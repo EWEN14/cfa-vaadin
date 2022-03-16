@@ -3,12 +3,7 @@ package nc.unc.application.data.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Set;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import nc.unc.application.data.AbstractEntity;
 import nc.unc.application.data.enums.Role;
@@ -17,9 +12,14 @@ import nc.unc.application.data.enums.Role;
 @Table(name = "application_user")
 public class User extends AbstractEntity {
 
+  @Column(name = "username", nullable = false)
   private String username;
 
-  private String name;
+  @Column(name = "nom", nullable = false)
+  private String nom;
+
+  @Column(name = "prenom", nullable = false)
+  private String prenom;
 
   @JsonIgnore
   private String hashedPassword;
@@ -36,12 +36,20 @@ public class User extends AbstractEntity {
     this.username = username;
   }
 
-  public String getName() {
-    return name;
+  public String getNom() {
+    return nom;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setNom(String nom) {
+    this.nom = nom;
+  }
+
+  public String getPrenom() {
+    return prenom;
+  }
+
+  public void setPrenom(String prenom) {
+    this.prenom = prenom;
   }
 
   public String getHashedPassword() {

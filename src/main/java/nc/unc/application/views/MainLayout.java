@@ -148,7 +148,7 @@ public class MainLayout extends AppLayout {
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
 
-            Span name = new Span(user.getName());
+            Span name = new Span(user.getPrenom()+" "+user.getNom());
             name.addClassNames("font-medium", "text-s", "text-secondary");
 
             ContextMenu userMenu = new ContextMenu(name);

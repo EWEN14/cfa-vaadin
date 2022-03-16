@@ -1,4 +1,4 @@
-package nc.unc.application.data.service;
+package nc.unc.application.data.repository;
 
 import java.util.UUID;
 import nc.unc.application.data.entity.User;

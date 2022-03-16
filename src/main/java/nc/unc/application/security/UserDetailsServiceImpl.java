@@ -3,7 +3,7 @@ package nc.unc.application.security;
 import java.util.List;
 import java.util.stream.Collectors;
 import nc.unc.application.data.entity.User;
-import nc.unc.application.data.service.UserRepository;
+import nc.unc.application.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

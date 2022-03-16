@@ -10,7 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 import nc.unc.application.data.AbstractEntity;
-import nc.unc.application.data.Role;
+import nc.unc.application.data.enums.Role;
 
 @Entity
 @Table(name = "ApplicationUser")

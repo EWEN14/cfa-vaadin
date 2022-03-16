@@ -3,6 +3,7 @@ package nc.unc.application.data.service;
 import java.util.Optional;
 import java.util.UUID;
 import nc.unc.application.data.entity.User;
+import nc.unc.application.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

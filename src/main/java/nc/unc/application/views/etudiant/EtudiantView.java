@@ -11,18 +11,20 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Etudiant;
+import nc.unc.application.data.entity.LogEnregistrement;
+import nc.unc.application.data.enums.TypeCrud;
 import nc.unc.application.data.service.EtudiantService;
+import nc.unc.application.data.service.LogEnregistrmentService;
 import nc.unc.application.views.MainLayout;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
-import javax.swing.text.html.ListView;
 
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests
 @Route(value="etudiants", layout = MainLayout.class) // inclusion du MainLayout (header + nav)
-@PageTitle("Etudiants | CFA") // title de la page
+@PageTitle("Étudiants | CFA") // title de la page
 @PermitAll // tous les utilisateurs connectés peuvent aller sur cette page
 public class EtudiantView extends VerticalLayout {
 
@@ -31,9 +33,11 @@ public class EtudiantView extends VerticalLayout {
   Button addEtudiantButton;
   EtudiantForm form;
   EtudiantService service;
+  LogEnregistrmentService logEnregistrmentService;
 
-  public EtudiantView(EtudiantService service) {
+  public EtudiantView(EtudiantService service, LogEnregistrmentService logEnregistrmentService) {
     this.service = service;
+    this.logEnregistrmentService = logEnregistrmentService;
 
     addClassName("list-view");
     setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
@@ -100,11 +104,20 @@ public class EtudiantView extends VerticalLayout {
     final boolean isNewEtudiant = etudiant.isNewEtudiant();
     // mise en majuscule du nom avant sauvegarde
     etudiant.setNom(etudiant.getNom().toUpperCase());
-    // sauvegarde de l'étudiant, mise à jour de la grid, fermeture du formulaire et notification
+
+    // sauvegarde de l'étudiant
     service.saveEtudiant(etudiant);
+
+    // ajout du log
+    if (isNewEtudiant) {
+      logEnregistrmentService.saveAjoutLog(etudiant.toString(),TypeCrud.AJOUT);
+    }
+
+    // mise à jour de la grid, fermeture du formulaire et notification
     updateList();
     closeEditor();
     Notification.show(etudiant.getPrenom()+" "+etudiant.getNom()+" "+(isNewEtudiant ? "créé(e)" : "modifié(e)"));
+
   }
 
   // suppression de l'étudiant en utilisant EtudiantService

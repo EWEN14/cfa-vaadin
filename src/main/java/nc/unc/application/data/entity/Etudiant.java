@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "etudiant")
@@ -105,5 +106,29 @@ public class Etudiant {
 
   public boolean isNewEtudiant() {
     return getId() == null;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Etudiant etudiant = (Etudiant) o;
+    return Objects.equals(id, etudiant.id) && Objects.equals(nom, etudiant.nom) && Objects.equals(prenom, etudiant.prenom) && civilite == etudiant.civilite && Objects.equals(dateNaissance, etudiant.dateNaissance) && Objects.equals(createdAt, etudiant.createdAt) && Objects.equals(updatedAt, etudiant.updatedAt);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, nom, prenom, civilite, dateNaissance, createdAt, updatedAt);
+  }
+
+  @Override
+  public String toString() {
+    return "Etudiant{" +
+            "id=" + id +
+            ", nom='" + nom + '\'' +
+            ", prenom='" + prenom + '\'' +
+            ", civilite=" + civilite +
+            ", dateNaissance=" + dateNaissance +
+            '}';
   }
 }

@@ -3,6 +3,27 @@
 This project can be used as a starting point to create your own Vaadin application with Spring Boot.
 It contains all the necessary configuration and some placeholder files to get you started.
 
+## Modification du application.properties
+
+vous devez ajouter 4 lignes dans le fichier application.properties (_src/main/resources/application.properties_) 
+pour connecter l'application avec votre base de données, préalablement créée et nommé cfa_sb, sans table ni contenu :
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/cfa_sb
+
+spring.datasource.username=votre username postgres, généralement "postgres"
+
+spring.datasource.password=votre mot de passe
+
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+Au lancement de l'application, les tables se généreront grâce aux scripts de migration présents
+dans le dossier _src/main/resources/db/migration_. Ne tentez pas de modifier ces scripts !
+
+## Génération de 2 utilisateurs
+
+Dans un contexte de développement, l'application génère automatiquement au premier lancement 2 utilisateurs, 
+un ADMIN et un USER. Pour vous connecter il suffira de taper admin/admin ou user/user sur la page de connexion.
+
 ## Running the application
 
 The project is a standard Maven project. To run it from the command line,

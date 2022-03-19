@@ -29,7 +29,7 @@ public class DataGenerator {
 
             logger.info("... generating 2 User entities...");
             User user = new User();
-            user.setNom("Normal");
+            user.setNom("RAMBO");
             user.setPrenom("John");
             user.setUsername("user");
             user.setHashedPassword(passwordEncoder.encode("user"));
@@ -37,8 +37,8 @@ public class DataGenerator {
             userRepository.save(user);
 
             User admin = new User();
-            admin.setNom("Powerful");
-            admin.setPrenom("Emma");
+            admin.setNom("CLÉMENT");
+            admin.setPrenom("Ewen");
             admin.setUsername("admin");
             admin.setHashedPassword(passwordEncoder.encode("admin"));
             admin.setRoles(Set.of(Role.USER, Role.ADMIN));

@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "etudiant")
-public class Etudiant {
+public class Etudiant implements Cloneable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id", nullable = false)
@@ -106,6 +106,10 @@ public class Etudiant {
 
   public boolean isNewEtudiant() {
     return getId() == null;
+  }
+
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
   }
 
   @Override

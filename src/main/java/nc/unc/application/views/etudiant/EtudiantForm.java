@@ -25,6 +25,7 @@ import java.time.ZoneId;
 public class EtudiantForm extends FormLayout {
 
   private Etudiant etudiant;
+  private Etudiant cloneEtudiant;
 
   TextField prenom = new TextField("prenom");
   TextField nom = new TextField("nom");
@@ -78,8 +79,17 @@ public class EtudiantForm extends FormLayout {
   }
 
   // fonction qui va alimenter le binder d'un étudiant
-  public void setEtudiant(Etudiant etudiant) {
+  public void setEtudiant(Etudiant etudiant)  {
     this.etudiant = etudiant;
+    // copie de l'étudiant si c'est un edit (pour garder les anciennes valeurs qu'on mettra dans le log)
+    if (etudiant != null && etudiant.getId() != null) {
+      try {
+        this.cloneEtudiant = (Etudiant) etudiant.clone();
+      } catch (CloneNotSupportedException e) {
+        e.printStackTrace();
+      }
+    }
+    // alimentation du binder
     binder.readBean(etudiant);
   }
 
@@ -87,7 +97,11 @@ public class EtudiantForm extends FormLayout {
   private void validateAndSave() {
     try {
       binder.writeBean(etudiant);
-      fireEvent(new SaveEvent(this, etudiant));
+      if (this.cloneEtudiant == null) {
+        fireEvent(new SaveEvent(this, etudiant));
+      } else {
+        fireEvent(new SaveEditedEvent(this, etudiant, cloneEtudiant));
+      }
     } catch (ValidationException e) {
       e.printStackTrace();
     }
@@ -97,28 +111,39 @@ public class EtudiantForm extends FormLayout {
   // qu'on manipule dans le formulaire
   public static abstract class EtudiantFormEvent extends ComponentEvent<EtudiantForm> {
     private final Etudiant etudiant;
+    private final Etudiant etudiantOriginal;
 
-    protected EtudiantFormEvent(EtudiantForm source, Etudiant etudiant) {
+    protected EtudiantFormEvent(EtudiantForm source, Etudiant etudiant, Etudiant etudiantOriginal) {
       super(source, false);
       this.etudiant = etudiant;
+      this.etudiantOriginal = etudiantOriginal;
     }
 
     public Etudiant getEtudiant() {
       return etudiant;
     }
+
+    public Etudiant getEtudiantOriginal() { return etudiantOriginal; }
   }
 
   // Event au clic sur le bouton de sauvegarde qui récupère le contact du formulaire (classe fille)
   public static class SaveEvent extends EtudiantFormEvent {
     SaveEvent(EtudiantForm source, Etudiant etudiant) {
-      super(source, etudiant);
+      super(source, etudiant, null);
+    }
+  }
+
+  // Event au clic sur le bouton de sauvegarde qui récupère le contact du formulaire (classe fille)
+  public static class SaveEditedEvent extends EtudiantFormEvent {
+    SaveEditedEvent(EtudiantForm source, Etudiant etudiant, Etudiant etudiantOriginal) {
+      super(source, etudiant, etudiantOriginal);
     }
   }
 
   // Event au clic sur le bouton de suppression (classe fille)
   public static class DeleteEvent extends EtudiantFormEvent {
     DeleteEvent(EtudiantForm source, Etudiant etudiant) {
-      super(source, etudiant);
+      super(source, etudiant, null);
     }
 
   }
@@ -126,7 +151,7 @@ public class EtudiantForm extends FormLayout {
   // Event au clic sur le bouton de fermerture du formulaire (classe fille)
   public static class CloseEvent extends EtudiantFormEvent {
     CloseEvent(EtudiantForm source) {
-      super(source, null);
+      super(source, null, null);
     }
   }
 

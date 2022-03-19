@@ -11,7 +11,6 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Etudiant;
-import nc.unc.application.data.entity.LogEnregistrement;
 import nc.unc.application.data.enums.TypeCrud;
 import nc.unc.application.data.service.EtudiantService;
 import nc.unc.application.data.service.LogEnregistrmentService;
@@ -23,7 +22,7 @@ import javax.annotation.security.PermitAll;
 
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests
-@Route(value="etudiants", layout = MainLayout.class) // inclusion du MainLayout (header + nav)
+@Route(value = "etudiants", layout = MainLayout.class) // inclusion du MainLayout (header + nav)
 @PageTitle("Étudiants | CFA") // title de la page
 @PermitAll // tous les utilisateurs connectés peuvent aller sur cette page
 public class EtudiantView extends VerticalLayout {
@@ -48,6 +47,7 @@ public class EtudiantView extends VerticalLayout {
     // On définit que les différents events (EtudiantForm.fooEvent) dans le Etudiant vont déclencher une fonction
     // contenant l'objet etudiant (dans le cas du save ou delete).
     form.addListener(EtudiantForm.SaveEvent.class, this::saveEtudiant);
+    form.addListener(EtudiantForm.SaveEditedEvent.class, this::saveEditedEtudiant);
     form.addListener(EtudiantForm.DeleteEvent.class, this::deleteEtudiant);
     form.addListener(EtudiantForm.CloseEvent.class, e -> closeEditor());
 
@@ -96,37 +96,57 @@ public class EtudiantView extends VerticalLayout {
     return toolbar;
   }
 
-  // sauvegarde de l'étudiant en utilisant EtudiantService
+  // sauvegarde de l'étudiant en utilisant EtudiantService (nouveau)
   private void saveEtudiant(EtudiantForm.SaveEvent event) {
     // utilisation du getEtudiant de la classe mère EtudiantFormEvent pour récupérer l'étudiant
     Etudiant etudiant = event.getEtudiant();
-    // on regarde si l'étudiant est nouveau ou si c'est une modification, ce qui modifiera le message en notification
-    final boolean isNewEtudiant = etudiant.isNewEtudiant();
+    // mise en majuscule du nom avant sauvegarde
+    etudiant.setNom(etudiant.getNom().toUpperCase());
+    // sauvegarde de l'étudiant
+    service.saveEtudiant(etudiant);
+
+    // ajout du log d'ajout
+    logEnregistrmentService.saveLogString(etudiant.toString(), TypeCrud.AJOUT);
+
+    // mise à jour de la grid, fermeture du formulaire et notification
+    updateList();
+    closeEditor();
+    Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " créé(e)");
+  }
+
+  // sauvegarde de l'étudiant modifié en utilisant EtudiantService
+  private void saveEditedEtudiant(EtudiantForm.SaveEditedEvent event) {
+    // utilisation du getEtudiant de la classe mère EtudiantFormEvent pour récupérer l'étudiant
+    Etudiant etudiant = event.getEtudiant();
+    // récupération de l'étudiant avant modification
+    Etudiant etudiantOriginal = event.getEtudiantOriginal();
     // mise en majuscule du nom avant sauvegarde
     etudiant.setNom(etudiant.getNom().toUpperCase());
 
     // sauvegarde de l'étudiant
     service.saveEtudiant(etudiant);
 
-    // ajout du log
-    if (isNewEtudiant) {
-      logEnregistrmentService.saveAjoutLog(etudiant.toString(),TypeCrud.AJOUT);
-    }
+    // ajout du log de modification
+    logEnregistrmentService.saveLogString("Anciennes valeurs : "
+            + etudiantOriginal.toString() + " remplacées par : "
+            + etudiant.toString(), TypeCrud.MODIFICATION);
 
-    // mise à jour de la grid, fermeture du formulaire et notification
     updateList();
     closeEditor();
-    Notification.show(etudiant.getPrenom()+" "+etudiant.getNom()+" "+(isNewEtudiant ? "créé(e)" : "modifié(e)"));
-
+    Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " modifié(e)");
   }
 
   // suppression de l'étudiant en utilisant EtudiantService
   private void deleteEtudiant(EtudiantForm.DeleteEvent event) {
     Etudiant etudiant = event.getEtudiant();
     service.deleteEtudiant(etudiant);
+
+    // ajout du log de suppression
+    logEnregistrmentService.saveLogString(etudiant.toString(), TypeCrud.SUPPRESSION);
+
     updateList();
     closeEditor();
-    Notification.show(etudiant.getPrenom()+" "+etudiant.getNom()+" retiré(e)");
+    Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " retiré(e)");
   }
 
   // si étudiant null, on ferme le formulaire, sinon on l'affiche (new or edit)

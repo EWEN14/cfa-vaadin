@@ -32,7 +32,7 @@ public class LogEnregistrmentService {
     logEnregistrementRepository.delete(logEnregistrement);
   }
 
-  public void saveAjoutLog(String description_log, TypeCrud typeCrud) {
+  public void saveLogString(String description_log, TypeCrud typeCrud) {
     LogEnregistrement logEnregistrement = new LogEnregistrement();
     logEnregistrement.setDescription_log(description_log);
     logEnregistrement.setTypeCrud(typeCrud);

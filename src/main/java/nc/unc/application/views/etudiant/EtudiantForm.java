@@ -18,6 +18,7 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.enums.Civilite;
+import nc.unc.application.data.enums.SituationAnneePrecedente;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -27,9 +28,10 @@ public class EtudiantForm extends FormLayout {
   private Etudiant etudiant;
   private Etudiant cloneEtudiant;
 
-  TextField prenom = new TextField("prenom");
-  TextField nom = new TextField("nom");
+  TextField prenom = new TextField("Prénom");
+  TextField nom = new TextField("NOM");
   Select<Civilite> civilite = new Select<>();
+  Select<String> situationAnneePrecedente = new Select<>();
 
   DatePicker dateNaissance = new DatePicker("Date de Naissance");
 
@@ -45,8 +47,14 @@ public class EtudiantForm extends FormLayout {
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)
     binder.bindInstanceFields(this);
 
+    // définition du label de civilite, et alimentation en valeurs de l'enum Civilite
     civilite.setLabel("Civilité");
     civilite.setItems(Civilite.values());
+
+    // définition du label de civilite, et alimentation en valeurs de l'enum SituationAnneePrecedente,
+    // mais de la version "chaîne de caractère" de chaque énumération
+    situationAnneePrecedente.setLabel("Situation Année Précédente");
+    situationAnneePrecedente.setItems(SituationAnneePrecedente.getSituationAnneePrecedenteStr());
 
     // date picker I18n qui permet de taper à la main une date au format français
     // (si l'utilisateur veut se passer de l'utilisation du calendrier intégré)
@@ -57,7 +65,7 @@ public class EtudiantForm extends FormLayout {
     dateNaissance.isRequired();
 
     // ajout des champs et des boutons d'action dans le formulaire
-    add(prenom, nom, civilite, dateNaissance, createButtonsLayout());
+    add(prenom, nom, civilite, dateNaissance, situationAnneePrecedente, createButtonsLayout());
   }
 
   private HorizontalLayout createButtonsLayout() {

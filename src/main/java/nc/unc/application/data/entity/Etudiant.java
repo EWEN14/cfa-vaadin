@@ -20,6 +20,8 @@ public class Etudiant implements Cloneable {
   @Column(name = "id", nullable = false)
   private Long id;
 
+  // le NotNull permet l'affichage du message du NotEmpty avec le binder
+  // dans le formulaire (un peu bizarre, mais ok)
   @NotEmpty(message = "Le nom doit être renseigné")
   @NotNull(message = "Le nom ne peut pas être nul")
   @Column(name = "nom", nullable = false)
@@ -39,6 +41,9 @@ public class Etudiant implements Cloneable {
   @Past(message = "La date de naissance ne peut pas être aujourd'hui ou dans le futur")
   @Column(name = "date_naissance", nullable = false)
   private LocalDate dateNaissance;
+
+  @Column(name = "situation_anne_precedente", nullable = false)
+  private String situationAnneePrecedente;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
@@ -106,6 +111,14 @@ public class Etudiant implements Cloneable {
 
   public boolean isNewEtudiant() {
     return getId() == null;
+  }
+
+  public String getSituationAnneePrecedente() {
+    return situationAnneePrecedente;
+  }
+
+  public void setSituationAnneePrecedente(String situationAnneePrecedente) {
+    this.situationAnneePrecedente = situationAnneePrecedente;
   }
 
   public Object clone() throws CloneNotSupportedException {

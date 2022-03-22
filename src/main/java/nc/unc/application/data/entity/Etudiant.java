@@ -42,6 +42,8 @@ public class Etudiant implements Cloneable {
   @Column(name = "date_naissance", nullable = false)
   private LocalDate dateNaissance;
 
+
+  @NotNull(message = "La situation de l'année précédente ne peut être nulle")
   @Column(name = "situation_anne_precedente", nullable = false)
   private String situationAnneePrecedente;
 

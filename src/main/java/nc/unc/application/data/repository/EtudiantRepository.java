@@ -15,4 +15,5 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
           "where lower(e.nom) like lower(concat('%', :searchTerm, '%')) " +
           "or lower(e.prenom) like lower(concat('%', :searchTerm, '%'))")
   List<Etudiant> search(@Param("searchTerm") String searchTerm);
+
 }

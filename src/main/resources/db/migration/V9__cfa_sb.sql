@@ -21,6 +21,6 @@ CREATE TABLE tuteur
 ALTER TABLE tuteur
     ADD CONSTRAINT FK_TUTEUR_ON_ID_ENTREPRISE FOREIGN KEY (id_entreprise) REFERENCES entreprise (id_entreprise);
 
-ALTER TABLE etudiant
+/*ALTER TABLE etudiant
 DROP
-COLUMN test;
+COLUMN test;*/

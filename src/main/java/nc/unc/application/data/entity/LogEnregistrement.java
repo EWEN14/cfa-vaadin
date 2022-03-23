@@ -25,6 +25,17 @@ public class LogEnregistrement {
   @Column(name = "created_at", nullable = false)
   private LocalDateTime createdAt;
 
+  @Column(name = "executant")
+  private String executant;
+
+  public String getExecutant() {
+    return executant;
+  }
+
+  public void setExecutant(String executant) {
+    this.executant = executant;
+  }
+
   public Long getId() {
     return id;
   }

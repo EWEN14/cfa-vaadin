@@ -9,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -80,6 +81,9 @@ public class Entreprise {
 
   @OneToMany(mappedBy = "entreprise", targetEntity = Etudiant.class)
   private List<Etudiant> etudiants = new java.util.ArrayList<>();
+
+  @OneToMany(mappedBy = "entreprise", targetEntity = Tuteur.class)
+  private List<Tuteur> tuteurs = new ArrayList<>();
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
@@ -239,5 +243,13 @@ public class Entreprise {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  public List<Tuteur> getTuteurs() {
+    return tuteurs;
+  }
+
+  public void setTuteurs(List<Tuteur> tuteurs) {
+    this.tuteurs = tuteurs;
   }
 }

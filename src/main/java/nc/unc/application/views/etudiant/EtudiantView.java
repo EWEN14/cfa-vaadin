@@ -42,7 +42,7 @@ public class EtudiantView extends VerticalLayout {
     setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
     configureGrid(); // configuration de la grille (colonnes, données...)
 
-    form = new EtudiantForm();
+    form = new EtudiantForm(service.findAllEntreprises());
     form.setWidth("30em");
     // On définit que les différents events (EtudiantForm.fooEvent) dans le Etudiant vont déclencher une fonction
     // contenant l'objet etudiant (dans le cas du save ou delete).

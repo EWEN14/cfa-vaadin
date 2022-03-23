@@ -16,20 +16,25 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
+import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.enums.Civilite;
+import nc.unc.application.data.enums.SituationAnneePrecedente;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.List;
 
 public class EtudiantForm extends FormLayout {
 
   private Etudiant etudiant;
   private Etudiant cloneEtudiant;
 
-  TextField prenom = new TextField("prenom");
-  TextField nom = new TextField("nom");
+  TextField prenom = new TextField("Prénom");
+  TextField nom = new TextField("NOM");
   Select<Civilite> civilite = new Select<>();
+  Select<String> situationAnneePrecedente = new Select<>();
+  ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
 
   DatePicker dateNaissance = new DatePicker("Date de Naissance");
 
@@ -39,25 +44,33 @@ public class EtudiantForm extends FormLayout {
   Button delete = new Button("Supprimer");
   Button close = new Button("Fermer");
 
-  public EtudiantForm() {
+  public EtudiantForm(List<Entreprise> entreprises) {
     addClassName("contact-form");
     // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité étudiant,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)
     binder.bindInstanceFields(this);
 
+    // définition du label de civilite, et alimentation en valeurs de l'enum Civilite
     civilite.setLabel("Civilité");
     civilite.setItems(Civilite.values());
+
+    // définition du label de civilite, et alimentation en valeurs de l'enum SituationAnneePrecedente,
+    // mais de la version "chaîne de caractère" de chaque énumération
+    situationAnneePrecedente.setLabel("Situation Année Précédente");
+    situationAnneePrecedente.setItems(SituationAnneePrecedente.getSituationAnneePrecedenteStr());
 
     // date picker I18n qui permet de taper à la main une date au format français
     // (si l'utilisateur veut se passer de l'utilisation du calendrier intégré)
     DatePicker.DatePickerI18n multiFormatI18n = new DatePicker.DatePickerI18n();
     multiFormatI18n.setDateFormats("dd/MM/yyyy","yyyy-MM-dd" );
-
     dateNaissance.setI18n(multiFormatI18n);
     dateNaissance.isRequired();
 
+    entreprise.setItems(entreprises);
+    entreprise.setItemLabelGenerator(Entreprise::getEnseigne);
+
     // ajout des champs et des boutons d'action dans le formulaire
-    add(prenom, nom, civilite, dateNaissance, createButtonsLayout());
+    add(prenom, nom, civilite, dateNaissance, situationAnneePrecedente, entreprise, createButtonsLayout());
   }
 
   private HorizontalLayout createButtonsLayout() {

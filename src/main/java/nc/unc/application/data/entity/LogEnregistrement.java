@@ -1,15 +1,17 @@
 package nc.unc.application.data.entity;
 
 import nc.unc.application.data.enums.TypeCrud;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "log_enregistrement")
 public class LogEnregistrement {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "id", nullable = false)
+  @Column(name = "id_log_enregistrement", nullable = false)
   private Long id;
 
   @Column(name = "description_log", nullable = false, length = 15000)
@@ -18,6 +20,10 @@ public class LogEnregistrement {
   @Enumerated(EnumType.STRING)
   @Column(name = "type_crud", nullable = false)
   private TypeCrud typeCrud;
+
+  @CreationTimestamp
+  @Column(name = "created_at", nullable = false)
+  private LocalDateTime createdAt;
 
   public Long getId() {
     return id;
@@ -41,5 +47,13 @@ public class LogEnregistrement {
 
   public void setTypeCrud(TypeCrud typeCrud) {
     this.typeCrud = typeCrud;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
   }
 }

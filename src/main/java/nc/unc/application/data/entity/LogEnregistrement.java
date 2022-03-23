@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class LogEnregistrement {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "id", nullable = false)
+  @Column(name = "id_log_enregistrement", nullable = false)
   private Long id;
 
   @Column(name = "description_log", nullable = false, length = 15000)

@@ -1,7 +1,7 @@
 package nc.unc.application.data.enums;
 
 public enum StatutActifEntreprise {
-  DEMARCHEE("Démarchée"), ENTREPRISE_ACTIVE("Entreprise active"), ANCIENNE_ENTREPRISE("Ancienne Entreprise");
+  DEMARCHEE("Démarchée"), ENTREPRISE_ACTIVE("Entreprise Active"), ANCIENNE_ENTREPRISE("Ancienne Entreprise");
 
   private String enumStringify;
 

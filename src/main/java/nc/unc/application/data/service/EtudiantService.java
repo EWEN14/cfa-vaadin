@@ -1,6 +1,8 @@
 package nc.unc.application.data.service;
 
+import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Etudiant;
+import nc.unc.application.data.repository.EntrepriseRepository;
 import nc.unc.application.data.repository.EtudiantRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +12,11 @@ import java.util.List;
 public class EtudiantService {
 
   private final EtudiantRepository etudiantRepository;
+  private final EntrepriseRepository entrepriseRepository;
 
-  public EtudiantService(EtudiantRepository etudiantRepository) {
+  public EtudiantService(EtudiantRepository etudiantRepository, EntrepriseRepository entrepriseRepository) {
     this.etudiantRepository = etudiantRepository;
+    this.entrepriseRepository = entrepriseRepository;
   }
 
   public List<Etudiant> findAllEtudiants(String stringFilter) {
@@ -41,4 +45,8 @@ public class EtudiantService {
 
   // TODO : mettre les findAll de compagnie, tuteur, référent, interlocuteur CFA
   // quand je les aurais créé
+
+  public List<Entreprise> findAllEntreprises() {
+    return entrepriseRepository.findAll();
+  }
 }

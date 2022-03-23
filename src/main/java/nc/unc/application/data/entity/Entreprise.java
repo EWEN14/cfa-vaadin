@@ -1,18 +1,23 @@
 package nc.unc.application.data.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Table(name = "entreprise")
 public class Entreprise {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "id", nullable = false)
+  @Column(name = "id_entreprise", nullable = false)
   private Long id;
 
 
@@ -72,6 +77,17 @@ public class Entreprise {
 
   @Column(name = "fonction_representant_employeur")
   private String fonctionRepresentantEmployeur;
+
+  @OneToMany(mappedBy = "entreprise", targetEntity = Etudiant.class)
+  private List<Etudiant> etudiants = new java.util.ArrayList<>();
+
+  @CreationTimestamp
+  @Column(name = "created_at", nullable = false)
+  private LocalDateTime createdAt;
+
+  @UpdateTimestamp
+  @Column(name = "updated_at", nullable = false)
+  private LocalDateTime updatedAt;
 
   public Long getId() {
     return id;
@@ -199,5 +215,29 @@ public class Entreprise {
 
   public void setFonctionRepresentantEmployeur(String fonctionRepresentantEmployeur) {
     this.fonctionRepresentantEmployeur = fonctionRepresentantEmployeur;
+  }
+
+  public List<Etudiant> getEtudiants() {
+    return etudiants;
+  }
+
+  public void setEtudiants(List<Etudiant> etudiants) {
+    this.etudiants = etudiants;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
   }
 }

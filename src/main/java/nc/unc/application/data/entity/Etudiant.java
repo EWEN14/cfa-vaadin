@@ -1,5 +1,6 @@
 package nc.unc.application.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import nc.unc.application.data.enums.Civilite;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -17,7 +18,7 @@ import java.util.Objects;
 public class Etudiant implements Cloneable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "id", nullable = false)
+  @Column(name = "id_etudiant", nullable = false)
   private Long id;
 
   // le NotNull permet l'affichage du message du NotEmpty avec le binder
@@ -42,10 +43,14 @@ public class Etudiant implements Cloneable {
   @Column(name = "date_naissance", nullable = false)
   private LocalDate dateNaissance;
 
-
   @NotNull(message = "La situation de l'année précédente ne peut être nulle")
   @Column(name = "situation_anne_precedente", nullable = false)
   private String situationAnneePrecedente;
+
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Entreprise.class)
+  @JoinColumn(name = "id_entreprise")
+  @JsonIgnoreProperties({"etudiants"})
+  private Entreprise entreprise;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
@@ -111,16 +116,24 @@ public class Etudiant implements Cloneable {
     this.id = id;
   }
 
-  public boolean isNewEtudiant() {
-    return getId() == null;
-  }
-
   public String getSituationAnneePrecedente() {
     return situationAnneePrecedente;
   }
 
   public void setSituationAnneePrecedente(String situationAnneePrecedente) {
     this.situationAnneePrecedente = situationAnneePrecedente;
+  }
+
+  public Entreprise getEntreprise() {
+    return entreprise;
+  }
+
+  public void setEntreprise(Entreprise entreprise) {
+    this.entreprise = entreprise;
+  }
+
+  public boolean isNewEtudiant() {
+    return getId() == null;
   }
 
   public Object clone() throws CloneNotSupportedException {

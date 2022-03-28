@@ -47,6 +47,9 @@ public class Etudiant implements Cloneable {
   @Column(name = "situation_anne_precedente", nullable = false)
   private String situationAnneePrecedente;
 
+  @Column(name = "parcours")
+  private String parcours;
+
   @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Entreprise.class)
   @JoinColumn(name = "id_entreprise")
   @JsonIgnoreProperties({"etudiants"})
@@ -60,44 +63,12 @@ public class Etudiant implements Cloneable {
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
 
-  public LocalDateTime getUpdatedAt() {
-    return updatedAt;
+  public Long getId() {
+    return id;
   }
 
-  public void setUpdatedAt(LocalDateTime updatedAt) {
-    this.updatedAt = updatedAt;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public LocalDate getDateNaissance() {
-    return dateNaissance;
-  }
-
-  public void setDateNaissance(LocalDate dateNaissance) {
-    this.dateNaissance = dateNaissance;
-  }
-
-  public Civilite getCivilite() {
-    return civilite;
-  }
-
-  public void setCivilite(Civilite civilite) {
-    this.civilite = civilite;
-  }
-
-  public String getPrenom() {
-    return prenom;
-  }
-
-  public void setPrenom(String prenom) {
-    this.prenom = prenom;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getNom() {
@@ -108,12 +79,28 @@ public class Etudiant implements Cloneable {
     this.nom = nom;
   }
 
-  public Long getId() {
-    return id;
+  public String getPrenom() {
+    return prenom;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setPrenom(String prenom) {
+    this.prenom = prenom;
+  }
+
+  public Civilite getCivilite() {
+    return civilite;
+  }
+
+  public void setCivilite(Civilite civilite) {
+    this.civilite = civilite;
+  }
+
+  public LocalDate getDateNaissance() {
+    return dateNaissance;
+  }
+
+  public void setDateNaissance(LocalDate dateNaissance) {
+    this.dateNaissance = dateNaissance;
   }
 
   public String getSituationAnneePrecedente() {
@@ -124,12 +111,36 @@ public class Etudiant implements Cloneable {
     this.situationAnneePrecedente = situationAnneePrecedente;
   }
 
+  public String getParcours() {
+    return parcours;
+  }
+
+  public void setParcours(String parcours) {
+    this.parcours = parcours;
+  }
+
   public Entreprise getEntreprise() {
     return entreprise;
   }
 
   public void setEntreprise(Entreprise entreprise) {
     this.entreprise = entreprise;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
   }
 
   public boolean isNewEtudiant() {

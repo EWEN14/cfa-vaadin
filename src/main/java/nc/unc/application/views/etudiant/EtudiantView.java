@@ -2,6 +2,8 @@ package nc.unc.application.views.etudiant;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -31,6 +33,7 @@ public class EtudiantView extends VerticalLayout {
   com.vaadin.flow.component.textfield.TextField filterText = new TextField();
   Button addEtudiantButton;
   EtudiantForm form;
+  EtudiantConsult modalConsult;
   EtudiantService service;
   LogEnregistrmentService logEnregistrmentService;
 
@@ -51,6 +54,9 @@ public class EtudiantView extends VerticalLayout {
     form.addListener(EtudiantForm.DeleteEvent.class, this::deleteEtudiant);
     form.addListener(EtudiantForm.CloseEvent.class, e -> closeEditor());
 
+    modalConsult = new EtudiantConsult();
+    modalConsult.addListener(EtudiantConsult.CloseEvent.class, e -> closeConsultModal());
+
     // ajout d'un FlexLayout qui place la grille et le formulaire côte à côte (quand formulaire ouvert)
     FlexLayout content = new FlexLayout(grid, form);
     content.setFlexGrow(2, grid);
@@ -61,11 +67,13 @@ public class EtudiantView extends VerticalLayout {
     content.setSizeFull();
 
     // ajout de la toolbar (recherche + nouveau etudiant) et du content (grid + formulaire)
-    add(getToolbar(), content);
+    add(getToolbar(), content, modalConsult);
     // initialisation des données de la grille à l'ouverture de la vue
     updateList();
     // formulaire d'ajout/d'édition d'étudiant fermé à l'ouverture de la vue
     closeEditor();
+    // modale de consultation de l'étudiant, fermée à l'ouverture de la vue
+    closeConsultModal();
 
     grid.asSingleSelect().addValueChangeListener(event ->
             editEtudiant(event.getValue()));
@@ -74,12 +82,22 @@ public class EtudiantView extends VerticalLayout {
   private void configureGrid() {
     grid.addClassNames("etudiant-grid");
     grid.setSizeFull();
+    // ajout des colonnes
     grid.setColumns("prenom", "nom", "civilite", "dateNaissance");
+    // ajout du bouton de consultation d'un étudiant
+    grid.addComponentColumn(etudiant -> {
+      Button consultButton = new Button(new Icon(VaadinIcon.EYE), click -> {
+        consultEtudiant(etudiant);
+      });
+      return consultButton;
+    });
+    // on définit que chaque colonne à une largeur autodéterminée
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
   }
 
   private HorizontalLayout getToolbar() {
-    filterText.setPlaceholder("Recherche par nom ou prénom...");
+    filterText.setHelperText("Recherche par nom ou prénom...");
+    filterText.setPrefixComponent(VaadinIcon.SEARCH.create()); // affiche une petite loupe au début du champ
     filterText.setClearButtonVisible(true); // affiche la petite croix dans le champ pour effacer
     // permet de rendre Lazy le changement de valeur, la recherche ne se fera donc que après que l'utilisateur
     // a arrêté de taper dans le champ depuis un petit moment.
@@ -160,6 +178,11 @@ public class EtudiantView extends VerticalLayout {
     }
   }
 
+  public void consultEtudiant(Etudiant etudiant) {
+    modalConsult.setEtudiant(etudiant);
+    modalConsult.open();
+  }
+
   // ajout d'un étudiant
   void addEtudiant() {
     // on retire le focus s'il y avait une ligne sélectionnée
@@ -174,6 +197,12 @@ public class EtudiantView extends VerticalLayout {
     form.setVisible(false);
     removeClassName("editing");
     // retrait du focus sur la ligne
+    grid.asSingleSelect().clear();
+  }
+
+  private void closeConsultModal() {
+    modalConsult.setEtudiant(null);
+    modalConsult.close();
     grid.asSingleSelect().clear();
   }
 

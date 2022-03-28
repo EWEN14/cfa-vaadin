@@ -7,7 +7,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -21,8 +20,6 @@ import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.enums.Civilite;
 import nc.unc.application.data.enums.SituationAnneePrecedente;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 
 public class EtudiantForm extends FormLayout {
@@ -120,7 +117,7 @@ public class EtudiantForm extends FormLayout {
     }
   }
 
-  // Event "global" (class mère), qui étend les trois event ci-dessous, dont le but est de fournir le contact
+  // Event "global" (class mère), qui étend les trois event ci-dessous, dont le but est de fournir l'étudiant
   // qu'on manipule dans le formulaire
   public static abstract class EtudiantFormEvent extends ComponentEvent<EtudiantForm> {
     private final Etudiant etudiant;

@@ -34,6 +34,7 @@ public class EtudiantView extends VerticalLayout {
   Button addEtudiantButton;
   EtudiantForm form;
   EtudiantConsult modalConsult;
+  EtudiantNewOrEdit modalNewOrEdit;
   EtudiantService service;
   LogEnregistrmentService logEnregistrmentService;
 
@@ -45,17 +46,26 @@ public class EtudiantView extends VerticalLayout {
     setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
     configureGrid(); // configuration de la grille (colonnes, données...)
 
+    // ajout du formulaire dans la vue
     form = new EtudiantForm(service.findAllEntreprises());
     form.setWidth("30em");
     // On définit que les différents events (EtudiantForm.fooEvent) dans le Etudiant vont déclencher une fonction
     // contenant l'objet etudiant (dans le cas du save ou delete).
-    form.addListener(EtudiantForm.SaveEvent.class, this::saveEtudiant);
-    form.addListener(EtudiantForm.SaveEditedEvent.class, this::saveEditedEtudiant);
-    form.addListener(EtudiantForm.DeleteEvent.class, this::deleteEtudiant);
+    form.addListener(EtudiantForm.SaveEvent.class, this::saveEtudiantOldVerion);
+    form.addListener(EtudiantForm.SaveEditedEvent.class, this::saveEditedEtudiantOldVersion);
+    form.addListener(EtudiantForm.DeleteEvent.class, this::deleteEtudiantOldVersion);
     form.addListener(EtudiantForm.CloseEvent.class, e -> closeEditor());
 
+    // ajout de la modale de consultation de l'étudiant dans la vue
     modalConsult = new EtudiantConsult();
+    modalConsult.addListener(EtudiantConsult.DeleteEvent.class, this::deleteEtudiant);
     modalConsult.addListener(EtudiantConsult.CloseEvent.class, e -> closeConsultModal());
+
+    // ajout de la modale d'édition ou de crétion d'un étudiant dans la vue
+    modalNewOrEdit = new EtudiantNewOrEdit(service.findAllEntreprises());
+    modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEvent.class, this::saveEtudiant);
+    modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEditedEvent.class, this::saveEditedEtudiant);
+    modalNewOrEdit.addListener(EtudiantNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
 
     // ajout d'un FlexLayout qui place la grille et le formulaire côte à côte (quand formulaire ouvert)
     FlexLayout content = new FlexLayout(grid, form);
@@ -67,12 +77,13 @@ public class EtudiantView extends VerticalLayout {
     content.setSizeFull();
 
     // ajout de la toolbar (recherche + nouveau etudiant) et du content (grid + formulaire)
-    add(getToolbar(), content, modalConsult);
+    // et des modales de consultation et de création/modification
+    add(getToolbar(), content, modalConsult, modalNewOrEdit);
     // initialisation des données de la grille à l'ouverture de la vue
     updateList();
     // formulaire d'ajout/d'édition d'étudiant fermé à l'ouverture de la vue
     closeEditor();
-    // modale de consultation de l'étudiant, fermée à l'ouverture de la vue
+    // modales de consultation et d'édition/création de l'étudiant fermée à l'ouverture de la vue
     closeConsultModal();
 
     grid.asSingleSelect().addValueChangeListener(event ->
@@ -90,6 +101,12 @@ public class EtudiantView extends VerticalLayout {
         consultEtudiant(etudiant);
       });
       return consultButton;
+    });
+    grid.addComponentColumn(etudiant -> {
+      Button editButton = new Button(new Icon(VaadinIcon.PENCIL), click -> {
+        editEtudiantModal(etudiant);
+      });
+      return editButton;
     });
     // on définit que chaque colonne à une largeur autodéterminée
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
@@ -115,7 +132,7 @@ public class EtudiantView extends VerticalLayout {
   }
 
   // sauvegarde de l'étudiant en utilisant EtudiantService (nouveau)
-  private void saveEtudiant(EtudiantForm.SaveEvent event) {
+  private void saveEtudiantOldVerion(EtudiantForm.SaveEvent event) {
     // utilisation du getEtudiant de la classe mère EtudiantFormEvent pour récupérer l'étudiant
     Etudiant etudiant = event.getEtudiant();
     // mise en majuscule du nom avant sauvegarde
@@ -133,7 +150,7 @@ public class EtudiantView extends VerticalLayout {
   }
 
   // sauvegarde de l'étudiant modifié en utilisant EtudiantService
-  private void saveEditedEtudiant(EtudiantForm.SaveEditedEvent event) {
+  private void saveEditedEtudiantOldVersion(EtudiantForm.SaveEditedEvent event) {
     // utilisation du getEtudiant de la classe mère EtudiantFormEvent pour récupérer l'étudiant
     Etudiant etudiant = event.getEtudiant();
     // récupération de l'étudiant avant modification
@@ -154,8 +171,48 @@ public class EtudiantView extends VerticalLayout {
     Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " modifié(e)");
   }
 
-  // suppression de l'étudiant en utilisant EtudiantService
-  private void deleteEtudiant(EtudiantForm.DeleteEvent event) {
+  // sauvegarde de l'étudiant en utilisant EtudiantService (nouveau)
+  private void saveEtudiant(EtudiantNewOrEdit.SaveEvent event) {
+    // utilisation du getEtudiant de la classe mère EtudiantFormEvent pour récupérer l'étudiant
+    Etudiant etudiant = event.getEtudiant();
+    // mise en majuscule du nom avant sauvegarde
+    etudiant.setNom(etudiant.getNom().toUpperCase());
+    // sauvegarde de l'étudiant
+    service.saveEtudiant(etudiant);
+
+    // ajout du log d'ajout
+    logEnregistrmentService.saveLogString(etudiant.toString(), TypeCrud.AJOUT);
+
+    // mise à jour de la grid, fermeture du formulaire et notification
+    updateList();
+    closeNewOrEditModal();
+    Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " créé(e)");
+  }
+
+  // sauvegarde de l'étudiant modifié en utilisant EtudiantService
+  private void saveEditedEtudiant(EtudiantNewOrEdit.SaveEditedEvent event) {
+    // utilisation du getEtudiant de la classe mère EtudiantFormEvent pour récupérer l'étudiant
+    Etudiant etudiant = event.getEtudiant();
+    // récupération de l'étudiant avant modification
+    Etudiant etudiantOriginal = event.getEtudiantOriginal();
+    // mise en majuscule du nom avant sauvegarde
+    etudiant.setNom(etudiant.getNom().toUpperCase());
+
+    // sauvegarde de l'étudiant
+    service.saveEtudiant(etudiant);
+
+    // ajout du log de modification
+    logEnregistrmentService.saveLogString("Anciennes valeurs : "
+            + etudiantOriginal.toString() + " remplacées par : "
+            + etudiant.toString(), TypeCrud.MODIFICATION);
+
+    updateList();
+    closeNewOrEditModal();
+    Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " modifié(e)");
+  }
+
+  // suppression de l'étudiant en utilisant EtudiantService (à retirer plus tard)
+  private void deleteEtudiantOldVersion(EtudiantForm.DeleteEvent event) {
     Etudiant etudiant = event.getEtudiant();
     service.deleteEtudiant(etudiant);
 
@@ -164,6 +221,19 @@ public class EtudiantView extends VerticalLayout {
 
     updateList();
     closeEditor();
+    Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " retiré(e)");
+  }
+
+  // suppression de l'étudiant en utilisant EtudiantService
+  private void deleteEtudiant(EtudiantConsult.DeleteEvent event) {
+    Etudiant etudiant = event.getEtudiant();
+    service.deleteEtudiant(etudiant);
+
+    // ajout du log de suppression
+    logEnregistrmentService.saveLogString(etudiant.toString(), TypeCrud.SUPPRESSION);
+
+    updateList();
+    closeConsultModal();
     Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " retiré(e)");
   }
 
@@ -178,6 +248,17 @@ public class EtudiantView extends VerticalLayout {
     }
   }
 
+  // si étudiant null, on ferme le formulaire, sinon on l'affiche (new or edit)
+  public void editEtudiantModal(Etudiant etudiant) {
+    if (etudiant == null) {
+      closeNewOrEditModal();
+    } else {
+      modalNewOrEdit.setEtudiant(etudiant);
+      modalNewOrEdit.open();
+      addClassName("editing");
+    }
+  }
+
   public void consultEtudiant(Etudiant etudiant) {
     modalConsult.setEtudiant(etudiant);
     modalConsult.open();
@@ -188,7 +269,7 @@ public class EtudiantView extends VerticalLayout {
     // on retire le focus s'il y avait une ligne sélectionnée
     grid.asSingleSelect().clear();
     // appel de la fonction juste au-dessus
-    editEtudiant(new Etudiant());
+    editEtudiantModal(new Etudiant());
   }
 
   // fermeture du formulaire
@@ -203,6 +284,12 @@ public class EtudiantView extends VerticalLayout {
   private void closeConsultModal() {
     modalConsult.setEtudiant(null);
     modalConsult.close();
+    grid.asSingleSelect().clear();
+  }
+
+  private void closeNewOrEditModal() {
+    modalNewOrEdit.setEtudiant(null);
+    modalNewOrEdit.close();
     grid.asSingleSelect().clear();
   }
 

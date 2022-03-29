@@ -15,4 +15,6 @@ public interface LogEnregistrementRepository extends JpaRepository<LogEnregistre
   @Query("select l from LogEnregistrement l " +
           "where lower(l.description_log) like lower(concat('%', :searchTerm, '%')) ")
   List<LogEnregistrement> search(@Param("searchTerm") String searchTerm);
+
+  List<LogEnregistrement> findAllByOrderByCreatedAtDesc();
 }

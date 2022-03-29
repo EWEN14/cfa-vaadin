@@ -23,7 +23,7 @@ public class LogEnregistrmentService {
 
   public List<LogEnregistrement> findAllLogs(String stringFilter) {
     if (stringFilter == null || stringFilter.isEmpty()) {
-      return logEnregistrementRepository.findAll();
+      return logEnregistrementRepository.findAllByOrderByCreatedAtDesc();
     } else {
       return logEnregistrementRepository.search(stringFilter);
     }

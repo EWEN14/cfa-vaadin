@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "tuteur")
-public class Tuteur {
+public class Tuteur implements Cloneable{
 
     //Id du tuteur
     @Id
@@ -56,13 +56,13 @@ public class Tuteur {
     private String posteOccupe;
 
     //L'expérience professionnelle du tuteur
-    @Column(name = "experience_professionnelle")
-    private String experienceProfessionnelle;
+    @Column(name = "annee_experience_professionnelle")
+    private String anneeExperienceProfessionnelle;
 
     //Niveau du diplôme du tuteur
     @NotNull(message = "Le niveau du diplome ne peut pas être null")
     @Column(name = "niveau_diplome", nullable = false)
-    private String niveauDiplome;
+    private Long niveauDiplome;
 
     //Première pièce jointe
     @NotNull(message = "La piece jointe ne doit pas être nulle")
@@ -88,7 +88,7 @@ public class Tuteur {
     @Min(111111)
     @NotNull(message = "La numéro de téléphone ne doit pas être nulle")
     @Column(name = "telephone_2")
-    private String telephone2;
+    private Integer telephone2;
 
     //Entreprise du tuteur
     @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Entreprise.class)
@@ -113,21 +113,21 @@ public class Tuteur {
         this.pieceJointe2 = pieceJointe2;
     }
 
-    public String getNiveauDiplome() {
+    public Long getNiveauDiplome() {
         return niveauDiplome;
     }
 
-    public void setNiveauDiplome(String niveauDiplome) {
+    public void setNiveauDiplome(Long niveauDiplome) {
         this.niveauDiplome = niveauDiplome;
     }
 
 
     public String getExperienceProfessionnelle() {
-        return experienceProfessionnelle;
+        return anneeExperienceProfessionnelle;
     }
 
-    public void setExperienceProfessionnelle(String experienceProfessionnelle) {
-        this.experienceProfessionnelle = experienceProfessionnelle;
+    public void setExperienceProfessionnelle(String anneeExperienceProfessionnelle) {
+        this.anneeExperienceProfessionnelle = anneeExperienceProfessionnelle;
     }
 
     public String getPosteOccupe() {
@@ -194,11 +194,11 @@ public class Tuteur {
         this.prenom = prenom;
     }
 
-    public String getTelephone2() {
+    public Integer getTelephone2() {
         return telephone2;
     }
 
-    public void setTelephone2(String telephone2) {
+    public void setTelephone2(Integer telephone2) {
         this.telephone2 = telephone2;
     }
 
@@ -216,5 +216,9 @@ public class Tuteur {
 
     public void setEntreprise(Entreprise entreprise) {
         this.entreprise = entreprise;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

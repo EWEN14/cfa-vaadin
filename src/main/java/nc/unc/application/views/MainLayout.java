@@ -26,6 +26,7 @@ import nc.unc.application.views.about.AboutView;
 import nc.unc.application.views.etudiant.EtudiantView;
 import nc.unc.application.views.helloworld.HelloWorldView;
 import nc.unc.application.views.logs.LogsView;
+import nc.unc.application.views.tuteur.TuteurView;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -140,6 +141,8 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("About", "la la-file", AboutView.class), //
 
                 new MenuItemInfo("Étudiants", "las la-user-graduate", EtudiantView.class),
+
+                new MenuItemInfo("Tuteurs", "las la-user-graduate", TuteurView.class),
 
                 new MenuItemInfo("Logs", "las la-history", LogsView.class)
         };

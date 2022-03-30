@@ -1,17 +1,16 @@
 package nc.unc.application.data.repository;
 
-import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.entity.Tuteur;
-import nc.unc.application.data.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
+import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 
+@Repository
 public interface TuteurRepository extends JpaRepository<Tuteur, UUID> {
-
+    
     //Récupérer le(s) tuteurs selon le paramètre searchTerm
     @Query("select t from Tuteur t " +
             "where lower(t.nom) like lower(concat('%', :searchTerm, '%')) " +

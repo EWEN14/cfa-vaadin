@@ -169,3 +169,4 @@ public class EtudiantNewOrEdit extends Dialog {
     return getEventBus().addListener(eventType, listener);
   }
 }
+

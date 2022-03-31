@@ -172,6 +172,11 @@ public class Etudiant implements Cloneable {
             ", prenom='" + prenom + '\'' +
             ", civilite=" + civilite +
             ", dateNaissance=" + dateNaissance +
+            ", situationAnneePrecedente='" + situationAnneePrecedente + '\'' +
+            ", parcours='" + parcours + '\'' +
+            ", entreprise=" + entreprise +
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
             '}';
   }
 }

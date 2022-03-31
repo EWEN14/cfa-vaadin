@@ -142,7 +142,7 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Étudiants", "las la-user-graduate", EtudiantView.class),
 
-                new MenuItemInfo("Tuteurs", "las la-user-graduate", TuteurView.class),
+                new MenuItemInfo("Tuteurs", "las la-user-tie", TuteurView.class),
 
                 new MenuItemInfo("Logs", "las la-history", LogsView.class)
         };

@@ -48,13 +48,13 @@ public class TuteurView extends VerticalLayout {
         setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
         configureGrid(); // configuration de la grille (colonnes, données...)
 
-        tuteurModal = new TuteurNewOrEdit(tuteurService.findAllEntreprises());
-        tuteurModal.setWidth("30em");
+        tuteurModalConsult = new TuteurConsult();
         // On définit que les différents events (TuteurForm.fooEvent) dans le Tuteur  vont déclencher une fonction
         // contenant l'objet tuteur (dans le cas du save ou delete).
         tuteurModalConsult.addListener(TuteurConsult.DeleteEvent.class, this::deleteTuteur);
         tuteurModalConsult.addListener(TuteurConsult.CloseEvent.class, e -> closeConsultModal());
 
+        tuteurModal = new TuteurNewOrEdit(tuteurService.findAllEntreprises());
         tuteurModal.addListener(TuteurNewOrEdit.SaveEvent.class, this::saveTuteur);
         tuteurModal.addListener(TuteurNewOrEdit.SaveEditedEvent.class, this::saveEditedTuteur);
         tuteurModal.addListener(TuteurNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
@@ -66,7 +66,7 @@ public class TuteurView extends VerticalLayout {
         content.addClassNames("content", "gap-m");
         content.setSizeFull();
 
-        // ajout de la toolbar (recherche + nouveau etudiant) et du content (grid + formulaire)
+        // ajout de la toolbar (recherche + nouveau tuteur) et du content (grid + formulaire)
         add(getToolbar(), content, tuteurModal);
         // initialisation des données de la grille à l'ouverture de la vue
         updateList();
@@ -80,11 +80,11 @@ public class TuteurView extends VerticalLayout {
         grid.addClassNames("tuteur-grid");
         grid.setSizeFull();
         grid.setColumns("prenom", "nom", "dateNaissance");
-        grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
-            consultEtudiant(etudiant);
+        grid.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.EYE), click -> {
+            consultTuteur(tuteur);
         }));
-        grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
-            editEtudiantModal(etudiant);
+        grid.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
+            editTuteurModal(tuteur);
         }));
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
@@ -160,9 +160,20 @@ public class TuteurView extends VerticalLayout {
         Notification.show(tuteur.getPrenom() + " " + tuteur.getNom() + " retiré(e)");
     }
 
-    public void consultEtudiant(Tuteur tuteur) {
+    public void consultTuteur(Tuteur tuteur) {
         tuteurModalConsult.setTuteur(tuteur);
         tuteurModalConsult.open();
+    }
+
+    // si tuteur null, on ferme le formulaire, sinon on l'affiche (new or edit)
+    public void editTuteurModal(Tuteur tuteur) {
+        if (tuteur == null) {
+            closeNewOrEditModal();
+        } else {
+            tuteurModal.setTuteur(tuteur);
+            tuteurModal.open();
+            addClassName("editing");
+        }
     }
 
     // ajout d'un tuteur
@@ -183,17 +194,6 @@ public class TuteurView extends VerticalLayout {
         tuteurModal.setTuteur(null);
         tuteurModal.close();
         grid.asSingleSelect().clear();
-    }
-
-    // si étudiant null, on ferme le formulaire, sinon on l'affiche (new or edit)
-    public void editTuteurModal(Tuteur tuteur) {
-        if (tuteur == null) {
-            closeNewOrEditModal();
-        } else {
-            tuteurModal.setTuteur(tuteur);
-            tuteurModal.open();
-            addClassName("editing");
-        }
     }
 
     // fonction qui récupère la liste des tuteurs pour les afficher dans la grille (avec les valeurs de recherche)

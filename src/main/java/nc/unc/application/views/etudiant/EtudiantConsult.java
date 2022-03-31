@@ -89,11 +89,7 @@ public class EtudiantConsult extends Dialog {
       // affichage date au format français
       dateNaissance.setValue(etudiant.getDateNaissance().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
       situationAnneePrecedente.setValue(etudiant.getSituationAnneePrecedente());
-      if (etudiant.getParcours() != null) {
-        parcours.setValue(etudiant.getParcours());
-      } else {
-        parcours.setValue("");
-      }
+      parcours.setValue(etudiant.getParcours() != null ? etudiant.getParcours() : "");
 
       // si l'étudiant a une entreprise, on passe les infos relatives à l'entreprise en formulaire
       // et on affiche la tab "Entreprise", sinon on la masque

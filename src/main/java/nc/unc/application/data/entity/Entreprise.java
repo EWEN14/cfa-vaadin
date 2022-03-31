@@ -21,7 +21,6 @@ public class Entreprise {
   @Column(name = "id_entreprise", nullable = false)
   private Long id;
 
-
   @NotNull(message = "Le statut actif de l'entreprise ne peut être nul")
   @Column(name = "statut_actif_entreprise", nullable = false)
   private String statutActifEntreprise;
@@ -80,7 +79,7 @@ public class Entreprise {
   private String fonctionRepresentantEmployeur;
 
   @OneToMany(mappedBy = "entreprise", targetEntity = Etudiant.class)
-  private List<Etudiant> etudiants = new java.util.ArrayList<>();
+  private List<Etudiant> etudiants = new ArrayList<>();
 
   @OneToMany(mappedBy = "entreprise", targetEntity = Tuteur.class)
   private List<Tuteur> tuteurs = new ArrayList<>();

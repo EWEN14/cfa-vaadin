@@ -4,7 +4,6 @@ import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.repository.EntrepriseRepository;
 import nc.unc.application.data.repository.TuteurRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

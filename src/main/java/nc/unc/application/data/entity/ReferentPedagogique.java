@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "referent_pedagogique")
-public class ReferentPedagogique {
+public class ReferentPedagogique implements Cloneable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -88,4 +88,22 @@ public class ReferentPedagogique {
     public void setCivilite(Civilite civilite) {
         this.civilite = civilite;
     }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    @Override
+    public String toString() {
+        return "Tuteur{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
+                ", telephone=" + telephone +
+                ", civilite=" + civilite +
+                '}';
+    }
+
+
 }

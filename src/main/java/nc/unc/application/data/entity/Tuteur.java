@@ -1,224 +1,289 @@
 package nc.unc.application.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import nc.unc.application.data.enums.Decua;
+import nc.unc.application.data.enums.Civilite;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tuteur")
-public class Tuteur implements Cloneable{
+public class Tuteur implements Cloneable {
 
-    //Id du tuteur
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_tuteur", nullable = false)
-    private Long id;
+  // Id du tuteur
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id_tuteur", nullable = false)
+  private Long id;
 
-    //Nom du tuteur
-    @NotEmpty(message = "Le nom doit être renseigné")
-    @NotNull(message = "Le nom ne peut pas être nul")
-    @Column(name = "nom", nullable = false)
-    private String nom;
+  // Nom du tuteur
+  @NotEmpty(message = "Le nom doit être renseigné")
+  @NotNull(message = "Le nom ne peut pas être nul")
+  @Column(name = "nom", nullable = false)
+  private String nom;
 
-    //Prénom du tuteur
-    @NotEmpty(message = "Le prénom doit être renseigné")
-    @NotNull(message = "Le prénom ne peut pas être nul")
-    @Column(name = "prenom", nullable = false)
-    private String prenom;
+  // Prénom du tuteur
+  @NotEmpty(message = "Le prénom doit être renseigné")
+  @NotNull(message = "Le prénom ne peut pas être nul")
+  @Column(name = "prenom", nullable = false)
+  private String prenom;
 
-    //Date de naissance du tuteur
-    @NotNull(message = "La date de naissance ne peut pas être nulle")
-    @Past(message = "La date de naissance ne peut pas être aujourd'hui ou dans le futur")
-    @Column(name = "date_naissance", nullable = false)
-    private LocalDate dateNaissance;
+  // Date de naissance du tuteur
+  @Past(message = "La date de naissance ne peut pas être aujourd'hui ou dans le futur")
+  @Column(name = "date_naissance")
+  private LocalDate dateNaissance;
 
-    //Email du tuteur
-    @Email
-    @NotNull(message = "L'email ne peut pas être null")
-    @Column(name = "email")
-    private String email;
+  // Email du tuteur
+  @Email
+  @NotNull(message = "L'email ne peut pas être null")
+  @Column(name = "email", nullable = false)
+  private String email;
 
-    //Casier judiciaire fourni du tuteur
-    @NotNull(message = "La casier judiciaire fournit ne peut pas être null")
-    @Column(name = "casier_judiciaire_fourni")
-    private Boolean casierJudiciaireFourni;
+  // Premier numéro de téléphone
+  @Max(999999)
+  @Min(111111)
+  @NotNull(message = "Le numéro de téléphone 1 ne doit pas être null")
+  @Column(name = "telephone_1", nullable = false)
+  private Integer telephone1;
 
-    //Diplôme le plus élévé du tuteur
-    @NotNull(message = "Le diplôme élevé obtenu ne peut pas être null")
-    @Column(name = "diplome_eleve_obtenu")
-    private String diplomeEleveObtenu;
+  // Deuxième numéro de téléphone
+  @Max(999999)
+  @Min(111111)
+  @Column(name = "telephone_2")
+  private Integer telephone2;
 
-    //Le poste occupé du tuteur
-    @NotNull(message = "Le poste occupé ne peut pas être null")
-    @Column(name = "poste_occupe")
-    private String posteOccupe;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "civilite")
+  private Civilite civilite;
 
-    //L'expérience professionnelle du tuteur
-    @Column(name = "annee_experience_professionnelle")
-    private String anneeExperienceProfessionnelle;
+  // Diplôme le plus élévé du tuteur
+  @Column(name = "diplome_eleve_obtenu")
+  private String diplomeEleveObtenu;
 
-    //Niveau du diplôme du tuteur
-    @NotNull(message = "Le niveau du diplome ne peut pas être null")
-    @Column(name = "niveau_diplome", nullable = false)
-    private Long niveauDiplome;
+  // Niveau du diplôme du tuteur
+  @Column(name = "niveau_diplome")
+  private Integer niveauDiplome;
 
-    //Première pièce jointe
-    @NotNull(message = "La piece jointe ne doit pas être nulle")
-    @Enumerated(EnumType.STRING)
-    @Column(name = "pj1", nullable = false)
-    private Decua pieceJointe1;
+  // Le poste occupé du tuteur
+  @Column(name = "poste_occupe")
+  private String posteOccupe;
 
-    //Deuxième pièce jointe
-    @NotNull(message = "La piece jointe ne doit pas être nulle")
-    @Enumerated(EnumType.STRING)
-    @Column(name = "pj2", nullable = false)
-    private Decua pieceJointe2;
+  // L'expérience professionnelle du tuteur en années
+  @Column(name = "annee_experience_professionnelle")
+  private String anneeExperienceProfessionnelle;
 
-    //Premier numéro de téléphone
-    @Max(999999)
-    @Min(111111)
-    @NotNull(message = "Le numéro de téléphone ne doit pas être null")
-    @Column(name = "telephone_1")
-    private Integer telephone1;
+  // Entreprise du tuteur
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Entreprise.class)
+  @JoinColumn(name = "id_entreprise")
+  @JsonIgnoreProperties({"tuteurs"})
+  private Entreprise entreprise;
 
-    //Deuxième numéro de téléphone
-    @Max(999999)
-    @Min(111111)
-    @NotNull(message = "La numéro de téléphone ne doit pas être nulle")
-    @Column(name = "telephone_2")
-    private Integer telephone2;
+  // Casier judiciaire fourni du tuteur
+  @Column(name = "casier_judiciaire_fourni")
+  private Boolean casierJudiciaireFourni;
 
-    //Entreprise du tuteur
-    @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Entreprise.class)
-    @JoinColumn(name = "id_entreprise")
-    @JsonIgnoreProperties({"tuteurs"})
-    private Entreprise entreprise;
+  // diplôme fourni
+  @Column(name = "diplome_fourni")
+  private Boolean diplomeFourni;
 
-    //Getters et Setters
-    public Decua getPieceJointe1() {
-        return pieceJointe1;
-    }
+  // certificat de travail fourni
+  @Column(name = "certificat_travail_fourni")
+  private Boolean certificatTravailFourni;
 
-    public void setPieceJointe1(Decua pieceJointe1) {
-        this.pieceJointe1 = pieceJointe1;
-    }
+  @Column(name = "cv_fourni")
+  private Boolean cvFourni;
 
-    public Decua getPieceJointe2() {
-        return pieceJointe2;
-    }
+  @CreationTimestamp
+  @Column(name = "created_at", nullable = false)
+  private LocalDateTime createdAt;
 
-    public void setPieceJointe2(Decua pieceJointe2) {
-        this.pieceJointe2 = pieceJointe2;
-    }
+  @UpdateTimestamp
+  @Column(name = "updated_at", nullable = false)
+  private LocalDateTime updatedAt;
 
-    public Long getNiveauDiplome() {
-        return niveauDiplome;
-    }
+  // Getters et Setters
+  public Long getId() {
+    return id;
+  }
 
-    public void setNiveauDiplome(Long niveauDiplome) {
-        this.niveauDiplome = niveauDiplome;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
+  public String getNom() {
+    return nom;
+  }
 
-    public String getExperienceProfessionnelle() {
-        return anneeExperienceProfessionnelle;
-    }
+  public void setNom(String nom) {
+    this.nom = nom;
+  }
 
-    public void setExperienceProfessionnelle(String anneeExperienceProfessionnelle) {
-        this.anneeExperienceProfessionnelle = anneeExperienceProfessionnelle;
-    }
+  public String getPrenom() {
+    return prenom;
+  }
 
-    public String getPosteOccupe() {
-        return posteOccupe;
-    }
+  public void setPrenom(String prenom) {
+    this.prenom = prenom;
+  }
 
-    public void setPosteOccupe(String posteOccupe) {
-        this.posteOccupe = posteOccupe;
-    }
+  public LocalDate getDateNaissance() {
+    return dateNaissance;
+  }
 
-    public String getDiplomeEleveObtenu() {
-        return diplomeEleveObtenu;
-    }
+  public void setDateNaissance(LocalDate dateNaissance) {
+    this.dateNaissance = dateNaissance;
+  }
 
-    public void setDiplomeEleveObtenu(String diplomeEleveObtenu) {
-        this.diplomeEleveObtenu = diplomeEleveObtenu;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public Boolean getCasierJudiciaireFourni() {
-        return casierJudiciaireFourni;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public void setCasierJudiciaireFourni(Boolean casierJudiciaireFourni) {
-        this.casierJudiciaireFourni = casierJudiciaireFourni;
-    }
+  public Integer getTelephone1() {
+    return telephone1;
+  }
 
-    public LocalDate getDateNaissance() {
-        return dateNaissance;
-    }
+  public void setTelephone1(Integer telephone1) {
+    this.telephone1 = telephone1;
+  }
 
-    public void setDateNaissance(LocalDate dateNaissance) {
-        this.dateNaissance = dateNaissance;
-    }
+  public Integer getTelephone2() {
+    return telephone2;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public void setTelephone2(Integer telephone2) {
+    this.telephone2 = telephone2;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public Civilite getCivilite() {
+    return civilite;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public void setCivilite(Civilite civilite) {
+    this.civilite = civilite;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public String getDiplomeEleveObtenu() {
+    return diplomeEleveObtenu;
+  }
 
-    public String getNom() {
-        return nom;
-    }
+  public void setDiplomeEleveObtenu(String diplomeEleveObtenu) {
+    this.diplomeEleveObtenu = diplomeEleveObtenu;
+  }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
+  public Integer getNiveauDiplome() {
+    return niveauDiplome;
+  }
 
-    public String getPrenom() {
-        return prenom;
-    }
+  public void setNiveauDiplome(Integer niveauDiplome) {
+    this.niveauDiplome = niveauDiplome;
+  }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
+  public String getPosteOccupe() {
+    return posteOccupe;
+  }
 
-    public Integer getTelephone2() {
-        return telephone2;
-    }
+  public void setPosteOccupe(String posteOccupe) {
+    this.posteOccupe = posteOccupe;
+  }
 
-    public void setTelephone2(Integer telephone2) {
-        this.telephone2 = telephone2;
-    }
+  public String getAnneeExperienceProfessionnelle() {
+    return anneeExperienceProfessionnelle;
+  }
 
-    public Integer getTelephone1() {
-        return telephone1;
-    }
+  public void setAnneeExperienceProfessionnelle(String anneeExperienceProfessionnelle) {
+    this.anneeExperienceProfessionnelle = anneeExperienceProfessionnelle;
+  }
 
-    public void setTelephone1(Integer telephone1) {
-        this.telephone1 = telephone1;
-    }
+  public Entreprise getEntreprise() {
+    return entreprise;
+  }
 
-    public Entreprise getEntreprise() {
-        return entreprise;
-    }
+  public void setEntreprise(Entreprise entreprise) {
+    this.entreprise = entreprise;
+  }
 
-    public void setEntreprise(Entreprise entreprise) {
-        this.entreprise = entreprise;
-    }
+  public Boolean getCasierJudiciaireFourni() {
+    return casierJudiciaireFourni;
+  }
 
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
+  public void setCasierJudiciaireFourni(Boolean casierJudiciaireFourni) {
+    this.casierJudiciaireFourni = casierJudiciaireFourni;
+  }
+
+  public Boolean getDiplomeFourni() {
+    return diplomeFourni;
+  }
+
+  public void setDiplomeFourni(Boolean diplomeFourni) {
+    this.diplomeFourni = diplomeFourni;
+  }
+
+  public Boolean getCertificatTravailFourni() {
+    return certificatTravailFourni;
+  }
+
+  public void setCertificatTravailFourni(Boolean certificatTravailFourni) {
+    this.certificatTravailFourni = certificatTravailFourni;
+  }
+
+  public Boolean getCvFourni() {
+    return cvFourni;
+  }
+
+  public void setCvFourni(Boolean cvFourni) {
+    this.cvFourni = cvFourni;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  // autres fonctions
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
+  }
+
+  @Override
+  public String toString() {
+    return "Tuteur{" +
+            "id=" + id +
+            ", nom='" + nom + '\'' +
+            ", prenom='" + prenom + '\'' +
+            ", dateNaissance=" + dateNaissance +
+            ", email='" + email + '\'' +
+            ", telephone1=" + telephone1 +
+            ", telephone2=" + telephone2 +
+            ", diplomeEleveObtenu='" + diplomeEleveObtenu + '\'' +
+            ", niveauDiplome=" + niveauDiplome +
+            ", posteOccupe='" + posteOccupe + '\'' +
+            ", anneeExperienceProfessionnelle='" + anneeExperienceProfessionnelle + '\'' +
+            ", entreprise=" + entreprise +
+            ", casierJudiciaireFourni=" + casierJudiciaireFourni +
+            ", diplomeFourni=" + diplomeFourni +
+            ", certificatTravailFourni=" + certificatTravailFourni +
+            ", cvFourni=" + cvFourni +
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
+            '}';
+  }
 }

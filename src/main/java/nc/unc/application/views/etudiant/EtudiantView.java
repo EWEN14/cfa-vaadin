@@ -144,8 +144,8 @@ public class EtudiantView extends VerticalLayout {
     service.saveEtudiant(etudiant);
 
     // ajout du log de modification
-    logEnregistrmentService.saveLogString("Anciennes valeurs : "
-            + etudiantOriginal.toString() + " remplacées par : "
+    logEnregistrmentService.saveLogString("ANCIENNES VALEURS : "
+            + etudiantOriginal.toString() + " \uD83C\uDD95 REMPLACÉES PAR : "
             + etudiant.toString(), TypeCrud.MODIFICATION);
 
     updateList();

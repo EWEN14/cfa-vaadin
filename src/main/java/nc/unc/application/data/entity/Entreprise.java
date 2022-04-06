@@ -10,34 +10,29 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Entity
 @Table(name = "entreprise")
-public class Entreprise {
+public class Entreprise implements Cloneable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id_entreprise", nullable = false)
   private Long id;
 
-  @NotNull(message = "Le statut actif de l'entreprise ne peut être nul")
+  @NotNull(message = "Le statut qui définit l'entreprise ne peut être nul")
   @Column(name = "statut_actif_entreprise", nullable = false)
   private String statutActifEntreprise;
 
   @NotEmpty(message = "L'enseigne de l'entreprise doit être renseigné")
+  @NotNull(message = "L'enseigne de l'entreprise ne peut pas être nulle")
   @Column(name = "enseigne", nullable = false)
   private String enseigne;
 
   @NotEmpty(message = "La raison sociale de l'entreprise doit être renseignée")
   @NotNull(message = "La raison sociale de l'entreprise ne peut pas être nulle")
-  @Column(name = "raison_sociale", nullable = false)
+  @Column(name = "raison_sociale")
   private String raisonSociale;
-
-  @NotEmpty(message = "La forme juridique de l'entreprise doit être renseignée")
-  @NotNull(message = "La forme juridique de l'entreprise ne peut pas être nulle")
-  @Column(name = "forme_juridique", nullable = false)
-  private String formeJuridique;
 
   @NotNull(message = "Le numéro de ridet ne peut pas être nul")
   @NotEmpty(message = "Le numéro de ridet doit être renseigné")
@@ -45,12 +40,13 @@ public class Entreprise {
   @Column(name = "numero_ridet")
   private String numeroRidet;
 
-  @NotNull(message = "Le numéro cafat ne peut pas être nul")
-  @Range(min = 100000, max = 999999)
+  @Column(name = "forme_juridique")
+  private String formeJuridique;
+
+  @Range(message = "Le numéro de Cafat doit comporter 6 chiffres", min = 100000, max = 999999)
   @Column(name = "numero_cafat")
   private Long numeroCafat;
 
-  @NotNull(message = "Le nombre de salariés ne peut pas être nul")
   @Column(name = "nombre_salarie")
   private Long nombreSalarie;
 
@@ -63,12 +59,6 @@ public class Entreprise {
   @Column(name = "convention_collective")
   private String conventionCollective;
 
-  @Column(name = "boite_postale")
-  private String boitePostale;
-
-  @Column(name = "commune")
-  private String commune;
-
   @Column(name = "nom_representant_employeur")
   private String nomRepresentantEmployeur;
 
@@ -77,6 +67,42 @@ public class Entreprise {
 
   @Column(name = "fonction_representant_employeur")
   private String fonctionRepresentantEmployeur;
+
+  @Column(name = "nom_contact_cfa")
+  private String nom_contact_cfa;
+
+  @Column(name = "prenom_contact_cfa")
+  private String prenom_contact_cfa;
+
+  @Column(name = "fonction_contact_cfa")
+  private String fonction_contact_cfa;
+
+  @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
+  @Column(name = "telephone_contact_cfa")
+  private String telephone_contact_cfa;
+
+  @Column(name = "email_contact_cfa")
+  private String email_contact_cfa;
+
+  @Column(name = "adr_phys_commune")
+  private String adressePhysiqueCommune;
+
+  @Range(message = "Le code postal doit correspondre à une commune en Nouvelle-Calédonie", min = 98000, max = 98999)
+  @Column(name = "adr_phys_cp")
+  private Integer adressePhysiqueCodePostal;
+
+  @Column(name = "adr_phy_rue")
+  private String adressePhysiqueRue;
+
+  @Column(name = "adr_post_commune")
+  private String adressePostaleCommune;
+
+  @Range(message = "Le code postal doit correspondre à une commune en Nouvelle-Calédonie", min = 98000, max = 98999)
+  @Column(name = "adr_postale_cp")
+  private Integer adressePostaleCodePostal;
+
+  @Column(name = "adr_post_rue_ou_bp")
+  private String adressePostaleRueOuBp;
 
   @OneToMany(mappedBy = "entreprise", targetEntity = Etudiant.class)
   private List<Etudiant> etudiants = new ArrayList<>();
@@ -92,6 +118,10 @@ public class Entreprise {
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
 
+  @Column(name = "observations", length = 15000)
+  private String observations;
+
+  // Getters et Setters
   public Long getId() {
     return id;
   }
@@ -124,20 +154,20 @@ public class Entreprise {
     this.raisonSociale = raisonSociale;
   }
 
-  public String getFormeJuridique() {
-    return formeJuridique;
-  }
-
-  public void setFormeJuridique(String formeJuridique) {
-    this.formeJuridique = formeJuridique;
-  }
-
   public String getNumeroRidet() {
     return numeroRidet;
   }
 
   public void setNumeroRidet(String numeroRidet) {
     this.numeroRidet = numeroRidet;
+  }
+
+  public String getFormeJuridique() {
+    return formeJuridique;
+  }
+
+  public void setFormeJuridique(String formeJuridique) {
+    this.formeJuridique = formeJuridique;
   }
 
   public Long getNumeroCafat() {
@@ -180,22 +210,6 @@ public class Entreprise {
     this.conventionCollective = conventionCollective;
   }
 
-  public String getBoitePostale() {
-    return boitePostale;
-  }
-
-  public void setBoitePostale(String boitePostale) {
-    this.boitePostale = boitePostale;
-  }
-
-  public String getCommune() {
-    return commune;
-  }
-
-  public void setCommune(String commune) {
-    this.commune = commune;
-  }
-
   public String getNomRepresentantEmployeur() {
     return nomRepresentantEmployeur;
   }
@@ -220,12 +234,116 @@ public class Entreprise {
     this.fonctionRepresentantEmployeur = fonctionRepresentantEmployeur;
   }
 
+  public String getEmail_contact_cfa() {
+    return email_contact_cfa;
+  }
+
+  public void setEmail_contact_cfa(String email_contact_cfa) {
+    this.email_contact_cfa = email_contact_cfa;
+  }
+
+  public String getTelephone_contact_cfa() {
+    return telephone_contact_cfa;
+  }
+
+  public void setTelephone_contact_cfa(String telephone_contact_cfa) {
+    this.telephone_contact_cfa = telephone_contact_cfa;
+  }
+
+  public String getFonction_contact_cfa() {
+    return fonction_contact_cfa;
+  }
+
+  public void setFonction_contact_cfa(String fonction_contact_cfa) {
+    this.fonction_contact_cfa = fonction_contact_cfa;
+  }
+
+  public String getPrenom_contact_cfa() {
+    return prenom_contact_cfa;
+  }
+
+  public void setPrenom_contact_cfa(String prenom_contact_cfa) {
+    this.prenom_contact_cfa = prenom_contact_cfa;
+  }
+
+  public String getNom_contact_cfa() {
+    return nom_contact_cfa;
+  }
+
+  public void setNom_contact_cfa(String nom_contact_cfa) {
+    this.nom_contact_cfa = nom_contact_cfa;
+  }
+
+  public String getAdressePhysiqueCommune() {
+    return adressePhysiqueCommune;
+  }
+
+  public void setAdressePhysiqueCommune(String adressePhysiqueCommune) {
+    this.adressePhysiqueCommune = adressePhysiqueCommune;
+  }
+
+  public Integer getAdressePhysiqueCodePostal() {
+    return adressePhysiqueCodePostal;
+  }
+
+  public void setAdressePhysiqueCodePostal(Integer adressePhysiqueCodePostal) {
+    this.adressePhysiqueCodePostal = adressePhysiqueCodePostal;
+  }
+
+  public String getAdressePhysiqueRue() {
+    return adressePhysiqueRue;
+  }
+
+  public void setAdressePhysiqueRue(String adressePhysiqueRue) {
+    this.adressePhysiqueRue = adressePhysiqueRue;
+  }
+
+  public String getAdressePostaleCommune() {
+    return adressePostaleCommune;
+  }
+
+  public void setAdressePostaleCommune(String adressePostaleCommune) {
+    this.adressePostaleCommune = adressePostaleCommune;
+  }
+
+  public Integer getAdressePostaleCodePostal() {
+    return adressePostaleCodePostal;
+  }
+
+  public void setAdressePostaleCodePostal(Integer adressePostaleCodePostal) {
+    this.adressePostaleCodePostal = adressePostaleCodePostal;
+  }
+
+  public String getAdressePostaleRueOuBp() {
+    return adressePostaleRueOuBp;
+  }
+
+  public void setAdressePostaleRueOuBp(String adressePostaleRueOuBp) {
+    this.adressePostaleRueOuBp = adressePostaleRueOuBp;
+  }
+
+  public String getObservations() {
+    return observations;
+  }
+
+  public void setObservations(String observations) {
+    this.observations = observations;
+  }
+
   public List<Etudiant> getEtudiants() {
     return etudiants;
   }
 
   public void setEtudiants(List<Etudiant> etudiants) {
     this.etudiants = etudiants;
+  }
+
+  public List<Tuteur> getTuteurs() {
+    return tuteurs;
+  }
+
+  public void setTuteurs(List<Tuteur> tuteurs) {
+    this.tuteurs = tuteurs;
   }
 
   public LocalDateTime getCreatedAt() {
@@ -244,11 +362,8 @@ public class Entreprise {
     this.updatedAt = updatedAt;
   }
 
-  public List<Tuteur> getTuteurs() {
-    return tuteurs;
-  }
-
-  public void setTuteurs(List<Tuteur> tuteurs) {
-    this.tuteurs = tuteurs;
+  // Autres méthodes
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
   }
 }

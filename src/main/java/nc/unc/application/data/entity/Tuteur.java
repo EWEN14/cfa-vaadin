@@ -2,8 +2,10 @@ package nc.unc.application.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import nc.unc.application.data.enums.Civilite;
+import nc.unc.application.data.enums.Sexe;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -44,21 +46,23 @@ public class Tuteur implements Cloneable {
   private String email;
 
   // Premier numéro de téléphone
-  @Max(999999)
-  @Min(111111)
-  @NotNull(message = "Le numéro de téléphone 1 ne doit pas être null")
+  @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
+  @NotNull(message = "Le numéro de téléphone 1 ne doit pas être nul")
   @Column(name = "telephone_1", nullable = false)
   private Integer telephone1;
 
   // Deuxième numéro de téléphone
-  @Max(999999)
-  @Min(111111)
+  @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
   @Column(name = "telephone_2")
   private Integer telephone2;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "civilite")
   private Civilite civilite;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "sexe")
+  private Sexe sexe;
 
   // Diplôme le plus élévé du tuteur
   @Column(name = "diplome_eleve_obtenu")
@@ -96,6 +100,9 @@ public class Tuteur implements Cloneable {
 
   @Column(name = "cv_fourni")
   private Boolean cvFourni;
+
+  @Column(name = "observations", length = 15000)
+  private String observations;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
@@ -170,6 +177,14 @@ public class Tuteur implements Cloneable {
     this.civilite = civilite;
   }
 
+  public Sexe getSexe() {
+    return sexe;
+  }
+
+  public void setSexe(Sexe sexe) {
+    this.sexe = sexe;
+  }
+
   public String getDiplomeEleveObtenu() {
     return diplomeEleveObtenu;
   }
@@ -242,6 +257,14 @@ public class Tuteur implements Cloneable {
     this.cvFourni = cvFourni;
   }
 
+  public String getObservations() {
+    return observations;
+  }
+
+  public void setObservations(String observations) {
+    this.observations = observations;
+  }
+
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
@@ -273,6 +296,8 @@ public class Tuteur implements Cloneable {
             ", email='" + email + '\'' +
             ", telephone1=" + telephone1 +
             ", telephone2=" + telephone2 +
+            ", civilite=" + civilite +
+            ", sexe=" + sexe +
             ", diplomeEleveObtenu='" + diplomeEleveObtenu + '\'' +
             ", niveauDiplome=" + niveauDiplome +
             ", posteOccupe='" + posteOccupe + '\'' +
@@ -282,6 +307,7 @@ public class Tuteur implements Cloneable {
             ", diplomeFourni=" + diplomeFourni +
             ", certificatTravailFourni=" + certificatTravailFourni +
             ", cvFourni=" + cvFourni +
+            ", observations='" + observations + '\'' +
             ", createdAt=" + createdAt +
             ", updatedAt=" + updatedAt +
             '}';

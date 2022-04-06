@@ -138,8 +138,8 @@ public class TuteurView extends VerticalLayout {
         tuteurService.saveTuteur(tuteur);
 
         // ajout du log de modification
-        logEnregistrmentService.saveLogString("Anciennes valeurs : "
-                + tuteurOriginal.toString() + " remplacées par : "
+        logEnregistrmentService.saveLogString("ANCIENNES VALEURS : "
+                + tuteurOriginal.toString() + " \uD83C\uDD95 REMPLACÉES PAR : "
                 + tuteur.toString(), TypeCrud.MODIFICATION);
 
         updateList();

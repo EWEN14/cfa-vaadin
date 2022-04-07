@@ -48,7 +48,7 @@ public class Etudiant implements Cloneable {
   private LocalDate dateNaissance;
 
   @Column(name = "age")
-  private Integer age;
+  private Long age;
 
   @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
   @NotNull(message = "Le numéro de téléphone 1 ne doit pas être nul")
@@ -64,6 +64,7 @@ public class Etudiant implements Cloneable {
   @Column(name = "email", nullable = false)
   private String email;
 
+  @NotNull(message = "Le dernier diplôme obtenu ne peut pas être nul")
   @Column(name = "dernier_diplome_obtenu_ou_en_cours", nullable = false)
   private String dernierDiplomeObtenuOuEnCours;
 
@@ -73,6 +74,7 @@ public class Etudiant implements Cloneable {
   @Column(name = "annee_obtention_dernier_diplome")
   private Integer anneeObtentionDernierDiplome;
 
+  @NotNull(message = "le statut d'admission ne doit pas être nul")
   @Column(name = "admis", nullable = false)
   private String admis;
 
@@ -119,7 +121,7 @@ public class Etudiant implements Cloneable {
   private String parcours;
 
   @Column(name = "veepap")
-  private Integer veepap;
+  private Boolean veepap;
 
   @Column(name = "prise_en_charge_frais_inscription")
   private String priseEnChargeFraisInscription;
@@ -192,11 +194,11 @@ public class Etudiant implements Cloneable {
     this.dateNaissance = dateNaissance;
   }
 
-  public Integer getAge() {
+  public Long getAge() {
     return age;
   }
 
-  public void setAge(Integer age) {
+  public void setAge(Long age) {
     this.age = age;
   }
 
@@ -360,11 +362,11 @@ public class Etudiant implements Cloneable {
     this.parcours = parcours;
   }
 
-  public Integer getVeepap() {
+  public Boolean getVeepap() {
     return veepap;
   }
 
-  public void setVeepap(Integer veepap) {
+  public void setVeepap(Boolean veepap) {
     this.veepap = veepap;
   }
 
@@ -439,41 +441,39 @@ public class Etudiant implements Cloneable {
 
   @Override
   public String toString() {
-    return "Etudiant{" +
-            "id=" + id +
-            ", nom='" + nom + '\'' +
-            ", prenom='" + prenom + '\'' +
-            ", civilite=" + civilite +
-            ", sexe=" + sexe +
-            ", dateNaissance=" + dateNaissance +
-            ", age=" + age +
-            ", telephone1=" + telephone1 +
-            ", telephone2=" + telephone2 +
-            ", email='" + email + '\'' +
-            ", dernierDiplomeObtenuOuEnCours='" + dernierDiplomeObtenuOuEnCours + '\'' +
-            ", niveauDernierDiplome=" + niveauDernierDiplome +
-            ", anneeObtentionDernierDiplome=" + anneeObtentionDernierDiplome +
-            ", admis='" + admis + '\'' +
-            ", situationUnc='" + situationUnc + '\'' +
-            ", situationEntreprise='" + situationEntreprise + '\'' +
-            ", lieuNaissance='" + lieuNaissance + '\'' +
-            ", nationalite='" + nationalite + '\'' +
-            ", numeroCafat=" + numeroCafat +
-            ", adresse='" + adresse + '\'' +
-            ", boitePostale='" + boitePostale + '\'' +
-            ", codePostal=" + codePostal +
-            ", commune='" + commune + '\'' +
-            ", situationAnneePrecedente='" + situationAnneePrecedente + '\'' +
-            ", etablissementDeProvenance='" + etablissementDeProvenance + '\'' +
-            ", travailleurHandicape=" + travailleurHandicape +
-            ", parcours='" + parcours + '\'' +
-            ", veepap=" + veepap +
-            ", priseEnChargeFraisInscription='" + priseEnChargeFraisInscription + '\'' +
-            ", obtentionDiplomeMention='" + obtentionDiplomeMention + '\'' +
-            ", observations='" + observations + '\'' +
-            ", entreprise=" + entreprise +
-            ", createdAt=" + createdAt +
-            ", updatedAt=" + updatedAt +
-            '}';
+    return "Étudiant { " +
+            "\n id=" + id +
+            "\n nom='" + nom + '\'' +
+            "\n prenom='" + prenom + '\'' +
+            "\n civilite=" + civilite +
+            "\n sexe=" + sexe +
+            "\n dateNaissance=" + dateNaissance +
+            "\n age=" + age +
+            "\n telephone1=" + telephone1 +
+            "\n telephone2=" + telephone2 +
+            "\n email='" + email + '\'' +
+            "\n dernierDiplomeObtenuOuEnCours='" + dernierDiplomeObtenuOuEnCours + '\'' +
+            "\n niveauDernierDiplome=" + niveauDernierDiplome +
+            "\n anneeObtentionDernierDiplome=" + anneeObtentionDernierDiplome +
+            "\n admis='" + admis + '\'' +
+            "\n situationUnc='" + situationUnc + '\'' +
+            "\n situationEntreprise='" + situationEntreprise + '\'' +
+            "\n lieuNaissance='" + lieuNaissance + '\'' +
+            "\n nationalite='" + nationalite + '\'' +
+            "\n numeroCafat=" + numeroCafat +
+            "\n adresse='" + adresse + '\'' +
+            "\n boitePostale='" + boitePostale + '\'' +
+            "\n codePostal=" + codePostal +
+            "\n commune='" + commune + '\'' +
+            "\n situationAnneePrecedente='" + situationAnneePrecedente + '\'' +
+            "\n etablissementDeProvenance='" + etablissementDeProvenance + '\'' +
+            "\n travailleurHandicape=" + travailleurHandicape +
+            "\n parcours='" + parcours + '\'' +
+            "\n veepap=" + veepap +
+            "\n priseEnChargeFraisInscription='" + priseEnChargeFraisInscription + '\'' +
+            "\n obtentionDiplomeMention='" + obtentionDiplomeMention + '\'' +
+            "\n observations='" + observations + '\'' +
+            "\n entreprise=" + (entreprise != null ? entreprise.getEnseigne() : "") +
+            " }";
   }
 }

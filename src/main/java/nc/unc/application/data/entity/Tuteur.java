@@ -289,27 +289,25 @@ public class Tuteur implements Cloneable {
   @Override
   public String toString() {
     return "Tuteur{" +
-            "id=" + id +
-            ", nom='" + nom + '\'' +
-            ", prenom='" + prenom + '\'' +
-            ", dateNaissance=" + dateNaissance +
-            ", email='" + email + '\'' +
-            ", telephone1=" + telephone1 +
-            ", telephone2=" + telephone2 +
-            ", civilite=" + civilite +
-            ", sexe=" + sexe +
-            ", diplomeEleveObtenu='" + diplomeEleveObtenu + '\'' +
-            ", niveauDiplome=" + niveauDiplome +
-            ", posteOccupe='" + posteOccupe + '\'' +
-            ", anneeExperienceProfessionnelle='" + anneeExperienceProfessionnelle + '\'' +
-            ", entreprise=" + entreprise +
-            ", casierJudiciaireFourni=" + casierJudiciaireFourni +
-            ", diplomeFourni=" + diplomeFourni +
-            ", certificatTravailFourni=" + certificatTravailFourni +
-            ", cvFourni=" + cvFourni +
-            ", observations='" + observations + '\'' +
-            ", createdAt=" + createdAt +
-            ", updatedAt=" + updatedAt +
-            '}';
+            "\n id=" + id +
+            "\n nom='" + nom + '\'' +
+            "\n prenom='" + prenom + '\'' +
+            "\n dateNaissance=" + dateNaissance +
+            "\n email='" + email + '\'' +
+            "\n telephone1=" + telephone1 +
+            "\n telephone2=" + telephone2 +
+            "\n civilite=" + civilite +
+            "\n sexe=" + sexe +
+            "\n diplomeEleveObtenu='" + diplomeEleveObtenu + '\'' +
+            "\n niveauDiplome=" + niveauDiplome +
+            "\n posteOccupe='" + posteOccupe + '\'' +
+            "\n anneeExperienceProfessionnelle='" + anneeExperienceProfessionnelle + '\'' +
+            "\n entreprise=" + (entreprise != null ? entreprise.getEnseigne() : "") +
+            "\n casierJudiciaireFourni=" + casierJudiciaireFourni +
+            "\n diplomeFourni=" + diplomeFourni +
+            "\n certificatTravailFourni=" + certificatTravailFourni +
+            "\n cvFourni=" + cvFourni +
+            "\n observations='" + observations + '\'' +
+            " }";
   }
 }

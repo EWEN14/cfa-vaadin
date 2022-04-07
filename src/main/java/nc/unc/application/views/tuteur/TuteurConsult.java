@@ -66,6 +66,9 @@ public class TuteurConsult extends Dialog {
     // tant que la modale n'est pas fermée
     this.setModal(true);
 
+    // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
+    setAllFieldsToReadOnly();
+
     // On instancie la Tabs, et on lui donne les tab que l'on veut insérer
     // tabs qui contiendra les tab permettant de passer d'un groupe d'informations à un autre
     Tabs tabsTuteurs = new Tabs(tuteursInfosTab, entrepriseTuteurInfosTab);
@@ -92,7 +95,7 @@ public class TuteurConsult extends Dialog {
     add(tabsTuteurs, content, createButtonsLayout());
   }
 
-  // méthode appelé à l'ouverture de la vue pour alimenter les champs du formulaire.
+  // Méthode appelée à l'ouverture de la vue pour alimenter les champs du formulaire.
   // Ici pas besoin de binder étant donné que l'on ne fait que consulter les informations (pas de sauvegarde)
   public void setTuteur(Tuteur tuteur) {
     this.tuteur = tuteur;
@@ -113,17 +116,20 @@ public class TuteurConsult extends Dialog {
       niveauDiplome.setValue(tuteur.getNiveauDiplome() != null ? tuteur.getNiveauDiplome().toString() : "");
       posteOccupe.setValue(tuteur.getPosteOccupe() != null ? tuteur.getPosteOccupe() : "");
       anneeExperienceProfessionnelle.setValue(tuteur.getAnneeExperienceProfessionnelle() != null ? tuteur.getAnneeExperienceProfessionnelle() : "");
-      casierJudiciaireFourni.setValue(tuteur.getCasierJudiciaireFourni());
-      diplomeFourni.setValue(tuteur.getDiplomeFourni());
-      certificatTravailFourni.setValue(tuteur.getDiplomeFourni());
-      cvFourni.setValue(tuteur.getCvFourni());
+      casierJudiciaireFourni.setValue(tuteur.getCasierJudiciaireFourni() != null ? tuteur.getCasierJudiciaireFourni() : false);
+      diplomeFourni.setValue(tuteur.getDiplomeFourni() != null ? tuteur.getDiplomeFourni() : false);
+      certificatTravailFourni.setValue(tuteur.getCertificatTravailFourni() != null ? tuteur.getCertificatTravailFourni() : false);
+      cvFourni.setValue(tuteur.getCvFourni() != null ? tuteur.getCvFourni() : false);
 
       // si le tuteur a une entreprise, on passe les infos relatives à l'entreprise en formulaire
       // et on affiche la tab "Entreprise", sinon on la masque
       if (tuteur.getEntreprise() != null) {
         entrepriseTuteurInfosTab.setVisible(true);
+        // champs obligatoirement remplis dans entreprise
         entrepriseEnseigne.setValue(tuteur.getEntreprise().getEnseigne());
-        entrepriseRaisonSociale.setValue(tuteur.getEntreprise().getRaisonSociale());
+
+        // champs non obligatoirement remplis dans entreprise
+        entrepriseRaisonSociale.setValue(tuteur.getEntreprise().getRaisonSociale() != null ? tuteur.getEntreprise().getRaisonSociale() : "");
       } else {
         entrepriseTuteurInfosTab.setVisible(false);
       }
@@ -151,6 +157,11 @@ public class TuteurConsult extends Dialog {
     } else if (tab.equals(entrepriseTuteurInfosTab)) {
       content.add(formTuteursEntrepriseInfos);
     }
+  }
+
+  private void setAllFieldsToReadOnly() {
+    nom.setReadOnly(true);
+    prenom.setReadOnly(true);
   }
 
   // Event "global" (class mère), qui étend les deux events ci-dessous, dont le but est de fournir l'étudiant

@@ -366,4 +366,38 @@ public class Entreprise implements Cloneable {
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
   }
+
+  @Override
+  public String toString() {
+    return "Entreprise { " +
+            "\n id=" + id +
+            "\n statutActifEntreprise='" + statutActifEntreprise + '\'' +
+            "\n enseigne='" + enseigne + '\'' +
+            "\n raisonSociale='" + raisonSociale + '\'' +
+            "\n numeroRidet='" + numeroRidet + '\'' +
+            "\n formeJuridique='" + formeJuridique + '\'' +
+            "\n numeroCafat=" + numeroCafat +
+            "\n nombreSalarie=" + nombreSalarie +
+            "\n codeNaf='" + codeNaf + '\'' +
+            "\n activiteEntreprise='" + activiteEntreprise + '\'' +
+            "\n conventionCollective='" + conventionCollective + '\'' +
+            "\n nomRepresentantEmployeur='" + nomRepresentantEmployeur + '\'' +
+            "\n prenomRepresentantEmployeur='" + prenomRepresentantEmployeur + '\'' +
+            "\n fonctionRepresentantEmployeur='" + fonctionRepresentantEmployeur + '\'' +
+            "\n nom_contact_cfa='" + nom_contact_cfa + '\'' +
+            "\n prenom_contact_cfa='" + prenom_contact_cfa + '\'' +
+            "\n fonction_contact_cfa='" + fonction_contact_cfa + '\'' +
+            "\n telephone_contact_cfa='" + telephone_contact_cfa + '\'' +
+            "\n email_contact_cfa='" + email_contact_cfa + '\'' +
+            "\n adressePhysiqueCommune='" + adressePhysiqueCommune + '\'' +
+            "\n adressePhysiqueCodePostal=" + adressePhysiqueCodePostal +
+            "\n adressePhysiqueRue='" + adressePhysiqueRue + '\'' +
+            "\n adressePostaleCommune='" + adressePostaleCommune + '\'' +
+            "\n adressePostaleCodePostal=" + adressePostaleCodePostal +
+            "\n adressePostaleRueOuBp='" + adressePostaleRueOuBp + '\'' +
+            "\n etudiants=" + etudiants +
+            "\n tuteurs=" + tuteurs +
+            "\n observations='" + observations + '\'' +
+            " }";
+  }
 }

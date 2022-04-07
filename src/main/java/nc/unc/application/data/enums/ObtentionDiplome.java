@@ -18,7 +18,7 @@ public enum ObtentionDiplome {
    * Tableau renvoyant les différents choix sous forme de String.
    * @return tableau de chaînes de caractères qui sont les versions String de chaque Enum
    */
-  public static String[] getSituationsStr() {
+  public static String[] getObtentionDiplomeStr() {
     ObtentionDiplome[] enums =  ObtentionDiplome.values();
     String[] strings = new String[ObtentionDiplome.values().length];
     for (int i = 0; i < strings.length; i++) {

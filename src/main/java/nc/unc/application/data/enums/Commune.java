@@ -56,10 +56,10 @@ public enum Commune {
   }
 
   /**
-   * Tableau renvoyant les différentes situations sous forme de String.
+   * Tableau renvoyant les différentes communes sous forme de String.
    * @return tableau de chaînes de caractères qui sont les versions String de chaque Enum
    */
-  public static String[] getSituationAnneePrecedenteStr() {
+  public static String[] getCommunesStr() {
     Commune[] communesEnum = Commune.values();
     String[] communesStr = new String[Commune.values().length];
     for (int i = 0; i < communesStr.length; i++) {

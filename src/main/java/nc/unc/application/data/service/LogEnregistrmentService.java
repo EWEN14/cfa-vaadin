@@ -7,6 +7,7 @@ import nc.unc.application.data.enums.TypeCrud;
 import nc.unc.application.data.repository.LogEnregistrementRepository;
 import org.springframework.stereotype.Service;
 import nc.unc.application.security.AuthenticatedUser;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -37,17 +38,32 @@ public class LogEnregistrmentService {
     logEnregistrementRepository.delete(logEnregistrement);
   }
 
-  public void saveLogString(String description_log, TypeCrud typeCrud) {
+  public void saveLogAjoutString(String description_log) {
     LogEnregistrement logEnregistrement = new LogEnregistrement();
     logEnregistrement.setDescription_log(description_log);
-    logEnregistrement.setTypeCrud(typeCrud);
+    logEnregistrement.setTypeCrud(TypeCrud.AJOUT);
 
-    Optional<User> maybeUser = authenticatedUser.get();
-    if(maybeUser.isPresent()){
-      User user = maybeUser.get();
-      logEnregistrement.setExecutant(user.getNom() + " " + user.getPrenom());
-    }
+    setExecutant(logEnregistrement);
+    saveLog(logEnregistrement);
+  }
 
+  public void saveLogEditString(String oldValues, String newValues) {
+    LogEnregistrement logEnregistrement = new LogEnregistrement();
+    logEnregistrement.setDescription_log(
+            "ANCIENNES VALEURS : \n" + oldValues + "\n\uD83C\uDD95 REMPLACÉES PAR : \n" + newValues
+    );
+    logEnregistrement.setTypeCrud(TypeCrud.MODIFICATION);
+
+    setExecutant(logEnregistrement);
+    saveLog(logEnregistrement);
+  }
+
+  public void saveLogDeleteString(String description_log) {
+    LogEnregistrement logEnregistrement = new LogEnregistrement();
+    logEnregistrement.setDescription_log(description_log);
+    logEnregistrement.setTypeCrud(TypeCrud.SUPPRESSION);
+
+    setExecutant(logEnregistrement);
     saveLog(logEnregistrement);
   }
 
@@ -57,5 +73,13 @@ public class LogEnregistrmentService {
       return;
     }
     logEnregistrementRepository.save(logEnregistrement);
+  }
+
+  public void setExecutant(LogEnregistrement logEnregistrement) {
+    Optional<User> maybeUser = authenticatedUser.get();
+    if (maybeUser.isPresent()) {
+      User user = maybeUser.get();
+      logEnregistrement.setExecutant(user.getNom() + " " + user.getPrenom());
+    }
   }
 }

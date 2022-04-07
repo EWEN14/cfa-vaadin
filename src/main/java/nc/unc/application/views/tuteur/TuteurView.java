@@ -29,7 +29,7 @@ import javax.annotation.security.PermitAll;
 @PermitAll // tous les utilisateurs connectés peuvent aller sur cette page
 public class TuteurView extends VerticalLayout {
 
-    //Les objets de notre vue
+    // Les objets de notre vue
     Grid<Tuteur> grid = new Grid<>(Tuteur.class);
     TextField filterText = new TextField();
     Button addTuteurButton;
@@ -117,7 +117,7 @@ public class TuteurView extends VerticalLayout {
         tuteurService.saveTuteur(tuteur);
 
         // ajout du log d'ajout
-        logEnregistrmentService.saveLogString(tuteur.toString(), TypeCrud.AJOUT);
+        logEnregistrmentService.saveLogAjoutString(tuteur.toString());
 
         // mise à jour de la grid, fermeture du formulaire et notification
         updateList();
@@ -138,9 +138,7 @@ public class TuteurView extends VerticalLayout {
         tuteurService.saveTuteur(tuteur);
 
         // ajout du log de modification
-        logEnregistrmentService.saveLogString("ANCIENNES VALEURS : "
-                + tuteurOriginal.toString() + " \uD83C\uDD95 REMPLACÉES PAR : "
-                + tuteur.toString(), TypeCrud.MODIFICATION);
+        logEnregistrmentService.saveLogEditString(tuteurOriginal.toString(), tuteur.toString());
 
         updateList();
         closeNewOrEditModal();
@@ -153,7 +151,7 @@ public class TuteurView extends VerticalLayout {
         tuteurService.deleteTuteur(tuteur);
 
         // ajout du log de suppression
-        logEnregistrmentService.saveLogString(tuteur.toString(), TypeCrud.SUPPRESSION);
+        logEnregistrmentService.saveLogDeleteString(tuteur.toString());
 
         updateList();
         closeConsultModal();

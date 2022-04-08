@@ -59,7 +59,7 @@ public class TuteurConsult extends Dialog {
   private final Tab entrepriseTuteurInfosTab = new Tab(VaadinIcon.WORKPLACE.create(), new Span("Entreprise"));
 
   private final Button close = new Button("Fermer");
-  private final Button delete = new Button("Supprimer");
+  private final Button delete = new Button("Supprimer le tuteur");
 
   public TuteurConsult() {
     // On définit que la fenêtre qui s'ouvre est une modale, ce qui fait qu'on ne peut rien faire sur l'application

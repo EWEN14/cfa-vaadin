@@ -11,6 +11,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tuteur")
@@ -111,6 +113,10 @@ public class Tuteur implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
+
+  @OneToMany(mappedBy = "tuteur", cascade = CascadeType.MERGE, orphanRemoval = true, targetEntity = TuteurHabilitation.class)
+  @OrderBy("dateFormation DESC")
+  private List<TuteurHabilitation> tuteurHabilitations = new ArrayList<>();
 
   // Getters et Setters
   public Long getId() {
@@ -263,6 +269,14 @@ public class Tuteur implements Cloneable {
 
   public void setObservations(String observations) {
     this.observations = observations;
+  }
+
+  public List<TuteurHabilitation> getTuteurHabilitations() {
+    return tuteurHabilitations;
+  }
+
+  public void setTuteurHabilitations(List<TuteurHabilitation> tuteurHabilitations) {
+    this.tuteurHabilitations = tuteurHabilitations;
   }
 
   public LocalDateTime getCreatedAt() {

@@ -39,7 +39,7 @@ public class TuteurView extends VerticalLayout {
     private TuteurService tuteurService;
     private LogEnregistrmentService logEnregistrmentService;
 
-    public TuteurView(TuteurService tuteurService,LogEnregistrmentService logEnregistrmentService ){
+    public TuteurView(TuteurService tuteurService,LogEnregistrmentService logEnregistrmentService){
 
         this.tuteurService = tuteurService;
         this.logEnregistrmentService = logEnregistrmentService;

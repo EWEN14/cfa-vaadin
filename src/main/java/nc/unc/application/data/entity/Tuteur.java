@@ -106,6 +106,11 @@ public class Tuteur implements Cloneable {
   @Column(name = "observations", length = 15000)
   private String observations;
 
+  // Besoin de mettre en EAGER plutôt qu'en LAZY (par défaut), car sinon liste des Habilitations pas initialisées
+  // quand le Tuteur est initialisé
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "tuteur", cascade = CascadeType.MERGE, orphanRemoval = true)
+  private List<TuteurHabilitation> tuteurHabilitations = new ArrayList<>();
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private LocalDateTime createdAt;
@@ -113,10 +118,6 @@ public class Tuteur implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
-
-  @OneToMany(mappedBy = "tuteur", cascade = CascadeType.MERGE, orphanRemoval = true, targetEntity = TuteurHabilitation.class)
-  @OrderBy("dateFormation DESC")
-  private List<TuteurHabilitation> tuteurHabilitations = new ArrayList<>();
 
   // Getters et Setters
   public Long getId() {

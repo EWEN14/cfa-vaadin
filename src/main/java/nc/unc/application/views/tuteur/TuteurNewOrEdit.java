@@ -8,8 +8,17 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -20,7 +29,9 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Tuteur;
 import com.vaadin.flow.component.textfield.TextField;
+import nc.unc.application.data.entity.TuteurHabilitation;
 import nc.unc.application.data.enums.Civilite;
+import nc.unc.application.data.service.TuteurService;
 
 import java.util.List;
 
@@ -30,6 +41,11 @@ public class TuteurNewOrEdit extends Dialog {
   private Tuteur tuteur;
   private Tuteur cloneTuteur;
 
+  private TuteurService tuteurService;
+
+  // Layout qui contiendra le contenu en dessous des tabs
+  private final VerticalLayout content;
+
   // Champs de notre formulaire
   FormLayout form = new FormLayout();
   TextField nom = new TextField("NOM");
@@ -38,7 +54,7 @@ public class TuteurNewOrEdit extends Dialog {
   EmailField email = new EmailField("Email");
   IntegerField telephone1 = new IntegerField("Téléphone 1");
   IntegerField telephone2 = new IntegerField("Téléphone 2");
-  // Select<Civilite> civilite = new Select<>();
+  Select<Civilite> civilite = new Select<>();
   TextField diplomeEleveObtenu = new TextField("Diplome le plus élevé obtenu");
   Select<Integer> niveauDiplome = new Select<>();
   TextField posteOccupe = new TextField("Poste occupé");
@@ -48,6 +64,10 @@ public class TuteurNewOrEdit extends Dialog {
   Checkbox diplomeFourni = new Checkbox("Diplôme fourni");
   Checkbox certificatTravailFourni = new Checkbox("Certificat de Travail fourni");
   Checkbox cvFourni = new Checkbox("CV fourni");
+  Grid<TuteurHabilitation> tuteurHabilitations = new Grid<>(TuteurHabilitation.class);
+
+  Tab tuteursInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(), new Span("Tuteur"));
+  Tab tuteursHabilitationsTab = new Tab(VaadinIcon.DIPLOMA.create(), new Span("Habilitations"));
 
   // Notre binder
   Binder<Tuteur> binder = new BeanValidationBinder<>(Tuteur.class);
@@ -60,10 +80,19 @@ public class TuteurNewOrEdit extends Dialog {
     // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité étudiant,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)
     binder.bindInstanceFields(this);
+    // binder.forField(tuteurHabilitations).bind(Tuteur::getTuteurHabilitations, Tuteur::setTuteurHabilitationsns);
+
+    this.setWidth("90vw");
+
+    Tabs tabsTuteurs = new Tabs(tuteursInfosTab, tuteursHabilitationsTab);
+    // Au clic sur une des tab, on appelle notre méthode setContent pour pouvoir changer le contenu
+    tabsTuteurs.addSelectedChangeListener(selectedChangeEvent ->
+            setContent(selectedChangeEvent.getSelectedTab())
+    );
 
     // définition du label de civilite, et alimentation en valeurs de l'enum Civilite
-    // civilite.setLabel("Civilité");
-    // civilite.setItems(Civilite.values());
+    civilite.setLabel("Civilité");
+    civilite.setItems(Civilite.values());
 
     // Remplissage de nos select
     niveauDiplome.setLabel("Niveau de diplôme");
@@ -80,13 +109,23 @@ public class TuteurNewOrEdit extends Dialog {
     dateNaissance.setI18n(multiFormatI18n);
     dateNaissance.isRequired();
 
+    // grille des habilitations du tuteur
+    tuteurHabilitations.addClassName("tuteur-habilitation-grid");
+    tuteurHabilitations.setColumns("dateFormation","formation.libelleFormation", "statutFormation");
+
     // ajout des champs et des boutons d'action dans le formulaire
     // TODO : remettre civilité après
-    form.add(nom, prenom, dateNaissance, email, telephone1, telephone2, diplomeEleveObtenu, niveauDiplome,
+    form.add(nom, prenom, dateNaissance, civilite, email, telephone1, telephone2, diplomeEleveObtenu, niveauDiplome,
             posteOccupe, anneeExperienceProfessionnelle, entreprise, casierJudiciaireFourni, diplomeFourni,
             certificatTravailFourni, cvFourni, createButtonsLayout());
 
-    add(form);
+    // contenu qui sera affiché en dessous des tabs, qui change en fonction de la tab sélectionné
+    content = new VerticalLayout();
+    content.setSpacing(false);
+    // à l'ouverture, on définit le contenu par rapport à la tab sélectionné (la première par défaut)
+    setContent(tabsTuteurs.getSelectedTab());
+
+    add(tabsTuteurs, content);
   }
 
   // Events lancés lors du click sur nos boutons
@@ -112,6 +151,7 @@ public class TuteurNewOrEdit extends Dialog {
     if (tuteur != null && tuteur.getId() != null) {
       try {
         this.cloneTuteur = (Tuteur) tuteur.clone();
+        tuteurHabilitations.setItems(tuteur.getTuteurHabilitations());
       } catch (CloneNotSupportedException e) {
         e.printStackTrace();
       }
@@ -134,6 +174,16 @@ public class TuteurNewOrEdit extends Dialog {
     }
   }
 
+  private void setContent(Tab tab) {
+    // au début on enlève tout le contenu avant remplacement
+    content.removeAll();
+    // on insère le contenu adéquat en fonction de la tab sélectionnée
+    if (tab.equals(tuteursInfosTab)) {
+      content.add(form);
+    } else if (tab.equals(tuteursHabilitationsTab)) {
+      content.add(tuteurHabilitations);
+    }
+  }
 
   // Event "global" (class mère), qui étend les trois event ci-dessous, dont le but est de fournir l'étudiant
   // qu'on manipule dans le formulaire

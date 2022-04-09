@@ -7,6 +7,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -17,6 +18,8 @@ import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.Tuteur;
+import nc.unc.application.data.entity.TuteurHabilitation;
+import nc.unc.application.data.service.TuteurService;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -27,6 +30,7 @@ import java.time.format.FormatStyle;
 public class TuteurConsult extends Dialog {
 
   private Tuteur tuteur;
+  private TuteurService tuteurService;
 
   // Layout qui contiendra le contenu en dessous des tabs
   private final VerticalLayout content;
@@ -39,7 +43,7 @@ public class TuteurConsult extends Dialog {
   private final EmailField email = new EmailField("Email");
   private final TextField telephone1 = new TextField("Téléphone 1");
   private final TextField telephone2 = new TextField("Téléphone 2");
-  // private final TextField civilite = new TextField("Civilité");
+  private final TextField civilite = new TextField("Civilité");
   private final TextField diplomeEleveObtenu = new TextField("Diplome le plus élevé obtenu");
   private final TextField niveauDiplome = new TextField("Niveau du Diplôme");
   private final TextField posteOccupe = new TextField("Poste occupé");
@@ -54,8 +58,12 @@ public class TuteurConsult extends Dialog {
   private final TextField entrepriseEnseigne = new TextField("Enseigne");
   private final TextField entrepriseRaisonSociale = new TextField("Raison Sociale");
 
+  // grid qui contiendra les habilitations du tuteur
+  private final Grid<TuteurHabilitation> tuteurHabilitationGrid = new Grid<>(TuteurHabilitation.class);
+
   // tab (onglet) qui seront insérés dans une tabs (ensemble d'onglets) les regroupant
-  private final Tab tuteursInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(), new Span("Tuteurs"));
+  private final Tab tuteursInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(), new Span("Tuteur"));
+  private final Tab tuteursHabilitationsTab = new Tab(VaadinIcon.DIPLOMA.create(), new Span("Habiliations"));
   private final Tab entrepriseTuteurInfosTab = new Tab(VaadinIcon.WORKPLACE.create(), new Span("Entreprise"));
 
   private final Button close = new Button("Fermer");
@@ -65,24 +73,29 @@ public class TuteurConsult extends Dialog {
     // On définit que la fenêtre qui s'ouvre est une modale, ce qui fait qu'on ne peut rien faire sur l'application
     // tant que la modale n'est pas fermée
     this.setModal(true);
+    this.setWidth("90vw");
+
+    // grille des habilitations du tuteur
+    tuteurHabilitationGrid.addClassName("tuteur-habilitation-grid");
+    tuteurHabilitationGrid.setColumns("dateFormation","formation.libelleFormation", "statutFormation");
 
     // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
     setAllFieldsToReadOnly();
 
     // On instancie la Tabs, et on lui donne les tab que l'on veut insérer
     // tabs qui contiendra les tab permettant de passer d'un groupe d'informations à un autre
-    Tabs tabsTuteurs = new Tabs(tuteursInfosTab, entrepriseTuteurInfosTab);
+    Tabs tabsTuteurs = new Tabs(tuteursInfosTab, tuteursHabilitationsTab, entrepriseTuteurInfosTab);
     // Au clic sur une des tab, on appelle notre méthode setContent pour pouvoir changer le contenu
     tabsTuteurs.addSelectedChangeListener(selectedChangeEvent ->
             setContent(selectedChangeEvent.getSelectedTab())
     );
 
     // on définit les champs qu'il y aura dans le formulaire d'informations générales de l'étudiant
-    form.add(nom, prenom, dateNaissance, email, telephone1, telephone2, diplomeEleveObtenu, niveauDiplome, posteOccupe,
+    form.add(nom, prenom, dateNaissance, email, civilite, telephone1, telephone2, diplomeEleveObtenu, niveauDiplome, posteOccupe,
             anneeExperienceProfessionnelle, casierJudiciaireFourni, diplomeFourni, certificatTravailFourni,
             cvFourni, createButtonsLayout());
 
-    // pareil, mais pour le formulaire relative à son entreprise
+    // pareil, mais pour le formulaire relatif à son entreprise
     formTuteursEntrepriseInfos.add(entrepriseEnseigne, entrepriseRaisonSociale);
 
     // contenu qui sera affiché en dessous des tabs, qui change en fonction de la tab sélectionné
@@ -111,7 +124,7 @@ public class TuteurConsult extends Dialog {
 
       // champs pouvant être null (ou false donc pas coché dans les cas des cases à cocher)
       telephone2.setValue(tuteur.getTelephone2() != null ? tuteur.getTelephone2().toString() : "");
-
+      civilite.setValue(tuteur.getCivilite() != null ? tuteur.getCivilite().toString() : "");
       diplomeEleveObtenu.setValue(tuteur.getDiplomeEleveObtenu() != null ? tuteur.getDiplomeEleveObtenu() : "");
       niveauDiplome.setValue(tuteur.getNiveauDiplome() != null ? tuteur.getNiveauDiplome().toString() : "");
       posteOccupe.setValue(tuteur.getPosteOccupe() != null ? tuteur.getPosteOccupe() : "");
@@ -132,6 +145,13 @@ public class TuteurConsult extends Dialog {
         entrepriseRaisonSociale.setValue(tuteur.getEntreprise().getRaisonSociale() != null ? tuteur.getEntreprise().getRaisonSociale() : "");
       } else {
         entrepriseTuteurInfosTab.setVisible(false);
+      }
+
+      if (tuteur.getTuteurHabilitations() != null) {
+        tuteursHabilitationsTab.setVisible(true);
+        tuteurHabilitationGrid.setItems(tuteur.getTuteurHabilitations());
+      } else {
+        tuteursHabilitationsTab.setVisible(false);
       }
     }
   }
@@ -154,6 +174,8 @@ public class TuteurConsult extends Dialog {
     // on insère le contenu (formulaire) adéquat en fonction de la tab sélectionnée
     if (tab.equals(tuteursInfosTab)) {
       content.add(form);
+    } else if (tab.equals(tuteursHabilitationsTab)) {
+      content.add(tuteurHabilitationGrid);
     } else if (tab.equals(entrepriseTuteurInfosTab)) {
       content.add(formTuteursEntrepriseInfos);
     }

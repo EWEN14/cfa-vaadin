@@ -13,6 +13,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Etudiant;
+import nc.unc.application.data.enums.Sexe;
 import nc.unc.application.data.enums.TypeCrud;
 import nc.unc.application.data.service.EtudiantService;
 import nc.unc.application.data.service.LogEnregistrmentService;
@@ -21,6 +22,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests
@@ -98,8 +101,8 @@ public class EtudiantView extends VerticalLayout {
     filterText.setHelperText("Recherche par nom ou prénom...");
     filterText.setPrefixComponent(VaadinIcon.SEARCH.create()); // affiche une petite loupe au début du champ
     filterText.setClearButtonVisible(true); // affiche la petite croix dans le champ pour effacer
-    // permet de rendre Lazy le changement de valeur, la recherche ne se fera donc que après que l'utilisateur
-    // a arrêté de taper dans le champ depuis un petit moment.
+    // permet de rendre Lazy le changement de valeur, la recherche ne se fera donc qu'après que l'utilisateur
+    // ait arrêté de taper dans le champ depuis un petit moment.
     filterText.setValueChangeMode(ValueChangeMode.LAZY);
     // appel de la fonction qui va mettre à jour la liste d'étudiants en tenant compte de ce qu'on a tapé en recherche
     filterText.addValueChangeListener(e -> updateList());
@@ -117,13 +120,13 @@ public class EtudiantView extends VerticalLayout {
   private void saveEtudiant(EtudiantNewOrEdit.SaveEvent event) {
     // utilisation du getEtudiant de la classe mère EtudiantFormEvent pour récupérer l'étudiant
     Etudiant etudiant = event.getEtudiant();
-    // mise en majuscule du nom avant sauvegarde
-    etudiant.setNom(etudiant.getNom().toUpperCase());
+    // mise en majuscule du nom, définition sexe et âge avant sauvegarde
+    setNameSexeAgeEtudiant(etudiant);
     // sauvegarde de l'étudiant
     service.saveEtudiant(etudiant);
 
     // ajout du log d'ajout
-    logEnregistrmentService.saveLogString(etudiant.toString(), TypeCrud.AJOUT);
+    logEnregistrmentService.saveLogAjoutString(etudiant.toString());
 
     // mise à jour de la grid, fermeture du formulaire et notification
     updateList();
@@ -137,16 +140,14 @@ public class EtudiantView extends VerticalLayout {
     Etudiant etudiant = event.getEtudiant();
     // récupération de l'étudiant avant modification
     Etudiant etudiantOriginal = event.getEtudiantOriginal();
-    // mise en majuscule du nom avant sauvegarde
-    etudiant.setNom(etudiant.getNom().toUpperCase());
+    // mise en majuscule du nom, définition sexe et âge avant sauvegarde
+    setNameSexeAgeEtudiant(etudiant);
 
     // sauvegarde de l'étudiant
     service.saveEtudiant(etudiant);
 
     // ajout du log de modification
-    logEnregistrmentService.saveLogString("Anciennes valeurs : "
-            + etudiantOriginal.toString() + " remplacées par : "
-            + etudiant.toString(), TypeCrud.MODIFICATION);
+    logEnregistrmentService.saveLogEditString(etudiantOriginal.toString(), etudiant.toString());
 
     updateList();
     closeNewOrEditModal();
@@ -159,7 +160,7 @@ public class EtudiantView extends VerticalLayout {
     service.deleteEtudiant(etudiant);
 
     // ajout du log de suppression
-    logEnregistrmentService.saveLogString(etudiant.toString(), TypeCrud.SUPPRESSION);
+    logEnregistrmentService.saveLogDeleteString(etudiant.toString());
 
     updateList();
     closeConsultModal();
@@ -205,5 +206,22 @@ public class EtudiantView extends VerticalLayout {
   // fonction qui récupère la liste des étudiants pour les afficher dans la grille (avec les valeurs de recherche)
   private void updateList() {
     grid.setItems(service.findAllEtudiants(filterText.getValue()));
+  }
+
+  // fonction qui met le nom de l'étudiant en majuscule, défini son sexe en fonction de sa civilté
+  // et son âge selon sa date de naissance
+  private void setNameSexeAgeEtudiant(Etudiant etudiant) {
+    etudiant.setNom(etudiant.getNom().toUpperCase());
+    switch (etudiant.getCivilite()) {
+      case MONSIEUR:
+        etudiant.setSexe(Sexe.M);
+        break;
+      case MADAME:
+        etudiant.setSexe(Sexe.F);
+        break;
+      case NON_BINAIRE:
+        etudiant.setSexe(Sexe.NB);
+    }
+    etudiant.setAge(ChronoUnit.YEARS.between(etudiant.getDateNaissance(), LocalDate.now()));
   }
 }

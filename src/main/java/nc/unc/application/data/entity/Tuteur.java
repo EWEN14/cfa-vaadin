@@ -2,13 +2,17 @@ package nc.unc.application.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import nc.unc.application.data.enums.Civilite;
+import nc.unc.application.data.enums.Sexe;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tuteur")
@@ -44,21 +48,23 @@ public class Tuteur implements Cloneable {
   private String email;
 
   // Premier numéro de téléphone
-  @Max(999999)
-  @Min(111111)
-  @NotNull(message = "Le numéro de téléphone 1 ne doit pas être null")
+  @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
+  @NotNull(message = "Le numéro de téléphone 1 ne doit pas être nul")
   @Column(name = "telephone_1", nullable = false)
   private Integer telephone1;
 
   // Deuxième numéro de téléphone
-  @Max(999999)
-  @Min(111111)
+  @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
   @Column(name = "telephone_2")
   private Integer telephone2;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "civilite")
   private Civilite civilite;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "sexe")
+  private Sexe sexe;
 
   // Diplôme le plus élévé du tuteur
   @Column(name = "diplome_eleve_obtenu")
@@ -96,6 +102,14 @@ public class Tuteur implements Cloneable {
 
   @Column(name = "cv_fourni")
   private Boolean cvFourni;
+
+  @Column(name = "observations", length = 15000)
+  private String observations;
+
+  // Besoin de mettre en EAGER plutôt qu'en LAZY (par défaut), car sinon liste des Habilitations pas initialisées
+  // quand le Tuteur est initialisé
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "tuteur", cascade = CascadeType.MERGE, orphanRemoval = true)
+  private List<TuteurHabilitation> tuteurHabilitations = new ArrayList<>();
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
@@ -170,6 +184,14 @@ public class Tuteur implements Cloneable {
     this.civilite = civilite;
   }
 
+  public Sexe getSexe() {
+    return sexe;
+  }
+
+  public void setSexe(Sexe sexe) {
+    this.sexe = sexe;
+  }
+
   public String getDiplomeEleveObtenu() {
     return diplomeEleveObtenu;
   }
@@ -242,6 +264,22 @@ public class Tuteur implements Cloneable {
     this.cvFourni = cvFourni;
   }
 
+  public String getObservations() {
+    return observations;
+  }
+
+  public void setObservations(String observations) {
+    this.observations = observations;
+  }
+
+  public List<TuteurHabilitation> getTuteurHabilitations() {
+    return tuteurHabilitations;
+  }
+
+  public void setTuteurHabilitations(List<TuteurHabilitation> tuteurHabilitations) {
+    this.tuteurHabilitations = tuteurHabilitations;
+  }
+
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
@@ -266,24 +304,25 @@ public class Tuteur implements Cloneable {
   @Override
   public String toString() {
     return "Tuteur{" +
-            "id=" + id +
-            ", nom='" + nom + '\'' +
-            ", prenom='" + prenom + '\'' +
-            ", dateNaissance=" + dateNaissance +
-            ", email='" + email + '\'' +
-            ", telephone1=" + telephone1 +
-            ", telephone2=" + telephone2 +
-            ", diplomeEleveObtenu='" + diplomeEleveObtenu + '\'' +
-            ", niveauDiplome=" + niveauDiplome +
-            ", posteOccupe='" + posteOccupe + '\'' +
-            ", anneeExperienceProfessionnelle='" + anneeExperienceProfessionnelle + '\'' +
-            ", entreprise=" + entreprise +
-            ", casierJudiciaireFourni=" + casierJudiciaireFourni +
-            ", diplomeFourni=" + diplomeFourni +
-            ", certificatTravailFourni=" + certificatTravailFourni +
-            ", cvFourni=" + cvFourni +
-            ", createdAt=" + createdAt +
-            ", updatedAt=" + updatedAt +
-            '}';
+            "\n id=" + id +
+            "\n nom='" + nom + '\'' +
+            "\n prenom='" + prenom + '\'' +
+            "\n dateNaissance=" + dateNaissance +
+            "\n email='" + email + '\'' +
+            "\n telephone1=" + telephone1 +
+            "\n telephone2=" + telephone2 +
+            "\n civilite=" + civilite +
+            "\n sexe=" + sexe +
+            "\n diplomeEleveObtenu='" + diplomeEleveObtenu + '\'' +
+            "\n niveauDiplome=" + niveauDiplome +
+            "\n posteOccupe='" + posteOccupe + '\'' +
+            "\n anneeExperienceProfessionnelle='" + anneeExperienceProfessionnelle + '\'' +
+            "\n entreprise=" + (entreprise != null ? entreprise.getEnseigne() : "") +
+            "\n casierJudiciaireFourni=" + casierJudiciaireFourni +
+            "\n diplomeFourni=" + diplomeFourni +
+            "\n certificatTravailFourni=" + certificatTravailFourni +
+            "\n cvFourni=" + cvFourni +
+            "\n observations='" + observations + '\'' +
+            " }";
   }
 }

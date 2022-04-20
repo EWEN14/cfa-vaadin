@@ -14,6 +14,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.enums.TypeCrud;
+import nc.unc.application.data.service.FormationService;
 import nc.unc.application.data.service.LogEnregistrmentService;
 import nc.unc.application.data.service.TuteurService;
 import nc.unc.application.views.MainLayout;
@@ -37,11 +38,13 @@ public class TuteurView extends VerticalLayout {
     TuteurConsult tuteurModalConsult;
 
     private TuteurService tuteurService;
+    private FormationService formationService;
     private LogEnregistrmentService logEnregistrmentService;
 
-    public TuteurView(TuteurService tuteurService,LogEnregistrmentService logEnregistrmentService){
+    public TuteurView(TuteurService tuteurService, FormationService formationService, LogEnregistrmentService logEnregistrmentService){
 
         this.tuteurService = tuteurService;
+        this.formationService = formationService;
         this.logEnregistrmentService = logEnregistrmentService;
 
         addClassName("list-view");
@@ -54,7 +57,7 @@ public class TuteurView extends VerticalLayout {
         tuteurModalConsult.addListener(TuteurConsult.DeleteEvent.class, this::deleteTuteur);
         tuteurModalConsult.addListener(TuteurConsult.CloseEvent.class, e -> closeConsultModal());
 
-        tuteurModal = new TuteurNewOrEdit(tuteurService.findAllEntreprises());
+        tuteurModal = new TuteurNewOrEdit(tuteurService.findAllEntreprises(), formationService.findAllFormations(""));
         tuteurModal.addListener(TuteurNewOrEdit.SaveEvent.class, this::saveTuteur);
         tuteurModal.addListener(TuteurNewOrEdit.SaveEditedEvent.class, this::saveEditedTuteur);
         tuteurModal.addListener(TuteurNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());

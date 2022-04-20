@@ -18,14 +18,14 @@ public class FormationService {
   }
 
   //Récupérer tous les formations ou la(les) formation(s) si filter n'est pas null
-  /*public List<Formation> findAllFormations(String filter){
+  public List<Formation> findAllFormations(String filter){
 
     if(filter == null || filter.isEmpty()){
       return formationRepository.findAll();
     } else {
       return formationRepository.search(filter);
     }
-  }*/
+  }
 
   //Supprimer une formation
   public void removeFormation(Formation formation){
@@ -44,5 +44,10 @@ public class FormationService {
   //Retourne le nombre de formations
   public void countFormations(){
     formationRepository.count();
+  }
+
+  // retourne les formation pour lequel le tuteur n'est pas habilité
+  public List<Formation> getAllFormationNonHabilite(List<Long> idFormationHabilite) {
+    return formationRepository.findAllByIdNotIn(idFormationHabilite);
   }
 }

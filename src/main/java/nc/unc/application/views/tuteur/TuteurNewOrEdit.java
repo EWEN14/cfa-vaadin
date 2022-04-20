@@ -27,10 +27,12 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import nc.unc.application.data.entity.Entreprise;
+import nc.unc.application.data.entity.Formation;
 import nc.unc.application.data.entity.Tuteur;
 import com.vaadin.flow.component.textfield.TextField;
 import nc.unc.application.data.entity.TuteurHabilitation;
 import nc.unc.application.data.enums.Civilite;
+import nc.unc.application.data.enums.StatutFormation;
 import nc.unc.application.data.service.TuteurService;
 
 import java.util.List;
@@ -64,19 +66,29 @@ public class TuteurNewOrEdit extends Dialog {
   Checkbox diplomeFourni = new Checkbox("Diplôme fourni");
   Checkbox certificatTravailFourni = new Checkbox("Certificat de Travail fourni");
   Checkbox cvFourni = new Checkbox("CV fourni");
+
+  // éléments associés aux habilitations du tuteur
   Grid<TuteurHabilitation> tuteurHabilitations = new Grid<>(TuteurHabilitation.class);
+  FormLayout formNewHabilitation = new FormLayout();
+  Select<String> statutFormation = new Select<>();
+  DatePicker dateFormation = new DatePicker("Date de Formation");
+  ComboBox<Formation> formation = new ComboBox<>("Formation");
 
   Tab tuteursInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(), new Span("Tuteur"));
   Tab tuteursHabilitationsTab = new Tab(VaadinIcon.DIPLOMA.create(), new Span("Habilitations"));
 
   // Notre binder
   Binder<Tuteur> binder = new BeanValidationBinder<>(Tuteur.class);
+  // binder pour le formulaire de nouvelle habilitation
+  Binder<TuteurHabilitation> tuteurHabilitationBinder = new BeanValidationBinder<>(TuteurHabilitation.class);
 
-  // Nos boutons(sauvegarder, annuler)
+  // les boutons (sauvegarder, annuler)
   Button save = new Button("Sauvegarder");
   Button close = new Button("Fermer");
+  // bouton de sauvegarde d'habilitation
+  Button saveNewHabilitation = new Button("Sauvegarder");
 
-  public TuteurNewOrEdit(List<Entreprise> entreprises) {
+  public TuteurNewOrEdit(List<Entreprise> entreprises, List<Formation> allFormations) {
     // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité étudiant,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)
     binder.bindInstanceFields(this);
@@ -119,6 +131,23 @@ public class TuteurNewOrEdit extends Dialog {
             posteOccupe, anneeExperienceProfessionnelle, entreprise, casierJudiciaireFourni, diplomeFourni,
             certificatTravailFourni, cvFourni, createButtonsLayout());
 
+    // --- configuration champs et formulaire d'ajout d'habilités ---
+    // ajout du binder pour le formulaire d'ajout
+    tuteurHabilitationBinder.bindInstanceFields(this);
+
+    // ajout des valeurs possibles sur le select du statut de formation
+    statutFormation.setLabel("Statut de la Formation");
+    statutFormation.setItems(StatutFormation.getStatutFormationStr());
+
+    dateFormation.setI18n(multiFormatI18n);
+
+    formation.setItems(allFormations);
+    formation.setItemLabelGenerator(Formation::getLibelleFormation);
+
+    // ajout des champs dans le formulaire d'ajout d'habilités au tuteur
+    formNewHabilitation.add(statutFormation, dateFormation, formation, createSaveHabilitationButtonLayout());
+
+
     // contenu qui sera affiché en dessous des tabs, qui change en fonction de la tab sélectionné
     content = new VerticalLayout();
     content.setSpacing(false);
@@ -141,6 +170,14 @@ public class TuteurNewOrEdit extends Dialog {
     binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
 
     return new HorizontalLayout(save, close);
+  }
+
+  private HorizontalLayout createSaveHabilitationButtonLayout() {
+    saveNewHabilitation.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    // saveNewHabilitation.addClickListener(event -> validateHabilitationAndSave());
+    tuteurHabilitationBinder.addStatusChangeListener(e -> saveNewHabilitation.setEnabled(tuteurHabilitationBinder.isValid()));
+
+    return new HorizontalLayout(saveNewHabilitation);
   }
 
   // fonction qui va alimenter le binder d'un tuteur
@@ -174,6 +211,20 @@ public class TuteurNewOrEdit extends Dialog {
     }
   }
 
+  /*private void validateHabilitationAndSave() {
+    try {
+      tuteurHabilitationBinder.writeBean(tuteurHabilitation);
+      if (tuteurHabilitation != null) {
+        tuteurHabilitation.setTuteur(tuteur);
+        tuteurService.saveTuteurHabilitation(tuteurHabilitation);
+        Notification.show("Habilitation ajoutée");
+        fireEvent(new TuteurNewOrEdit.CloseAndReloadEvent(this));
+      }
+    } catch (ValidationException e) {
+      e.printStackTrace();
+    }
+  }*/
+
   private void setContent(Tab tab) {
     // au début on enlève tout le contenu avant remplacement
     content.removeAll();
@@ -181,7 +232,7 @@ public class TuteurNewOrEdit extends Dialog {
     if (tab.equals(tuteursInfosTab)) {
       content.add(form);
     } else if (tab.equals(tuteursHabilitationsTab)) {
-      content.add(tuteurHabilitations);
+      content.add(formNewHabilitation, tuteurHabilitations);
     }
   }
 

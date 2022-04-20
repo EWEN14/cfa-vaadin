@@ -4,6 +4,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -15,15 +16,17 @@ public class TuteurHabilitation {
   @Column(name = "id_tuteur_habilitation", nullable = false)
   private Long id;
 
+  @NotNull(message = "Le statut de la formation ne peut pas être nul")
   @Column(name = "statut_formation", nullable = false)
   private String statutFormation;
 
   @Column(name = "date_formation")
   private LocalDate dateFormation;
 
+  /*@NotNull(message = "La formation liée à l'habilation ne peut pas être nulle")
   @OneToOne(cascade = CascadeType.MERGE, targetEntity = Formation.class)
   @JoinColumn(name = "id_formation")
-  private Formation formation;
+  private Formation formation;*/
 
   @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Tuteur.class)
   @JoinColumn(name = "id_tuteur")
@@ -36,6 +39,18 @@ public class TuteurHabilitation {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "id_formation")
+  private Formation formation;
+
+  public Formation getFormation() {
+    return formation;
+  }
+
+  public void setFormation(Formation formation) {
+    this.formation = formation;
+  }
 
   // Getters et Setters
   public Long getId() {
@@ -62,13 +77,13 @@ public class TuteurHabilitation {
     this.dateFormation = dateFormation;
   }
 
-  public Formation getFormation() {
+  /*public Formation getFormation() {
     return formation;
   }
 
   public void setFormation(Formation formation) {
     this.formation = formation;
-  }
+  }*/
 
   public Tuteur getTuteur() {
     return tuteur;

@@ -38,8 +38,8 @@ public class Formation implements Cloneable {
   @JoinColumn(name = "id_referent_pedagogique")
   private ReferentPedagogique referentPedagogique;
 
-  @OneToOne(mappedBy = "formation", cascade = CascadeType.MERGE, targetEntity = TuteurHabilitation.class)
-  private TuteurHabilitation tuteurHabilitation;
+  /*@OneToOne(mappedBy = "formation", cascade = CascadeType.MERGE, targetEntity = TuteurHabilitation.class)
+  private TuteurHabilitation tuteurHabilitation;*/
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
@@ -48,6 +48,17 @@ public class Formation implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
+
+  @OneToMany(mappedBy = "formation", cascade = CascadeType.MERGE)
+  private List<TuteurHabilitation> tuteurHabilitations = new ArrayList<>();
+
+  public List<TuteurHabilitation> getTuteurHabilitations() {
+    return tuteurHabilitations;
+  }
+
+  public void setTuteurHabilitations(List<TuteurHabilitation> tuteurHabilitations) {
+    this.tuteurHabilitations = tuteurHabilitations;
+  }
 
   @OneToMany(mappedBy = "formation", cascade = CascadeType.MERGE)
   private List<Contrat> contrats = new ArrayList<>();
@@ -101,13 +112,15 @@ public class Formation implements Cloneable {
     this.referentPedagogique = referentPedagogique;
   }
 
-  public TuteurHabilitation getTuteurHabilitation() {
+
+
+  /*public TuteurHabilitation getTuteurHabilitation() {
     return tuteurHabilitation;
   }
 
   public void setTuteurHabilitation(TuteurHabilitation tuteurHabilitation) {
     this.tuteurHabilitation = tuteurHabilitation;
-  }
+  }*/
 
   public LocalDateTime getCreatedAt() {
     return createdAt;

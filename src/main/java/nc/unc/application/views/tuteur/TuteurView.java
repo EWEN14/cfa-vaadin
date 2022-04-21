@@ -57,10 +57,11 @@ public class TuteurView extends VerticalLayout {
         tuteurModalConsult.addListener(TuteurConsult.DeleteEvent.class, this::deleteTuteur);
         tuteurModalConsult.addListener(TuteurConsult.CloseEvent.class, e -> closeConsultModal());
 
-        tuteurModal = new TuteurNewOrEdit(tuteurService.findAllEntreprises(), formationService.findAllFormations(""));
+        tuteurModal = new TuteurNewOrEdit(tuteurService.findAllEntreprises(), formationService.findAllFormations(""), formationService, tuteurService);
         tuteurModal.addListener(TuteurNewOrEdit.SaveEvent.class, this::saveTuteur);
         tuteurModal.addListener(TuteurNewOrEdit.SaveEditedEvent.class, this::saveEditedTuteur);
         tuteurModal.addListener(TuteurNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
+        tuteurModal.addListener(TuteurNewOrEdit.CloseAndReloadEvent.class, e -> closeNewOrEditModalAndRefreshGrid());
 
         // ajout d'un FlexLayout qui place la grille
         FlexLayout content = new FlexLayout(grid);
@@ -195,6 +196,11 @@ public class TuteurView extends VerticalLayout {
         tuteurModal.setTuteur(null);
         tuteurModal.close();
         grid.asSingleSelect().clear();
+    }
+
+    private void closeNewOrEditModalAndRefreshGrid() {
+        closeNewOrEditModal();
+        updateList();
     }
 
     // fonction qui récupère la liste des tuteurs pour les afficher dans la grille (avec les valeurs de recherche)

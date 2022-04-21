@@ -104,8 +104,8 @@ public class EtudiantConsult extends Dialog {
     // contenu qui sera affiché en dessous des tabs, qui change en fonction de la tab sélectionné
     content = new VerticalLayout();
     content.setSpacing(false);
-    // à l'ouverture, on définit le contenu par rapport à la tab sélectionné (la première par défaut)
-    setContent(tabsEtudiant.getSelectedTab());
+    // à l'ouverture, on ouvre la tab d'infos générales sur l'étudiant
+    setContent(etudiantInfosTab);
 
     // on ajoute la tabs, le contenu et les boutons du bas dans la Modale/Dialog
     add(tabsEtudiant, content, createButtonsLayout());

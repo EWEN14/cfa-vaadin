@@ -23,11 +23,6 @@ public class TuteurHabilitation {
   @Column(name = "date_formation")
   private LocalDate dateFormation;
 
-  /*@NotNull(message = "La formation liée à l'habilation ne peut pas être nulle")
-  @OneToOne(cascade = CascadeType.MERGE, targetEntity = Formation.class)
-  @JoinColumn(name = "id_formation")
-  private Formation formation;*/
-
   @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Tuteur.class)
   @JoinColumn(name = "id_tuteur")
   private Tuteur tuteur;
@@ -40,17 +35,10 @@ public class TuteurHabilitation {
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @NotNull(message = "La formation liée à l'habilation ne peut pas être nulle")
+  @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "id_formation")
   private Formation formation;
-
-  public Formation getFormation() {
-    return formation;
-  }
-
-  public void setFormation(Formation formation) {
-    this.formation = formation;
-  }
 
   // Getters et Setters
   public Long getId() {
@@ -77,13 +65,13 @@ public class TuteurHabilitation {
     this.dateFormation = dateFormation;
   }
 
-  /*public Formation getFormation() {
+  public Formation getFormation() {
     return formation;
   }
 
   public void setFormation(Formation formation) {
     this.formation = formation;
-  }*/
+  }
 
   public Tuteur getTuteur() {
     return tuteur;

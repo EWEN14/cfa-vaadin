@@ -73,7 +73,7 @@ public class TuteurConsult extends Dialog {
     // On définit que la fenêtre qui s'ouvre est une modale, ce qui fait qu'on ne peut rien faire sur l'application
     // tant que la modale n'est pas fermée
     this.setModal(true);
-    this.setWidth("90vw");
+    this.setWidth("85vw");
 
     // grille des habilitations du tuteur
     tuteurHabilitationGrid.addClassName("tuteur-habilitation-grid");

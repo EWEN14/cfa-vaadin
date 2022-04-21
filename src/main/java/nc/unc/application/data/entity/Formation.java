@@ -8,6 +8,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "formation")
@@ -46,6 +48,17 @@ public class Formation implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
+
+  @OneToMany(mappedBy = "formation", cascade = CascadeType.MERGE)
+  private List<Contrat> contrats = new ArrayList<>();
+
+  public List<Contrat> getContrats() {
+    return contrats;
+  }
+
+  public void setContrats(List<Contrat> contrats) {
+    this.contrats = contrats;
+  }
 
   // Getters et Setters
   public Long getId() {

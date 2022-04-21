@@ -119,6 +119,17 @@ public class Tuteur implements Cloneable {
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
 
+  @OneToMany(mappedBy = "tuteur", cascade = CascadeType.MERGE)
+  private List<Contrat> contrats = new ArrayList<>();
+
+  public List<Contrat> getContrats() {
+    return contrats;
+  }
+
+  public void setContrats(List<Contrat> contrats) {
+    this.contrats = contrats;
+  }
+
   // Getters et Setters
   public Long getId() {
     return id;

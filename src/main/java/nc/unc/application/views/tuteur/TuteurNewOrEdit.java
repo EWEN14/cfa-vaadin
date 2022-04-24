@@ -282,6 +282,15 @@ public class TuteurNewOrEdit extends Dialog {
     }
   }
 
+  // suppression d'une habilitation
+  private void deleteHabilitationTuteur(TuteurHabilitation tuteurHabilitation) {
+    if (tuteurHabilitation != null) {
+      tuteurService.deleteTuteurHabilitation(tuteurHabilitation);
+      fireEvent(new TuteurNewOrEdit.CloseAndReloadEvent(this));
+      Notification.show("Habilitation supprimée");
+    }
+  }
+
   // On définit que les formations qui doivent apparaître dans le select pour ajouter
   // une habilitation doivent être celles pour lesquelles le tuteur n'est pas encore habilité
   private void selectFormationNonHabilite(List<TuteurHabilitation> tuteurHabilitationListe) {
@@ -312,11 +321,6 @@ public class TuteurNewOrEdit extends Dialog {
     this.tuteurHabilitation = new TuteurHabilitation();
     tuteurHabilitationBinder.readBean(tuteurHabilitation);
     formation.setReadOnly(false);
-  }
-
-  // suppression d'une habilitation TODO
-  private void deleteHabilitationTuteur(TuteurHabilitation tuteurHabilitation) {
-    Notification.show("Hello There !");
   }
 
   private void setContent(Tab tab) {

@@ -62,6 +62,11 @@ public class TuteurService {
         tuteurHabilitationRepository.save(tuteurHabilitation);
     }
 
+    // supprimer une habilitation tuteur
+    public void deleteTuteurHabilitation(TuteurHabilitation tuteurHabilitation) {
+        tuteurHabilitationRepository.delete(tuteurHabilitation);
+    }
+
     // Récupérer toutes les entreprises
     public List<Entreprise> findAllEntreprises() {
         return entrepriseRepository.findAll();

@@ -35,7 +35,7 @@ public class FormationService {
   //Sauvegarder une formation
   public void addFormation(Formation formation){
     if (formation == null) {
-      System.err.println("La formation est nul, le formulaire est-il bien connecté à l'application ?");
+      System.err.println("La formation est nulle, le formulaire est-il bien connecté à l'application ?");
       return;
     }
     formationRepository.save(formation);

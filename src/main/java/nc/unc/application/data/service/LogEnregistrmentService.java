@@ -38,6 +38,10 @@ public class LogEnregistrmentService {
     logEnregistrementRepository.delete(logEnregistrement);
   }
 
+  /**
+   * Définition d'un log de sauvegarde d'un élément
+   * @param description_log la description du log, correspondant aux information de l'élément ajouté (son toString)
+   */
   public void saveLogAjoutString(String description_log) {
     LogEnregistrement logEnregistrement = new LogEnregistrement();
     logEnregistrement.setDescription_log(description_log);
@@ -47,6 +51,11 @@ public class LogEnregistrmentService {
     saveLog(logEnregistrement);
   }
 
+  /**
+   * définition d'un log dans le cas d'une modification d'élément
+   * @param oldValues anciennes valeurs de l'élément
+   * @param newValues nouvelles valeurs de l'élément
+   */
   public void saveLogEditString(String oldValues, String newValues) {
     LogEnregistrement logEnregistrement = new LogEnregistrement();
     logEnregistrement.setDescription_log(
@@ -58,6 +67,10 @@ public class LogEnregistrmentService {
     saveLog(logEnregistrement);
   }
 
+  /**
+   * Définition d'un log dans le cas de la suppression d'un élément
+   * @param description_log
+   */
   public void saveLogDeleteString(String description_log) {
     LogEnregistrement logEnregistrement = new LogEnregistrement();
     logEnregistrement.setDescription_log(description_log);
@@ -67,6 +80,10 @@ public class LogEnregistrmentService {
     saveLog(logEnregistrement);
   }
 
+  /**
+   * Sauvegarde d'un log
+   * @param logEnregistrement
+   */
   public void saveLog(LogEnregistrement logEnregistrement) {
     if (logEnregistrement == null) {
       System.err.println("L'enregistrement est nul...");
@@ -75,6 +92,10 @@ public class LogEnregistrmentService {
     logEnregistrementRepository.save(logEnregistrement);
   }
 
+  /**
+   * Défini qui est la personne qui a effectuée l'action provoquant l'enregistrement d'un log
+   * @param logEnregistrement
+   */
   public void setExecutant(LogEnregistrement logEnregistrement) {
     Optional<User> maybeUser = authenticatedUser.get();
     if (maybeUser.isPresent()) {

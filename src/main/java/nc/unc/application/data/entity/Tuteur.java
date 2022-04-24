@@ -314,7 +314,7 @@ public class Tuteur implements Cloneable {
 
   @Override
   public String toString() {
-    return "Tuteur{" +
+    return "Tuteur {" +
             "\n id=" + id +
             "\n nom='" + nom + '\'' +
             "\n prenom='" + prenom + '\'' +

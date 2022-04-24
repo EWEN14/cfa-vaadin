@@ -53,6 +53,20 @@ public class TuteurService {
         tuteurRepository.save(tuteur);
     }
 
+    // Sauvegarder une habilitation tuteur
+    public void saveTuteurHabilitation(TuteurHabilitation tuteurHabilitation) {
+        if (tuteurHabilitation == null) {
+            System.err.println("L'habilitation est nulle, le formulaire est-il bien connecté à l'application ?");
+            return;
+        }
+        tuteurHabilitationRepository.save(tuteurHabilitation);
+    }
+
+    // supprimer une habilitation tuteur
+    public void deleteTuteurHabilitation(TuteurHabilitation tuteurHabilitation) {
+        tuteurHabilitationRepository.delete(tuteurHabilitation);
+    }
+
     // Récupérer toutes les entreprises
     public List<Entreprise> findAllEntreprises() {
         return entrepriseRepository.findAll();

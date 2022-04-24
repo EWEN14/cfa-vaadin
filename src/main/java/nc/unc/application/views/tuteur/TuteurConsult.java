@@ -15,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.Tuteur;
@@ -48,6 +49,7 @@ public class TuteurConsult extends Dialog {
   private final TextField niveauDiplome = new TextField("Niveau du Diplôme");
   private final TextField posteOccupe = new TextField("Poste occupé");
   private final TextField anneeExperienceProfessionnelle = new TextField("Années d'expérience professionnelle");
+  private final TextArea observations = new TextArea("Observations");
   private final Checkbox casierJudiciaireFourni = new Checkbox("Casier Judiciaire fourni");
   private final Checkbox diplomeFourni = new Checkbox("Diplôme fourni");
   private final Checkbox certificatTravailFourni = new Checkbox("Certificat de Travail fourni");
@@ -73,7 +75,7 @@ public class TuteurConsult extends Dialog {
     // On définit que la fenêtre qui s'ouvre est une modale, ce qui fait qu'on ne peut rien faire sur l'application
     // tant que la modale n'est pas fermée
     this.setModal(true);
-    this.setWidth("90vw");
+    this.setWidth("85vw");
 
     // grille des habilitations du tuteur
     tuteurHabilitationGrid.addClassName("tuteur-habilitation-grid");
@@ -92,7 +94,7 @@ public class TuteurConsult extends Dialog {
 
     // on définit les champs qu'il y aura dans le formulaire d'informations générales de l'étudiant
     form.add(nom, prenom, dateNaissance, email, civilite, telephone1, telephone2, diplomeEleveObtenu, niveauDiplome, posteOccupe,
-            anneeExperienceProfessionnelle, casierJudiciaireFourni, diplomeFourni, certificatTravailFourni,
+            anneeExperienceProfessionnelle, observations, casierJudiciaireFourni, diplomeFourni, certificatTravailFourni,
             cvFourni, createButtonsLayout());
 
     // pareil, mais pour le formulaire relatif à son entreprise
@@ -129,6 +131,7 @@ public class TuteurConsult extends Dialog {
       niveauDiplome.setValue(tuteur.getNiveauDiplome() != null ? tuteur.getNiveauDiplome().toString() : "");
       posteOccupe.setValue(tuteur.getPosteOccupe() != null ? tuteur.getPosteOccupe() : "");
       anneeExperienceProfessionnelle.setValue(tuteur.getAnneeExperienceProfessionnelle() != null ? tuteur.getAnneeExperienceProfessionnelle() : "");
+      observations.setValue(tuteur.getObservations() != null ? tuteur.getObservations() : "");
       casierJudiciaireFourni.setValue(tuteur.getCasierJudiciaireFourni() != null ? tuteur.getCasierJudiciaireFourni() : false);
       diplomeFourni.setValue(tuteur.getDiplomeFourni() != null ? tuteur.getDiplomeFourni() : false);
       certificatTravailFourni.setValue(tuteur.getCertificatTravailFourni() != null ? tuteur.getCertificatTravailFourni() : false);

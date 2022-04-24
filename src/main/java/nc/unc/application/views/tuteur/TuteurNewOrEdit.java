@@ -23,6 +23,7 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
@@ -36,6 +37,7 @@ import nc.unc.application.data.entity.TuteurHabilitation;
 import nc.unc.application.data.enums.Civilite;
 import nc.unc.application.data.enums.StatutFormation;
 import nc.unc.application.data.service.FormationService;
+import nc.unc.application.data.service.LogEnregistrmentService;
 import nc.unc.application.data.service.TuteurService;
 
 import java.util.ArrayList;
@@ -49,6 +51,8 @@ public class TuteurNewOrEdit extends Dialog {
 
   // habilitation, qui sera une nouvelle ou une habilitation en cours d'édition
   private TuteurHabilitation tuteurHabilitation;
+  // variable qui prendra les valeurs d'une habilitation avant sa modification, utilisé pour les logs
+  private TuteurHabilitation tuteurHabilitationOldValues;
   // contiendra la liste des habilitations du tuteur
   private List<TuteurHabilitation> tuteurHabilitationsList;
 
@@ -56,6 +60,8 @@ public class TuteurNewOrEdit extends Dialog {
   private TuteurService tuteurService;
   // FormationService qu'on va requêter pour obtenir les formations pour lesquelles le tuteur n'est pas habilité
   private FormationService formationService;
+  // LogEnregistrementService pour les logs sur les habilitations du tuteur
+  private LogEnregistrmentService logEnregistrmentService;
 
   // Contiendra la liste des formations pour lesquelles le tuteur n'est pas habilité
   private List<Formation> formationsNonHabilites;
@@ -77,6 +83,7 @@ public class TuteurNewOrEdit extends Dialog {
   TextField posteOccupe = new TextField("Poste occupé");
   TextField anneeExperienceProfessionnelle = new TextField("Années expérience professionnelle");
   ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
+  TextArea observations = new TextArea("Observations");
   Checkbox casierJudiciaireFourni = new Checkbox("Casier Judiciaire fourni");
   Checkbox diplomeFourni = new Checkbox("Diplôme fourni");
   Checkbox certificatTravailFourni = new Checkbox("Certificat de Travail fourni");
@@ -107,14 +114,18 @@ public class TuteurNewOrEdit extends Dialog {
   Button saveNewHabilitation = new Button("Sauvegarder");
   Button effacerChamps = new Button("Effacer / Annuler");
 
-  public TuteurNewOrEdit(List<Entreprise> entreprises, List<Formation> allFormations, FormationService formationService, TuteurService tuteurService) {
+  public TuteurNewOrEdit(List<Entreprise> entreprises, List<Formation> allFormations, FormationService formationService,
+                         TuteurService tuteurService, LogEnregistrmentService logEnregistrmentService) {
     this.tuteurService = tuteurService;
     this.formationService = formationService;
+    this.logEnregistrmentService = logEnregistrmentService;
 
     // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité tuteur,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)
     binder.bindInstanceFields(this);
     this.setWidth("85vw");
+    // méthode appelée lors de la fermeture de la modale au clic sur le bouton ECHAP ou en cliquant en dehors de la modale
+    this.addDialogCloseActionListener(dialogCloseActionEvent -> closeDialog());
 
     Tabs tabsTuteurs = new Tabs(tuteursInfosTab, tuteursHabilitationsTab);
     // Au clic sur une des tab, on appelle notre méthode setContent pour pouvoir changer le contenu
@@ -155,7 +166,7 @@ public class TuteurNewOrEdit extends Dialog {
 
     // ajout des champs et des boutons d'action dans le formulaire
     form.add(nom, prenom, dateNaissance, civilite, email, telephone1, telephone2, diplomeEleveObtenu, niveauDiplome,
-            posteOccupe, anneeExperienceProfessionnelle, entreprise, casierJudiciaireFourni, diplomeFourni,
+            posteOccupe, anneeExperienceProfessionnelle, entreprise, observations, casierJudiciaireFourni, diplomeFourni,
             certificatTravailFourni, cvFourni, createButtonsLayout());
 
     // --- configuration champs et formulaire d'ajout d'habilités ---
@@ -236,8 +247,10 @@ public class TuteurNewOrEdit extends Dialog {
         e.printStackTrace();
       }
     } else {
-      // si nouveau tuteur, on cache l'onglet des habilitations
+      // si nouveau tuteur, on cache l'onglet des habilitations et on passe sur l'onglet des infos tuteur
       tuteursHabilitationsTab.setVisible(false);
+      tuteursInfosTab.setSelected(true);
+      setContent(tuteursInfosTab);
     }
     // alimentation du binder
     binder.readBean(tuteur);
@@ -269,13 +282,26 @@ public class TuteurNewOrEdit extends Dialog {
       tuteurHabilitationBinder.writeBean(tuteurHabilitation);
       if (tuteurHabilitation != null) {
         tuteurHabilitation.setTuteur(tuteur);
+        // cas où l'on créé un nouveau tuteur
         if (tuteurHabilitation.getId() == null) {
+          tuteurService.saveTuteurHabilitation(tuteurHabilitation);
+          logEnregistrmentService.saveLogAjoutString(tuteurHabilitation.toString());
+          fireEvent(new TuteurNewOrEdit.CloseAndReloadEvent(this));
           Notification.show("Habilitation ajoutée");
         } else {
-          Notification.show("Habilitation modifiée");
+          // cas où l'on modifie une habilitation
+          if (!tuteurHabilitationOldValues.equals(tuteurHabilitation)) {
+            // on ne créé un log de modification que s'il y a eu des valeurs de changées
+            logEnregistrmentService.saveLogEditString(tuteurHabilitationOldValues.toString(), tuteurHabilitation.toString());
+            tuteurService.saveTuteurHabilitation(tuteurHabilitation);
+            tuteurHabilitationOldValues = null;
+            fireEvent(new TuteurNewOrEdit.CloseAndReloadEvent(this));
+            Notification.show("Habilitation modifiée");
+          } else {
+            // sinon on signale que les valeurs n'ont pas changés
+            Notification.show("Les valeurs sont les mêmes qu'avant !");
+          }
         }
-        tuteurService.saveTuteurHabilitation(tuteurHabilitation);
-        fireEvent(new TuteurNewOrEdit.CloseAndReloadEvent(this));
       }
     } catch (ValidationException e) {
       e.printStackTrace();
@@ -285,6 +311,7 @@ public class TuteurNewOrEdit extends Dialog {
   // suppression d'une habilitation
   private void deleteHabilitationTuteur(TuteurHabilitation tuteurHabilitation) {
     if (tuteurHabilitation != null) {
+      logEnregistrmentService.saveLogDeleteString(tuteurHabilitation.toString());
       tuteurService.deleteTuteurHabilitation(tuteurHabilitation);
       fireEvent(new TuteurNewOrEdit.CloseAndReloadEvent(this));
       Notification.show("Habilitation supprimée");
@@ -308,9 +335,14 @@ public class TuteurNewOrEdit extends Dialog {
     formation.setItemLabelGenerator(Formation::getLibelleFormation);
   }
 
-  // fonction qui va afficher les informations de l'habilitation sélectionnée dans la grid
-  // dans le formulaire d'édition pour pouvoir modifier l'habilitation
+  // fonction qui va afficher les informations de l'habilitation sur laquelle on a cliqué dans la grid dans
+  // le formulaire d'édition pour pouvoir modifier l'habilitation
   private void editHabilitationTuteur(TuteurHabilitation tuteurHabilitation) {
+    try {
+      this.tuteurHabilitationOldValues = (TuteurHabilitation) tuteurHabilitation.clone();
+    } catch (CloneNotSupportedException e) {
+      e.printStackTrace();
+    }
     this.tuteurHabilitation = tuteurHabilitation;
     tuteurHabilitationBinder.readBean(tuteurHabilitation);
     formation.setReadOnly(true);
@@ -318,6 +350,7 @@ public class TuteurNewOrEdit extends Dialog {
 
   // appelée au clic sur "effacer", met à vide les champs du formulaire.
   private void effacerChampsFormHabilitation() {
+    this.tuteurHabilitationOldValues = null;
     this.tuteurHabilitation = new TuteurHabilitation();
     tuteurHabilitationBinder.readBean(tuteurHabilitation);
     formation.setReadOnly(false);
@@ -332,6 +365,15 @@ public class TuteurNewOrEdit extends Dialog {
     } else if (tab.equals(tuteursHabilitationsTab)) {
       content.add(formNewHabilitation, tuteurHabilitations);
     }
+  }
+
+  private void closeDialog() {
+    // on enlève l'éventuel focus sur l'onglet des infos du tuteur.
+    if (tuteursInfosTab.isEnabled()) {
+      tuteursInfosTab.setSelected(false);
+    }
+    // on appelle l'événement pour fermer la modale.
+    fireEvent(new TuteurNewOrEdit.CloseEvent(this));
   }
 
   // Event "global" (class mère), qui étend les trois event ci-dessous, dont le but est de fournir l'étudiant

@@ -12,7 +12,9 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.entity.Tuteur;
+import nc.unc.application.data.enums.Sexe;
 import nc.unc.application.data.enums.TypeCrud;
 import nc.unc.application.data.service.FormationService;
 import nc.unc.application.data.service.LogEnregistrmentService;
@@ -22,6 +24,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import com.vaadin.flow.component.button.Button;
 import javax.annotation.security.PermitAll;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests
@@ -30,7 +34,7 @@ import javax.annotation.security.PermitAll;
 @PermitAll // tous les utilisateurs connectés peuvent aller sur cette page
 public class TuteurView extends VerticalLayout {
 
-    // Les objets de notre vue
+    // Les attributs de notre vue
     Grid<Tuteur> grid = new Grid<>(Tuteur.class);
     TextField filterText = new TextField();
     Button addTuteurButton;
@@ -38,13 +42,11 @@ public class TuteurView extends VerticalLayout {
     TuteurConsult tuteurModalConsult;
 
     private TuteurService tuteurService;
-    private FormationService formationService;
     private LogEnregistrmentService logEnregistrmentService;
 
     public TuteurView(TuteurService tuteurService, FormationService formationService, LogEnregistrmentService logEnregistrmentService){
 
         this.tuteurService = tuteurService;
-        this.formationService = formationService;
         this.logEnregistrmentService = logEnregistrmentService;
 
         addClassName("list-view");
@@ -57,7 +59,8 @@ public class TuteurView extends VerticalLayout {
         tuteurModalConsult.addListener(TuteurConsult.DeleteEvent.class, this::deleteTuteur);
         tuteurModalConsult.addListener(TuteurConsult.CloseEvent.class, e -> closeConsultModal());
 
-        tuteurModal = new TuteurNewOrEdit(tuteurService.findAllEntreprises(), formationService.findAllFormations(""), formationService, tuteurService);
+        tuteurModal = new TuteurNewOrEdit(tuteurService.findAllEntreprises(), formationService.findAllFormations(""),
+                formationService, tuteurService, logEnregistrmentService);
         tuteurModal.addListener(TuteurNewOrEdit.SaveEvent.class, this::saveTuteur);
         tuteurModal.addListener(TuteurNewOrEdit.SaveEditedEvent.class, this::saveEditedTuteur);
         tuteurModal.addListener(TuteurNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
@@ -115,8 +118,8 @@ public class TuteurView extends VerticalLayout {
     private void saveTuteur(TuteurNewOrEdit.SaveEvent event) {
         // utilisation du getTuteur de la classe mère TuteurFormEvent pour récupérer le tuteur
         Tuteur tuteur = event.getTuteur();
-        // mise en majuscule du nom avant sauvegarde
-        tuteur.setNom(tuteur.getNom().toUpperCase());
+        // mise en majuscule du nom et définition du sexe avant sauvegarde
+        setSexeTuteur(tuteur);
         // sauvegarde de l'étudiant
         tuteurService.saveTuteur(tuteur);
 
@@ -135,8 +138,8 @@ public class TuteurView extends VerticalLayout {
         Tuteur tuteur = event.getTuteur();
         // récupération du tuteur avant modification
         Tuteur tuteurOriginal = event.getTuteurOriginal();
-        // mise en majuscule du nom avant sauvegarde
-        tuteur.setNom(tuteur.getNom().toUpperCase());
+        // mise en majuscule du nom et définition du sexe avant sauvegarde
+        setSexeTuteur(tuteur);
 
         // sauvegarde du tuteur
         tuteurService.saveTuteur(tuteur);
@@ -201,6 +204,24 @@ public class TuteurView extends VerticalLayout {
     private void closeNewOrEditModalAndRefreshGrid() {
         closeNewOrEditModal();
         updateList();
+    }
+
+    // fonction qui met le nom du tuteur en majuscule et défini son sexe en fonction de sa civilté
+    private void setSexeTuteur(Tuteur tuteur) {
+        tuteur.setNom(tuteur.getNom().toUpperCase());
+        // définition du sexe que si le champ civilité est rempli
+        if (tuteur.getCivilite() != null) {
+            switch (tuteur.getCivilite()) {
+                case MONSIEUR:
+                    tuteur.setSexe(Sexe.M);
+                    break;
+                case MADAME:
+                    tuteur.setSexe(Sexe.F);
+                    break;
+                case NON_BINAIRE:
+                    tuteur.setSexe(Sexe.NB);
+            }
+        }
     }
 
     // fonction qui récupère la liste des tuteurs pour les afficher dans la grille (avec les valeurs de recherche)

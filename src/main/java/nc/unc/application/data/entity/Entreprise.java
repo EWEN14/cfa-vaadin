@@ -121,6 +121,17 @@ public class Entreprise implements Cloneable {
   @Column(name = "observations", length = 15000)
   private String observations;
 
+  @OneToMany(mappedBy = "entreprise", cascade = CascadeType.MERGE)
+  private List<Contrat> contrats = new ArrayList<>();
+
+  public List<Contrat> getContrats() {
+    return contrats;
+  }
+
+  public void setContrats(List<Contrat> contrats) {
+    this.contrats = contrats;
+  }
+
   // Getters et Setters
   public Long getId() {
     return id;

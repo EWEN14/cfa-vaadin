@@ -112,6 +112,7 @@ public class EtudiantConsult extends Dialog {
     // On définit que la fenêtre qui s'ouvre est une modale, ce qui fait qu'on ne peut rien faire sur l'application
     // tant que la modale n'est pas fermée
     this.setModal(true);
+    this.setWidth("85vw");
 
     // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables TODO
     setAllFieldsToReadOnly();

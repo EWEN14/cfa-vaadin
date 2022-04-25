@@ -144,6 +144,14 @@ public class Etudiant implements Cloneable {
   @JsonIgnoreProperties({"etudiants"})
   private Tuteur tuteur;
 
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Formation.class)
+  @JoinColumn(name = "id_formation")
+  private Formation formation;
+
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = ReferentPedagogique.class)
+  @JoinColumn(name = "id_referent_pedagogique")
+  private ReferentPedagogique referentPedagogique;
+
   @OneToMany(mappedBy = "etudiant", cascade = CascadeType.MERGE)
   private List<Contrat> contrats = new ArrayList<>();
 
@@ -154,7 +162,6 @@ public class Etudiant implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
-
 
   // Getters et Setters
   public Long getId() {
@@ -421,6 +428,22 @@ public class Etudiant implements Cloneable {
     this.tuteur = tuteur;
   }
 
+  public Formation getFormation() {
+    return formation;
+  }
+
+  public void setFormation(Formation formation) {
+    this.formation = formation;
+  }
+
+  public ReferentPedagogique getReferentPedagogique() {
+    return referentPedagogique;
+  }
+
+  public void setReferentPedagogique(ReferentPedagogique referentPedagogique) {
+    this.referentPedagogique = referentPedagogique;
+  }
+
   public List<Contrat> getContrats() {
     return contrats;
   }
@@ -498,7 +521,10 @@ public class Etudiant implements Cloneable {
             "\n obtentionDiplomeMention='" + obtentionDiplomeMention + '\'' +
             "\n observations='" + observations + '\'' +
             "\n entreprise=" + (entreprise != null ? entreprise.getEnseigne() : "") +
-            "\n entreprise=" + (tuteur != null ? tuteur.getPrenom() + " " + tuteur.getNom() : "") +
+            "\n tuteur=" + (tuteur != null ? tuteur.getPrenom() + " " + tuteur.getNom() : "") +
+            "\n formation=" + (formation != null ? formation.getLibelleFormation() : "") +
+            "\n referentPedagogique=" +
+            (referentPedagogique != null ? referentPedagogique.getPrenomReferentPedago() + " " + referentPedagogique.getNomReferentPedago() : "") +
             " }";
   }
 }

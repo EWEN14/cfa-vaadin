@@ -18,12 +18,16 @@ import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
+import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.entity.TuteurHabilitation;
+import nc.unc.application.data.service.EtudiantService;
 import nc.unc.application.data.service.TuteurService;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Modale (Dialog) qui s'ouvre lorsque l'on clique sur le bouton de détail d'un tuteur
@@ -31,7 +35,7 @@ import java.time.format.FormatStyle;
 public class TuteurConsult extends Dialog {
 
   private Tuteur tuteur;
-  private TuteurService tuteurService;
+  private EtudiantService etudiantService;
 
   // Layout qui contiendra le contenu en dessous des tabs
   private final VerticalLayout content;
@@ -62,16 +66,22 @@ public class TuteurConsult extends Dialog {
 
   // grid qui contiendra les habilitations du tuteur
   private final Grid<TuteurHabilitation> tuteurHabilitationGrid = new Grid<>(TuteurHabilitation.class);
+  // grid qui contiendra les etudiants cadrés par le tuteur
+  private final Grid<Etudiant> tuteurEtudiantsGrid = new Grid<>(Etudiant.class);
+  private List<Etudiant> tuteurEtudiantsList = new ArrayList<>();
 
   // tab (onglet) qui seront insérés dans une tabs (ensemble d'onglets) les regroupant
   private final Tab tuteursInfosTab = new Tab(VaadinIcon.USER.create(), new Span("Tuteur"));
   private final Tab tuteursHabilitationsTab = new Tab(VaadinIcon.DIPLOMA.create(), new Span("Habiliations"));
   private final Tab entrepriseTuteurInfosTab = new Tab(VaadinIcon.WORKPLACE.create(), new Span("Entreprise"));
+  private final Tab etudiantsTuteurTab = new Tab(VaadinIcon.ACADEMY_CAP.create(), new Span("Étudiants"));
 
   private final Button close = new Button("Fermer");
   private final Button delete = new Button("Supprimer le tuteur");
 
-  public TuteurConsult() {
+  public TuteurConsult(EtudiantService etudiantService) {
+    this.etudiantService = etudiantService;
+
     // On définit que la fenêtre qui s'ouvre est une modale, ce qui fait qu'on ne peut rien faire sur l'application
     // tant que la modale n'est pas fermée
     this.setModal(true);
@@ -81,12 +91,16 @@ public class TuteurConsult extends Dialog {
     tuteurHabilitationGrid.addClassName("tuteur-habilitation-grid");
     tuteurHabilitationGrid.setColumns("dateFormation","formation.libelleFormation", "statutFormation");
 
+    // grille des étudiants cadrés par le tuteur
+    tuteurEtudiantsGrid.addClassName("tuteur-etudiants-grid");
+    tuteurEtudiantsGrid.setColumns("prenom", "nom", "telephone1");
+
     // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
     setAllFieldsToReadOnly();
 
     // On instancie la Tabs, et on lui donne les tab que l'on veut insérer
     // tabs qui contiendra les tab permettant de passer d'un groupe d'informations à un autre
-    Tabs tabsTuteurs = new Tabs(tuteursInfosTab, tuteursHabilitationsTab, entrepriseTuteurInfosTab);
+    Tabs tabsTuteurs = new Tabs(tuteursInfosTab, tuteursHabilitationsTab, entrepriseTuteurInfosTab, etudiantsTuteurTab);
     // Au clic sur une des tab, on appelle notre méthode setContent pour pouvoir changer le contenu
     tabsTuteurs.addSelectedChangeListener(selectedChangeEvent ->
             setContent(selectedChangeEvent.getSelectedTab())
@@ -156,6 +170,10 @@ public class TuteurConsult extends Dialog {
       } else {
         tuteursHabilitationsTab.setVisible(false);
       }
+
+      tuteurEtudiantsList = etudiantService.findAllEtudiantsTuteur(tuteur.getId());
+      etudiantsTuteurTab.setVisible(true);
+      tuteurEtudiantsGrid.setItems(tuteurEtudiantsList);
     }
   }
 
@@ -181,6 +199,8 @@ public class TuteurConsult extends Dialog {
       content.add(tuteurHabilitationGrid);
     } else if (tab.equals(entrepriseTuteurInfosTab)) {
       content.add(formTuteursEntrepriseInfos);
+    } else if (tab.equals(etudiantsTuteurTab)) {
+      content.add(tuteurEtudiantsGrid);
     }
   }
 

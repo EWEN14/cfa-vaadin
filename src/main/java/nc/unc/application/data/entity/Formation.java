@@ -41,6 +41,9 @@ public class Formation implements Cloneable {
   @OneToMany(mappedBy = "formation", cascade = CascadeType.MERGE, targetEntity = TuteurHabilitation.class)
   private List<TuteurHabilitation> tuteurHabilitations = new ArrayList<>();
 
+  @OneToMany(mappedBy = "formation", cascade = CascadeType.MERGE, targetEntity = Etudiant.class)
+  private List<Etudiant> etudiants = new ArrayList<>();
+
   @OneToMany(mappedBy = "formation", cascade = CascadeType.MERGE, targetEntity = Contrat.class)
   private List<Contrat> contrats = new ArrayList<>();
 
@@ -109,6 +112,14 @@ public class Formation implements Cloneable {
     this.contrats = contrats;
   }
 
+  public List<Etudiant> getEtudiants() {
+    return etudiants;
+  }
+
+  public void setEtudiants(List<Etudiant> etudiants) {
+    this.etudiants = etudiants;
+  }
+
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
@@ -138,7 +149,7 @@ public class Formation implements Cloneable {
             "\n , codeFormation='" + codeFormation + '\'' +
             "\n , codeRome='" + codeRome + '\'' +
             "\n , referentPedagogique=" +
-            (referentPedagogique != null ? referentPedagogique.getPrenom()+" "+referentPedagogique.getNom() : "") +
+            (referentPedagogique != null ? referentPedagogique.getPrenomReferentPedago()+" "+referentPedagogique.getNomReferentPedago() : "") +
             "\n , createdAt=" + createdAt +
             "\n , updatedAt=" + updatedAt +
             '}';

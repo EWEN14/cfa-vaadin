@@ -114,7 +114,7 @@ public class Tuteur implements Cloneable {
   @OneToMany(mappedBy = "tuteur", cascade = CascadeType.MERGE)
   private List<Contrat> contrats = new ArrayList<>();
 
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "tuteur", cascade = CascadeType.MERGE)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "tuteur", cascade = CascadeType.MERGE)
   private List<Etudiant> etudiants = new ArrayList<>();
 
   @CreationTimestamp

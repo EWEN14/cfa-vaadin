@@ -20,27 +20,27 @@ public class ReferentPedagogique implements Cloneable{
     @NotEmpty(message = "Le nom doit être renseigné")
     @NotNull(message = "Le nom ne peut pas être nul")
     @Column(name = "nom", nullable = false)
-    private String nom;
+    private String nomReferentPedago;
 
     @NotBlank(message = "Le prénom doit être renseigné")
     @NotNull(message = "Le prenom ne peut pas être nul")
     @Column(name = "prenom", nullable = false)
-    private String prenom;
+    private String prenomReferentPedago;
 
     @NotNull(message = "La civilité ne doit pas être nulle")
     @Enumerated(EnumType.STRING)
     @Column(name = "civilite" ,nullable = false)
-    private Civilite civilite;
+    private Civilite civiliteReferentPedago;
 
     @Email
     @NotNull(message = "L'email ne peut pas être nul")
     @Column(name = "email", nullable = false)
-    private String email;
+    private String emailReferentPedago;
 
     @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
     @NotNull(message = "Le téléphone ne peut pas être nul")
     @Column(name = "telephone", nullable = false)
-    private Integer telephone;
+    private Integer telephoneReferentPedago;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
@@ -59,44 +59,44 @@ public class ReferentPedagogique implements Cloneable{
         this.id = id;
     }
 
-    public String getNom() {
-        return nom;
+    public String getNomReferentPedago() {
+        return nomReferentPedago;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setNomReferentPedago(String nom) {
+        this.nomReferentPedago = nom;
     }
 
-    public String getPrenom() {
-        return prenom;
+    public String getPrenomReferentPedago() {
+        return prenomReferentPedago;
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    public void setPrenomReferentPedago(String prenom) {
+        this.prenomReferentPedago = prenom;
     }
 
-    public Civilite getCivilite() {
-        return civilite;
+    public Civilite getCiviliteReferentPedago() {
+        return civiliteReferentPedago;
     }
 
-    public void setCivilite(Civilite civilite) {
-        this.civilite = civilite;
+    public void setCiviliteReferentPedago(Civilite civilite) {
+        this.civiliteReferentPedago = civilite;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmailReferentPedago() {
+        return emailReferentPedago;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmailReferentPedago(String email) {
+        this.emailReferentPedago = email;
     }
 
-    public Integer getTelephone() {
-        return telephone;
+    public Integer getTelephoneReferentPedago() {
+        return telephoneReferentPedago;
     }
 
-    public void setTelephone(Integer telephone) {
-        this.telephone = telephone;
+    public void setTelephoneReferentPedago(Integer telephone) {
+        this.telephoneReferentPedago = telephone;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -124,11 +124,11 @@ public class ReferentPedagogique implements Cloneable{
     public String toString() {
         return "Tuteur { " +
                 "\n id=" + id +
-                "\n nom='" + nom + '\'' +
-                "\n prenom='" + prenom + '\'' +
-                "\n email='" + email + '\'' +
-                "\n telephone=" + telephone +
-                "\n civilite=" + civilite +
+                "\n nom='" + nomReferentPedago + '\'' +
+                "\n prenom='" + prenomReferentPedago + '\'' +
+                "\n email='" + emailReferentPedago + '\'' +
+                "\n telephone=" + telephoneReferentPedago +
+                "\n civilite=" + civiliteReferentPedago +
                 " }";
     }
 

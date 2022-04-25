@@ -72,6 +72,8 @@ public class EtudiantNewOrEdit extends Dialog {
   Button close = new Button("Fermer");
 
   public EtudiantNewOrEdit(List<Entreprise> entreprises, List<Tuteur> tuteurs) {
+    this.setWidth("85vw");
+
     // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité étudiant,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)
     binder.bindInstanceFields(this);

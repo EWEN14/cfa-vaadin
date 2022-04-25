@@ -99,7 +99,7 @@ public class TuteurNewOrEdit extends Dialog {
   ComboBox<Formation> formation = new ComboBox<>("Formation");
 
   // Onglets
-  Tab tuteursInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(), new Span("Tuteur"));
+  Tab tuteursInfosTab = new Tab(VaadinIcon.USER.create(), new Span("Tuteur"));
   Tab tuteursHabilitationsTab = new Tab(VaadinIcon.DIPLOMA.create(), new Span("Habilitations"));
 
   // Notre binder

@@ -129,4 +129,18 @@ public class Formation implements Cloneable {
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
   }
+
+  @Override
+  public String toString() {
+    return "Formation{" +
+            "\n id=" + id +
+            "\n , libelleFormation='" + libelleFormation + '\'' +
+            "\n , codeFormation='" + codeFormation + '\'' +
+            "\n , codeRome='" + codeRome + '\'' +
+            "\n , referentPedagogique=" +
+            (referentPedagogique != null ? referentPedagogique.getPrenom()+" "+referentPedagogique.getNom() : "") +
+            "\n , createdAt=" + createdAt +
+            "\n , updatedAt=" + updatedAt +
+            '}';
+  }
 }

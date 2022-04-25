@@ -111,6 +111,12 @@ public class Tuteur implements Cloneable {
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "tuteur", cascade = CascadeType.MERGE, orphanRemoval = true)
   private List<TuteurHabilitation> tuteurHabilitations = new ArrayList<>();
 
+  @OneToMany(mappedBy = "tuteur", cascade = CascadeType.MERGE)
+  private List<Contrat> contrats = new ArrayList<>();
+
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "tuteur", cascade = CascadeType.MERGE)
+  private List<Etudiant> etudiants = new ArrayList<>();
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private LocalDateTime createdAt;
@@ -118,17 +124,6 @@ public class Tuteur implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
-
-  @OneToMany(mappedBy = "tuteur", cascade = CascadeType.MERGE)
-  private List<Contrat> contrats = new ArrayList<>();
-
-  public List<Contrat> getContrats() {
-    return contrats;
-  }
-
-  public void setContrats(List<Contrat> contrats) {
-    this.contrats = contrats;
-  }
 
   // Getters et Setters
   public Long getId() {
@@ -289,6 +284,22 @@ public class Tuteur implements Cloneable {
 
   public void setTuteurHabilitations(List<TuteurHabilitation> tuteurHabilitations) {
     this.tuteurHabilitations = tuteurHabilitations;
+  }
+
+  public List<Contrat> getContrats() {
+    return contrats;
+  }
+
+  public void setContrats(List<Contrat> contrats) {
+    this.contrats = contrats;
+  }
+
+  public List<Etudiant> getEtudiants() {
+    return etudiants;
+  }
+
+  public void setEtudiants(List<Etudiant> etudiants) {
+    this.etudiants = etudiants;
   }
 
   public LocalDateTime getCreatedAt() {

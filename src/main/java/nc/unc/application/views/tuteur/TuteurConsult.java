@@ -64,7 +64,7 @@ public class TuteurConsult extends Dialog {
   private final Grid<TuteurHabilitation> tuteurHabilitationGrid = new Grid<>(TuteurHabilitation.class);
 
   // tab (onglet) qui seront insérés dans une tabs (ensemble d'onglets) les regroupant
-  private final Tab tuteursInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(), new Span("Tuteur"));
+  private final Tab tuteursInfosTab = new Tab(VaadinIcon.USER.create(), new Span("Tuteur"));
   private final Tab tuteursHabilitationsTab = new Tab(VaadinIcon.DIPLOMA.create(), new Span("Habiliations"));
   private final Tab entrepriseTuteurInfosTab = new Tab(VaadinIcon.WORKPLACE.create(), new Span("Entreprise"));
 

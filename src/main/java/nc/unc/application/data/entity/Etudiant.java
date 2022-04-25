@@ -139,6 +139,14 @@ public class Etudiant implements Cloneable {
   @JsonIgnoreProperties({"etudiants"})
   private Entreprise entreprise;
 
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Tuteur.class)
+  @JoinColumn(name = "id_tuteur")
+  @JsonIgnoreProperties({"etudiants"})
+  private Tuteur tuteur;
+
+  @OneToMany(mappedBy = "etudiant", cascade = CascadeType.MERGE)
+  private List<Contrat> contrats = new ArrayList<>();
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private LocalDateTime createdAt;
@@ -147,16 +155,6 @@ public class Etudiant implements Cloneable {
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
 
-  @OneToMany(mappedBy = "etudiant", cascade = CascadeType.MERGE)
-  private List<Contrat> contrats = new ArrayList<>();
-
-  public List<Contrat> getContrats() {
-    return contrats;
-  }
-
-  public void setContrats(List<Contrat> contrats) {
-    this.contrats = contrats;
-  }
 
   // Getters et Setters
   public Long getId() {
@@ -415,6 +413,22 @@ public class Etudiant implements Cloneable {
     this.entreprise = entreprise;
   }
 
+  public Tuteur getTuteur() {
+    return tuteur;
+  }
+
+  public void setTuteur(Tuteur tuteur) {
+    this.tuteur = tuteur;
+  }
+
+  public List<Contrat> getContrats() {
+    return contrats;
+  }
+
+  public void setContrats(List<Contrat> contrats) {
+    this.contrats = contrats;
+  }
+
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
@@ -431,10 +445,7 @@ public class Etudiant implements Cloneable {
     this.updatedAt = updatedAt;
   }
 
-  public boolean isNewEtudiant() {
-    return getId() == null;
-  }
-
+  // Autres méthodes
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
   }
@@ -487,6 +498,7 @@ public class Etudiant implements Cloneable {
             "\n obtentionDiplomeMention='" + obtentionDiplomeMention + '\'' +
             "\n observations='" + observations + '\'' +
             "\n entreprise=" + (entreprise != null ? entreprise.getEnseigne() : "") +
+            "\n entreprise=" + (tuteur != null ? tuteur.getPrenom() + " " + tuteur.getNom() : "") +
             " }";
   }
 }

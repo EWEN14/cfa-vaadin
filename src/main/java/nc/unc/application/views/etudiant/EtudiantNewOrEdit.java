@@ -21,6 +21,7 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Etudiant;
+import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.enums.*;
 
 import java.util.List;
@@ -62,6 +63,7 @@ public class EtudiantNewOrEdit extends Dialog {
   Select<String> priseEnChargeFraisInscription = new Select<>();
   Select<String> obtentionDiplomeMention = new Select<>();
   ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
+  ComboBox<Tuteur> tuteur = new ComboBox<>("Tuteur");
   TextArea observations = new TextArea("Observations");
 
   Binder<Etudiant> binder = new BeanValidationBinder<>(Etudiant.class);
@@ -69,7 +71,7 @@ public class EtudiantNewOrEdit extends Dialog {
   Button save = new Button("Sauvegarder");
   Button close = new Button("Fermer");
 
-  public EtudiantNewOrEdit(List<Entreprise> entreprises) {
+  public EtudiantNewOrEdit(List<Entreprise> entreprises, List<Tuteur> tuteurs) {
     // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité étudiant,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)
     binder.bindInstanceFields(this);
@@ -130,12 +132,16 @@ public class EtudiantNewOrEdit extends Dialog {
     entreprise.setItemLabelGenerator(Entreprise::getEnseigne);
     entreprise.setClearButtonVisible(true);
 
+    tuteur.setItems(tuteurs);
+    tuteur.setItemLabelGenerator(tuteur1 -> tuteur1.getPrenom() + " " + tuteur1.getNom());
+    tuteur.setClearButtonVisible(true);
+
     // ajout des champs et des boutons d'action dans le formulaire
     form.add(nom, prenom, civilite, dateNaissance, telephone1, telephone2, email, dernierDiplomeObtenuOuEnCours,
             niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, lieuNaissance, nationalite,
             numeroCafat, adresse, boitePostale, codePostal, commune, situationAnneePrecedente, etablissementDeProvenance,
             parcours, travailleurHandicape, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention, entreprise,
-            observations, createButtonsLayout());
+            tuteur, observations, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(form);

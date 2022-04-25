@@ -5,19 +5,28 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
+import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Etudiant;
+import nc.unc.application.data.entity.Tuteur;
+import nc.unc.application.data.enums.Civilite;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -69,9 +78,32 @@ public class EtudiantConsult extends Dialog {
   private final TextField entrepriseEnseigne = new TextField("Enseigne");
   private final TextField entrepriseRaisonSociale = new TextField("Raison Sociale");
 
+  // Champs du formulaire relatifs aux informations du tuteur lié à l'étudiant
+  FormLayout formEtudiantTuteur = new FormLayout();
+  TextField nomTuteur = new TextField("NOM");
+  TextField prenomTuteur = new TextField("Prenom");
+  DatePicker dateNaissanceTuteur = new DatePicker("Date de naissance");
+  EmailField emailTuteur = new EmailField("Email");
+  IntegerField telephone1Tuteur = new IntegerField("Téléphone 1");
+  IntegerField telephone2Tuteur = new IntegerField("Téléphone 2");
+  Select<Civilite> civiliteTuteur = new Select<>();
+  TextField diplomeEleveObtenu = new TextField("Diplome le plus élevé obtenu");
+  Select<Integer> niveauDiplome = new Select<>();
+  TextField posteOccupe = new TextField("Poste occupé");
+  TextField anneeExperienceProfessionnelle = new TextField("Années expérience professionnelle");
+  ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
+  TextArea observationsTuteur = new TextArea("Observations");
+  Checkbox casierJudiciaireFourni = new Checkbox("Casier Judiciaire fourni");
+  Checkbox diplomeFourni = new Checkbox("Diplôme fourni");
+  Checkbox certificatTravailFourni = new Checkbox("Certificat de Travail fourni");
+  Checkbox cvFourni = new Checkbox("CV fourni");
+
+  Binder<Tuteur> binderTuteur = new BeanValidationBinder<>(Tuteur.class);
+
   // tab (onglet) qui seront insérés dans une tabs (ensemble d'onglets) les regroupant
   private final Tab etudiantInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(),new Span("Étudiant"));
   private final Tab entrepriseEtudiantInfosTab = new Tab(VaadinIcon.WORKPLACE.create(),new Span("Entreprise"));
+  private final Tab tuteurEtudiantInfosTab = new Tab(VaadinIcon.USER.create(), new Span("Tuteur"));
 
   private final Button close = new Button("Fermer");
   private final Button delete = new Button("Supprimer l'étudiant");
@@ -81,12 +113,14 @@ public class EtudiantConsult extends Dialog {
     // tant que la modale n'est pas fermée
     this.setModal(true);
 
-    // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
+    // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables TODO
     setAllFieldsToReadOnly();
+
+    // binderTuteur.bindInstanceFields(this);
 
     // On instancie la Tabs, et on lui donne les tab que l'on veut insérer
     // tabs qui contiendra les tab permettant de passer d'un groupe d'informations à un autre
-    Tabs tabsEtudiant = new Tabs(etudiantInfosTab, entrepriseEtudiantInfosTab);
+    Tabs tabsEtudiant = new Tabs(etudiantInfosTab, entrepriseEtudiantInfosTab, tuteurEtudiantInfosTab);
     // Au clic sur une des tab, on appelle notre méthode setContent pour pouvoir changer le contenu
     tabsEtudiant.addSelectedChangeListener(selectedChangeEvent ->
             setContent(selectedChangeEvent.getSelectedTab())
@@ -100,6 +134,8 @@ public class EtudiantConsult extends Dialog {
             observations);
     // pareil, mais pour le formulaire relatif à son entreprise
     formEtudiantEntrepriseInfos.add(entrepriseEnseigne, entrepriseRaisonSociale);
+
+    formEtudiantTuteur.add(prenomTuteur);
 
     // contenu qui sera affiché en dessous des tabs, qui change en fonction de la tab sélectionné
     content = new VerticalLayout();
@@ -162,6 +198,15 @@ public class EtudiantConsult extends Dialog {
       } else {
        entrepriseEtudiantInfosTab.setVisible(false);
       }
+
+      // si l'étudiant a un tuteur, on passe les infos relatives à son tuteur
+      if (etudiant.getTuteur() != null) {
+        tuteurEtudiantInfosTab.setVisible(true);
+        prenomTuteur.setValue(etudiant.getTuteur().getPrenom());
+        // binderTuteur.readBean(etudiant.getTuteur());
+      } else {
+        tuteurEtudiantInfosTab.setVisible(false);
+      }
     }
   }
 
@@ -185,6 +230,8 @@ public class EtudiantConsult extends Dialog {
       content.add(formEtudiantInfos);
     } else if (tab.equals(entrepriseEtudiantInfosTab)) {
       content.add(formEtudiantEntrepriseInfos);
+    } else if (tab.equals(tuteurEtudiantInfosTab)) {
+      content.add(formEtudiantTuteur);
     }
   }
 

@@ -406,8 +406,6 @@ public class Entreprise implements Cloneable {
             "\n adressePostaleCommune='" + adressePostaleCommune + '\'' +
             "\n adressePostaleCodePostal=" + adressePostaleCodePostal +
             "\n adressePostaleRueOuBp='" + adressePostaleRueOuBp + '\'' +
-            "\n etudiants=" + etudiants +
-            "\n tuteurs=" + tuteurs +
             "\n observations='" + observations + '\'' +
             " }";
   }

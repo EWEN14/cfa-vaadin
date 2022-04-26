@@ -19,9 +19,7 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
-import nc.unc.application.data.entity.Entreprise;
-import nc.unc.application.data.entity.Etudiant;
-import nc.unc.application.data.entity.Tuteur;
+import nc.unc.application.data.entity.*;
 import nc.unc.application.data.enums.*;
 
 import java.util.List;
@@ -64,6 +62,8 @@ public class EtudiantNewOrEdit extends Dialog {
   Select<String> obtentionDiplomeMention = new Select<>();
   ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
   ComboBox<Tuteur> tuteur = new ComboBox<>("Tuteur");
+  ComboBox<Formation> formation = new ComboBox<>("Formation suivie");
+  ComboBox<ReferentPedagogique> referentPedagogique = new ComboBox<>("Référent pédagogique");
   TextArea observations = new TextArea("Observations");
 
   Binder<Etudiant> binder = new BeanValidationBinder<>(Etudiant.class);
@@ -71,7 +71,7 @@ public class EtudiantNewOrEdit extends Dialog {
   Button save = new Button("Sauvegarder");
   Button close = new Button("Fermer");
 
-  public EtudiantNewOrEdit(List<Entreprise> entreprises, List<Tuteur> tuteurs) {
+  public EtudiantNewOrEdit(List<Entreprise> entreprises, List<Tuteur> tuteurs, List<Formation> formations, List<ReferentPedagogique> referentsPedagogiques) {
     this.setWidth("85vw");
 
     // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité étudiant,
@@ -138,12 +138,19 @@ public class EtudiantNewOrEdit extends Dialog {
     tuteur.setItemLabelGenerator(tuteur1 -> tuteur1.getPrenom() + " " + tuteur1.getNom());
     tuteur.setClearButtonVisible(true);
 
+    formation.setItems(formations);
+    formation.setItemLabelGenerator(Formation::getLibelleFormation);
+    formation.setClearButtonVisible(true);
+
+    referentPedagogique.setItems(referentsPedagogiques);
+    referentPedagogique.setItemLabelGenerator(rp -> rp.getPrenomReferentPedago()+ " " + rp.getNomReferentPedago());
+
     // ajout des champs et des boutons d'action dans le formulaire
     form.add(nom, prenom, civilite, dateNaissance, telephone1, telephone2, email, dernierDiplomeObtenuOuEnCours,
             niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, lieuNaissance, nationalite,
             numeroCafat, adresse, boitePostale, codePostal, commune, situationAnneePrecedente, etablissementDeProvenance,
             parcours, travailleurHandicape, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention, entreprise,
-            tuteur, observations, createButtonsLayout());
+            tuteur, formation, referentPedagogique, observations, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(form);

@@ -23,9 +23,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
-import nc.unc.application.data.entity.Entreprise;
-import nc.unc.application.data.entity.Etudiant;
-import nc.unc.application.data.entity.Tuteur;
+import nc.unc.application.data.entity.*;
 import nc.unc.application.data.enums.Civilite;
 
 import java.time.format.DateTimeFormatter;
@@ -82,28 +80,33 @@ public class EtudiantConsult extends Dialog {
   FormLayout formEtudiantTuteur = new FormLayout();
   TextField nomTuteur = new TextField("NOM");
   TextField prenomTuteur = new TextField("Prenom");
-  DatePicker dateNaissanceTuteur = new DatePicker("Date de naissance");
   EmailField emailTuteur = new EmailField("Email");
   IntegerField telephone1Tuteur = new IntegerField("Téléphone 1");
-  IntegerField telephone2Tuteur = new IntegerField("Téléphone 2");
-  Select<Civilite> civiliteTuteur = new Select<>();
-  TextField diplomeEleveObtenu = new TextField("Diplome le plus élevé obtenu");
-  Select<Integer> niveauDiplome = new Select<>();
-  TextField posteOccupe = new TextField("Poste occupé");
-  TextField anneeExperienceProfessionnelle = new TextField("Années expérience professionnelle");
-  ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
-  TextArea observationsTuteur = new TextArea("Observations");
-  Checkbox casierJudiciaireFourni = new Checkbox("Casier Judiciaire fourni");
-  Checkbox diplomeFourni = new Checkbox("Diplôme fourni");
-  Checkbox certificatTravailFourni = new Checkbox("Certificat de Travail fourni");
-  Checkbox cvFourni = new Checkbox("CV fourni");
 
   Binder<Tuteur> binderTuteur = new BeanValidationBinder<>(Tuteur.class);
+
+  // Champs du formulaire relatif aux informations de la formation lié à l'étudiant
+  FormLayout formEtudiantFormation = new FormLayout();
+  TextField libelleFormation = new TextField("Libellé de la formation");
+  TextField codeFormation = new TextField("Code de la formation");
+
+  Binder<Formation> formationBinder = new BeanValidationBinder<>(Formation.class);
+
+  // Champs du formulaire relatif aux informations du référent pédagogique lié à l'étudiant
+  FormLayout formEtudiantReferentPedago = new FormLayout();
+  TextField nomReferentPedago = new TextField("NOM");
+  TextField prenomReferentPedago = new TextField("Prénom");
+  IntegerField telephoneReferentPedago = new IntegerField("Téléphone");
+  EmailField emailReferentPedago = new EmailField("Email");
+
+  Binder<ReferentPedagogique> referentPedagogiqueBinder = new BeanValidationBinder<>(ReferentPedagogique.class);
 
   // tab (onglet) qui seront insérés dans une tabs (ensemble d'onglets) les regroupant
   private final Tab etudiantInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(),new Span("Étudiant"));
   private final Tab entrepriseEtudiantInfosTab = new Tab(VaadinIcon.WORKPLACE.create(),new Span("Entreprise"));
   private final Tab tuteurEtudiantInfosTab = new Tab(VaadinIcon.USER.create(), new Span("Tuteur"));
+  private final Tab formationEtudiantInfosTab = new Tab(VaadinIcon.DIPLOMA.create(), new Span("Formation"));
+  private final Tab referentPedagoEtudiantInfosTab = new Tab(VaadinIcon.HANDSHAKE.create(), new Span("Référent pédagogique"));
 
   private final Button close = new Button("Fermer");
   private final Button delete = new Button("Supprimer l'étudiant");
@@ -118,10 +121,13 @@ public class EtudiantConsult extends Dialog {
     setAllFieldsToReadOnly();
 
     // binderTuteur.bindInstanceFields(this);
+    formationBinder.bindInstanceFields(this);
+    referentPedagogiqueBinder.bindInstanceFields(this);
 
     // On instancie la Tabs, et on lui donne les tab que l'on veut insérer
     // tabs qui contiendra les tab permettant de passer d'un groupe d'informations à un autre
-    Tabs tabsEtudiant = new Tabs(etudiantInfosTab, entrepriseEtudiantInfosTab, tuteurEtudiantInfosTab);
+    Tabs tabsEtudiant = new Tabs(etudiantInfosTab, entrepriseEtudiantInfosTab, tuteurEtudiantInfosTab,
+            formationEtudiantInfosTab, referentPedagoEtudiantInfosTab);
     // Au clic sur une des tab, on appelle notre méthode setContent pour pouvoir changer le contenu
     tabsEtudiant.addSelectedChangeListener(selectedChangeEvent ->
             setContent(selectedChangeEvent.getSelectedTab())
@@ -136,7 +142,14 @@ public class EtudiantConsult extends Dialog {
     // pareil, mais pour le formulaire relatif à son entreprise
     formEtudiantEntrepriseInfos.add(entrepriseEnseigne, entrepriseRaisonSociale);
 
+    // ajout des champs dans le formulaire de tuteur
     formEtudiantTuteur.add(prenomTuteur);
+
+    // ajout des champs dans le formulaire de la formation suivie par l'étudiant
+    formEtudiantFormation.add(libelleFormation, codeFormation);
+
+    // ajout des champs dans le formulaire du referent pédagogique qui encadre l'étudiant
+    formEtudiantReferentPedago.add(prenomReferentPedago, nomReferentPedago, telephoneReferentPedago, emailReferentPedago);
 
     // contenu qui sera affiché en dessous des tabs, qui change en fonction de la tab sélectionné
     content = new VerticalLayout();
@@ -208,6 +221,11 @@ public class EtudiantConsult extends Dialog {
       } else {
         tuteurEtudiantInfosTab.setVisible(false);
       }
+
+      formationEtudiantInfosTab.setVisible(true);
+      formationBinder.readBean(etudiant.getFormation());
+
+      referentPedagogiqueBinder.readBean(etudiant.getReferentPedagogique());
     }
   }
 
@@ -233,13 +251,26 @@ public class EtudiantConsult extends Dialog {
       content.add(formEtudiantEntrepriseInfos);
     } else if (tab.equals(tuteurEtudiantInfosTab)) {
       content.add(formEtudiantTuteur);
+    } else if (tab.equals(formationEtudiantInfosTab)) {
+      content.add(formEtudiantFormation);
+    } else if (tab.equals(referentPedagoEtudiantInfosTab)) {
+      content.add(formEtudiantReferentPedago);
     }
   }
 
   // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
   private void setAllFieldsToReadOnly() {
+    // étudiant
     nom.setReadOnly(true);
     prenom.setReadOnly(true);
+    // formation
+    libelleFormation.setReadOnly(true);
+    codeFormation.setReadOnly(true);
+    // referent pédagogique
+    nomReferentPedago.setReadOnly(true);
+    prenomReferentPedago.setReadOnly(true);
+    telephoneReferentPedago.setReadOnly(true);
+    emailReferentPedago.setReadOnly(true);
   }
 
   // Event "global" (class mère), qui étend les deux events ci-dessous, dont le but est de fournir l'étudiant

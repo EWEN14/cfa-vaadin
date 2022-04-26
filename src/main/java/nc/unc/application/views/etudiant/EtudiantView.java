@@ -14,9 +14,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.enums.Sexe;
-import nc.unc.application.data.service.EtudiantService;
-import nc.unc.application.data.service.LogEnregistrmentService;
-import nc.unc.application.data.service.TuteurService;
+import nc.unc.application.data.service.*;
 import nc.unc.application.views.MainLayout;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -39,11 +37,16 @@ public class EtudiantView extends VerticalLayout {
   EtudiantNewOrEdit modalNewOrEdit;
   EtudiantService etudiantService;
   TuteurService tuteurService;
+  FormationService formationService;
+  ReferentPedagogiqueService referentPedagogiqueService;
   LogEnregistrmentService logEnregistrmentService;
 
-  public EtudiantView(EtudiantService etudiantService, TuteurService tuteurService, LogEnregistrmentService logEnregistrmentService) {
+  public EtudiantView(EtudiantService etudiantService, TuteurService tuteurService, FormationService formationService,
+                      ReferentPedagogiqueService referentPedagogiqueService, LogEnregistrmentService logEnregistrmentService) {
     this.etudiantService = etudiantService;
     this.tuteurService = tuteurService;
+    this.formationService = formationService;
+    this.referentPedagogiqueService = referentPedagogiqueService;
     this.logEnregistrmentService = logEnregistrmentService;
 
     addClassName("list-view");
@@ -58,7 +61,8 @@ public class EtudiantView extends VerticalLayout {
     modalConsult.addListener(EtudiantConsult.CloseEvent.class, e -> closeConsultModal());
 
     // ajout de la modale d'édition ou de création d'un étudiant dans la vue, en lui passant la liste des entreprises et des tuteurs
-    modalNewOrEdit = new EtudiantNewOrEdit(etudiantService.findAllEntreprises(), tuteurService.findAllTuteurs(""));
+    modalNewOrEdit = new EtudiantNewOrEdit(etudiantService.findAllEntreprises(), tuteurService.findAllTuteurs(""),
+            formationService.findAllFormations(""), referentPedagogiqueService.findAllReferentPedagogique(""));
     modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEvent.class, this::saveEtudiant);
     modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEditedEvent.class, this::saveEditedEtudiant);
     modalNewOrEdit.addListener(EtudiantNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());

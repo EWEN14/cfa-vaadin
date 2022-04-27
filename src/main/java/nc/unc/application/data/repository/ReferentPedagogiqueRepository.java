@@ -13,7 +13,7 @@ public interface ReferentPedagogiqueRepository extends JpaRepository<ReferentPed
 
   //Récupérer le(s) référent pédagogique selon le paramètre searchTerm
   @Query("select r from  ReferentPedagogique r "+
-          "where lower(r.nom) like lower(concat('%', :searchTerm, '%')) " +
-          "or lower(r.prenom) like lower(concat('%', :searchTerm, '%'))")
+          "where lower(r.nomReferentPedago) like lower(concat('%', :searchTerm, '%')) " +
+          "or lower(r.prenomReferentPedago) like lower(concat('%', :searchTerm, '%'))")
   List<ReferentPedagogique> search(@Param("searchTerm") String searchTerm);
 }

@@ -9,9 +9,6 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -71,19 +68,19 @@ public class TuteurNewOrEdit extends Dialog {
 
   // Champs de notre formulaire
   FormLayout form = new FormLayout();
-  TextField nom = new TextField("NOM");
-  TextField prenom = new TextField("Prenom");
-  DatePicker dateNaissance = new DatePicker("Date de naissance");
-  EmailField email = new EmailField("Email");
-  IntegerField telephone1 = new IntegerField("Téléphone 1");
-  IntegerField telephone2 = new IntegerField("Téléphone 2");
-  Select<Civilite> civilite = new Select<>();
+  TextField nomTuteur = new TextField("NOM");
+  TextField prenomTuteur = new TextField("Prenom");
+  DatePicker dateNaissanceTuteur = new DatePicker("Date de naissance");
+  EmailField emailTuteur = new EmailField("Email");
+  IntegerField telephoneTuteur1 = new IntegerField("Téléphone 1");
+  IntegerField telephoneTuteur2 = new IntegerField("Téléphone 2");
+  Select<Civilite> civiliteTuteur = new Select<>();
   TextField diplomeEleveObtenu = new TextField("Diplome le plus élevé obtenu");
   Select<Integer> niveauDiplome = new Select<>();
   TextField posteOccupe = new TextField("Poste occupé");
   TextField anneeExperienceProfessionnelle = new TextField("Années expérience professionnelle");
   ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
-  TextArea observations = new TextArea("Observations");
+  TextArea observationsTuteur = new TextArea("Observations");
   Checkbox casierJudiciaireFourni = new Checkbox("Casier Judiciaire fourni");
   Checkbox diplomeFourni = new Checkbox("Diplôme fourni");
   Checkbox certificatTravailFourni = new Checkbox("Certificat de Travail fourni");
@@ -99,7 +96,7 @@ public class TuteurNewOrEdit extends Dialog {
   ComboBox<Formation> formation = new ComboBox<>("Formation");
 
   // Onglets
-  Tab tuteursInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(), new Span("Tuteur"));
+  Tab tuteursInfosTab = new Tab(VaadinIcon.USER.create(), new Span("Tuteur"));
   Tab tuteursHabilitationsTab = new Tab(VaadinIcon.DIPLOMA.create(), new Span("Habilitations"));
 
   // Notre binder
@@ -134,8 +131,8 @@ public class TuteurNewOrEdit extends Dialog {
     );
 
     // définition du label de civilite, et alimentation en valeurs de l'enum Civilite
-    civilite.setLabel("Civilité");
-    civilite.setItems(Civilite.values());
+    civiliteTuteur.setLabel("Civilité");
+    civiliteTuteur.setItems(Civilite.values());
 
     // Remplissage de nos select
     niveauDiplome.setLabel("Niveau de diplôme");
@@ -149,8 +146,8 @@ public class TuteurNewOrEdit extends Dialog {
     // (si l'utilisateur veut se passer de l'utilisation du calendrier intégré)
     DatePicker.DatePickerI18n multiFormatI18n = new DatePicker.DatePickerI18n();
     multiFormatI18n.setDateFormats("dd/MM/yyyy", "yyyy-MM-dd");
-    dateNaissance.setI18n(multiFormatI18n);
-    dateNaissance.isRequired();
+    dateNaissanceTuteur.setI18n(multiFormatI18n);
+    dateNaissanceTuteur.isRequired();
 
     // grille des habilitations du tuteur
     tuteurHabilitations.addClassName("tuteur-habilitation-grid");
@@ -165,8 +162,8 @@ public class TuteurNewOrEdit extends Dialog {
     }));
 
     // ajout des champs et des boutons d'action dans le formulaire
-    form.add(nom, prenom, dateNaissance, civilite, email, telephone1, telephone2, diplomeEleveObtenu, niveauDiplome,
-            posteOccupe, anneeExperienceProfessionnelle, entreprise, observations, casierJudiciaireFourni, diplomeFourni,
+    form.add(nomTuteur, prenomTuteur, dateNaissanceTuteur, civiliteTuteur, emailTuteur, telephoneTuteur1, telephoneTuteur2, diplomeEleveObtenu, niveauDiplome,
+            posteOccupe, anneeExperienceProfessionnelle, entreprise, observationsTuteur, casierJudiciaireFourni, diplomeFourni,
             certificatTravailFourni, cvFourni, createButtonsLayout());
 
     // --- configuration champs et formulaire d'ajout d'habilités ---

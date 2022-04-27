@@ -12,10 +12,9 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.enums.Sexe;
-import nc.unc.application.data.enums.TypeCrud;
+import nc.unc.application.data.service.EtudiantService;
 import nc.unc.application.data.service.FormationService;
 import nc.unc.application.data.service.LogEnregistrmentService;
 import nc.unc.application.data.service.TuteurService;
@@ -24,8 +23,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import com.vaadin.flow.component.button.Button;
 import javax.annotation.security.PermitAll;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests
@@ -42,18 +39,20 @@ public class TuteurView extends VerticalLayout {
     TuteurConsult tuteurModalConsult;
 
     private TuteurService tuteurService;
+    private EtudiantService etudiantService;
     private LogEnregistrmentService logEnregistrmentService;
 
-    public TuteurView(TuteurService tuteurService, FormationService formationService, LogEnregistrmentService logEnregistrmentService){
+    public TuteurView(TuteurService tuteurService, FormationService formationService, EtudiantService etudiantService, LogEnregistrmentService logEnregistrmentService){
 
         this.tuteurService = tuteurService;
+        this.etudiantService = etudiantService;
         this.logEnregistrmentService = logEnregistrmentService;
 
         addClassName("list-view");
         setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
         configureGrid(); // configuration de la grille (colonnes, données...)
 
-        tuteurModalConsult = new TuteurConsult();
+        tuteurModalConsult = new TuteurConsult(etudiantService);
         // On définit que les différents events (TuteurForm.fooEvent) dans le Tuteur  vont déclencher une fonction
         // contenant l'objet tuteur (dans le cas du save ou delete).
         tuteurModalConsult.addListener(TuteurConsult.DeleteEvent.class, this::deleteTuteur);
@@ -86,7 +85,7 @@ public class TuteurView extends VerticalLayout {
     private void configureGrid() {
         grid.addClassNames("tuteur-grid");
         grid.setSizeFull();
-        grid.setColumns("prenom", "nom", "dateNaissance");
+        grid.setColumns("prenomTuteur", "nomTuteur", "dateNaissanceTuteur");
         grid.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.EYE), click -> {
             consultTuteur(tuteur);
         }));
@@ -129,7 +128,7 @@ public class TuteurView extends VerticalLayout {
         // mise à jour de la grid, fermeture du formulaire et notification
         updateList();
         closeNewOrEditModal();
-        Notification.show(tuteur.getPrenom() + " " + tuteur.getNom() + " créé(e)");
+        Notification.show(tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() + " créé(e)");
     }
 
     // sauvegarde du tuteur modifié en utilisant TuteurService
@@ -149,20 +148,22 @@ public class TuteurView extends VerticalLayout {
 
         updateList();
         closeNewOrEditModal();
-        Notification.show(tuteur.getPrenom() + " " + tuteur.getNom() + " modifié(e)");
+        Notification.show(tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() + " modifié(e)");
     }
 
     // suppression du tuteur en utilisant TuteurService
     private void deleteTuteur(TuteurConsult.DeleteEvent event) {
         Tuteur tuteur = event.getTuteur();
-        tuteurService.deleteTuteur(tuteur);
+        if (tuteur != null) {
+            tuteurService.deleteTuteur(tuteur);
 
-        // ajout du log de suppression
-        logEnregistrmentService.saveLogDeleteString(tuteur.toString());
+            // ajout du log de suppression
+            logEnregistrmentService.saveLogDeleteString(tuteur.toString());
 
-        updateList();
-        closeConsultModal();
-        Notification.show(tuteur.getPrenom() + " " + tuteur.getNom() + " retiré(e)");
+            updateList();
+            closeConsultModal();
+            Notification.show(tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() + " retiré(e)");
+        }
     }
 
     public void consultTuteur(Tuteur tuteur) {
@@ -208,10 +209,10 @@ public class TuteurView extends VerticalLayout {
 
     // fonction qui met le nom du tuteur en majuscule et défini son sexe en fonction de sa civilté
     private void setSexeTuteur(Tuteur tuteur) {
-        tuteur.setNom(tuteur.getNom().toUpperCase());
+        tuteur.setNomTuteur(tuteur.getNomTuteur().toUpperCase());
         // définition du sexe que si le champ civilité est rempli
-        if (tuteur.getCivilite() != null) {
-            switch (tuteur.getCivilite()) {
+        if (tuteur.getCiviliteTuteur() != null) {
+            switch (tuteur.getCiviliteTuteur()) {
                 case MONSIEUR:
                     tuteur.setSexe(Sexe.M);
                     break;

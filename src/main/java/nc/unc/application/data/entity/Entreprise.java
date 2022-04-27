@@ -45,7 +45,7 @@ public class Entreprise implements Cloneable {
 
   @Range(message = "Le numéro de Cafat doit comporter 6 chiffres", min = 100000, max = 999999)
   @Column(name = "numero_cafat")
-  private Long numeroCafat;
+  private Long numeroCafatEntreprise;
 
   @Column(name = "nombre_salarie")
   private Long nombreSalarie;
@@ -69,20 +69,20 @@ public class Entreprise implements Cloneable {
   private String fonctionRepresentantEmployeur;
 
   @Column(name = "nom_contact_cfa")
-  private String nom_contact_cfa;
+  private String nomContactCfa;
 
   @Column(name = "prenom_contact_cfa")
-  private String prenom_contact_cfa;
+  private String prenomContactCfa;
 
   @Column(name = "fonction_contact_cfa")
-  private String fonction_contact_cfa;
+  private String fonctionContactCfa;
 
-  @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
   @Column(name = "telephone_contact_cfa")
-  private String telephone_contact_cfa;
+  @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
+  private Integer telephoneContactCfa;
 
   @Column(name = "email_contact_cfa")
-  private String email_contact_cfa;
+  private String emailContactCfa;
 
   @Column(name = "adr_phys_commune")
   private String adressePhysiqueCommune;
@@ -181,12 +181,12 @@ public class Entreprise implements Cloneable {
     this.formeJuridique = formeJuridique;
   }
 
-  public Long getNumeroCafat() {
-    return numeroCafat;
+  public Long getNumeroCafatEntreprise() {
+    return numeroCafatEntreprise;
   }
 
-  public void setNumeroCafat(Long numeroCafat) {
-    this.numeroCafat = numeroCafat;
+  public void setNumeroCafatEntreprise(Long numeroCafat) {
+    this.numeroCafatEntreprise = numeroCafat;
   }
 
   public Long getNombreSalarie() {
@@ -245,44 +245,44 @@ public class Entreprise implements Cloneable {
     this.fonctionRepresentantEmployeur = fonctionRepresentantEmployeur;
   }
 
-  public String getEmail_contact_cfa() {
-    return email_contact_cfa;
+  public String getEmailContactCfa() {
+    return emailContactCfa;
   }
 
-  public void setEmail_contact_cfa(String email_contact_cfa) {
-    this.email_contact_cfa = email_contact_cfa;
+  public void setEmailContactCfa(String email_contact_cfa) {
+    this.emailContactCfa = email_contact_cfa;
   }
 
-  public String getTelephone_contact_cfa() {
-    return telephone_contact_cfa;
+  public @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999) Integer getTelephoneContactCfa() {
+    return telephoneContactCfa;
   }
 
-  public void setTelephone_contact_cfa(String telephone_contact_cfa) {
-    this.telephone_contact_cfa = telephone_contact_cfa;
+  public void setTelephoneContactCfa(@Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999) Integer telephone_contact_cfa) {
+    this.telephoneContactCfa = telephone_contact_cfa;
   }
 
-  public String getFonction_contact_cfa() {
-    return fonction_contact_cfa;
+  public String getFonctionContactCfa() {
+    return fonctionContactCfa;
   }
 
-  public void setFonction_contact_cfa(String fonction_contact_cfa) {
-    this.fonction_contact_cfa = fonction_contact_cfa;
+  public void setFonctionContactCfa(String fonction_contact_cfa) {
+    this.fonctionContactCfa = fonction_contact_cfa;
   }
 
-  public String getPrenom_contact_cfa() {
-    return prenom_contact_cfa;
+  public String getPrenomContactCfa() {
+    return prenomContactCfa;
   }
 
-  public void setPrenom_contact_cfa(String prenom_contact_cfa) {
-    this.prenom_contact_cfa = prenom_contact_cfa;
+  public void setPrenomContactCfa(String prenom_contact_cfa) {
+    this.prenomContactCfa = prenom_contact_cfa;
   }
 
-  public String getNom_contact_cfa() {
-    return nom_contact_cfa;
+  public String getNomContactCfa() {
+    return nomContactCfa;
   }
 
-  public void setNom_contact_cfa(String nom_contact_cfa) {
-    this.nom_contact_cfa = nom_contact_cfa;
+  public void setNomContactCfa(String nom_contact_cfa) {
+    this.nomContactCfa = nom_contact_cfa;
   }
 
   public String getAdressePhysiqueCommune() {
@@ -387,7 +387,7 @@ public class Entreprise implements Cloneable {
             "\n raisonSociale='" + raisonSociale + '\'' +
             "\n numeroRidet='" + numeroRidet + '\'' +
             "\n formeJuridique='" + formeJuridique + '\'' +
-            "\n numeroCafat=" + numeroCafat +
+            "\n numeroCafat=" + numeroCafatEntreprise +
             "\n nombreSalarie=" + nombreSalarie +
             "\n codeNaf='" + codeNaf + '\'' +
             "\n activiteEntreprise='" + activiteEntreprise + '\'' +
@@ -395,19 +395,17 @@ public class Entreprise implements Cloneable {
             "\n nomRepresentantEmployeur='" + nomRepresentantEmployeur + '\'' +
             "\n prenomRepresentantEmployeur='" + prenomRepresentantEmployeur + '\'' +
             "\n fonctionRepresentantEmployeur='" + fonctionRepresentantEmployeur + '\'' +
-            "\n nom_contact_cfa='" + nom_contact_cfa + '\'' +
-            "\n prenom_contact_cfa='" + prenom_contact_cfa + '\'' +
-            "\n fonction_contact_cfa='" + fonction_contact_cfa + '\'' +
-            "\n telephone_contact_cfa='" + telephone_contact_cfa + '\'' +
-            "\n email_contact_cfa='" + email_contact_cfa + '\'' +
+            "\n nomContactCfa='" + nomContactCfa + '\'' +
+            "\n prenomContactCfa='" + prenomContactCfa + '\'' +
+            "\n fonctionContactCfa='" + fonctionContactCfa + '\'' +
+            "\n telephoneContactCfa='" + telephoneContactCfa + '\'' +
+            "\n emailContactCfa='" + emailContactCfa + '\'' +
             "\n adressePhysiqueCommune='" + adressePhysiqueCommune + '\'' +
             "\n adressePhysiqueCodePostal=" + adressePhysiqueCodePostal +
             "\n adressePhysiqueRue='" + adressePhysiqueRue + '\'' +
             "\n adressePostaleCommune='" + adressePostaleCommune + '\'' +
             "\n adressePostaleCodePostal=" + adressePostaleCodePostal +
             "\n adressePostaleRueOuBp='" + adressePostaleRueOuBp + '\'' +
-            "\n etudiants=" + etudiants +
-            "\n tuteurs=" + tuteurs +
             "\n observations='" + observations + '\'' +
             " }";
   }

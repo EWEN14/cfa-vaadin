@@ -12,8 +12,9 @@ import java.util.List;
 public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
 
   @Query("select e from Etudiant e " +
-          "where lower(e.nom) like lower(concat('%', :searchTerm, '%')) " +
-          "or lower(e.prenom) like lower(concat('%', :searchTerm, '%'))")
+          "where lower(e.nomEtudiant) like lower(concat('%', :searchTerm, '%')) " +
+          "or lower(e.prenomEtudiant) like lower(concat('%', :searchTerm, '%'))")
   List<Etudiant> search(@Param("searchTerm") String searchTerm);
 
+  List<Etudiant> findAllByTuteurId(Long id);
 }

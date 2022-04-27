@@ -19,8 +19,7 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
-import nc.unc.application.data.entity.Entreprise;
-import nc.unc.application.data.entity.Etudiant;
+import nc.unc.application.data.entity.*;
 import nc.unc.application.data.enums.*;
 
 import java.util.List;
@@ -31,14 +30,14 @@ public class EtudiantNewOrEdit extends Dialog {
   private Etudiant cloneEtudiant;
 
   FormLayout form = new FormLayout();
-  TextField nom = new TextField("NOM");
-  TextField prenom = new TextField("Prénom");
+  TextField nomEtudiant = new TextField("NOM");
+  TextField prenomEtudiant = new TextField("Prénom");
   // utilisation de select lorsque nombre de choix assez petis
-  Select<Civilite> civilite = new Select<>();
-  DatePicker dateNaissance = new DatePicker("Date de Naissance");
-  IntegerField telephone1 = new IntegerField("Téléphone 1");
-  IntegerField telephone2 = new IntegerField("Téléphone 2");
-  EmailField email = new EmailField("Email");
+  Select<Civilite> civiliteEtudiant = new Select<>();
+  DatePicker dateNaissanceEtudiant = new DatePicker("Date de Naissance");
+  IntegerField telephoneEtudiant1 = new IntegerField("Téléphone 1");
+  IntegerField telephoneEtudiant2 = new IntegerField("Téléphone 2");
+  EmailField emailEtudiant = new EmailField("Email");
   // utilisation de comboBox lorsque qu'il y a beaucoup de choix, l'utilisateur peut ainsi chercher en tapant dans
   // le champ pour filtrer parmi les options.
   ComboBox<String> dernierDiplomeObtenuOuEnCours = new ComboBox<>("Dernier diplôme obtenu ou en cours");
@@ -49,11 +48,11 @@ public class EtudiantNewOrEdit extends Dialog {
   Select<String> situationEntreprise = new Select<>();
   ComboBox<String> lieuNaissance = new ComboBox<>("Lieu de naissance");
   Select<String> nationalite = new Select<>();
-  IntegerField numeroCafat = new IntegerField("Numéro Cafat");
-  TextField adresse = new TextField("Adresse");
-  TextField boitePostale = new TextField("Boîte Postale");
-  IntegerField codePostal = new IntegerField("Code Postal");
-  ComboBox<String> commune = new ComboBox<>("Commune");
+  IntegerField numeroCafatEtudiant = new IntegerField("Numéro Cafat");
+  TextField adresseEtudiant = new TextField("Adresse");
+  TextField boitePostaleEtudiant = new TextField("Boîte Postale");
+  IntegerField codePostalEtudiant = new IntegerField("Code Postal");
+  ComboBox<String> communeEtudiant = new ComboBox<>("Commune");
   Select<String> situationAnneePrecedente = new Select<>();
   ComboBox<String> etablissementDeProvenance = new ComboBox<>("Établissement de provenance");
   Select<String> parcours = new Select<>();
@@ -62,28 +61,33 @@ public class EtudiantNewOrEdit extends Dialog {
   Select<String> priseEnChargeFraisInscription = new Select<>();
   Select<String> obtentionDiplomeMention = new Select<>();
   ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
-  TextArea observations = new TextArea("Observations");
+  ComboBox<Tuteur> tuteur = new ComboBox<>("Tuteur");
+  ComboBox<Formation> formation = new ComboBox<>("Formation suivie");
+  ComboBox<ReferentPedagogique> referentPedagogique = new ComboBox<>("Référent pédagogique");
+  TextArea observationsEtudiant = new TextArea("Observations");
 
   Binder<Etudiant> binder = new BeanValidationBinder<>(Etudiant.class);
 
   Button save = new Button("Sauvegarder");
   Button close = new Button("Fermer");
 
-  public EtudiantNewOrEdit(List<Entreprise> entreprises) {
+  public EtudiantNewOrEdit(List<Entreprise> entreprises, List<Tuteur> tuteurs, List<Formation> formations, List<ReferentPedagogique> referentsPedagogiques) {
+    this.setWidth("85vw");
+
     // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité étudiant,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)
     binder.bindInstanceFields(this);
 
     // définition du label de civilite, et alimentation en valeurs de l'enum Civilite
-    civilite.setLabel("Civilité");
-    civilite.setItems(Civilite.values());
+    civiliteEtudiant.setLabel("Civilité");
+    civiliteEtudiant.setItems(Civilite.values());
 
     // date picker I18n qui permet de taper à la main une date au format français
     // (si l'utilisateur veut se passer de l'utilisation du calendrier intégré)
     DatePicker.DatePickerI18n multiFormatI18n = new DatePicker.DatePickerI18n();
     multiFormatI18n.setDateFormats("dd/MM/yyyy", "yyyy-MM-dd");
-    dateNaissance.setI18n(multiFormatI18n);
-    dateNaissance.isRequired();
+    dateNaissanceEtudiant.setI18n(multiFormatI18n);
+    dateNaissanceEtudiant.isRequired();
 
     dernierDiplomeObtenuOuEnCours.setItems(DernierDiplomeObtenu.getDiplomeStr());
     dernierDiplomeObtenuOuEnCours.setClearButtonVisible(true);
@@ -106,8 +110,8 @@ public class EtudiantNewOrEdit extends Dialog {
     nationalite.setLabel("Nationalité");
     nationalite.setItems(Nationalite.getNationalitesStr());
 
-    commune.setItems(Commune.getCommunesStr());
-    commune.setClearButtonVisible(true);
+    communeEtudiant.setItems(Commune.getCommunesStr());
+    communeEtudiant.setClearButtonVisible(true);
 
     // alimentation en valeurs de l'enum SituationAnneePrecedente,
     // mais de la version "chaîne de caractère" de chaque énumération
@@ -130,12 +134,23 @@ public class EtudiantNewOrEdit extends Dialog {
     entreprise.setItemLabelGenerator(Entreprise::getEnseigne);
     entreprise.setClearButtonVisible(true);
 
+    tuteur.setItems(tuteurs);
+    tuteur.setItemLabelGenerator(tuteur1 -> tuteur1.getPrenomTuteur() + " " + tuteur1.getNomTuteur());
+    tuteur.setClearButtonVisible(true);
+
+    formation.setItems(formations);
+    formation.setItemLabelGenerator(Formation::getLibelleFormation);
+    formation.setClearButtonVisible(true);
+
+    referentPedagogique.setItems(referentsPedagogiques);
+    referentPedagogique.setItemLabelGenerator(rp -> rp.getPrenomReferentPedago()+ " " + rp.getNomReferentPedago());
+
     // ajout des champs et des boutons d'action dans le formulaire
-    form.add(nom, prenom, civilite, dateNaissance, telephone1, telephone2, email, dernierDiplomeObtenuOuEnCours,
+    form.add(nomEtudiant, prenomEtudiant, civiliteEtudiant, dateNaissanceEtudiant, telephoneEtudiant1, telephoneEtudiant2, emailEtudiant, dernierDiplomeObtenuOuEnCours,
             niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, lieuNaissance, nationalite,
-            numeroCafat, adresse, boitePostale, codePostal, commune, situationAnneePrecedente, etablissementDeProvenance,
+            numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente, etablissementDeProvenance,
             parcours, travailleurHandicape, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention, entreprise,
-            observations, createButtonsLayout());
+            tuteur, formation, referentPedagogique, observationsEtudiant, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(form);

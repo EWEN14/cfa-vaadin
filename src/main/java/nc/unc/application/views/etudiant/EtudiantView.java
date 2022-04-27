@@ -14,9 +14,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.enums.Sexe;
-import nc.unc.application.data.enums.TypeCrud;
-import nc.unc.application.data.service.EtudiantService;
-import nc.unc.application.data.service.LogEnregistrmentService;
+import nc.unc.application.data.service.*;
 import nc.unc.application.views.MainLayout;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -37,11 +35,18 @@ public class EtudiantView extends VerticalLayout {
   Button addEtudiantButton;
   EtudiantConsult modalConsult;
   EtudiantNewOrEdit modalNewOrEdit;
-  EtudiantService service;
+  EtudiantService etudiantService;
+  TuteurService tuteurService;
+  FormationService formationService;
+  ReferentPedagogiqueService referentPedagogiqueService;
   LogEnregistrmentService logEnregistrmentService;
 
-  public EtudiantView(EtudiantService service, LogEnregistrmentService logEnregistrmentService) {
-    this.service = service;
+  public EtudiantView(EtudiantService etudiantService, TuteurService tuteurService, FormationService formationService,
+                      ReferentPedagogiqueService referentPedagogiqueService, LogEnregistrmentService logEnregistrmentService) {
+    this.etudiantService = etudiantService;
+    this.tuteurService = tuteurService;
+    this.formationService = formationService;
+    this.referentPedagogiqueService = referentPedagogiqueService;
     this.logEnregistrmentService = logEnregistrmentService;
 
     addClassName("list-view");
@@ -55,8 +60,9 @@ public class EtudiantView extends VerticalLayout {
     modalConsult.addListener(EtudiantConsult.DeleteEvent.class, this::deleteEtudiant);
     modalConsult.addListener(EtudiantConsult.CloseEvent.class, e -> closeConsultModal());
 
-    // ajout de la modale d'édition ou de crétion d'un étudiant dans la vue
-    modalNewOrEdit = new EtudiantNewOrEdit(service.findAllEntreprises());
+    // ajout de la modale d'édition ou de création d'un étudiant dans la vue, en lui passant la liste des entreprises et des tuteurs
+    modalNewOrEdit = new EtudiantNewOrEdit(etudiantService.findAllEntreprises(), tuteurService.findAllTuteurs(""),
+            formationService.findAllFormations(""), referentPedagogiqueService.findAllReferentPedagogique(""));
     modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEvent.class, this::saveEtudiant);
     modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEditedEvent.class, this::saveEditedEtudiant);
     modalNewOrEdit.addListener(EtudiantNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
@@ -85,7 +91,7 @@ public class EtudiantView extends VerticalLayout {
     grid.addClassNames("etudiant-grid");
     grid.setSizeFull();
     // ajout des colonnes
-    grid.setColumns("prenom", "nom", "civilite", "dateNaissance");
+    grid.setColumns("prenomEtudiant", "nomEtudiant", "civiliteEtudiant", "dateNaissanceEtudiant");
     // ajout du bouton de consultation d'un étudiant
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultEtudiant(etudiant);
@@ -121,9 +127,9 @@ public class EtudiantView extends VerticalLayout {
     // utilisation du getEtudiant de la classe mère EtudiantFormEvent pour récupérer l'étudiant
     Etudiant etudiant = event.getEtudiant();
     // mise en majuscule du nom, définition sexe et âge avant sauvegarde
-    setNameSexeAgeEtudiant(etudiant);
+    setNameSexeEtudiant(etudiant);
     // sauvegarde de l'étudiant
-    service.saveEtudiant(etudiant);
+    etudiantService.saveEtudiant(etudiant);
 
     // ajout du log d'ajout
     logEnregistrmentService.saveLogAjoutString(etudiant.toString());
@@ -131,7 +137,7 @@ public class EtudiantView extends VerticalLayout {
     // mise à jour de la grid, fermeture du formulaire et notification
     updateList();
     closeNewOrEditModal();
-    Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " créé(e)");
+    Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " créé(e)");
   }
 
   // sauvegarde de l'étudiant modifié en utilisant EtudiantService
@@ -141,30 +147,32 @@ public class EtudiantView extends VerticalLayout {
     // récupération de l'étudiant avant modification
     Etudiant etudiantOriginal = event.getEtudiantOriginal();
     // mise en majuscule du nom, définition sexe et âge avant sauvegarde
-    setNameSexeAgeEtudiant(etudiant);
+    setNameSexeEtudiant(etudiant);
 
     // sauvegarde de l'étudiant
-    service.saveEtudiant(etudiant);
+    etudiantService.saveEtudiant(etudiant);
 
     // ajout du log de modification
     logEnregistrmentService.saveLogEditString(etudiantOriginal.toString(), etudiant.toString());
 
     updateList();
     closeNewOrEditModal();
-    Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " modifié(e)");
+    Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " modifié(e)");
   }
 
   // suppression de l'étudiant en utilisant EtudiantService
   private void deleteEtudiant(EtudiantConsult.DeleteEvent event) {
     Etudiant etudiant = event.getEtudiant();
-    service.deleteEtudiant(etudiant);
+    if (etudiant != null) {
+      etudiantService.deleteEtudiant(etudiant);
 
-    // ajout du log de suppression
-    logEnregistrmentService.saveLogDeleteString(etudiant.toString());
+      // ajout du log de suppression
+      logEnregistrmentService.saveLogDeleteString(etudiant.toString());
 
-    updateList();
-    closeConsultModal();
-    Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " retiré(e)");
+      updateList();
+      closeConsultModal();
+      Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " retiré(e)");
+    }
   }
 
   // si étudiant null, on ferme le formulaire, sinon on l'affiche (new or edit)
@@ -205,23 +213,22 @@ public class EtudiantView extends VerticalLayout {
 
   // fonction qui récupère la liste des étudiants pour les afficher dans la grille (avec les valeurs de recherche)
   private void updateList() {
-    grid.setItems(service.findAllEtudiants(filterText.getValue()));
+    grid.setItems(etudiantService.findAllEtudiants(filterText.getValue()));
   }
 
   // fonction qui met le nom de l'étudiant en majuscule, défini son sexe en fonction de sa civilté
   // et son âge selon sa date de naissance
-  private void setNameSexeAgeEtudiant(Etudiant etudiant) {
-    etudiant.setNom(etudiant.getNom().toUpperCase());
-    switch (etudiant.getCivilite()) {
+  private void setNameSexeEtudiant(Etudiant etudiant) {
+    etudiant.setNomEtudiant(etudiant.getNomEtudiant().toUpperCase());
+    switch (etudiant.getCiviliteEtudiant()) {
       case MONSIEUR:
-        etudiant.setSexe(Sexe.M);
+        etudiant.setSexeEtudiant(Sexe.M);
         break;
       case MADAME:
-        etudiant.setSexe(Sexe.F);
+        etudiant.setSexeEtudiant(Sexe.F);
         break;
       case NON_BINAIRE:
-        etudiant.setSexe(Sexe.NB);
+        etudiant.setSexeEtudiant(Sexe.NB);
     }
-    etudiant.setAge(ChronoUnit.YEARS.between(etudiant.getDateNaissance(), LocalDate.now()));
   }
 }

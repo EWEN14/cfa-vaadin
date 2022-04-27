@@ -28,26 +28,26 @@ public class Etudiant implements Cloneable {
   @NotEmpty(message = "Le nom doit être renseigné")
   @NotNull(message = "Le nom ne peut pas être nul")
   @Column(name = "nom", nullable = false)
-  private String nom;
+  private String nomEtudiant;
 
   @NotEmpty(message = "Le prénom doit être renseigné")
   @NotNull(message = "Le prénom ne peut pas être nul")
   @Column(name = "prenom", nullable = false)
-  private String prenom;
+  private String prenomEtudiant;
 
   @NotNull(message = "La civilité ne peut pas être nulle")
   @Enumerated(EnumType.STRING)
   @Column(name = "civilite", nullable = false)
-  private Civilite civilite;
+  private Civilite civiliteEtudiant;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "sexe")
-  private Sexe sexe;
+  private Sexe sexeEtudiant;
 
   @NotNull(message = "La date de naissance ne peut pas être nulle")
   @Past(message = "La date de naissance ne peut pas être aujourd'hui ou dans le futur")
   @Column(name = "date_naissance", nullable = false)
-  private LocalDate dateNaissance;
+  private LocalDate dateNaissanceEtudiant;
 
   @Column(name = "age")
   private Long age;
@@ -55,16 +55,16 @@ public class Etudiant implements Cloneable {
   @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
   @NotNull(message = "Le numéro de téléphone 1 ne doit pas être nul")
   @Column(name = "telephone_1", nullable = false)
-  private Integer telephone1;
+  private Integer telephoneEtudiant1;
 
   @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
   @NotNull(message = "Le numéro de téléphone 2 ne doit pas être nul")
   @Column(name = "telephone_2", nullable = false)
-  private Integer telephone2;
+  private Integer telephoneEtudiant2;
 
   @Email
   @Column(name = "email", nullable = false)
-  private String email;
+  private String emailEtudiant;
 
   @NotNull(message = "Le dernier diplôme obtenu ne peut pas être nul")
   @Column(name = "dernier_diplome_obtenu_ou_en_cours", nullable = false)
@@ -95,20 +95,20 @@ public class Etudiant implements Cloneable {
   @Max(999999)
   @Min(100000)
   @Column(name = "numero_cafat")
-  private Integer numeroCafat;
+  private Integer numeroCafatEtudiant;
 
   @Column(name = "adresse")
-  private String adresse;
+  private String adresseEtudiant;
 
   @Column(name = "boite_postale")
-  private String boitePostale;
+  private String boitePostaleEtudiant;
 
   @Range(message = "Le code postal doit correspondre à une commune en Nouvelle-Calédonie", min = 98000, max = 98999)
   @Column(name = "code_postal")
-  private Integer codePostal;
+  private Integer codePostalEtudiant;
 
   @Column(name = "commune")
-  private String commune;
+  private String communeEtudiant;
 
   @Column(name = "situation_anne_precedente")
   private String situationAnneePrecedente;
@@ -132,7 +132,7 @@ public class Etudiant implements Cloneable {
   private String obtentionDiplomeMention;
 
   @Column(name = "observations", length = 15000)
-  private String observations;
+  private String observationsEtudiant;
 
   @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Entreprise.class)
   @JoinColumn(name = "id_entreprise")
@@ -172,44 +172,44 @@ public class Etudiant implements Cloneable {
     this.id = id;
   }
 
-  public String getNom() {
-    return nom;
+  public String getNomEtudiant() {
+    return nomEtudiant;
   }
 
-  public void setNom(String nom) {
-    this.nom = nom;
+  public void setNomEtudiant(String nom) {
+    this.nomEtudiant = nom;
   }
 
-  public String getPrenom() {
-    return prenom;
+  public String getPrenomEtudiant() {
+    return prenomEtudiant;
   }
 
-  public void setPrenom(String prenom) {
-    this.prenom = prenom;
+  public void setPrenomEtudiant(String prenom) {
+    this.prenomEtudiant = prenom;
   }
 
-  public Civilite getCivilite() {
-    return civilite;
+  public Civilite getCiviliteEtudiant() {
+    return civiliteEtudiant;
   }
 
-  public void setCivilite(Civilite civilite) {
-    this.civilite = civilite;
+  public void setCiviliteEtudiant(Civilite civilite) {
+    this.civiliteEtudiant = civilite;
   }
 
-  public Sexe getSexe() {
-    return sexe;
+  public Sexe getSexeEtudiant() {
+    return sexeEtudiant;
   }
 
-  public void setSexe(Sexe sexe) {
-    this.sexe = sexe;
+  public void setSexeEtudiant(Sexe sexe) {
+    this.sexeEtudiant = sexe;
   }
 
-  public LocalDate getDateNaissance() {
-    return dateNaissance;
+  public LocalDate getDateNaissanceEtudiant() {
+    return dateNaissanceEtudiant;
   }
 
-  public void setDateNaissance(LocalDate dateNaissance) {
-    this.dateNaissance = dateNaissance;
+  public void setDateNaissanceEtudiant(LocalDate dateNaissance) {
+    this.dateNaissanceEtudiant = dateNaissance;
   }
 
   public Long getAge() {
@@ -220,28 +220,28 @@ public class Etudiant implements Cloneable {
     this.age = age;
   }
 
-  public Integer getTelephone1() {
-    return telephone1;
+  public Integer getTelephoneEtudiant1() {
+    return telephoneEtudiant1;
   }
 
-  public void setTelephone1(Integer telephone1) {
-    this.telephone1 = telephone1;
+  public void setTelephoneEtudiant1(Integer telephone1) {
+    this.telephoneEtudiant1 = telephone1;
   }
 
-  public Integer getTelephone2() {
-    return telephone2;
+  public Integer getTelephoneEtudiant2() {
+    return telephoneEtudiant2;
   }
 
-  public void setTelephone2(Integer telephone2) {
-    this.telephone2 = telephone2;
+  public void setTelephoneEtudiant2(Integer telephone2) {
+    this.telephoneEtudiant2 = telephone2;
   }
 
-  public String getEmail() {
-    return email;
+  public String getEmailEtudiant() {
+    return emailEtudiant;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setEmailEtudiant(String email) {
+    this.emailEtudiant = email;
   }
 
   public String getDernierDiplomeObtenuOuEnCours() {
@@ -308,44 +308,44 @@ public class Etudiant implements Cloneable {
     this.nationalite = nationalite;
   }
 
-  public Integer getNumeroCafat() {
-    return numeroCafat;
+  public Integer getNumeroCafatEtudiant() {
+    return numeroCafatEtudiant;
   }
 
-  public void setNumeroCafat(Integer numeroCafat) {
-    this.numeroCafat = numeroCafat;
+  public void setNumeroCafatEtudiant(Integer numeroCafat) {
+    this.numeroCafatEtudiant = numeroCafat;
   }
 
-  public String getAdresse() {
-    return adresse;
+  public String getAdresseEtudiant() {
+    return adresseEtudiant;
   }
 
-  public void setAdresse(String adresse) {
-    this.adresse = adresse;
+  public void setAdresseEtudiant(String adresse) {
+    this.adresseEtudiant = adresse;
   }
 
-  public String getBoitePostale() {
-    return boitePostale;
+  public String getBoitePostaleEtudiant() {
+    return boitePostaleEtudiant;
   }
 
-  public void setBoitePostale(String boitePostale) {
-    this.boitePostale = boitePostale;
+  public void setBoitePostaleEtudiant(String boitePostale) {
+    this.boitePostaleEtudiant = boitePostale;
   }
 
-  public Integer getCodePostal() {
-    return codePostal;
+  public Integer getCodePostalEtudiant() {
+    return codePostalEtudiant;
   }
 
-  public void setCodePostal(Integer codePostal) {
-    this.codePostal = codePostal;
+  public void setCodePostalEtudiant(Integer codePostal) {
+    this.codePostalEtudiant = codePostal;
   }
 
-  public String getCommune() {
-    return commune;
+  public String getCommuneEtudiant() {
+    return communeEtudiant;
   }
 
-  public void setCommune(String commune) {
-    this.commune = commune;
+  public void setCommuneEtudiant(String commune) {
+    this.communeEtudiant = commune;
   }
 
   public String getSituationAnneePrecedente() {
@@ -404,12 +404,12 @@ public class Etudiant implements Cloneable {
     this.obtentionDiplomeMention = obtentionDiplomeMention;
   }
 
-  public String getObservations() {
-    return observations;
+  public String getObservationsEtudiant() {
+    return observationsEtudiant;
   }
 
-  public void setObservations(String observations) {
-    this.observations = observations;
+  public void setObservationsEtudiant(String observations) {
+    this.observationsEtudiant = observations;
   }
 
   public Entreprise getEntreprise() {
@@ -478,27 +478,27 @@ public class Etudiant implements Cloneable {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Etudiant etudiant = (Etudiant) o;
-    return id.equals(etudiant.id) && nom.equals(etudiant.nom) && prenom.equals(etudiant.prenom) && civilite == etudiant.civilite && sexe == etudiant.sexe && dateNaissance.equals(etudiant.dateNaissance) && Objects.equals(age, etudiant.age) && telephone1.equals(etudiant.telephone1) && telephone2.equals(etudiant.telephone2) && email.equals(etudiant.email) && dernierDiplomeObtenuOuEnCours.equals(etudiant.dernierDiplomeObtenuOuEnCours) && Objects.equals(niveauDernierDiplome, etudiant.niveauDernierDiplome) && Objects.equals(anneeObtentionDernierDiplome, etudiant.anneeObtentionDernierDiplome) && admis.equals(etudiant.admis) && Objects.equals(situationUnc, etudiant.situationUnc) && Objects.equals(situationEntreprise, etudiant.situationEntreprise) && Objects.equals(lieuNaissance, etudiant.lieuNaissance) && Objects.equals(nationalite, etudiant.nationalite) && Objects.equals(numeroCafat, etudiant.numeroCafat) && Objects.equals(adresse, etudiant.adresse) && Objects.equals(boitePostale, etudiant.boitePostale) && Objects.equals(codePostal, etudiant.codePostal) && Objects.equals(commune, etudiant.commune) && Objects.equals(situationAnneePrecedente, etudiant.situationAnneePrecedente) && Objects.equals(etablissementDeProvenance, etudiant.etablissementDeProvenance) && Objects.equals(travailleurHandicape, etudiant.travailleurHandicape) && Objects.equals(parcours, etudiant.parcours) && Objects.equals(veepap, etudiant.veepap) && Objects.equals(priseEnChargeFraisInscription, etudiant.priseEnChargeFraisInscription) && Objects.equals(obtentionDiplomeMention, etudiant.obtentionDiplomeMention) && Objects.equals(observations, etudiant.observations) && Objects.equals(entreprise, etudiant.entreprise) && Objects.equals(createdAt, etudiant.createdAt) && Objects.equals(updatedAt, etudiant.updatedAt);
+    return id.equals(etudiant.id) && nomEtudiant.equals(etudiant.nomEtudiant) && prenomEtudiant.equals(etudiant.prenomEtudiant) && civiliteEtudiant == etudiant.civiliteEtudiant && sexeEtudiant == etudiant.sexeEtudiant && dateNaissanceEtudiant.equals(etudiant.dateNaissanceEtudiant) && Objects.equals(age, etudiant.age) && telephoneEtudiant1.equals(etudiant.telephoneEtudiant1) && telephoneEtudiant2.equals(etudiant.telephoneEtudiant2) && emailEtudiant.equals(etudiant.emailEtudiant) && dernierDiplomeObtenuOuEnCours.equals(etudiant.dernierDiplomeObtenuOuEnCours) && Objects.equals(niveauDernierDiplome, etudiant.niveauDernierDiplome) && Objects.equals(anneeObtentionDernierDiplome, etudiant.anneeObtentionDernierDiplome) && admis.equals(etudiant.admis) && Objects.equals(situationUnc, etudiant.situationUnc) && Objects.equals(situationEntreprise, etudiant.situationEntreprise) && Objects.equals(lieuNaissance, etudiant.lieuNaissance) && Objects.equals(nationalite, etudiant.nationalite) && Objects.equals(numeroCafatEtudiant, etudiant.numeroCafatEtudiant) && Objects.equals(adresseEtudiant, etudiant.adresseEtudiant) && Objects.equals(boitePostaleEtudiant, etudiant.boitePostaleEtudiant) && Objects.equals(codePostalEtudiant, etudiant.codePostalEtudiant) && Objects.equals(communeEtudiant, etudiant.communeEtudiant) && Objects.equals(situationAnneePrecedente, etudiant.situationAnneePrecedente) && Objects.equals(etablissementDeProvenance, etudiant.etablissementDeProvenance) && Objects.equals(travailleurHandicape, etudiant.travailleurHandicape) && Objects.equals(parcours, etudiant.parcours) && Objects.equals(veepap, etudiant.veepap) && Objects.equals(priseEnChargeFraisInscription, etudiant.priseEnChargeFraisInscription) && Objects.equals(obtentionDiplomeMention, etudiant.obtentionDiplomeMention) && Objects.equals(observationsEtudiant, etudiant.observationsEtudiant) && Objects.equals(entreprise, etudiant.entreprise) && Objects.equals(createdAt, etudiant.createdAt) && Objects.equals(updatedAt, etudiant.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, nom, prenom, civilite, sexe, dateNaissance, age, telephone1, telephone2, email, dernierDiplomeObtenuOuEnCours, niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, situationEntreprise, lieuNaissance, nationalite, numeroCafat, adresse, boitePostale, codePostal, commune, situationAnneePrecedente, etablissementDeProvenance, travailleurHandicape, parcours, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention, observations, entreprise, createdAt, updatedAt);
+    return Objects.hash(id, nomEtudiant, prenomEtudiant, civiliteEtudiant, sexeEtudiant, dateNaissanceEtudiant, age, telephoneEtudiant1, telephoneEtudiant2, emailEtudiant, dernierDiplomeObtenuOuEnCours, niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, situationEntreprise, lieuNaissance, nationalite, numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente, etablissementDeProvenance, travailleurHandicape, parcours, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention, observationsEtudiant, entreprise, createdAt, updatedAt);
   }
 
   @Override
   public String toString() {
     return "Étudiant { " +
             "\n id=" + id +
-            "\n nom='" + nom + '\'' +
-            "\n prenom='" + prenom + '\'' +
-            "\n civilite=" + civilite +
-            "\n sexe=" + sexe +
-            "\n dateNaissance=" + dateNaissance +
+            "\n nomEtudiant='" + nomEtudiant + '\'' +
+            "\n prenomEtudiant='" + prenomEtudiant + '\'' +
+            "\n civiliteEtudiant=" + civiliteEtudiant +
+            "\n sexeEtudiant=" + sexeEtudiant +
+            "\n dateNaissanceEtudiant=" + dateNaissanceEtudiant +
             "\n age=" + age +
-            "\n telephone1=" + telephone1 +
-            "\n telephone2=" + telephone2 +
-            "\n email='" + email + '\'' +
+            "\n telephoneEtudiant1=" + telephoneEtudiant1 +
+            "\n telephoneEtudiant2=" + telephoneEtudiant2 +
+            "\n emailEtudiant='" + emailEtudiant + '\'' +
             "\n dernierDiplomeObtenuOuEnCours='" + dernierDiplomeObtenuOuEnCours + '\'' +
             "\n niveauDernierDiplome=" + niveauDernierDiplome +
             "\n anneeObtentionDernierDiplome=" + anneeObtentionDernierDiplome +
@@ -507,11 +507,11 @@ public class Etudiant implements Cloneable {
             "\n situationEntreprise='" + situationEntreprise + '\'' +
             "\n lieuNaissance='" + lieuNaissance + '\'' +
             "\n nationalite='" + nationalite + '\'' +
-            "\n numeroCafat=" + numeroCafat +
-            "\n adresse='" + adresse + '\'' +
-            "\n boitePostale='" + boitePostale + '\'' +
-            "\n codePostal=" + codePostal +
-            "\n commune='" + commune + '\'' +
+            "\n numeroCafatEtudiant=" + numeroCafatEtudiant +
+            "\n adresseEtudiant='" + adresseEtudiant + '\'' +
+            "\n boitePostaleEtudiant='" + boitePostaleEtudiant + '\'' +
+            "\n codePostalEtudiant=" + codePostalEtudiant +
+            "\n communeEtudiant='" + communeEtudiant + '\'' +
             "\n situationAnneePrecedente='" + situationAnneePrecedente + '\'' +
             "\n etablissementDeProvenance='" + etablissementDeProvenance + '\'' +
             "\n travailleurHandicape=" + travailleurHandicape +
@@ -519,9 +519,9 @@ public class Etudiant implements Cloneable {
             "\n veepap=" + veepap +
             "\n priseEnChargeFraisInscription='" + priseEnChargeFraisInscription + '\'' +
             "\n obtentionDiplomeMention='" + obtentionDiplomeMention + '\'' +
-            "\n observations='" + observations + '\'' +
+            "\n observationsEtudiant='" + observationsEtudiant + '\'' +
             "\n entreprise=" + (entreprise != null ? entreprise.getEnseigne() : "") +
-            "\n tuteur=" + (tuteur != null ? tuteur.getPrenom() + " " + tuteur.getNom() : "") +
+            "\n tuteur=" + (tuteur != null ? tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() : "") +
             "\n formation=" + (formation != null ? formation.getLibelleFormation() : "") +
             "\n referentPedagogique=" +
             (referentPedagogique != null ? referentPedagogique.getPrenomReferentPedago() + " " + referentPedagogique.getNomReferentPedago() : "") +

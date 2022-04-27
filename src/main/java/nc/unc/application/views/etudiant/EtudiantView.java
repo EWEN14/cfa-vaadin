@@ -91,7 +91,7 @@ public class EtudiantView extends VerticalLayout {
     grid.addClassNames("etudiant-grid");
     grid.setSizeFull();
     // ajout des colonnes
-    grid.setColumns("prenom", "nom", "civilite", "dateNaissance");
+    grid.setColumns("prenomEtudiant", "nomEtudiant", "civiliteEtudiant", "dateNaissanceEtudiant");
     // ajout du bouton de consultation d'un étudiant
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultEtudiant(etudiant);
@@ -137,7 +137,7 @@ public class EtudiantView extends VerticalLayout {
     // mise à jour de la grid, fermeture du formulaire et notification
     updateList();
     closeNewOrEditModal();
-    Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " créé(e)");
+    Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " créé(e)");
   }
 
   // sauvegarde de l'étudiant modifié en utilisant EtudiantService
@@ -157,7 +157,7 @@ public class EtudiantView extends VerticalLayout {
 
     updateList();
     closeNewOrEditModal();
-    Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " modifié(e)");
+    Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " modifié(e)");
   }
 
   // suppression de l'étudiant en utilisant EtudiantService
@@ -170,7 +170,7 @@ public class EtudiantView extends VerticalLayout {
 
     updateList();
     closeConsultModal();
-    Notification.show(etudiant.getPrenom() + " " + etudiant.getNom() + " retiré(e)");
+    Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " retiré(e)");
   }
 
   // si étudiant null, on ferme le formulaire, sinon on l'affiche (new or edit)
@@ -217,17 +217,17 @@ public class EtudiantView extends VerticalLayout {
   // fonction qui met le nom de l'étudiant en majuscule, défini son sexe en fonction de sa civilté
   // et son âge selon sa date de naissance
   private void setNameSexeAgeEtudiant(Etudiant etudiant) {
-    etudiant.setNom(etudiant.getNom().toUpperCase());
-    switch (etudiant.getCivilite()) {
+    etudiant.setNomEtudiant(etudiant.getNomEtudiant().toUpperCase());
+    switch (etudiant.getCiviliteEtudiant()) {
       case MONSIEUR:
-        etudiant.setSexe(Sexe.M);
+        etudiant.setSexeEtudiant(Sexe.M);
         break;
       case MADAME:
-        etudiant.setSexe(Sexe.F);
+        etudiant.setSexeEtudiant(Sexe.F);
         break;
       case NON_BINAIRE:
-        etudiant.setSexe(Sexe.NB);
+        etudiant.setSexeEtudiant(Sexe.NB);
     }
-    etudiant.setAge(ChronoUnit.YEARS.between(etudiant.getDateNaissance(), LocalDate.now()));
+    etudiant.setAge(ChronoUnit.YEARS.between(etudiant.getDateNaissanceEtudiant(), LocalDate.now()));
   }
 }

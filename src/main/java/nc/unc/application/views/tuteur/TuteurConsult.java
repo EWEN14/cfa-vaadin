@@ -22,7 +22,6 @@ import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.entity.TuteurHabilitation;
 import nc.unc.application.data.service.EtudiantService;
-import nc.unc.application.data.service.TuteurService;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -93,7 +92,7 @@ public class TuteurConsult extends Dialog {
 
     // grille des étudiants cadrés par le tuteur
     tuteurEtudiantsGrid.addClassName("tuteur-etudiants-grid");
-    tuteurEtudiantsGrid.setColumns("prenom", "nom", "telephone1");
+    tuteurEtudiantsGrid.setColumns("prenomEtudiant", "nomEtudiant", "telephoneEtudiant1");
 
     // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
     setAllFieldsToReadOnly();
@@ -130,22 +129,22 @@ public class TuteurConsult extends Dialog {
     this.tuteur = tuteur;
     if (tuteur != null) {
       // champs obligatoirement remplis
-      nom.setValue(tuteur.getNom());
-      prenom.setValue(tuteur.getPrenom());
+      nom.setValue(tuteur.getNomTuteur());
+      prenom.setValue(tuteur.getPrenomTuteur());
       // affichage date au format français
-      dateNaissance.setValue(tuteur.getDateNaissance() != null ?
-              tuteur.getDateNaissance().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) : "");
-      email.setValue(tuteur.getEmail());
-      telephone1.setValue(tuteur.getTelephone1().toString());
+      dateNaissance.setValue(tuteur.getDateNaissanceTuteur() != null ?
+              tuteur.getDateNaissanceTuteur().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) : "");
+      email.setValue(tuteur.getEmailTuteur());
+      telephone1.setValue(tuteur.getTelephoneTuteur1().toString());
 
       // champs pouvant être null (ou false donc pas coché dans les cas des cases à cocher)
-      telephone2.setValue(tuteur.getTelephone2() != null ? tuteur.getTelephone2().toString() : "");
-      civilite.setValue(tuteur.getCivilite() != null ? tuteur.getCivilite().toString() : "");
+      telephone2.setValue(tuteur.getTelephoneTuteur2() != null ? tuteur.getTelephoneTuteur2().toString() : "");
+      civilite.setValue(tuteur.getCiviliteTuteur() != null ? tuteur.getCiviliteTuteur().toString() : "");
       diplomeEleveObtenu.setValue(tuteur.getDiplomeEleveObtenu() != null ? tuteur.getDiplomeEleveObtenu() : "");
       niveauDiplome.setValue(tuteur.getNiveauDiplome() != null ? tuteur.getNiveauDiplome().toString() : "");
       posteOccupe.setValue(tuteur.getPosteOccupe() != null ? tuteur.getPosteOccupe() : "");
       anneeExperienceProfessionnelle.setValue(tuteur.getAnneeExperienceProfessionnelle() != null ? tuteur.getAnneeExperienceProfessionnelle() : "");
-      observations.setValue(tuteur.getObservations() != null ? tuteur.getObservations() : "");
+      observations.setValue(tuteur.getObservationsTuteur() != null ? tuteur.getObservationsTuteur() : "");
       casierJudiciaireFourni.setValue(tuteur.getCasierJudiciaireFourni() != null ? tuteur.getCasierJudiciaireFourni() : false);
       diplomeFourni.setValue(tuteur.getDiplomeFourni() != null ? tuteur.getDiplomeFourni() : false);
       certificatTravailFourni.setValue(tuteur.getCertificatTravailFourni() != null ? tuteur.getCertificatTravailFourni() : false);

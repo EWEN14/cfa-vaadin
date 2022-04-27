@@ -633,8 +633,8 @@ public class Contrat implements Cloneable{
   public String toString() {
     return "Contrat{" +
       "\n id=" + id +
-      "\n etudiant=" + (etudiant != null ? etudiant.getPrenom() + " " +etudiant.getNom() : " ") +
-      "\n tuteur=" + (tuteur != null ? tuteur.getPrenom() + " " +tuteur.getNom() : " ") +
+      "\n etudiant=" + (etudiant != null ? etudiant.getPrenomEtudiant() + " " +etudiant.getNomEtudiant() : " ") +
+      "\n tuteur=" + (tuteur != null ? tuteur.getPrenomTuteur() + " " +tuteur.getNomTuteur() : " ") +
       "\n entreprise=" + (entreprise != null ? entreprise.getEnseigne() : " ") +
       "\n formation=" + (formation != null ? formation.getLibelleFormation() : " ") +
       "\n codeContrat=" + codeContrat +

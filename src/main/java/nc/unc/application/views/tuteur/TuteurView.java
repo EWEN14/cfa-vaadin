@@ -85,7 +85,7 @@ public class TuteurView extends VerticalLayout {
     private void configureGrid() {
         grid.addClassNames("tuteur-grid");
         grid.setSizeFull();
-        grid.setColumns("prenom", "nom", "dateNaissance");
+        grid.setColumns("prenomTuteur", "nomTuteur", "dateNaissanceTuteur");
         grid.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.EYE), click -> {
             consultTuteur(tuteur);
         }));
@@ -128,7 +128,7 @@ public class TuteurView extends VerticalLayout {
         // mise à jour de la grid, fermeture du formulaire et notification
         updateList();
         closeNewOrEditModal();
-        Notification.show(tuteur.getPrenom() + " " + tuteur.getNom() + " créé(e)");
+        Notification.show(tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() + " créé(e)");
     }
 
     // sauvegarde du tuteur modifié en utilisant TuteurService
@@ -148,7 +148,7 @@ public class TuteurView extends VerticalLayout {
 
         updateList();
         closeNewOrEditModal();
-        Notification.show(tuteur.getPrenom() + " " + tuteur.getNom() + " modifié(e)");
+        Notification.show(tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() + " modifié(e)");
     }
 
     // suppression du tuteur en utilisant TuteurService
@@ -161,7 +161,7 @@ public class TuteurView extends VerticalLayout {
 
         updateList();
         closeConsultModal();
-        Notification.show(tuteur.getPrenom() + " " + tuteur.getNom() + " retiré(e)");
+        Notification.show(tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() + " retiré(e)");
     }
 
     public void consultTuteur(Tuteur tuteur) {
@@ -207,10 +207,10 @@ public class TuteurView extends VerticalLayout {
 
     // fonction qui met le nom du tuteur en majuscule et défini son sexe en fonction de sa civilté
     private void setSexeTuteur(Tuteur tuteur) {
-        tuteur.setNom(tuteur.getNom().toUpperCase());
+        tuteur.setNomTuteur(tuteur.getNomTuteur().toUpperCase());
         // définition du sexe que si le champ civilité est rempli
-        if (tuteur.getCivilite() != null) {
-            switch (tuteur.getCivilite()) {
+        if (tuteur.getCiviliteTuteur() != null) {
+            switch (tuteur.getCiviliteTuteur()) {
                 case MONSIEUR:
                     tuteur.setSexe(Sexe.M);
                     break;

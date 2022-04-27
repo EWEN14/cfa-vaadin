@@ -5,15 +5,12 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -24,7 +21,6 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.*;
-import nc.unc.application.data.enums.Civilite;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -73,23 +69,28 @@ public class EtudiantConsult extends Dialog {
 
   // form qui contiendra les informations relatives à l'entreprise dans laquelle est l'étudiant
   private final FormLayout formEtudiantEntrepriseInfos = new FormLayout();
-  private final TextField entrepriseEnseigne = new TextField("Enseigne");
-  private final TextField entrepriseRaisonSociale = new TextField("Raison Sociale");
+  private final TextField enseigne = new TextField("Enseigne");
+  private final TextField raisonSociale = new TextField("Raison Sociale");
+  private final TextField statutActifEntreprise = new TextField("Statut de l'entreprise");
+  private final IntegerField telephoneContactCfa = new IntegerField("Téléphone contact CFA");
+  // binder qui sera utilisé pour remlir automatiquement les champs de l'entreprise liée à l'étudiant
+  Binder<Entreprise> entrepriseBinder = new BeanValidationBinder<>(Entreprise.class);
 
   // Champs du formulaire relatifs aux informations du tuteur lié à l'étudiant
   FormLayout formEtudiantTuteur = new FormLayout();
   TextField nomTuteur = new TextField("NOM");
   TextField prenomTuteur = new TextField("Prenom");
   EmailField emailTuteur = new EmailField("Email");
-  IntegerField telephone1Tuteur = new IntegerField("Téléphone 1");
-
-  Binder<Tuteur> binderTuteur = new BeanValidationBinder<>(Tuteur.class);
+  IntegerField telephoneTuteur1 = new IntegerField("Téléphone 1");
+  IntegerField telephoneTuteur2 = new IntegerField("Téléphone 2");
+  // Binder qui sera utilisé pour remplir automatiquement les champs du tuteur
+  Binder<Tuteur> tuteurBinder = new BeanValidationBinder<>(Tuteur.class);
 
   // Champs du formulaire relatif aux informations de la formation lié à l'étudiant
   FormLayout formEtudiantFormation = new FormLayout();
   TextField libelleFormation = new TextField("Libellé de la formation");
   TextField codeFormation = new TextField("Code de la formation");
-
+  // Binder qui sera utilisé pour remplir automatiquement les champs de formation
   Binder<Formation> formationBinder = new BeanValidationBinder<>(Formation.class);
 
   // Champs du formulaire relatif aux informations du référent pédagogique lié à l'étudiant
@@ -98,7 +99,7 @@ public class EtudiantConsult extends Dialog {
   TextField prenomReferentPedago = new TextField("Prénom");
   IntegerField telephoneReferentPedago = new IntegerField("Téléphone");
   EmailField emailReferentPedago = new EmailField("Email");
-
+  // Binder qui sera utilisé pour remplir automatiquement les champs du référent pédagogique
   Binder<ReferentPedagogique> referentPedagogiqueBinder = new BeanValidationBinder<>(ReferentPedagogique.class);
 
   // tab (onglet) qui seront insérés dans une tabs (ensemble d'onglets) les regroupant
@@ -117,10 +118,12 @@ public class EtudiantConsult extends Dialog {
     this.setModal(true);
     this.setWidth("85vw");
 
-    // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables TODO
+    // fonction qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables TODO
     setAllFieldsToReadOnly();
 
-    // binderTuteur.bindInstanceFields(this);
+    // instanciation des différents binder qui serviront au remplissage automatique des formulaires d'informations rattachés à l'étudiant
+    entrepriseBinder.bindInstanceFields(this);
+    tuteurBinder.bindInstanceFields(this);
     formationBinder.bindInstanceFields(this);
     referentPedagogiqueBinder.bindInstanceFields(this);
 
@@ -140,10 +143,10 @@ public class EtudiantConsult extends Dialog {
             parcours, travailleurHandicape, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention,
             observations);
     // pareil, mais pour le formulaire relatif à son entreprise
-    formEtudiantEntrepriseInfos.add(entrepriseEnseigne, entrepriseRaisonSociale);
+    formEtudiantEntrepriseInfos.add(enseigne, raisonSociale, statutActifEntreprise, telephoneContactCfa);
 
     // ajout des champs dans le formulaire de tuteur
-    formEtudiantTuteur.add(prenomTuteur);
+    formEtudiantTuteur.add(prenomTuteur, nomTuteur, emailTuteur, telephoneTuteur1, telephoneTuteur2);
 
     // ajout des champs dans le formulaire de la formation suivie par l'étudiant
     formEtudiantFormation.add(libelleFormation, codeFormation);
@@ -167,15 +170,15 @@ public class EtudiantConsult extends Dialog {
     this.etudiant = etudiant;
     if (etudiant != null) {
       // champs obligatoirement remplis
-      nom.setValue(etudiant.getNom());
-      prenom.setValue(etudiant.getPrenom());
-      civilite.setValue(etudiant.getCivilite().toString());
+      nom.setValue(etudiant.getNomEtudiant());
+      prenom.setValue(etudiant.getPrenomEtudiant());
+      civilite.setValue(etudiant.getCiviliteEtudiant().toString());
       // affichage date au format français
-      dateNaissance.setValue(etudiant.getDateNaissance().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
+      dateNaissance.setValue(etudiant.getDateNaissanceEtudiant().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
       age.setValue(etudiant.getAge().toString());
-      telephone1.setValue(etudiant.getTelephone1().toString());
-      telephone2.setValue(etudiant.getTelephone2().toString());
-      email.setValue(etudiant.getEmail());
+      telephone1.setValue(etudiant.getTelephoneEtudiant1().toString());
+      telephone2.setValue(etudiant.getTelephoneEtudiant2().toString());
+      email.setValue(etudiant.getEmailEtudiant());
       dernierDiplomeObtenuOuEnCours.setValue(etudiant.getDernierDiplomeObtenuOuEnCours());
       admis.setValue(etudiant.getAdmis());
 
@@ -186,11 +189,11 @@ public class EtudiantConsult extends Dialog {
       situationEntreprise.setValue(etudiant.getSituationEntreprise() != null ? etudiant.getSituationEntreprise() : "");
       lieuNaissance.setValue(etudiant.getLieuNaissance() != null ? etudiant.getLieuNaissance() : "");
       nationalite.setValue(etudiant.getNationalite() != null ? etudiant.getNationalite() : "");
-      numeroCafat.setValue(etudiant.getNumeroCafat() != null ? etudiant.getNumeroCafat().toString() : "");
-      adresse.setValue(etudiant.getAdresse() != null ? etudiant.getAdresse() : "");
-      boitePostale.setValue(etudiant.getBoitePostale() != null ? etudiant.getBoitePostale() : "");
-      codePostal.setValue(etudiant.getCodePostal() != null ? etudiant.getCodePostal().toString() : "");
-      commune.setValue(etudiant.getCommune() != null ? etudiant.getCommune() : "");
+      numeroCafat.setValue(etudiant.getNumeroCafatEtudiant() != null ? etudiant.getNumeroCafatEtudiant().toString() : "");
+      adresse.setValue(etudiant.getAdresseEtudiant() != null ? etudiant.getAdresseEtudiant() : "");
+      boitePostale.setValue(etudiant.getBoitePostaleEtudiant() != null ? etudiant.getBoitePostaleEtudiant() : "");
+      codePostal.setValue(etudiant.getCodePostalEtudiant() != null ? etudiant.getCodePostalEtudiant().toString() : "");
+      commune.setValue(etudiant.getCommuneEtudiant() != null ? etudiant.getCommuneEtudiant() : "");
       situationAnneePrecedente.setValue(etudiant.getSituationAnneePrecedente() != null ? etudiant.getSituationAnneePrecedente() : "");
       etablissementDeProvenance.setValue(etudiant.getEtablissementDeProvenance() != null ? etudiant.getEtablissementDeProvenance() : "");
       parcours.setValue(etudiant.getParcours() != null ? etudiant.getParcours() : "");
@@ -198,31 +201,12 @@ public class EtudiantConsult extends Dialog {
       veepap.setValue(etudiant.getVeepap() != null ? etudiant.getVeepap() : false);
       priseEnChargeFraisInscription.setValue(etudiant.getPriseEnChargeFraisInscription() != null ? etudiant.getPriseEnChargeFraisInscription() : "");
       obtentionDiplomeMention.setValue(etudiant.getObtentionDiplomeMention() != null ? etudiant.getObtentionDiplomeMention() : "");
-      observations.setValue(etudiant.getObservations() != null ? etudiant.getObservations() : "");
+      observations.setValue(etudiant.getObservationsEtudiant() != null ? etudiant.getObservationsEtudiant() : "");
+      
+      entrepriseBinder.readBean(etudiant.getEntreprise());
 
-      // si l'étudiant a une entreprise, on passe les infos relatives à l'entreprise en formulaire
-      // et on affiche la tab "Entreprise", sinon on la masque
-      if (etudiant.getEntreprise() != null) {
-        entrepriseEtudiantInfosTab.setVisible(true);
-        // champs obligatoirement remplis dans entreprise
-        entrepriseEnseigne.setValue(etudiant.getEntreprise().getEnseigne());
+      tuteurBinder.readBean(etudiant.getTuteur());
 
-        // champs non obligatoirement remplis dans entreprise
-        entrepriseRaisonSociale.setValue(etudiant.getEntreprise().getRaisonSociale() != null ? etudiant.getEntreprise().getRaisonSociale() : "");
-      } else {
-       entrepriseEtudiantInfosTab.setVisible(false);
-      }
-
-      // si l'étudiant a un tuteur, on passe les infos relatives à son tuteur
-      if (etudiant.getTuteur() != null) {
-        tuteurEtudiantInfosTab.setVisible(true);
-        prenomTuteur.setValue(etudiant.getTuteur().getPrenom());
-        // binderTuteur.readBean(etudiant.getTuteur());
-      } else {
-        tuteurEtudiantInfosTab.setVisible(false);
-      }
-
-      formationEtudiantInfosTab.setVisible(true);
       formationBinder.readBean(etudiant.getFormation());
 
       referentPedagogiqueBinder.readBean(etudiant.getReferentPedagogique());
@@ -263,9 +247,20 @@ public class EtudiantConsult extends Dialog {
     // étudiant
     nom.setReadOnly(true);
     prenom.setReadOnly(true);
+    // entreprise
+    enseigne.setReadOnly(true);
+    raisonSociale.setReadOnly(true);
+    statutActifEntreprise.setReadOnly(true);
+    telephoneContactCfa.setReadOnly(true);
     // formation
     libelleFormation.setReadOnly(true);
     codeFormation.setReadOnly(true);
+    // tuteur
+    prenomTuteur.setReadOnly(true);
+    nomTuteur.setReadOnly(true);
+    emailTuteur.setReadOnly(true);
+    telephoneTuteur1.setReadOnly(true);
+    telephoneTuteur2.setReadOnly(true);
     // referent pédagogique
     nomReferentPedago.setReadOnly(true);
     prenomReferentPedago.setReadOnly(true);

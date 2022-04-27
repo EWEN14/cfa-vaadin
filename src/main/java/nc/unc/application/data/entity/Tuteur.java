@@ -28,39 +28,39 @@ public class Tuteur implements Cloneable {
   @NotEmpty(message = "Le nom doit être renseigné")
   @NotNull(message = "Le nom ne peut pas être nul")
   @Column(name = "nom", nullable = false)
-  private String nom;
+  private String nomTuteur;
 
   // Prénom du tuteur
   @NotEmpty(message = "Le prénom doit être renseigné")
   @NotNull(message = "Le prénom ne peut pas être nul")
   @Column(name = "prenom", nullable = false)
-  private String prenom;
+  private String prenomTuteur;
 
   // Date de naissance du tuteur
   @Past(message = "La date de naissance ne peut pas être aujourd'hui ou dans le futur")
   @Column(name = "date_naissance")
-  private LocalDate dateNaissance;
+  private LocalDate dateNaissanceTuteur;
 
   // Email du tuteur
   @Email
   @NotNull(message = "L'email ne peut pas être null")
   @Column(name = "email", nullable = false)
-  private String email;
+  private String emailTuteur;
 
   // Premier numéro de téléphone
   @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
   @NotNull(message = "Le numéro de téléphone 1 ne doit pas être nul")
   @Column(name = "telephone_1", nullable = false)
-  private Integer telephone1;
+  private Integer telephoneTuteur1;
 
   // Deuxième numéro de téléphone
   @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
   @Column(name = "telephone_2")
-  private Integer telephone2;
+  private Integer telephoneTuteur2;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "civilite")
-  private Civilite civilite;
+  private Civilite civiliteTuteur;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "sexe")
@@ -104,7 +104,7 @@ public class Tuteur implements Cloneable {
   private Boolean cvFourni;
 
   @Column(name = "observations", length = 15000)
-  private String observations;
+  private String observationsTuteur;
 
   // Besoin de mettre en EAGER plutôt qu'en LAZY (par défaut), car sinon liste des Habilitations pas initialisées
   // quand le Tuteur est initialisé
@@ -134,60 +134,60 @@ public class Tuteur implements Cloneable {
     this.id = id;
   }
 
-  public String getNom() {
-    return nom;
+  public String getNomTuteur() {
+    return nomTuteur;
   }
 
-  public void setNom(String nom) {
-    this.nom = nom;
+  public void setNomTuteur(String nom) {
+    this.nomTuteur = nom;
   }
 
-  public String getPrenom() {
-    return prenom;
+  public String getPrenomTuteur() {
+    return prenomTuteur;
   }
 
-  public void setPrenom(String prenom) {
-    this.prenom = prenom;
+  public void setPrenomTuteur(String prenom) {
+    this.prenomTuteur = prenom;
   }
 
-  public LocalDate getDateNaissance() {
-    return dateNaissance;
+  public LocalDate getDateNaissanceTuteur() {
+    return dateNaissanceTuteur;
   }
 
-  public void setDateNaissance(LocalDate dateNaissance) {
-    this.dateNaissance = dateNaissance;
+  public void setDateNaissanceTuteur(LocalDate dateNaissance) {
+    this.dateNaissanceTuteur = dateNaissance;
   }
 
-  public String getEmail() {
-    return email;
+  public String getEmailTuteur() {
+    return emailTuteur;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setEmailTuteur(String email) {
+    this.emailTuteur = email;
   }
 
-  public Integer getTelephone1() {
-    return telephone1;
+  public Integer getTelephoneTuteur1() {
+    return telephoneTuteur1;
   }
 
-  public void setTelephone1(Integer telephone1) {
-    this.telephone1 = telephone1;
+  public void setTelephoneTuteur1(Integer telephone1) {
+    this.telephoneTuteur1 = telephone1;
   }
 
-  public Integer getTelephone2() {
-    return telephone2;
+  public Integer getTelephoneTuteur2() {
+    return telephoneTuteur2;
   }
 
-  public void setTelephone2(Integer telephone2) {
-    this.telephone2 = telephone2;
+  public void setTelephoneTuteur2(Integer telephone2) {
+    this.telephoneTuteur2 = telephone2;
   }
 
-  public Civilite getCivilite() {
-    return civilite;
+  public Civilite getCiviliteTuteur() {
+    return civiliteTuteur;
   }
 
-  public void setCivilite(Civilite civilite) {
-    this.civilite = civilite;
+  public void setCiviliteTuteur(Civilite civilite) {
+    this.civiliteTuteur = civilite;
   }
 
   public Sexe getSexe() {
@@ -270,12 +270,12 @@ public class Tuteur implements Cloneable {
     this.cvFourni = cvFourni;
   }
 
-  public String getObservations() {
-    return observations;
+  public String getObservationsTuteur() {
+    return observationsTuteur;
   }
 
-  public void setObservations(String observations) {
-    this.observations = observations;
+  public void setObservationsTuteur(String observations) {
+    this.observationsTuteur = observations;
   }
 
   public List<TuteurHabilitation> getTuteurHabilitations() {
@@ -327,13 +327,13 @@ public class Tuteur implements Cloneable {
   public String toString() {
     return "Tuteur {" +
             "\n id=" + id +
-            "\n nom='" + nom + '\'' +
-            "\n prenom='" + prenom + '\'' +
-            "\n dateNaissance=" + dateNaissance +
-            "\n email='" + email + '\'' +
-            "\n telephone1=" + telephone1 +
-            "\n telephone2=" + telephone2 +
-            "\n civilite=" + civilite +
+            "\n nomTuteur='" + nomTuteur + '\'' +
+            "\n prenomTuteur='" + prenomTuteur + '\'' +
+            "\n dateNaissanceTuteur=" + dateNaissanceTuteur +
+            "\n emailTuteur='" + emailTuteur + '\'' +
+            "\n telephoneTuteur1=" + telephoneTuteur1 +
+            "\n telephoneTuteur2=" + telephoneTuteur2 +
+            "\n civiliteTuteur=" + civiliteTuteur +
             "\n sexe=" + sexe +
             "\n diplomeEleveObtenu='" + diplomeEleveObtenu + '\'' +
             "\n niveauDiplome=" + niveauDiplome +
@@ -344,7 +344,7 @@ public class Tuteur implements Cloneable {
             "\n diplomeFourni=" + diplomeFourni +
             "\n certificatTravailFourni=" + certificatTravailFourni +
             "\n cvFourni=" + cvFourni +
-            "\n observations='" + observations + '\'' +
+            "\n observationsTuteur='" + observationsTuteur + '\'' +
             " }";
   }
 }

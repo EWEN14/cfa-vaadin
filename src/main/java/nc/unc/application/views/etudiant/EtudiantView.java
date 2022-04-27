@@ -127,7 +127,7 @@ public class EtudiantView extends VerticalLayout {
     // utilisation du getEtudiant de la classe mère EtudiantFormEvent pour récupérer l'étudiant
     Etudiant etudiant = event.getEtudiant();
     // mise en majuscule du nom, définition sexe et âge avant sauvegarde
-    setNameSexeAgeEtudiant(etudiant);
+    setNameSexeEtudiant(etudiant);
     // sauvegarde de l'étudiant
     etudiantService.saveEtudiant(etudiant);
 
@@ -147,7 +147,7 @@ public class EtudiantView extends VerticalLayout {
     // récupération de l'étudiant avant modification
     Etudiant etudiantOriginal = event.getEtudiantOriginal();
     // mise en majuscule du nom, définition sexe et âge avant sauvegarde
-    setNameSexeAgeEtudiant(etudiant);
+    setNameSexeEtudiant(etudiant);
 
     // sauvegarde de l'étudiant
     etudiantService.saveEtudiant(etudiant);
@@ -163,14 +163,16 @@ public class EtudiantView extends VerticalLayout {
   // suppression de l'étudiant en utilisant EtudiantService
   private void deleteEtudiant(EtudiantConsult.DeleteEvent event) {
     Etudiant etudiant = event.getEtudiant();
-    etudiantService.deleteEtudiant(etudiant);
+    if (etudiant != null) {
+      etudiantService.deleteEtudiant(etudiant);
 
-    // ajout du log de suppression
-    logEnregistrmentService.saveLogDeleteString(etudiant.toString());
+      // ajout du log de suppression
+      logEnregistrmentService.saveLogDeleteString(etudiant.toString());
 
-    updateList();
-    closeConsultModal();
-    Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " retiré(e)");
+      updateList();
+      closeConsultModal();
+      Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " retiré(e)");
+    }
   }
 
   // si étudiant null, on ferme le formulaire, sinon on l'affiche (new or edit)
@@ -216,7 +218,7 @@ public class EtudiantView extends VerticalLayout {
 
   // fonction qui met le nom de l'étudiant en majuscule, défini son sexe en fonction de sa civilté
   // et son âge selon sa date de naissance
-  private void setNameSexeAgeEtudiant(Etudiant etudiant) {
+  private void setNameSexeEtudiant(Etudiant etudiant) {
     etudiant.setNomEtudiant(etudiant.getNomEtudiant().toUpperCase());
     switch (etudiant.getCiviliteEtudiant()) {
       case MONSIEUR:
@@ -228,6 +230,5 @@ public class EtudiantView extends VerticalLayout {
       case NON_BINAIRE:
         etudiant.setSexeEtudiant(Sexe.NB);
     }
-    etudiant.setAge(ChronoUnit.YEARS.between(etudiant.getDateNaissanceEtudiant(), LocalDate.now()));
   }
 }

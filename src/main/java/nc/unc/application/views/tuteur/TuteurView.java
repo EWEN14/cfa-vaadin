@@ -154,14 +154,16 @@ public class TuteurView extends VerticalLayout {
     // suppression du tuteur en utilisant TuteurService
     private void deleteTuteur(TuteurConsult.DeleteEvent event) {
         Tuteur tuteur = event.getTuteur();
-        tuteurService.deleteTuteur(tuteur);
+        if (tuteur != null) {
+            tuteurService.deleteTuteur(tuteur);
 
-        // ajout du log de suppression
-        logEnregistrmentService.saveLogDeleteString(tuteur.toString());
+            // ajout du log de suppression
+            logEnregistrmentService.saveLogDeleteString(tuteur.toString());
 
-        updateList();
-        closeConsultModal();
-        Notification.show(tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() + " retiré(e)");
+            updateList();
+            closeConsultModal();
+            Notification.show(tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() + " retiré(e)");
+        }
     }
 
     public void consultTuteur(Tuteur tuteur) {

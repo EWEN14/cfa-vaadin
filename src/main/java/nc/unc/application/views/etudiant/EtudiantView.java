@@ -81,8 +81,6 @@ public class EtudiantView extends VerticalLayout {
     add(getToolbar(), content, modalConsult, modalNewOrEdit);
     // initialisation des données de la grille à l'ouverture de la vue
     updateList();
-    // modales de consultation et d'édition/création de l'étudiant fermée à l'ouverture de la vue
-    closeConsultModal();
 
     // je le commente pour l'instant, car on doit cliquer deux fois sur fermer pour que ça fonctionne si on ouvre
     // la modale de consultation depuis le clic sur une ligne... mais clic en dehors de la modale ou ECHAP fonctionne.
@@ -140,7 +138,7 @@ public class EtudiantView extends VerticalLayout {
     // mise à jour de la grid, fermeture du formulaire et notification
     updateList();
     closeNewOrEditModal();
-    Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " créé(e)");
+    Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " créé(e).");
   }
 
   // sauvegarde de l'étudiant modifié en utilisant EtudiantService
@@ -189,17 +187,18 @@ public class EtudiantView extends VerticalLayout {
     }
   }
 
-  public void consultEtudiant(Etudiant etudiant) {
-    modalConsult.setEtudiant(etudiant);
-    modalConsult.open();
-  }
-
   // ajout d'un étudiant
   void addEtudiant() {
     // on retire le focus s'il y avait une ligne sélectionnée
     grid.asSingleSelect().clear();
-    // appel de la fonction juste au-dessus
+    // appel de la fonction d'edition de l'étudiant, en passant un nouvel étudiant
     editEtudiantModal(new Etudiant());
+  }
+
+  // ouverture de modale de consultation d'un étudiant
+  public void consultEtudiant(Etudiant etudiant) {
+    modalConsult.setEtudiant(etudiant);
+    modalConsult.open();
   }
 
   private void closeConsultModal() {

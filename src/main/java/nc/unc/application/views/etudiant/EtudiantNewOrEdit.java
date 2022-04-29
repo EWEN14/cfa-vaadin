@@ -222,14 +222,14 @@ public class EtudiantNewOrEdit extends Dialog {
     }
   }
 
-  // Event au clic sur le bouton de sauvegarde qui récupère le contact du formulaire (classe fille)
+  // Event au clic sur le bouton de sauvegarde qui récupère l'étudiant du formulaire (classe fille)
   public static class SaveEvent extends EtudiantNewOrEdit.EtudiantFormEvent {
     SaveEvent(EtudiantNewOrEdit source, Etudiant etudiant) {
       super(source, etudiant, null);
     }
   }
 
-  // Event au clic sur le bouton de sauvegarde qui récupère le contact du formulaire (classe fille)
+  // Event au clic sur le bouton de sauvegarde qui récupère l'étudiant du formulaire et sa version originale (avant modification)
   public static class SaveEditedEvent extends EtudiantNewOrEdit.EtudiantFormEvent {
     SaveEditedEvent(EtudiantNewOrEdit source, Etudiant etudiant, Etudiant etudiantOriginal) {
       super(source, etudiant, etudiantOriginal);

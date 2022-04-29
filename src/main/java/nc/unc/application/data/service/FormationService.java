@@ -9,7 +9,6 @@ import java.util.List;
 @Service
 public class FormationService {
 
-
   private FormationRepository formationRepository;
 
   //Constructeur
@@ -33,7 +32,7 @@ public class FormationService {
   }
 
   //Sauvegarder une formation
-  public void addFormation(Formation formation){
+  public void saveFormation(Formation formation){
     if (formation == null) {
       System.err.println("La formation est nulle, le formulaire est-il bien connecté à l'application ?");
       return;

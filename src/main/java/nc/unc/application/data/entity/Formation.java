@@ -30,12 +30,16 @@ public class Formation implements Cloneable {
   private String codeFormation;
 
   @NotNull(message = "Le code rome ne peut pas être nul")
-  @Pattern(message = "Le code rome est composé d'une lettre majuscule puis de 4 chiffres. Ex : M1234", regexp = "/[A-Z][0-9]{4}/gm")
+  @Pattern(message = "Le code rome est composé d'une lettre majuscule puis de 4 chiffres. Ex : M1234", regexp = "[A-Z][0-9]{4}$")
   @Column(name = "code_rome", length = 15)
   private String codeRome;
 
-  @OneToOne(cascade = CascadeType.MERGE, targetEntity = ReferentPedagogique.class)
-  @JoinColumn(name = "id_referent_pedagogique")
+  @Column(name = "observations", length = 15000)
+  private String observations;
+
+  @NotNull(message = "La formation doit avoir un responsable de formation")
+  @OneToOne(cascade = CascadeType.MERGE, optional = false, targetEntity = ReferentPedagogique.class)
+  @JoinColumn(name = "id_referent_pedagogique", nullable = false)
   private ReferentPedagogique referentPedagogique;
 
   @OneToMany(mappedBy = "formation", cascade = CascadeType.MERGE, targetEntity = TuteurHabilitation.class)
@@ -86,6 +90,14 @@ public class Formation implements Cloneable {
 
   public void setCodeRome(String codeRome) {
     this.codeRome = codeRome;
+  }
+
+  public String getObservations() {
+    return observations;
+  }
+
+  public void setObservations(String observations) {
+    this.observations = observations;
   }
 
   public ReferentPedagogique getReferentPedagogique() {
@@ -148,10 +160,9 @@ public class Formation implements Cloneable {
             "\n , libelleFormation='" + libelleFormation + '\'' +
             "\n , codeFormation='" + codeFormation + '\'' +
             "\n , codeRome='" + codeRome + '\'' +
+            "\n , observations='" + observations + '\'' +
             "\n , referentPedagogique=" +
             (referentPedagogique != null ? referentPedagogique.getPrenomReferentPedago()+" "+referentPedagogique.getNomReferentPedago() : "") +
-            "\n , createdAt=" + createdAt +
-            "\n , updatedAt=" + updatedAt +
             '}';
   }
 }

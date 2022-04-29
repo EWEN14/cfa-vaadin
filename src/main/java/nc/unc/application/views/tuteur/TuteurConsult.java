@@ -143,7 +143,6 @@ public class TuteurConsult extends Dialog {
   }
 
   // Méthode appelée à l'ouverture de la vue pour alimenter les champs du formulaire.
-  // Ici pas besoin de binder étant donné que l'on ne fait que consulter les informations (pas de sauvegarde)
   public void setTuteur(Tuteur tuteur) {
     this.tuteur = tuteur;
     if (tuteur != null) {
@@ -209,7 +208,7 @@ public class TuteurConsult extends Dialog {
     telephoneContactCfa.setReadOnly(true);
   }
 
-  // Event "global" (class mère), qui étend les deux events ci-dessous, dont le but est de fournir l'étudiant
+  // Event "global" (class mère), qui étend les deux events ci-dessous, dont le but est de fournir le tuteur
   // que l'on consulte dans le formulaire.
   public static abstract class TuteurConsultFormEvent extends ComponentEvent<TuteurConsult> {
     private final Tuteur tuteur;

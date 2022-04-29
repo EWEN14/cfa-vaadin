@@ -43,36 +43,36 @@ public class EtudiantConsult extends Dialog {
 
   // form qui contiendra les informations générales relatives à l'étudiants
   private final FormLayout formEtudiantInfos = new FormLayout();
-  TextField nomEtudiant = new TextField("NOM");
-  TextField prenomEtudiant = new TextField("Prénom");
+  private final TextField nomEtudiant = new TextField("NOM");
+  private final TextField prenomEtudiant = new TextField("Prénom");
   // utilisation de select lorsque nombre de choix assez petis
-  Select<Civilite> civiliteEtudiant = new Select<>();
-  DatePicker dateNaissanceEtudiant = new DatePicker("Date de Naissance");
-  TextField ageEtudiant = new TextField("Âge");
-  IntegerField telephoneEtudiant1 = new IntegerField("Téléphone 1");
-  IntegerField telephoneEtudiant2 = new IntegerField("Téléphone 2");
-  EmailField emailEtudiant = new EmailField("Email");
-  TextField dernierDiplomeObtenuOuEnCours = new TextField("Dernier diplôme obtenu ou en cours");
-  Select<Integer> niveauDernierDiplome = new Select<>();
-  IntegerField anneeObtentionDernierDiplome = new IntegerField("Année d'obtention du dernier diplôme");
-  TextField admis = new TextField("Admis");
-  TextField situationUnc = new TextField("Situation à l'UNC");
-  TextField situationEntreprise = new TextField("Situation en entreprise");
-  TextField lieuNaissance = new TextField("Lieu de Naissance");
-  TextField nationalite = new TextField("Nationalité");
-  IntegerField numeroCafatEtudiant = new IntegerField("Numéro Cafat");
-  TextField adresseEtudiant = new TextField("Adresse");
-  TextField boitePostaleEtudiant = new TextField("Boîte Postale");
-  IntegerField codePostalEtudiant = new IntegerField("Code Postal");
-  TextField communeEtudiant = new TextField("Commune");
-  TextField situationAnneePrecedente = new TextField("Situation l'année précédente");
-  TextField etablissementDeProvenance = new TextField("Établissement de provenance");
-  TextField parcours = new TextField("Parcours");
-  Checkbox travailleurHandicape = new Checkbox("Travailleur Handicapé");
-  Checkbox veepap = new Checkbox("VEEPAP");
-  TextField priseEnChargeFraisInscription = new TextField("Prise en charge des frais d'inscription");
-  TextField obtentionDiplomeMention = new TextField("Obtention du diplôme et mention");
-  TextArea observationsEtudiant = new TextArea("Observations");
+  private final Select<Civilite> civiliteEtudiant = new Select<>();
+  private final DatePicker dateNaissanceEtudiant = new DatePicker("Date de Naissance");
+  private final TextField ageEtudiant = new TextField("Âge");
+  private final IntegerField telephoneEtudiant1 = new IntegerField("Téléphone 1");
+  private final IntegerField telephoneEtudiant2 = new IntegerField("Téléphone 2");
+  private final EmailField emailEtudiant = new EmailField("Email");
+  private final TextField dernierDiplomeObtenuOuEnCours = new TextField("Dernier diplôme obtenu ou en cours");
+  private final Select<Integer> niveauDernierDiplome = new Select<>();
+  private final IntegerField anneeObtentionDernierDiplome = new IntegerField("Année d'obtention du dernier diplôme");
+  private final TextField admis = new TextField("Admis");
+  private final TextField situationUnc = new TextField("Situation à l'UNC");
+  private final TextField situationEntreprise = new TextField("Situation en entreprise");
+  private final TextField lieuNaissance = new TextField("Lieu de Naissance");
+  private final TextField nationalite = new TextField("Nationalité");
+  private final IntegerField numeroCafatEtudiant = new IntegerField("Numéro Cafat");
+  private final TextField adresseEtudiant = new TextField("Adresse");
+  private final TextField boitePostaleEtudiant = new TextField("Boîte Postale");
+  private final IntegerField codePostalEtudiant = new IntegerField("Code Postal");
+  private final TextField communeEtudiant = new TextField("Commune");
+  private final TextField situationAnneePrecedente = new TextField("Situation l'année précédente");
+  private final TextField etablissementDeProvenance = new TextField("Établissement de provenance");
+  private final TextField parcours = new TextField("Parcours");
+  private final Checkbox travailleurHandicape = new Checkbox("Travailleur Handicapé");
+  private final Checkbox veepap = new Checkbox("VEEPAP");
+  private final TextField priseEnChargeFraisInscription = new TextField("Prise en charge des frais d'inscription");
+  private final TextField obtentionDiplomeMention = new TextField("Obtention du diplôme et mention");
+  private final TextArea observationsEtudiant = new TextArea("Observations");
   // binder qui sera utilisé pour remlir automatiquement les champs d'infos générales sur l'étudiant
   Binder<Etudiant> etudiantBinder = new BeanValidationBinder<>(Etudiant.class);
 
@@ -177,8 +177,7 @@ public class EtudiantConsult extends Dialog {
     add(tabsEtudiant, content, createButtonsLayout());
   }
 
-  // méthode appelé à l'ouverture de la vue pour alimenter les champs du formulaire.
-  // Ici pas besoin de binder étant donné que l'on ne fait que consulter les informations (pas de sauvegarde)
+  // méthode appelée à l'ouverture de la vue pour alimenter les champs du formulaire.
   public void setEtudiant(Etudiant etudiant) {
     this.etudiant = etudiant;
     if (etudiant != null) {

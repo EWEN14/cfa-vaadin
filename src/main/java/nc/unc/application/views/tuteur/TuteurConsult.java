@@ -202,6 +202,11 @@ public class TuteurConsult extends Dialog {
     posteOccupe.setReadOnly(true);
     anneeExperienceProfessionnelle.setReadOnly(true);
     observationsTuteur.setReadOnly(true);
+    // entreprise
+    enseigne.setReadOnly(true);
+    raisonSociale.setReadOnly(true);
+    statutActifEntreprise.setReadOnly(true);
+    telephoneContactCfa.setReadOnly(true);
   }
 
   // Event "global" (class mère), qui étend les deux events ci-dessous, dont le but est de fournir l'étudiant

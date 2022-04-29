@@ -31,11 +31,14 @@ import java.time.temporal.ChronoUnit;
 public class EtudiantView extends VerticalLayout {
 
   Grid<Etudiant> grid = new Grid<>(Etudiant.class);
+
   TextField filterText = new TextField();
   Button addEtudiantButton;
+
   EtudiantConsult modalConsult;
   EtudiantNewOrEdit modalNewOrEdit;
   EtudiantService etudiantService;
+
   TuteurService tuteurService;
   FormationService formationService;
   ReferentPedagogiqueService referentPedagogiqueService;
@@ -67,7 +70,7 @@ public class EtudiantView extends VerticalLayout {
     modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEditedEvent.class, this::saveEditedEtudiant);
     modalNewOrEdit.addListener(EtudiantNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
 
-    // ajout d'un FlexLayout qui place la grille et le formulaire côte à côte (quand formulaire ouvert)
+    // ajout d'un FlexLayout dans lequel on place la grille
     FlexLayout content = new FlexLayout(grid);
     content.setFlexGrow(2, grid);
     content.addClassNames("content", "gap-m");

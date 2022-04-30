@@ -68,6 +68,7 @@ public class EtudiantConsult extends Dialog {
   private final TextField situationAnneePrecedente = new TextField("Situation l'année précédente");
   private final TextField etablissementDeProvenance = new TextField("Établissement de provenance");
   private final TextField parcours = new TextField("Parcours");
+  private final IntegerField anneePromotion = new IntegerField("Année de début de la promotion");
   private final Checkbox travailleurHandicape = new Checkbox("Travailleur Handicapé");
   private final Checkbox veepap = new Checkbox("VEEPAP");
   private final TextField priseEnChargeFraisInscription = new TextField("Prise en charge des frais d'inscription");
@@ -153,7 +154,7 @@ public class EtudiantConsult extends Dialog {
     formEtudiantInfos.add(nomEtudiant, prenomEtudiant, civiliteEtudiant, dateNaissanceEtudiant, ageEtudiant, telephoneEtudiant1, telephoneEtudiant2,
             emailEtudiant, dernierDiplomeObtenuOuEnCours, niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc,
             lieuNaissance, nationalite, numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente,
-            etablissementDeProvenance, parcours, travailleurHandicape, veepap, priseEnChargeFraisInscription,
+            etablissementDeProvenance, parcours, anneePromotion, travailleurHandicape, veepap, priseEnChargeFraisInscription,
             obtentionDiplomeMention, observationsEtudiant);
     // pareil, mais pour le formulaire relatif à son entreprise
     formEtudiantEntrepriseInfos.add(enseigne, raisonSociale, statutActifEntreprise, telephoneContactCfa);
@@ -253,6 +254,7 @@ public class EtudiantConsult extends Dialog {
     veepap.setReadOnly(true);
     priseEnChargeFraisInscription.setReadOnly(true);
     obtentionDiplomeMention.setReadOnly(true);
+    anneePromotion.setReadOnly(true);
     observationsEtudiant.setReadOnly(true);
     // entreprise
     enseigne.setReadOnly(true);

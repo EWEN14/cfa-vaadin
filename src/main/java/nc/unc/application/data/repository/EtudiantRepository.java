@@ -17,4 +17,6 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
   List<Etudiant> search(@Param("searchTerm") String searchTerm);
 
   List<Etudiant> findAllByTuteurId(Long id);
+
+  List<Etudiant> findAllByFormationId(Long id);
 }

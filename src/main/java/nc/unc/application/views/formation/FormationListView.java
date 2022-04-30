@@ -1,6 +1,7 @@
 package nc.unc.application.views.formation;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -11,6 +12,8 @@ import com.vaadin.flow.component.virtuallist.VirtualList;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteParameters;
+import com.vaadin.flow.router.RouterLink;
 import nc.unc.application.data.entity.Formation;
 import nc.unc.application.data.service.FormationService;
 import nc.unc.application.data.service.LogEnregistrmentService;
@@ -60,8 +63,10 @@ public class FormationListView extends VerticalLayout {
     // on place les boutons côte à côte dans un HorizontalLayout
     HorizontalLayout buttonsContainer = new HorizontalLayout(consultFormationButton, editFormationButton);
 
+    Div lienPageFormation = new Div(new RouterLink("Voir les étudiants", FormationEtudiantView.class, new RouteParameters("idFormation", String.valueOf(formation.getId()))));
+
     VerticalLayout insideCardLayout = new VerticalLayout();
-    insideCardLayout.add(libelleFormation, directeurFormation, buttonsContainer);
+    insideCardLayout.add(libelleFormation, directeurFormation, buttonsContainer, lienPageFormation);
 
     // ajout des éléments dans l'horizontal layout
     cardLayout.add(insideCardLayout);
@@ -96,6 +101,10 @@ public class FormationListView extends VerticalLayout {
     updateVirtualList();
   }
 
+  /**
+   * Sauvegarde d'une nouvelle formation
+   * @param event
+   */
   private void saveFormation(FormationNewOrEdit.SaveEvent event) {
     // récupération de la formation de la modale
     Formation formationtoSave = event.getFormation();
@@ -111,6 +120,10 @@ public class FormationListView extends VerticalLayout {
     Notification.show("Formation "+formationtoSave.getCodeFormation()+" créée.");
   }
 
+  /**
+   * Modification d'une formation
+   * @param event
+   */
   private void saveEditedFormation(FormationNewOrEdit.SaveEditedEvent event) {
     Formation formationToEdit = event.getFormation();
     Formation formationBeforeEdit = event.getFormationOriginale();
@@ -145,16 +158,19 @@ public class FormationListView extends VerticalLayout {
     modalConsult.open();
   }
 
+  // fermeture modale de consultation
   private void closeConsultModal() {
     modalConsult.setFormation(null);
     modalConsult.close();
   }
 
+  // fermeture modale création/édition
   private void closeNewOrEditModal() {
     modalNewOrEdit.setFormation(null);
     modalNewOrEdit.close();
   }
 
+  // mise à jour des cartes présentant les formations
   public void updateVirtualList() {
     cardsFormations.setItems(formationService.findAllFormations(""));
   }

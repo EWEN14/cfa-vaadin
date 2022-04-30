@@ -63,6 +63,7 @@ public class EtudiantNewOrEdit extends Dialog {
   ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
   ComboBox<Tuteur> tuteur = new ComboBox<>("Tuteur");
   ComboBox<Formation> formation = new ComboBox<>("Formation suivie");
+  IntegerField anneePromotion = new IntegerField("Année de début de la promotion");
   ComboBox<ReferentPedagogique> referentPedagogique = new ComboBox<>("Référent pédagogique");
   TextArea observationsEtudiant = new TextArea("Observations");
 
@@ -150,7 +151,7 @@ public class EtudiantNewOrEdit extends Dialog {
             niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, lieuNaissance, nationalite,
             numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente, etablissementDeProvenance,
             parcours, travailleurHandicape, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention, entreprise,
-            tuteur, formation, referentPedagogique, observationsEtudiant, createButtonsLayout());
+            tuteur, formation, anneePromotion, referentPedagogique, observationsEtudiant, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(form);

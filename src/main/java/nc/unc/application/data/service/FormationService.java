@@ -5,6 +5,7 @@ import nc.unc.application.data.repository.FormationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FormationService {
@@ -48,5 +49,11 @@ public class FormationService {
   // retourne les formation pour lequel le tuteur n'est pas habilité
   public List<Formation> getAllFormationNonHabilite(List<Long> idFormationHabilite) {
     return formationRepository.findAllByIdNotIn(idFormationHabilite);
+  }
+
+  // retourne la formation avec l'id passé en paramètre,
+  // si elle existe (d'où le Optional)
+  public Optional<Formation> getFormationbyId(Long id) {
+    return formationRepository.findById(id);
   }
 }

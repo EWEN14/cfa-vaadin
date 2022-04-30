@@ -20,8 +20,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests
@@ -92,7 +90,7 @@ public class EtudiantView extends VerticalLayout {
     grid.addClassNames("etudiant-grid");
     grid.setSizeFull();
     // ajout des colonnes
-    grid.setColumns("prenomEtudiant", "nomEtudiant", "civiliteEtudiant", "dateNaissanceEtudiant");
+    grid.setColumns("prenomEtudiant", "nomEtudiant","admis", "situationUnc");
     // ajout du bouton de consultation d'un étudiant
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultEtudiant(etudiant);

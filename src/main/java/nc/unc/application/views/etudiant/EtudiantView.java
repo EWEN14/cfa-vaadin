@@ -20,8 +20,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests
@@ -31,11 +29,14 @@ import java.time.temporal.ChronoUnit;
 public class EtudiantView extends VerticalLayout {
 
   Grid<Etudiant> grid = new Grid<>(Etudiant.class);
+
   TextField filterText = new TextField();
   Button addEtudiantButton;
+
   EtudiantConsult modalConsult;
   EtudiantNewOrEdit modalNewOrEdit;
   EtudiantService etudiantService;
+
   TuteurService tuteurService;
   FormationService formationService;
   ReferentPedagogiqueService referentPedagogiqueService;
@@ -67,7 +68,7 @@ public class EtudiantView extends VerticalLayout {
     modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEditedEvent.class, this::saveEditedEtudiant);
     modalNewOrEdit.addListener(EtudiantNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
 
-    // ajout d'un FlexLayout qui place la grille et le formulaire côte à côte (quand formulaire ouvert)
+    // ajout d'un FlexLayout dans lequel on place la grille
     FlexLayout content = new FlexLayout(grid);
     content.setFlexGrow(2, grid);
     content.addClassNames("content", "gap-m");
@@ -78,8 +79,6 @@ public class EtudiantView extends VerticalLayout {
     add(getToolbar(), content, modalConsult, modalNewOrEdit);
     // initialisation des données de la grille à l'ouverture de la vue
     updateList();
-    // modales de consultation et d'édition/création de l'étudiant fermée à l'ouverture de la vue
-    closeConsultModal();
 
     // je le commente pour l'instant, car on doit cliquer deux fois sur fermer pour que ça fonctionne si on ouvre
     // la modale de consultation depuis le clic sur une ligne... mais clic en dehors de la modale ou ECHAP fonctionne.
@@ -91,7 +90,7 @@ public class EtudiantView extends VerticalLayout {
     grid.addClassNames("etudiant-grid");
     grid.setSizeFull();
     // ajout des colonnes
-    grid.setColumns("prenomEtudiant", "nomEtudiant", "civiliteEtudiant", "dateNaissanceEtudiant");
+    grid.setColumns("prenomEtudiant", "nomEtudiant","admis", "situationUnc");
     // ajout du bouton de consultation d'un étudiant
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultEtudiant(etudiant);
@@ -137,7 +136,7 @@ public class EtudiantView extends VerticalLayout {
     // mise à jour de la grid, fermeture du formulaire et notification
     updateList();
     closeNewOrEditModal();
-    Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " créé(e)");
+    Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " créé(e).");
   }
 
   // sauvegarde de l'étudiant modifié en utilisant EtudiantService
@@ -186,17 +185,18 @@ public class EtudiantView extends VerticalLayout {
     }
   }
 
-  public void consultEtudiant(Etudiant etudiant) {
-    modalConsult.setEtudiant(etudiant);
-    modalConsult.open();
-  }
-
   // ajout d'un étudiant
   void addEtudiant() {
     // on retire le focus s'il y avait une ligne sélectionnée
     grid.asSingleSelect().clear();
-    // appel de la fonction juste au-dessus
+    // appel de la fonction d'edition de l'étudiant, en passant un nouvel étudiant
     editEtudiantModal(new Etudiant());
+  }
+
+  // ouverture de modale de consultation d'un étudiant
+  public void consultEtudiant(Etudiant etudiant) {
+    modalConsult.setEtudiant(etudiant);
+    modalConsult.open();
   }
 
   private void closeConsultModal() {

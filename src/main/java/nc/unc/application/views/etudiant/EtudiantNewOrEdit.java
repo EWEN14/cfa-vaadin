@@ -63,6 +63,7 @@ public class EtudiantNewOrEdit extends Dialog {
   ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
   ComboBox<Tuteur> tuteur = new ComboBox<>("Tuteur");
   ComboBox<Formation> formation = new ComboBox<>("Formation suivie");
+  IntegerField anneePromotion = new IntegerField("Année de début de la promotion");
   ComboBox<ReferentPedagogique> referentPedagogique = new ComboBox<>("Référent pédagogique");
   TextArea observationsEtudiant = new TextArea("Observations");
 
@@ -150,7 +151,7 @@ public class EtudiantNewOrEdit extends Dialog {
             niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, lieuNaissance, nationalite,
             numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente, etablissementDeProvenance,
             parcours, travailleurHandicape, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention, entreprise,
-            tuteur, formation, referentPedagogique, observationsEtudiant, createButtonsLayout());
+            tuteur, formation, anneePromotion, referentPedagogique, observationsEtudiant, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(form);
@@ -222,14 +223,14 @@ public class EtudiantNewOrEdit extends Dialog {
     }
   }
 
-  // Event au clic sur le bouton de sauvegarde qui récupère le contact du formulaire (classe fille)
+  // Event au clic sur le bouton de sauvegarde qui récupère l'étudiant du formulaire (classe fille)
   public static class SaveEvent extends EtudiantNewOrEdit.EtudiantFormEvent {
     SaveEvent(EtudiantNewOrEdit source, Etudiant etudiant) {
       super(source, etudiant, null);
     }
   }
 
-  // Event au clic sur le bouton de sauvegarde qui récupère le contact du formulaire (classe fille)
+  // Event au clic sur le bouton de sauvegarde qui récupère l'étudiant du formulaire et sa version originale (avant modification)
   public static class SaveEditedEvent extends EtudiantNewOrEdit.EtudiantFormEvent {
     SaveEditedEvent(EtudiantNewOrEdit source, Etudiant etudiant, Etudiant etudiantOriginal) {
       super(source, etudiant, etudiantOriginal);

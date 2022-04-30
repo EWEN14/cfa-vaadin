@@ -24,6 +24,7 @@ import nc.unc.application.data.entity.User;
 import nc.unc.application.security.AuthenticatedUser;
 import nc.unc.application.views.about.AboutView;
 import nc.unc.application.views.etudiant.EtudiantView;
+import nc.unc.application.views.formation.FormationListView;
 import nc.unc.application.views.helloworld.HelloWorldView;
 import nc.unc.application.views.logs.LogsView;
 import nc.unc.application.views.tuteur.TuteurView;
@@ -106,7 +107,7 @@ public class MainLayout extends AppLayout {
     }
 
     private Component createDrawerContent() {
-        H2 appName = new H2("cfa_vaadin");
+        H2 appName = new H2("CFA");
         appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
 
         com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(appName,
@@ -126,6 +127,7 @@ public class MainLayout extends AppLayout {
         nav.add(list);
 
         for (MenuItemInfo menuItem : createMenuItems()) {
+            // on ajoute à la navbar les éléments auxquels l'utilisateur a le droit d'accéder
             if (accessChecker.hasAccess(menuItem.getView())) {
                 list.add(menuItem);
             }
@@ -143,6 +145,8 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("Étudiants", "las la-user-graduate", EtudiantView.class),
 
                 new MenuItemInfo("Tuteurs", "las la-user-tie", TuteurView.class),
+
+                new MenuItemInfo("Formations", "las la-award", FormationListView.class),
 
                 new MenuItemInfo("Logs", "las la-history", LogsView.class)
         };

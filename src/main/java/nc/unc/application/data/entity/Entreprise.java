@@ -36,7 +36,7 @@ public class Entreprise implements Cloneable {
 
   @NotNull(message = "Le numéro de ridet ne peut pas être nul")
   @NotEmpty(message = "Le numéro de ridet doit être renseigné")
-  @Pattern(message = "Le numéro de ridet doit suivre le format suivant : 0 000 000.000", regexp = "/\\d{3}\\s\\d{3}\\s\\d{3}\\.\\d{3}/gm")
+  @Pattern(message = "Le numéro de ridet doit suivre le format suivant : 0 000 000.000", regexp = "\\d{3}\\s\\d{3}\\s\\d{3}\\.\\d{3}$")
   @Column(name = "numero_ridet")
   private String numeroRidet;
 

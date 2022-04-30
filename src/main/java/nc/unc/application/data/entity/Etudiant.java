@@ -128,6 +128,10 @@ public class Etudiant implements Cloneable {
   @Column(name = "obtention_diplome_mention")
   private String obtentionDiplomeMention;
 
+  @Range(message = "L'année de promotion est après l'an 2000", min = 2000, max = 9999)
+  @Column(name = "annee_promotion")
+  private Integer anneePromotion;
+
   @Column(name = "observations", length = 15000)
   private String observationsEtudiant;
 
@@ -393,6 +397,14 @@ public class Etudiant implements Cloneable {
     this.obtentionDiplomeMention = obtentionDiplomeMention;
   }
 
+  public Integer getAnneePromotion() {
+    return anneePromotion;
+  }
+
+  public void setAnneePromotion(Integer anneePromotion) {
+    this.anneePromotion = anneePromotion;
+  }
+
   public String getObservationsEtudiant() {
     return observationsEtudiant;
   }
@@ -467,12 +479,12 @@ public class Etudiant implements Cloneable {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Etudiant etudiant = (Etudiant) o;
-    return id.equals(etudiant.id) && nomEtudiant.equals(etudiant.nomEtudiant) && prenomEtudiant.equals(etudiant.prenomEtudiant) && civiliteEtudiant == etudiant.civiliteEtudiant && sexeEtudiant == etudiant.sexeEtudiant && dateNaissanceEtudiant.equals(etudiant.dateNaissanceEtudiant) && telephoneEtudiant1.equals(etudiant.telephoneEtudiant1) && telephoneEtudiant2.equals(etudiant.telephoneEtudiant2) && emailEtudiant.equals(etudiant.emailEtudiant) && dernierDiplomeObtenuOuEnCours.equals(etudiant.dernierDiplomeObtenuOuEnCours) && Objects.equals(niveauDernierDiplome, etudiant.niveauDernierDiplome) && Objects.equals(anneeObtentionDernierDiplome, etudiant.anneeObtentionDernierDiplome) && admis.equals(etudiant.admis) && Objects.equals(situationUnc, etudiant.situationUnc) && Objects.equals(situationEntreprise, etudiant.situationEntreprise) && Objects.equals(lieuNaissance, etudiant.lieuNaissance) && Objects.equals(nationalite, etudiant.nationalite) && Objects.equals(numeroCafatEtudiant, etudiant.numeroCafatEtudiant) && Objects.equals(adresseEtudiant, etudiant.adresseEtudiant) && Objects.equals(boitePostaleEtudiant, etudiant.boitePostaleEtudiant) && Objects.equals(codePostalEtudiant, etudiant.codePostalEtudiant) && Objects.equals(communeEtudiant, etudiant.communeEtudiant) && Objects.equals(situationAnneePrecedente, etudiant.situationAnneePrecedente) && Objects.equals(etablissementDeProvenance, etudiant.etablissementDeProvenance) && Objects.equals(travailleurHandicape, etudiant.travailleurHandicape) && Objects.equals(parcours, etudiant.parcours) && Objects.equals(veepap, etudiant.veepap) && Objects.equals(priseEnChargeFraisInscription, etudiant.priseEnChargeFraisInscription) && Objects.equals(obtentionDiplomeMention, etudiant.obtentionDiplomeMention) && Objects.equals(observationsEtudiant, etudiant.observationsEtudiant) && Objects.equals(entreprise, etudiant.entreprise) && Objects.equals(createdAt, etudiant.createdAt) && Objects.equals(updatedAt, etudiant.updatedAt);
+    return id.equals(etudiant.id) && nomEtudiant.equals(etudiant.nomEtudiant) && prenomEtudiant.equals(etudiant.prenomEtudiant) && civiliteEtudiant == etudiant.civiliteEtudiant && sexeEtudiant == etudiant.sexeEtudiant && dateNaissanceEtudiant.equals(etudiant.dateNaissanceEtudiant) && telephoneEtudiant1.equals(etudiant.telephoneEtudiant1) && telephoneEtudiant2.equals(etudiant.telephoneEtudiant2) && emailEtudiant.equals(etudiant.emailEtudiant) && dernierDiplomeObtenuOuEnCours.equals(etudiant.dernierDiplomeObtenuOuEnCours) && Objects.equals(niveauDernierDiplome, etudiant.niveauDernierDiplome) && Objects.equals(anneeObtentionDernierDiplome, etudiant.anneeObtentionDernierDiplome) && admis.equals(etudiant.admis) && Objects.equals(situationUnc, etudiant.situationUnc) && Objects.equals(situationEntreprise, etudiant.situationEntreprise) && Objects.equals(lieuNaissance, etudiant.lieuNaissance) && Objects.equals(nationalite, etudiant.nationalite) && Objects.equals(numeroCafatEtudiant, etudiant.numeroCafatEtudiant) && Objects.equals(adresseEtudiant, etudiant.adresseEtudiant) && Objects.equals(boitePostaleEtudiant, etudiant.boitePostaleEtudiant) && Objects.equals(codePostalEtudiant, etudiant.codePostalEtudiant) && Objects.equals(communeEtudiant, etudiant.communeEtudiant) && Objects.equals(situationAnneePrecedente, etudiant.situationAnneePrecedente) && Objects.equals(etablissementDeProvenance, etudiant.etablissementDeProvenance) && Objects.equals(travailleurHandicape, etudiant.travailleurHandicape) && Objects.equals(parcours, etudiant.parcours) && Objects.equals(veepap, etudiant.veepap) && Objects.equals(priseEnChargeFraisInscription, etudiant.priseEnChargeFraisInscription) && Objects.equals(obtentionDiplomeMention, etudiant.obtentionDiplomeMention) && Objects.equals(anneePromotion, etudiant.anneePromotion) && Objects.equals(observationsEtudiant, etudiant.observationsEtudiant) && Objects.equals(entreprise, etudiant.entreprise) && Objects.equals(createdAt, etudiant.createdAt) && Objects.equals(updatedAt, etudiant.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, nomEtudiant, prenomEtudiant, civiliteEtudiant, sexeEtudiant, dateNaissanceEtudiant, telephoneEtudiant1, telephoneEtudiant2, emailEtudiant, dernierDiplomeObtenuOuEnCours, niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, situationEntreprise, lieuNaissance, nationalite, numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente, etablissementDeProvenance, travailleurHandicape, parcours, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention, observationsEtudiant, entreprise, createdAt, updatedAt);
+    return Objects.hash(id, nomEtudiant, prenomEtudiant, civiliteEtudiant, sexeEtudiant, dateNaissanceEtudiant, telephoneEtudiant1, telephoneEtudiant2, emailEtudiant, dernierDiplomeObtenuOuEnCours, niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, situationEntreprise, lieuNaissance, nationalite, numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente, etablissementDeProvenance, travailleurHandicape, parcours, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention, anneePromotion, observationsEtudiant, entreprise, createdAt, updatedAt);
   }
 
   @Override
@@ -507,6 +519,7 @@ public class Etudiant implements Cloneable {
             "\n veepap=" + veepap +
             "\n priseEnChargeFraisInscription='" + priseEnChargeFraisInscription + '\'' +
             "\n obtentionDiplomeMention='" + obtentionDiplomeMention + '\'' +
+            "\n anneePromotion='" + anneePromotion + '\'' +
             "\n observationsEtudiant='" + observationsEtudiant + '\'' +
             "\n entreprise=" + (entreprise != null ? entreprise.getEnseigne() : "") +
             "\n tuteur=" + (tuteur != null ? tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() : "") +

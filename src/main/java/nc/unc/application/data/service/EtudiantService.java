@@ -44,13 +44,28 @@ public class EtudiantService {
     etudiantRepository.save(etudiant);
   }
 
+  /**
+   * Récupère tous les étudiants encadré par un tuteur
+   * @param id l'identifiant du tuteur
+   * @return liste d'étudiants
+   */
   public List<Etudiant> findAllEtudiantsTuteur(Long id) {
     return etudiantRepository.findAllByTuteurId(id);
   }
 
-  // TODO : mettre les findAll de compagnie, tuteur, référent, interlocuteur CFA
-  // quand je les aurais créé
+  /**
+   * Récupère tous les étudiants d'une formation
+   * @param id l'identidiant de la formation
+   * @return liste d'étudiants
+   */
+  public List<Etudiant> findAllEtudiantsFormation(Long id) {
+    return etudiantRepository.findAllByFormationId(id);
+  }
 
+  /**
+   * Récupère la liste de toutes les entreprises
+   * @return liste d'entreprises
+   */
   public List<Entreprise> findAllEntreprises() {
     return entrepriseRepository.findAll();
   }

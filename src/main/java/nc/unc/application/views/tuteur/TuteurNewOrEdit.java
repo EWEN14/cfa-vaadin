@@ -373,7 +373,7 @@ public class TuteurNewOrEdit extends Dialog {
     fireEvent(new TuteurNewOrEdit.CloseEvent(this));
   }
 
-  // Event "global" (class mère), qui étend les trois event ci-dessous, dont le but est de fournir l'étudiant
+  // Event "global" (class mère), qui étend les trois event ci-dessous, dont le but est de fournir le tuteur
   // qu'on manipule dans le formulaire
   public static abstract class TuteurFormEvent extends ComponentEvent<TuteurNewOrEdit> {
     private final Tuteur tuteur;
@@ -394,14 +394,14 @@ public class TuteurNewOrEdit extends Dialog {
     }
   }
 
-  // Event au clic sur le bouton de sauvegarde qui récupère le contact du formulaire (classe fille)
+  // Event au clic sur le bouton de sauvegarde qui récupère le tuteur du formulaire (classe fille)
   public static class SaveEvent extends TuteurNewOrEdit.TuteurFormEvent {
     SaveEvent(TuteurNewOrEdit source, Tuteur tuteur) {
       super(source, tuteur, null);
     }
   }
 
-  // Event au clic sur le bouton de sauvegarde qui récupère le contact du formulaire (classe fille)
+  // Event au clic sur le bouton de sauvegarde qui récupère le tuteur du formulaire (classe fille)
   public static class SaveEditedEvent extends TuteurNewOrEdit.TuteurFormEvent {
     SaveEditedEvent(TuteurNewOrEdit source, Tuteur tuteur, Tuteur tuteurOriginal) {
       super(source, tuteur, tuteurOriginal);

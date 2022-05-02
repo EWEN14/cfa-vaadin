@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
+import java.util.Calendar;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -46,7 +47,7 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
   H2 libelleFormation = new H2();
 
   Grid<Etudiant> etudiantGrid = new Grid<>(Etudiant.class, false);
-  Grid.Column<Etudiant> prenomColumn;
+  Grid.Column<Etudiant> fullNameColumn;
   Grid.Column<Etudiant> nomColumn;
   Grid.Column<Etudiant> anneePromotionColumn;
 
@@ -72,10 +73,8 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
     etudiantGrid.addClassNames("etudiant-grid");
     etudiantGrid.setSizeFull();
     // ajout des colonnes
-    // etudiantGrid.setColumns("prenomEtudiant", "nomEtudiant", "anneePromotion", "admis", "situationUnc");
-
-    prenomColumn = etudiantGrid.addColumn(Etudiant::getPrenomEtudiant);
-    nomColumn = etudiantGrid.addColumn(Etudiant::getNomEtudiant);
+    fullNameColumn = etudiantGrid.addColumn(etudiant -> etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant());
+    // nomColumn = etudiantGrid.addColumn(Etudiant::getNomEtudiant);
     anneePromotionColumn = etudiantGrid.addColumn(Etudiant::getAnneePromotion);
     etudiantGrid.addColumn(Etudiant::getAdmis);
     etudiantGrid.addColumn(Etudiant::getSituationUnc);
@@ -136,12 +135,8 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
     HeaderRow headerRow = etudiantGrid.appendHeaderRow();
 
     // ajout de nos header customisés sur nos colonnes
-    headerRow.getCell(prenomColumn).setComponent(
-            createFilterHeader("Prénom", etudiantFilter::setPrenom));
-    headerRow.getCell(nomColumn).setComponent(
-            createFilterHeader("NOM", etudiantFilter::setNom));
-    headerRow.getCell(anneePromotionColumn).setComponent(
-            createFilterHeader("Année Promotion", etudiantFilter::setAnneePromotion));
+    headerRow.getCell(fullNameColumn).setComponent(createFilterHeader("Prénom", etudiantFilter::setFullName));
+    headerRow.getCell(anneePromotionColumn).setComponent(createYearFilterHeader(etudiantFilter::setAnneePromotion));
   }
 
   /**
@@ -173,11 +168,40 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
     return layout;
   }
 
+  /**
+   * Même principe que la fonction précédente, mais spécifiquement pour l'année, avec l'année en cours par défaut.
+   * @param filterChangeConsumer
+   * @return
+   */
+  private static VerticalLayout createYearFilterHeader(Consumer<String> filterChangeConsumer) {
+    // label au dessus du champ
+    Label label = new Label("Année de promotion");
+    label.getStyle().set("padding-top", "var(--lumo-space-m)")
+            .set("font-size", "var(--lumo-font-size-xs)");
+    // champ pour le filtrage
+    TextField textField = new TextField();
+    // changeMode en EAGER (direct) car on a déjà les données récupérées, donc pas d'intérêt à rendre LAZY car on filtre, on ne recherche pas
+    textField.setValueChangeMode(ValueChangeMode.EAGER);
+    textField.setClearButtonVisible(true);
+    textField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
+    textField.setWidthFull();
+    textField.getStyle().set("max-width", "100%");
+    textField.addValueChangeListener(e -> filterChangeConsumer.accept(e.getValue()));
+    // on met l'année en cours par défaut dans le champ de filtre de l'année
+    textField.setValue(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+
+    // layout contenant le label et le champ de filtrage
+    VerticalLayout layout = new VerticalLayout(label, textField);
+    layout.getThemeList().clear();
+    layout.getThemeList().add("spacing-xs");
+
+    return layout;
+  }
+
   private static class EtudiantFilter {
     private final GridListDataView<Etudiant> dataView;
 
-    private String prenom;
-    private String nom;
+    private String fullName;
     private String anneePromotion;
 
     public EtudiantFilter(GridListDataView<Etudiant> dataView) {
@@ -185,13 +209,8 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
       this.dataView.addFilter(this::test);
     }
 
-    public void setPrenom(String prenom) {
-      this.prenom = prenom;
-      this.dataView.refreshAll();
-    }
-
-    public void setNom(String nom) {
-      this.nom = nom;
+    public void setFullName(String prenom) {
+      this.fullName = prenom;
       this.dataView.refreshAll();
     }
 
@@ -201,8 +220,7 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
     }
 
     public boolean test(Etudiant etudiant) {
-      boolean matchesPrenom = matches(etudiant.getPrenomEtudiant(), prenom);
-      boolean matchesNom = matches(etudiant.getNomEtudiant(), nom);
+      boolean matchesFullName = matches(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant(), fullName);
       boolean matchesAnneePromotion;
       if (etudiant.getAnneePromotion() != null) {
          matchesAnneePromotion = matches(etudiant.getAnneePromotion().toString(), anneePromotion);
@@ -210,7 +228,7 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
         matchesAnneePromotion = matches("", anneePromotion);
       }
 
-      return matchesPrenom && matchesNom && matchesAnneePromotion;
+      return matchesFullName && matchesAnneePromotion;
     }
 
     private boolean matches(String value, String searchTerm) {

@@ -1,5 +1,6 @@
 package nc.unc.application.views.formation;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
@@ -7,6 +8,8 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
@@ -20,6 +23,7 @@ import nc.unc.application.data.entity.Formation;
 import nc.unc.application.data.service.EtudiantService;
 import nc.unc.application.data.service.FormationService;
 import nc.unc.application.views.MainLayout;
+import nc.unc.application.views.etudiant.EtudiantConsult;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -41,24 +45,34 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
   Optional<Formation> formationExist;
   Formation formation;
 
+  EtudiantConsult modalConsult;
   String idFormationStr;
   Span span = new Span("");
   Div messageErreur;
   H2 libelleFormation = new H2();
 
+  private final Button close = new Button("Fermer");
+  private final Button delete = new Button("Supprimer l'étudiant");
+
   Grid<Etudiant> etudiantGrid = new Grid<>(Etudiant.class, false);
   Grid.Column<Etudiant> fullNameColumn;
-  Grid.Column<Etudiant> nomColumn;
   Grid.Column<Etudiant> anneePromotionColumn;
 
   public FormationEtudiantView(FormationService formationService, EtudiantService etudiantService) {
     this.formationService = formationService;
     this.etudiantService = etudiantService;
 
+    // ajout de la modale de consultation de l'étudiant dans la vue
+    modalConsult = new EtudiantConsult();
+    // On définit que les différents events vont déclencher une fonction
+    // contenant l'objet etudiant (dans le cas du delete dans la modalConsult ou du save dans modalNewOrdEdit).
+    modalConsult.addListener(EtudiantConsult.CloseEvent.class, e -> closeConsultModal());
+    modalConsult.hideDeleteButton();
+
     setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
     configureGrid(); // configuration de la grille (colonnes, données...)
 
-    add(libelleFormation, etudiantGrid);
+    add(libelleFormation, etudiantGrid, modalConsult);
   }
 
   @Override
@@ -74,18 +88,14 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
     etudiantGrid.setSizeFull();
     // ajout des colonnes
     fullNameColumn = etudiantGrid.addColumn(etudiant -> etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant());
-    // nomColumn = etudiantGrid.addColumn(Etudiant::getNomEtudiant);
     anneePromotionColumn = etudiantGrid.addColumn(Etudiant::getAnneePromotion);
     etudiantGrid.addColumn(Etudiant::getAdmis);
     etudiantGrid.addColumn(Etudiant::getSituationUnc);
 
     // ajout du bouton de consultation d'un étudiant
-    /*etudiantGrid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
+    etudiantGrid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultEtudiant(etudiant);
     }));
-    etudiantGrid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
-      editEtudiantModal(etudiant);
-    }));*/
 
     // on définit que chaque colonne à une largeur autodéterminée
     etudiantGrid.getColumns().forEach(col -> col.setAutoWidth(true));
@@ -241,5 +251,18 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
     this.remove(libelleFormation, etudiantGrid);
     messageErreur = new Div(new Span(message));
     this.add(messageErreur);
+  }
+
+  // ouverture de modale de consultation d'un étudiant
+  public void consultEtudiant(Etudiant etudiant) {
+    modalConsult.setEtudiant(etudiant);
+    modalConsult.open();
+  }
+
+  // fermeture de la modale de consultation d'un étudiant
+  private void closeConsultModal() {
+    modalConsult.setEtudiant(null);
+    modalConsult.close();
+    etudiantGrid.asSingleSelect().clear();
   }
 }

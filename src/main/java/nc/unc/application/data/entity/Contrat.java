@@ -35,7 +35,7 @@ public class Contrat implements Cloneable{
   private String communeRepresentant;
 
   @Column(name = "telephone_representant")
-  private String telephoneRepresentant;
+  private int telephoneRepresentant;
 
   @Email
   @Column(name = "email_representant")
@@ -263,11 +263,11 @@ public class Contrat implements Cloneable{
     this.communeRepresentant = communeRepresentant;
   }
 
-  public String getTelephoneRepresentant() {
+  public int getTelephoneRepresentant() {
     return telephoneRepresentant;
   }
 
-  public void setTelephoneRepresentant(String telephoneRepresentant) {
+  public void setTelephoneRepresentant(int telephoneRepresentant) {
     this.telephoneRepresentant = telephoneRepresentant;
   }
 

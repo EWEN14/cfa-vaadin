@@ -37,8 +37,8 @@ public class ContratNewOrEdit {
   DatePicker debutContrat = new DatePicker("Date de Naissance");
 
   TextField prenom = new TextField("Type contrat");
-  TextField prenom = new TextField("Type contrat");
-  TextField prenom = new TextField("Type contrat");
+  // TextField prenom = new TextField("Type contrat");
+  // TextField prenom = new TextField("Type contrat");
   IntegerField telephone1 = new IntegerField("Téléphone 1");
 
   // utilisation de comboBox lorsque qu'il y a beaucoup de choix, l'utilisateur peut ainsi chercher en tapant dans

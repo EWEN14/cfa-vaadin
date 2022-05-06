@@ -86,12 +86,14 @@ public class TuteurView extends VerticalLayout {
         grid.addClassNames("tuteur-grid");
         grid.setSizeFull();
         grid.setColumns("prenomTuteur", "nomTuteur", "dateNaissanceTuteur");
+        // bouton consultation tuteur
         grid.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.EYE), click -> {
             consultTuteur(tuteur);
-        }));
+        })).setHeader("Consulter");;
+        // bouton édition tuteur
         grid.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
             editTuteurModal(tuteur);
-        }));
+        })).setHeader("Éditer");;
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
 

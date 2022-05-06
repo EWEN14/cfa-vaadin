@@ -94,10 +94,11 @@ public class EtudiantView extends VerticalLayout {
     // ajout du bouton de consultation d'un étudiant
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultEtudiant(etudiant);
-    }));
+    })).setHeader("Consulter");;
+    // bouton édition étudiant
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
       editEtudiantModal(etudiant);
-    }));
+    })).setHeader("Éditer");;
     // on définit que chaque colonne à une largeur autodéterminée
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
   }

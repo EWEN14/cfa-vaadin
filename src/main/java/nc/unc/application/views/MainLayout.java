@@ -139,15 +139,17 @@ public class MainLayout extends AppLayout {
 
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
-                new MenuItemInfo("Hello World", "la la-globe", HelloWorldView.class), //
+                new MenuItemInfo("Hello World", "la la-globe", HelloWorldView.class),
 
-                new MenuItemInfo("About", "la la-file", AboutView.class), //
+                new MenuItemInfo("About", "la la-file", AboutView.class),
 
                 new MenuItemInfo("Étudiants", "las la-user-graduate", EtudiantView.class),
 
                 new MenuItemInfo("Tuteurs", "las la-user-tie", TuteurView.class),
 
                 new MenuItemInfo("Formations", "las la-award", FormationListView.class),
+
+                new MenuItemInfo("Contrats", "las la-file-contract", ContratView.class),
 
                 new MenuItemInfo("Logs", "las la-history", LogsView.class)
         };

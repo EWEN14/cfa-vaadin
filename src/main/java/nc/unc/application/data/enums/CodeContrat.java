@@ -4,8 +4,13 @@ import org.aspectj.apache.bcel.classfile.Code;
 
 public enum CodeContrat {
 
-  SANSCONTRAT("SANS CONTRAT"),
-  ENATENTEDECUA("EN ATTENTE DECUA");
+  ENATTENTEDECUA("0. EN ATTENTE DECUA"),
+  SANSCONTRAT("1. SANS CONTRAT"),
+  CUAENCOURS("2. CUA EN COURS"),
+  CUADEPOT("3. CUA - DÉPÔT ALFRESCO"),
+  RUPTURE("4. RUPTURE + DÉMISSION UNC"),
+  CHANGEMENTENTR("5. CHANGEMENT D'ENTREPRISE"),
+  STAGE("6. STAGE");
 
   private String codeContrat;
 

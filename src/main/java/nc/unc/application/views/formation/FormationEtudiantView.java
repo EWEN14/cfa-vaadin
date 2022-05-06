@@ -145,7 +145,7 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
     HeaderRow headerRow = etudiantGrid.appendHeaderRow();
 
     // ajout de nos header customisés sur nos colonnes
-    headerRow.getCell(fullNameColumn).setComponent(createFilterHeader("Prénom", etudiantFilter::setFullName));
+    headerRow.getCell(fullNameColumn).setComponent(createFilterHeader("Prénom NOM", etudiantFilter::setFullName));
     headerRow.getCell(anneePromotionColumn).setComponent(createYearFilterHeader(etudiantFilter::setAnneePromotion));
   }
 

@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class ContratService {
 
-  private ContratRepository contratRepository;
+  private final ContratRepository contratRepository;
 
   public ContratService(ContratRepository contratRepository){
     this.contratRepository = contratRepository;
@@ -24,10 +24,10 @@ public class ContratService {
   }
 
   public List<Contrat> findAllContrats(String filtertext){
-    if(filtertext != null){
-      return contratRepository.search(filtertext);
-    }else{
+    if(filtertext == null || filtertext.isEmpty()){
       return contratRepository.findAll();
+    } else {
+      return contratRepository.search(filtertext);
     }
   }
 

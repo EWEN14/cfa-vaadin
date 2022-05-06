@@ -89,8 +89,7 @@ public class Etudiant implements Cloneable {
   @Column(name = "nationalite")
   private String nationalite;
 
-  @Max(999999)
-  @Min(100000)
+  @Range(message = "Le numéro Cafat est composé de 6 chiffres", min = 100000, max = 999999)
   @Column(name = "numero_cafat")
   private Integer numeroCafatEtudiant;
 

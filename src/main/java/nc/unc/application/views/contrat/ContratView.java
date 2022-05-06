@@ -4,6 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -26,11 +27,14 @@ import javax.annotation.security.PermitAll;
 @PermitAll // tous les utilisateurs connectés peuvent aller sur cette page
 public class ContratView extends VerticalLayout {
 
-  Grid<Contrat> grid = new Grid<>(Contrat.class);
+  Grid<Contrat> grid = new Grid<>(Contrat.class, false);
+
   TextField filterText = new TextField();
   Button addContratButton;
+
   //EtudiantConsult modalConsult;
   //EtudiantNewOrEdit modalNewOrEdit;
+
   ContratService service;
   LogEnregistrmentService logEnregistrmentService;
 
@@ -43,8 +47,8 @@ public class ContratView extends VerticalLayout {
     setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
     configureGrid(); // configuration de la grille (colonnes, données...)
 
-    // ajout de la toolbar (recherche + nouveau contrat) et le grid
-    // et des modales de consultation et de création/modification
+    // ajout de la toolbar (recherche + nouveau contrat) et la grid
+    // et des modales de consultation et de création/modification TODO
     add(getToolbar(), grid);
     // initialisation des données de la grille à l'ouverture de la vue
     updateList();
@@ -52,20 +56,27 @@ public class ContratView extends VerticalLayout {
   }
 
   private void configureGrid() {
-
     grid.addClassNames("contrat-grid");
     grid.setSizeFull();
 
     // ajout des colonnes
-    //grid.setColumns("étudiant", "tuteur", "entreprise", "formation");
+    grid.addColumn(contrat -> contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant()).setHeader("Étudiant");
+    grid.addColumn(contrat -> contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur()).setHeader("Tuteur");
+    grid.addColumn(contrat -> contrat.getEntreprise().getEnseigne()).setHeader("Entreprise");
+    grid.addColumn(contrat -> contrat.getFormation().getCodeFormation()).setHeader("Formation");
+    grid.addColumn(Contrat::getCodeContrat).setHeader("Code Contrat");
 
     // ajout du bouton de consultation d'un contrat
     grid.addComponentColumn(contrat -> new Button(new Icon(VaadinIcon.EYE), click -> {
       //consultEtudiant(etudiant);
-    }));
+      Notification.show("modale consult");
+    })).setHeader("Consulter");
+    // ajout du bouton d'édition d'un contrat
     grid.addComponentColumn(contrat -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
       //editEtudiantModal(etudiant);
-    }));
+      Notification.show("modale new or edit");
+    })).setHeader("Éditer");
+
     // on définit que chaque colonne à une largeur autodéterminée
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
   }
@@ -93,6 +104,4 @@ public class ContratView extends VerticalLayout {
   private void updateList() {
     grid.setItems(service.findAllContrats(filterText.getValue()));
   }
-
-
 }

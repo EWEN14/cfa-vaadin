@@ -23,6 +23,7 @@ import java.util.Optional;
 import nc.unc.application.data.entity.User;
 import nc.unc.application.security.AuthenticatedUser;
 import nc.unc.application.views.about.AboutView;
+import nc.unc.application.views.contrat.ContratView;
 import nc.unc.application.views.etudiant.EtudiantView;
 import nc.unc.application.views.formation.FormationListView;
 import nc.unc.application.views.helloworld.HelloWorldView;

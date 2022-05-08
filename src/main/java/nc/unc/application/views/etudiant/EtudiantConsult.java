@@ -45,6 +45,7 @@ public class EtudiantConsult extends Dialog {
   private final FormLayout formEtudiantInfos = new FormLayout();
   private final TextField nomEtudiant = new TextField("NOM");
   private final TextField prenomEtudiant = new TextField("Prénom");
+  private IntegerField numeroEtudiant = new IntegerField("N° Étudiant");
   // utilisation de select lorsque nombre de choix assez petis
   private final Select<Civilite> civiliteEtudiant = new Select<>();
   private final DatePicker dateNaissanceEtudiant = new DatePicker("Date de Naissance");
@@ -53,7 +54,7 @@ public class EtudiantConsult extends Dialog {
   private final IntegerField telephoneEtudiant2 = new IntegerField("Téléphone 2");
   private final EmailField emailEtudiant = new EmailField("Email");
   private final TextField dernierDiplomeObtenuOuEnCours = new TextField("Dernier diplôme obtenu ou en cours");
-  private final Select<Integer> niveauDernierDiplome = new Select<>();
+  private final IntegerField niveauDernierDiplome = new IntegerField("Niveau dernier diplôme obtenu");
   private final IntegerField anneeObtentionDernierDiplome = new IntegerField("Année d'obtention du dernier diplôme");
   private final TextField admis = new TextField("Admis");
   private final TextField situationUnc = new TextField("Situation à l'UNC");
@@ -67,6 +68,7 @@ public class EtudiantConsult extends Dialog {
   private final TextField communeEtudiant = new TextField("Commune");
   private final TextField situationAnneePrecedente = new TextField("Situation l'année précédente");
   private final TextField etablissementDeProvenance = new TextField("Établissement de provenance");
+  private final TextField dernierEmploiOccupe = new TextField("Dernier emploi occupé");
   private final TextField parcours = new TextField("Parcours");
   private final IntegerField anneePromotion = new IntegerField("Année de début de la promotion");
   private final Checkbox travailleurHandicape = new Checkbox("Travailleur Handicapé");
@@ -151,10 +153,10 @@ public class EtudiantConsult extends Dialog {
     );
 
     // on définit les champs qu'il y aura dans le formulaire d'informations générales de l'étudiant
-    formEtudiantInfos.add(nomEtudiant, prenomEtudiant, civiliteEtudiant, dateNaissanceEtudiant, ageEtudiant, telephoneEtudiant1, telephoneEtudiant2,
+    formEtudiantInfos.add(nomEtudiant, prenomEtudiant, numeroEtudiant, civiliteEtudiant, dateNaissanceEtudiant, ageEtudiant, telephoneEtudiant1, telephoneEtudiant2,
             emailEtudiant, dernierDiplomeObtenuOuEnCours, niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc,
             lieuNaissance, nationalite, numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente,
-            etablissementDeProvenance, parcours, anneePromotion, travailleurHandicape, veepap, priseEnChargeFraisInscription,
+            etablissementDeProvenance, dernierEmploiOccupe, parcours, anneePromotion, travailleurHandicape, veepap, priseEnChargeFraisInscription,
             obtentionDiplomeMention, observationsEtudiant);
     // pareil, mais pour le formulaire relatif à son entreprise
     formEtudiantEntrepriseInfos.add(enseigne, raisonSociale, statutActifEntreprise, telephoneContactCfa);
@@ -228,6 +230,7 @@ public class EtudiantConsult extends Dialog {
     // étudiant
     nomEtudiant.setReadOnly(true);
     prenomEtudiant.setReadOnly(true);
+    numeroEtudiant.setReadOnly(true);
     civiliteEtudiant.setReadOnly(true);
     dateNaissanceEtudiant.setReadOnly(true);
     ageEtudiant.setReadOnly(true);
@@ -249,6 +252,7 @@ public class EtudiantConsult extends Dialog {
     communeEtudiant.setReadOnly(true);
     situationAnneePrecedente.setReadOnly(true);
     etablissementDeProvenance.setReadOnly(true);
+    dernierEmploiOccupe.setReadOnly(true);
     parcours.setReadOnly(true);
     travailleurHandicape.setReadOnly(true);
     veepap.setReadOnly(true);

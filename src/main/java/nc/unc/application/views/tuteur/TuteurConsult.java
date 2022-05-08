@@ -107,7 +107,7 @@ public class TuteurConsult extends Dialog {
 
     // grille des habilitations du tuteur
     tuteurHabilitationGrid.addClassName("tuteur-habilitation-grid");
-    tuteurHabilitationGrid.setColumns("dateFormation","formation.libelleFormation", "statutFormation");
+    tuteurHabilitationGrid.setColumns("dateFormation","formation.libelleFormation", "statutFormation", "modaliteFormation", "dateHabilitation");
 
     // grille des étudiants cadrés par le tuteur
     tuteurEtudiantsGrid.addClassName("tuteur-etudiants-grid");

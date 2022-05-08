@@ -35,6 +35,9 @@ public class Etudiant implements Cloneable {
   @Column(name = "prenom", nullable = false)
   private String prenomEtudiant;
 
+  @Column(name = "numero_etudiant")
+  private Integer numeroEtudiant;
+
   @NotNull(message = "La civilité ne peut pas être nulle")
   @Enumerated(EnumType.STRING)
   @Column(name = "civilite", nullable = false)
@@ -112,6 +115,9 @@ public class Etudiant implements Cloneable {
   @Column(name = "etablissement_de_provenance")
   private String etablissementDeProvenance;
 
+  @Column(name = "dernier_emploi_occupe")
+  private String dernierEmploiOccupe;
+
   @Column(name = "travailleur_handicape")
   private Boolean travailleurHandicape;
 
@@ -186,6 +192,14 @@ public class Etudiant implements Cloneable {
 
   public void setPrenomEtudiant(String prenom) {
     this.prenomEtudiant = prenom;
+  }
+
+  public Integer getNumeroEtudiant() {
+    return numeroEtudiant;
+  }
+
+  public void setNumeroEtudiant(Integer numeroEtudiant) {
+    this.numeroEtudiant = numeroEtudiant;
   }
 
   public Civilite getCiviliteEtudiant() {
@@ -356,6 +370,14 @@ public class Etudiant implements Cloneable {
     this.etablissementDeProvenance = etablissementDeProvenance;
   }
 
+  public String getDernierEmploiOccupe() {
+    return dernierEmploiOccupe;
+  }
+
+  public void setDernierEmploiOccupe(String dernierEmploiOccupe) {
+    this.dernierEmploiOccupe = dernierEmploiOccupe;
+  }
+
   public Boolean getTravailleurHandicape() {
     return travailleurHandicape;
   }
@@ -492,6 +514,7 @@ public class Etudiant implements Cloneable {
             "\n id=" + id +
             "\n nomEtudiant='" + nomEtudiant + '\'' +
             "\n prenomEtudiant='" + prenomEtudiant + '\'' +
+            "\n numeroEtudiant=" + numeroEtudiant +
             "\n civiliteEtudiant=" + civiliteEtudiant +
             "\n sexeEtudiant=" + sexeEtudiant +
             "\n dateNaissanceEtudiant=" + dateNaissanceEtudiant +
@@ -513,6 +536,7 @@ public class Etudiant implements Cloneable {
             "\n communeEtudiant='" + communeEtudiant + '\'' +
             "\n situationAnneePrecedente='" + situationAnneePrecedente + '\'' +
             "\n etablissementDeProvenance='" + etablissementDeProvenance + '\'' +
+            "\n dernierEmploiOccupe='" + dernierEmploiOccupe + '\'' +
             "\n travailleurHandicape=" + travailleurHandicape +
             "\n parcours='" + parcours + '\'' +
             "\n veepap=" + veepap +

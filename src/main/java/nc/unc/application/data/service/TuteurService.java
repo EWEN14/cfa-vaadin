@@ -16,13 +16,11 @@ public class TuteurService {
 
     private final TuteurRepository tuteurRepository;
     private final TuteurHabilitationRepository tuteurHabilitationRepository;
-    private final EntrepriseRepository entrepriseRepository;
 
     //Constructeur
-    public TuteurService(TuteurRepository tuteurRepository, TuteurHabilitationRepository tuteurHabilitationRepository, EntrepriseRepository entrepriseRepository) {
+    public TuteurService(TuteurRepository tuteurRepository, TuteurHabilitationRepository tuteurHabilitationRepository) {
         this.tuteurRepository = tuteurRepository;
         this.tuteurHabilitationRepository = tuteurHabilitationRepository;
-        this.entrepriseRepository = entrepriseRepository;
     }
 
     //Récupérer les tuteurs
@@ -65,10 +63,5 @@ public class TuteurService {
     // supprimer une habilitation tuteur
     public void deleteTuteurHabilitation(TuteurHabilitation tuteurHabilitation) {
         tuteurHabilitationRepository.delete(tuteurHabilitation);
-    }
-
-    // Récupérer toutes les entreprises
-    public List<Entreprise> findAllEntreprises() {
-        return entrepriseRepository.findAll();
     }
 }

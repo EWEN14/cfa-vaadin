@@ -10,9 +10,10 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -25,7 +26,6 @@ import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.*;
 import nc.unc.application.data.enums.CodeContrat;
 import nc.unc.application.data.enums.Commune;
-import nc.unc.application.views.etudiant.EtudiantNewOrEdit;
 
 import java.util.List;
 
@@ -42,84 +42,84 @@ public class ContratNewOrEdit extends Dialog {
   ComboBox<Tuteur> tuteur = new ComboBox<>("Tuteur");
 
   Select<String> codeContrat = new Select<>(CodeContrat.getCodeContratStr());
-  Select<Integer> typeContrat = new Select<>(1,2,3,4);
+  Select<String> typeContrat = new Select<>("1","2","3","4");
 
-  Div representantLegal = new Div(new Span("Représentant légal du salarié et dérogation d'âge"));
+  H3 titre = new H3();
+  Div representantLegal = new Div(new H4("Représentant légal du salarié et dérogation d'âge"));
   TextField  nomRepresentantLegal = new TextField("Nom représentant légal");
   TextField prenomRepresentantLegal = new TextField("Prénom représentant légal");
-  Select<String> relationAvecSalarie = new Select<>("Père", "Mère, Tuteur");
+  Select<String> relationAvecSalarie = new Select<>("Père", "Mère", "Tuteur");
   TextField adresseRepresentant = new TextField("Adresse représentant légal");
-  TextField codePostalRepresentant = new TextField("Code postal représentant légal");
+  IntegerField codePostalRepresentant = new IntegerField("Code postal représentant légal");
   ComboBox<String> communeRepresentant = new ComboBox<>("Commune du représentant légal");
   IntegerField telephoneRepresentant = new IntegerField("Téléphone du représentant légal");
   EmailField emailRepresentant = new EmailField("Email du représentant légal");
   Checkbox derogationAge = new Checkbox("Dérogation d'âge");
   DatePicker dateDelivranceDerogationAge = new DatePicker("Date de délivrance de la dérogation d'âge");
 
-  Div cadreAdministration = new Div(new Span("Cadre réservé à l'administration"));
+  Div cadreAdministration = new Div(new H4("Cadre réservé à l'administration"));
   TextField cadreAdminNumEnregistrementContrat = new TextField("Numéro d'enregistrement du contrat");
   TextField cadreAdminNumAvenant = new TextField("Numéro d'avenant");
   DatePicker cadreAdminRecuLe = new DatePicker("Reçu le");
 
-  Div infosContrat = new Div(new Span("Informations liées au contrat"));
+  Div infosContrat = new Div(new H4("Informations liées au contrat"));
   DatePicker debutContrat = new DatePicker("Date de début du contrat");
-  DatePicker finContrat = new DatePicker("Date de début du contrat");
+  DatePicker finContrat = new DatePicker("Date de fin du contrat");
   TextField emploiOccupeSalarieEtudiant = new TextField("Emploi occupé par le salarié");
   TextField codeRomeEmploiOccupe = new TextField("Code ROME de l'emploi occupé");
   IntegerField dureePeriodeEssai = new IntegerField("Durée de la période d'essai (nombre de semaines)");
   // intitulé formation pro : pas utile car intitulé de la formation qu'on sélectionne plus tôt, à retirer de l'entité TODO
   Select<Integer> niveauCertificationPro = new Select<>(3,4,5,6,7,8);
-  TextField formationAssuree = new TextField("Établissement assurant la formation");
 
   TextField numeroConventionFormation = new TextField("Numéro de la convention de Formation");
   IntegerField semainesEntreprise = new IntegerField("Nombre de semaines en entreprise");
   IntegerField heuresFormation = new IntegerField("Nombre d'heures en formation");
   IntegerField semainesFormation = new IntegerField("Nombre de semaines en formation");
   ComboBox<String> lieuFormation = new ComboBox<>("Lieu de la formation");
-  IntegerField dureeHebdomadaireTravail = new IntegerField("Durée hebsomadaire de travail");
+  IntegerField dureeHebdomadaireTravail = new IntegerField("Durée hebdomadaire de travail");
 
-  Div decua = new Div(new Span("DECUA"));
+  Div decua = new Div(new H4("DECUA"));
   DatePicker dateReceptionDecua = new DatePicker("Date de réception du DECUA");
   DatePicker dateEnvoiRpDecua = new DatePicker("Date d'envoi au référent pédagogique du DECUA pour validation");
   DatePicker dateRetourRpDecua = new DatePicker("Date de retour validation du DECUA par le référent pédagogique");
 
-  Div retourCuaEtConvention = new Div(new Span("Retour CUA et convention signée"));
+  Div retourCuaEtConvention = new Div(new H4("Retour CUA et convention signée"));
   DatePicker dateEnvoiEmailCuaConvention = new DatePicker("Date de réception des originaux");
   DatePicker dateDepotAlfrescoCuaConvSigne = new DatePicker("Date de dépôt Alfresco");
 
-  Div convention = new Div(new Span("Convention"));
-  DatePicker dateReceptionOriginauxConvention = new DatePicker("Exemplaire originaux (x3) remis à l'alternant ou l'entreprise");
+  Div convention = new Div(new H4("Convention"));
+  DatePicker dateReceptionOriginauxConvention = new DatePicker("Date de réception des originaux");
   TextField exemplaireOriginauxRemisAlternantOuEntreprise = new TextField("Exemplaires originaux (x3) remis à l'alternant ou à l'entreprise");
 
-  VerticalLayout ruptureContainer = new VerticalLayout();
-  Div rupture = new Div(new Span("Rupture"));
+  FormLayout ruptureContainer = new FormLayout();
+  Div rupture = new Div(new H4("Rupture"));
   DatePicker dateRupture = new DatePicker("Date de rupture du contrat");
   TextArea motifRupture = new TextArea("Motif de la rupture");
 
-  VerticalLayout avenant1Container = new VerticalLayout();
-  Div avenant1 = new Div(new Span("Avenant N°1"));
+  FormLayout avenant1Container = new FormLayout();
+  Div avenant1 = new Div(new H4("Avenant N°1"));
   TextArea motifAvn1 = new TextArea("Motif de l'avenant");
-  Div suiviAvenantCua1 = new Div(new Span("Suivi Avenant CUA N°1"));
+  Div suiviAvenantCua1 = new Div(new H5("Suivi Avenant CUA N°1"));
   DatePicker dateMailOuRdvSignatureCuaAvn1 = new DatePicker("Date mail ou RDV pour signature");
   DatePicker dateDepotAlfrescoCuaAvn1 = new DatePicker("Date de dépôt sur Alfresco");
-  Div suiviAvenantConv1 = new Div(new Span("Suivi Avenant Convention N°1"));
+  Div suiviAvenantConv1 = new Div(new H5("Suivi Avenant Convention N°1"));
   DatePicker dateMailOuRdvSignatureConvAvn1 = new DatePicker("Date mail ou RDV pour signature");
   DatePicker dateDepotAlfrescoConvAvn1 = new DatePicker("Date de dépôt sur Alfresco");
   DatePicker dateRemiseOriginauxAvn1 = new DatePicker("Date de remise des exemplaires originaux (x3) à l'alternant");
 
-  VerticalLayout avenant2Container = new VerticalLayout();
-  Div avenant2 = new Div(new Span("Avenant N°2"));
+  FormLayout avenant2Container = new FormLayout();
+  Div avenant2 = new Div(new H4("Avenant N°2"));
   TextArea motifAvn2 = new TextArea("Motif de l'avenant");
-  Div suiviAvenantCua2 = new Div(new Span("Suivi Avenant CUA N°1"));
+  Div suiviAvenantCua2 = new Div(new H5("Suivi Avenant CUA N°1"));
   DatePicker dateMailOuRdvSignatureCuaAvn2 = new DatePicker("Date mail ou RDV pour signature");
   DatePicker dateDepotAlfrescoCuaAvn2 = new DatePicker("Date de dépôt sur Alfresco");
   DatePicker dateRemiseOriginauxCuaAvn2 = new DatePicker("Date de remise des exemplaires originaux (x3) à l'alternant");
-  Div suiviAvenantConv2 = new Div(new Span("Suivi Avenant Convention N°1"));
+  Div suiviAvenantConv2 = new Div(new H5("Suivi Avenant Convention N°1"));
   DatePicker dateMailOuRdvSignatureConvAvn2 = new DatePicker("Date mail ou RDV pour signature");
   DatePicker dateDepotAlfrescoConvAvn2 = new DatePicker("Date de dépôt sur Alfresco");
   DatePicker dateRemiseOriginauxAvn2 = new DatePicker("Date de remise des exemplaires originaux (x3) à l'alternant");
 
-  Div lea = new Div(new Span("Formation LEA"));
+  Div lea = new Div(new H4("Formation LEA"));
   DatePicker formationLea = new DatePicker("Date de formation au LEA");
 
   Binder<Contrat> binder = new BeanValidationBinder<>(Contrat.class);
@@ -158,7 +158,7 @@ public class ContratNewOrEdit extends Dialog {
     codeRomeEmploiOccupe.setPlaceholder("ex: M1234");
     codeRomeEmploiOccupe.setPattern("[A-Z][0-9]{4}$");
 
-    // ajoutd de labels sur les select
+    // ajout de labels sur les select
     codeContrat.setLabel("Code du Contrat");
     typeContrat.setLabel("Type du Contrat");
     niveauCertificationPro.setLabel("Niveau de la certification professionnelle");
@@ -166,30 +166,28 @@ public class ContratNewOrEdit extends Dialog {
 
     // on passe les communes de NC dans nos combo box en ayant besoin
     communeRepresentant.setItems(Commune.getCommunesStr());
+    communeRepresentant.setClearButtonVisible(true);
     lieuFormation.setItems(Commune.getCommunesStr());
+    lieuFormation.setClearButtonVisible(true);
 
-    // valeur par défaut qui sera vraisemblablement la plus utilisée
-    formationAssuree.setValue("CFA SUP de l'Université de la Nouvelle-Calédonie");
-
-    // ajout des éléments dans les verticales correspondants à des champs qui seront cachés ou non selon les circonstances
-    ruptureContainer.add(rupture, motifRupture, dateRupture);
-    avenant1Container.add(avenant1, motifAvn1, suiviAvenantCua1, dateMailOuRdvSignatureCuaAvn1, dateDepotAlfrescoCuaAvn1,
-            suiviAvenantConv1, dateMailOuRdvSignatureConvAvn1, dateDepotAlfrescoConvAvn1, dateRemiseOriginauxAvn1);
-    avenant2Container.add(avenant2, motifAvn2, suiviAvenantCua2, dateMailOuRdvSignatureCuaAvn2, dateDepotAlfrescoCuaAvn2,
-            dateRemiseOriginauxCuaAvn2, suiviAvenantConv2, dateMailOuRdvSignatureConvAvn2, dateDepotAlfrescoConvAvn2, dateRemiseOriginauxAvn2);
-
-    // ajout des élément au formulaire
-    form.add(etudiant, formation, entreprise, tuteur, codeContrat, typeContrat, representantLegal, nomRepresentantLegal,
+    // ajout des élément au formulaire principal
+    form.add(etudiant, formation, entreprise, tuteur, codeContrat, typeContrat, representantLegal, new Div(), nomRepresentantLegal,
             prenomRepresentantLegal, relationAvecSalarie, adresseRepresentant, codePostalRepresentant, communeRepresentant,
-            telephoneRepresentant, emailRepresentant, derogationAge, dateDelivranceDerogationAge, cadreAdministration, cadreAdminNumEnregistrementContrat, cadreAdminNumAvenant,
-            cadreAdminRecuLe, infosContrat, debutContrat, finContrat, emploiOccupeSalarieEtudiant, codeRomeEmploiOccupe, dureePeriodeEssai, numeroConventionFormation, semainesEntreprise,
-            heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail, decua, dateReceptionDecua, dateEnvoiRpDecua,
-            dateRetourRpDecua, retourCuaEtConvention, dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention,
-            dateReceptionOriginauxConvention, exemplaireOriginauxRemisAlternantOuEntreprise, ruptureContainer,
-            avenant1Container, avenant2Container, lea, createButtonsLayout());
-    
+            telephoneRepresentant, emailRepresentant, derogationAge, dateDelivranceDerogationAge, cadreAdministration, new Div(), cadreAdminNumEnregistrementContrat, cadreAdminNumAvenant,
+            cadreAdminRecuLe, new Div(), infosContrat, new Div(), debutContrat, finContrat, emploiOccupeSalarieEtudiant, codeRomeEmploiOccupe, dureePeriodeEssai, niveauCertificationPro, numeroConventionFormation, semainesEntreprise,
+            heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail, decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua,
+            dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(), dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(),
+            dateReceptionOriginauxConvention, exemplaireOriginauxRemisAlternantOuEntreprise, lea, new Div(), formationLea);
+
+    // ajout des petits formulaires correspondants à des champs qui seront cachés ou non selon les circonstances
+    ruptureContainer.add(rupture, new Div(), motifRupture, dateRupture);
+    avenant1Container.add(avenant1, new Div(), motifAvn1, new Div(), suiviAvenantCua1, new Div(), dateMailOuRdvSignatureCuaAvn1, dateDepotAlfrescoCuaAvn1,
+            suiviAvenantConv1, new Div(), dateMailOuRdvSignatureConvAvn1, dateDepotAlfrescoConvAvn1, dateRemiseOriginauxAvn1);
+    avenant2Container.add(avenant2, new Div(), motifAvn2, new Div(), suiviAvenantCua2, new Div(), dateMailOuRdvSignatureCuaAvn2, dateDepotAlfrescoCuaAvn2,
+            dateRemiseOriginauxCuaAvn2, new Div(), suiviAvenantConv2, new Div(), dateMailOuRdvSignatureConvAvn2, dateDepotAlfrescoConvAvn2, dateRemiseOriginauxAvn2);
+
     // ajout des éléments à la modale
-    this.add(form);
+    this.add(titre, form, ruptureContainer, avenant1Container, avenant2Container, createButtonsLayout());
   }
 
   private HorizontalLayout createButtonsLayout() {
@@ -215,9 +213,12 @@ public class ContratNewOrEdit extends Dialog {
     if (contrat != null && contrat.getId() != null) {
       try {
         this.cloneContrat = (Contrat) contrat.clone();
+        titre.add("Modification d'un contrat");
       } catch (CloneNotSupportedException e) {
         e.printStackTrace();
       }
+    } else {
+      titre.add("Création d'un nouveau contrat");
     }
     // alimentation du binder
     binder.readBean(contrat);

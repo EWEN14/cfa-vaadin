@@ -14,10 +14,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.enums.Sexe;
-import nc.unc.application.data.service.EtudiantService;
-import nc.unc.application.data.service.FormationService;
-import nc.unc.application.data.service.LogEnregistrmentService;
-import nc.unc.application.data.service.TuteurService;
+import nc.unc.application.data.service.*;
 import nc.unc.application.views.MainLayout;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -39,13 +36,12 @@ public class TuteurView extends VerticalLayout {
     TuteurConsult tuteurModalConsult;
 
     private TuteurService tuteurService;
-    private EtudiantService etudiantService;
+    private EntrepriseService entrepriseService;
     private LogEnregistrmentService logEnregistrmentService;
 
-    public TuteurView(TuteurService tuteurService, FormationService formationService, EtudiantService etudiantService, LogEnregistrmentService logEnregistrmentService){
+    public TuteurView(TuteurService tuteurService, EntrepriseService entrepriseService, FormationService formationService, EtudiantService etudiantService, LogEnregistrmentService logEnregistrmentService){
 
         this.tuteurService = tuteurService;
-        this.etudiantService = etudiantService;
         this.logEnregistrmentService = logEnregistrmentService;
 
         addClassName("list-view");
@@ -58,7 +54,7 @@ public class TuteurView extends VerticalLayout {
         tuteurModalConsult.addListener(TuteurConsult.DeleteEvent.class, this::deleteTuteur);
         tuteurModalConsult.addListener(TuteurConsult.CloseEvent.class, e -> closeConsultModal());
 
-        tuteurModal = new TuteurNewOrEdit(tuteurService.findAllEntreprises(), formationService.findAllFormations(""),
+        tuteurModal = new TuteurNewOrEdit(entrepriseService.findAllEntreprises(), formationService.findAllFormations(""),
                 formationService, tuteurService, logEnregistrmentService);
         tuteurModal.addListener(TuteurNewOrEdit.SaveEvent.class, this::saveTuteur);
         tuteurModal.addListener(TuteurNewOrEdit.SaveEditedEvent.class, this::saveEditedTuteur);

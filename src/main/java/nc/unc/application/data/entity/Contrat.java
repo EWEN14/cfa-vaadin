@@ -77,8 +77,6 @@ public class Contrat implements Cloneable {
   @Column(name = "emploi_occupe_salarie_etudiant")
   private String emploiOccupeSalarieEtudiant;
 
-  @NotNull(message = "Le code rome ne peut pas être nul")
-  @Pattern(message = "Le code rome est composé d'une lettre majuscule puis de 4 chiffres. Ex : M1234", regexp = "[A-Z][0-9]{4}$")
   @Column(name = "code_rome_emploi_occupe", length = 15)
   private String codeRomeEmploiOccupe;
 
@@ -87,9 +85,6 @@ public class Contrat implements Cloneable {
 
   @Column(name = "niveau_certification_pro")
   private Integer niveauCertificationPro;
-
-  @Column(name = "formation_assuree")
-  private String formationAssuree;
 
   @Column(name = "numero_convention_formation")
   private String numeroConventionFormation;
@@ -380,14 +375,6 @@ public class Contrat implements Cloneable {
 
   public void setNiveauCertificationPro(Integer niveauCertificationPro) {
     this.niveauCertificationPro = niveauCertificationPro;
-  }
-
-  public String getFormationAssuree() {
-    return formationAssuree;
-  }
-
-  public void setFormationAssuree(String formationAssuree) {
-    this.formationAssuree = formationAssuree;
   }
 
   public String getNumeroConventionFormation() {
@@ -708,7 +695,6 @@ public class Contrat implements Cloneable {
             "\n codeRomeEmploiOccupe='" + codeRomeEmploiOccupe + '\'' +
             "\n dureePeriodeEssai=" + dureePeriodeEssai +
             "\n niveauCertificationPro=" + niveauCertificationPro +
-            "\n formationAssuree='" + formationAssuree + '\'' +
             "\n numeroConventionFormation='" + numeroConventionFormation + '\'' +
             "\n semainesEntreprise=" + semainesEntreprise +
             "\n heuresFormation=" + heuresFormation +

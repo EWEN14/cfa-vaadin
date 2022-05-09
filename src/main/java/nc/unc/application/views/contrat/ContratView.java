@@ -12,9 +12,10 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Contrat;
-import nc.unc.application.data.service.ContratService;
-import nc.unc.application.data.service.LogEnregistrmentService;
+import nc.unc.application.data.entity.Etudiant;
+import nc.unc.application.data.service.*;
 import nc.unc.application.views.MainLayout;
+import nc.unc.application.views.etudiant.EtudiantNewOrEdit;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -32,24 +33,41 @@ public class ContratView extends VerticalLayout {
   TextField filterText = new TextField();
   Button addContratButton;
 
-  //EtudiantConsult modalConsult;
-  //EtudiantNewOrEdit modalNewOrEdit;
+  //ContratConsult modalConsult;
+  ContratNewOrEdit modalNewOrEdit;
 
-  ContratService service;
+  ContratService contratService;
+  EtudiantService etudiantService;
+  FormationService formationService;
+  EntrepriseService entrepriseService;
+  TuteurService tuteurService;
   LogEnregistrmentService logEnregistrmentService;
 
-  public ContratView(ContratService service, LogEnregistrmentService logEnregistrmentService){
+  public ContratView(ContratService contratService, EtudiantService etudiantService, FormationService formationService,
+                     EntrepriseService entrepriseService, TuteurService tuteurService, LogEnregistrmentService logEnregistrmentService){
 
-    this.service = service;
+    this.contratService = contratService;
+    this.etudiantService = etudiantService;
+    this.formationService = formationService;
+    this.entrepriseService = entrepriseService;
+    this.tuteurService = tuteurService;
     this.logEnregistrmentService = logEnregistrmentService;
 
     addClassName("list-view");
     setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
     configureGrid(); // configuration de la grille (colonnes, données...)
 
+    // ajout de la modale d'édition ou de création d'un étudiant dans la vue, en lui passant la liste des entreprises et des tuteurs
+    modalNewOrEdit = new ContratNewOrEdit( entrepriseService.findAllEntreprises(), formationService.findAllFormations(""),
+            etudiantService.findAllEtudiants(""), tuteurService.findAllTuteurs(""));
+    modalNewOrEdit.addListener(ContratNewOrEdit.SaveEvent.class, this::saveContrat);
+    modalNewOrEdit.addListener(ContratNewOrEdit.SaveEditedEvent.class, this::saveEditedContrat);
+    modalNewOrEdit.addListener(ContratNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
+
+
     // ajout de la toolbar (recherche + nouveau contrat) et la grid
     // et des modales de consultation et de création/modification TODO
-    add(getToolbar(), grid);
+    add(getToolbar(), grid, modalNewOrEdit);
     // initialisation des données de la grille à l'ouverture de la vue
     updateList();
 
@@ -73,8 +91,7 @@ public class ContratView extends VerticalLayout {
     })).setHeader("Consulter");
     // ajout du bouton d'édition d'un contrat
     grid.addComponentColumn(contrat -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
-      //editEtudiantModal(etudiant);
-      Notification.show("modale new or edit");
+      editContratModal(contrat);
     })).setHeader("Éditer");
 
     // on définit que chaque colonne à une largeur autodéterminée
@@ -100,8 +117,59 @@ public class ContratView extends VerticalLayout {
     return toolbar;
   }
 
+  // sauvegarde du nouveau contrat en utilisant ContratService
+  private void saveContrat(ContratNewOrEdit.SaveEvent event) {
+    // utilisation du getContrat de la classe mère ContratFormEvent pour récupérer le contrat
+    Contrat contrat = event.getContrat();
+    // sauvegarde du contrat
+    contratService.saveContrat(contrat);
+
+    // ajout du log d'ajout
+    logEnregistrmentService.saveLogAjoutString(contrat.toString());
+
+    // mise à jour de la grid, fermeture du formulaire et notification
+    updateList();
+    closeNewOrEditModal();
+    Notification.show("Contrat créé.");
+  }
+
+  // sauvegarde du contrat à modifier en utilisant ContratService
+  private void saveEditedContrat(ContratNewOrEdit.SaveEditedEvent event) {
+    // utilisation du getContrat de la classe mère ContratFormEvent pour récupérer le contrat
+    Contrat contrat = event.getContrat();
+    // récupération du contrat original avant modification
+    Contrat contratOriginal = event.getContratOriginal();
+    // sauvegarde du contrat
+    contratService.saveContrat(contrat);
+
+    // ajout du log d'ajout
+    logEnregistrmentService.saveLogEditString(contratOriginal.toString(), contrat.toString());
+
+    // mise à jour de la grid, fermeture du formulaire et notification
+    updateList();
+    closeNewOrEditModal();
+    Notification.show("Contrat modifié.");
+  }
+
+  // si contrat null, on ferme le formulaire, sinon on l'affiche (new or edit)
+  public void editContratModal(Contrat contrat) {
+    if (contrat == null) {
+      closeNewOrEditModal();
+    } else {
+      modalNewOrEdit.setContrat(contrat);
+      modalNewOrEdit.open();
+      addClassName("editing");
+    }
+  }
+
+  private void closeNewOrEditModal() {
+    modalNewOrEdit.setContrat(null);
+    modalNewOrEdit.close();
+    grid.asSingleSelect().clear();
+  }
+
   // fonction qui récupère la liste des contrat pour les afficher dans la grille (avec les valeurs de recherche)
   private void updateList() {
-    grid.setItems(service.findAllContrats(filterText.getValue()));
+    grid.setItems(contratService.findAllContrats(filterText.getValue()));
   }
 }

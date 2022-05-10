@@ -5,7 +5,6 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -27,8 +26,6 @@ import nc.unc.application.data.entity.*;
 import nc.unc.application.data.enums.Civilite;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -76,7 +73,7 @@ public class EtudiantConsult extends Dialog {
   private final TextField priseEnChargeFraisInscription = new TextField("Prise en charge des frais d'inscription");
   private final TextField obtentionDiplomeMention = new TextField("Obtention du diplôme et mention");
   private final TextArea observationsEtudiant = new TextArea("Observations");
-  // binder qui sera utilisé pour remlir automatiquement les champs d'infos générales sur l'étudiant
+  // binder qui sera utilisé pour remplir automatiquement les champs d'infos générales sur l'étudiant
   Binder<Etudiant> etudiantBinder = new BeanValidationBinder<>(Etudiant.class);
 
   // form qui contiendra les informations relatives à l'entreprise dans laquelle est l'étudiant
@@ -89,28 +86,29 @@ public class EtudiantConsult extends Dialog {
   Binder<Entreprise> entrepriseBinder = new BeanValidationBinder<>(Entreprise.class);
 
   // Champs du formulaire relatifs aux informations du tuteur lié à l'étudiant
-  FormLayout formEtudiantTuteur = new FormLayout();
-  TextField nomTuteur = new TextField("NOM");
-  TextField prenomTuteur = new TextField("Prenom");
-  EmailField emailTuteur = new EmailField("Email");
-  IntegerField telephoneTuteur1 = new IntegerField("Téléphone 1");
-  IntegerField telephoneTuteur2 = new IntegerField("Téléphone 2");
+  private final FormLayout formEtudiantTuteur = new FormLayout();
+  private final TextField nomTuteur = new TextField("NOM");
+  private final TextField prenomTuteur = new TextField("Prenom");
+  private final EmailField emailTuteur = new EmailField("Email");
+  private final IntegerField telephoneTuteur1 = new IntegerField("Téléphone 1");
+  private final IntegerField telephoneTuteur2 = new IntegerField("Téléphone 2");
   // Binder qui sera utilisé pour remplir automatiquement les champs du tuteur
   Binder<Tuteur> tuteurBinder = new BeanValidationBinder<>(Tuteur.class);
 
   // Champs du formulaire relatif aux informations de la formation lié à l'étudiant
-  FormLayout formEtudiantFormation = new FormLayout();
-  TextField libelleFormation = new TextField("Libellé de la formation");
-  TextField codeFormation = new TextField("Code de la formation");
+  private final FormLayout formEtudiantFormation = new FormLayout();
+  private final TextField libelleFormation = new TextField("Libellé de la formation");
+  private final TextField codeFormation = new TextField("Code de la formation");
+  private final TextField codeRome = new TextField("Code ROME de la formation");
   // Binder qui sera utilisé pour remplir automatiquement les champs de formation
   Binder<Formation> formationBinder = new BeanValidationBinder<>(Formation.class);
 
   // Champs du formulaire relatif aux informations du référent pédagogique lié à l'étudiant
-  FormLayout formEtudiantReferentPedago = new FormLayout();
-  TextField nomReferentPedago = new TextField("NOM");
-  TextField prenomReferentPedago = new TextField("Prénom");
-  IntegerField telephoneReferentPedago = new IntegerField("Téléphone");
-  EmailField emailReferentPedago = new EmailField("Email");
+  private final FormLayout formEtudiantReferentPedago = new FormLayout();
+  private final TextField nomReferentPedago = new TextField("NOM");
+  private final TextField prenomReferentPedago = new TextField("Prénom");
+  private final IntegerField telephoneReferentPedago = new IntegerField("Téléphone");
+  private final EmailField emailReferentPedago = new EmailField("Email");
   // Binder qui sera utilisé pour remplir automatiquement les champs du référent pédagogique
   Binder<ReferentPedagogique> referentPedagogiqueBinder = new BeanValidationBinder<>(ReferentPedagogique.class);
 
@@ -130,7 +128,7 @@ public class EtudiantConsult extends Dialog {
     this.setModal(true);
     this.setWidth("85vw");
 
-    // fonction qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables TODO
+    // fonction qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
     setAllFieldsToReadOnly();
 
     // instanciation des différents binder qui serviront au remplissage automatique des formulaires d'informations rattachés à l'étudiant
@@ -154,7 +152,7 @@ public class EtudiantConsult extends Dialog {
 
     // on définit les champs qu'il y aura dans le formulaire d'informations générales de l'étudiant
     formEtudiantInfos.add(nomEtudiant, prenomEtudiant, numeroEtudiant, civiliteEtudiant, dateNaissanceEtudiant, ageEtudiant, telephoneEtudiant1, telephoneEtudiant2,
-            emailEtudiant, dernierDiplomeObtenuOuEnCours, niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc,
+            emailEtudiant, dernierDiplomeObtenuOuEnCours, niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, situationEntreprise,
             lieuNaissance, nationalite, numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente,
             etablissementDeProvenance, dernierEmploiOccupe, parcours, anneePromotion, travailleurHandicape, veepap, priseEnChargeFraisInscription,
             obtentionDiplomeMention, observationsEtudiant);
@@ -165,7 +163,7 @@ public class EtudiantConsult extends Dialog {
     formEtudiantTuteur.add(prenomTuteur, nomTuteur, emailTuteur, telephoneTuteur1, telephoneTuteur2);
 
     // ajout des champs dans le formulaire de la formation suivie par l'étudiant
-    formEtudiantFormation.add(libelleFormation, codeFormation);
+    formEtudiantFormation.add(libelleFormation, codeFormation, codeRome);
 
     // ajout des champs dans le formulaire du referent pédagogique qui encadre l'étudiant
     formEtudiantReferentPedago.add(prenomReferentPedago, nomReferentPedago, telephoneReferentPedago, emailReferentPedago);
@@ -184,7 +182,7 @@ public class EtudiantConsult extends Dialog {
   public void setEtudiant(Etudiant etudiant) {
     this.etudiant = etudiant;
     if (etudiant != null) {
-      // lecture des binder pour compléter les champs dans les différents formulaire
+      // lecture des binder pour compléter les champs dans les différents formulaires
       etudiantBinder.readBean(etudiant);
       entrepriseBinder.readBean(etudiant.getEntreprise());
       tuteurBinder.readBean(etudiant.getTuteur());
@@ -268,6 +266,7 @@ public class EtudiantConsult extends Dialog {
     // formation
     libelleFormation.setReadOnly(true);
     codeFormation.setReadOnly(true);
+    codeRome.setReadOnly(true);
     // tuteur
     prenomTuteur.setReadOnly(true);
     nomTuteur.setReadOnly(true);

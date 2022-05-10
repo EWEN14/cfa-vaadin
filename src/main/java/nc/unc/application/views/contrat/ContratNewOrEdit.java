@@ -41,12 +41,13 @@ public class ContratNewOrEdit extends Dialog {
   ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
   ComboBox<Tuteur> tuteur = new ComboBox<>("Tuteur");
 
+  H3 titre = new H3();
+
   Select<String> codeContrat = new Select<>(CodeContrat.getCodeContratStr());
   Select<String> typeContrat = new Select<>("1","2","3","4");
 
-  H3 titre = new H3();
   Div representantLegal = new Div(new H4("Représentant légal du salarié et dérogation d'âge"));
-  TextField  nomRepresentantLegal = new TextField("Nom représentant légal");
+  TextField  nomRepresentantLegal = new TextField("NOM représentant légal");
   TextField prenomRepresentantLegal = new TextField("Prénom représentant légal");
   Select<String> relationAvecSalarie = new Select<>("Père", "Mère", "Tuteur");
   TextField adresseRepresentant = new TextField("Adresse représentant légal");
@@ -68,7 +69,6 @@ public class ContratNewOrEdit extends Dialog {
   TextField emploiOccupeSalarieEtudiant = new TextField("Emploi occupé par le salarié");
   TextField codeRomeEmploiOccupe = new TextField("Code ROME de l'emploi occupé");
   IntegerField dureePeriodeEssai = new IntegerField("Durée de la période d'essai (nombre de semaines)");
-  // intitulé formation pro : pas utile car intitulé de la formation qu'on sélectionne plus tôt, à retirer de l'entité TODO
   Select<Integer> niveauCertificationPro = new Select<>(3,4,5,6,7,8);
 
   TextField numeroConventionFormation = new TextField("Numéro de la convention de Formation");
@@ -90,6 +90,9 @@ public class ContratNewOrEdit extends Dialog {
   Div convention = new Div(new H4("Convention"));
   DatePicker dateReceptionOriginauxConvention = new DatePicker("Date de réception des originaux");
   TextField exemplaireOriginauxRemisAlternantOuEntreprise = new TextField("Exemplaires originaux (x3) remis à l'alternant ou à l'entreprise");
+
+  Div lea = new Div(new H4("Formation LEA"));
+  DatePicker formationLea = new DatePicker("Date de formation au LEA");
 
   FormLayout ruptureContainer = new FormLayout();
   Div rupture = new Div(new H4("Rupture"));
@@ -118,9 +121,6 @@ public class ContratNewOrEdit extends Dialog {
   DatePicker dateMailOuRdvSignatureConvAvn2 = new DatePicker("Date mail ou RDV pour signature");
   DatePicker dateDepotAlfrescoConvAvn2 = new DatePicker("Date de dépôt sur Alfresco");
   DatePicker dateRemiseOriginauxAvn2 = new DatePicker("Date de remise des exemplaires originaux (x3) à l'alternant");
-
-  Div lea = new Div(new H4("Formation LEA"));
-  DatePicker formationLea = new DatePicker("Date de formation au LEA");
 
   Binder<Contrat> binder = new BeanValidationBinder<>(Contrat.class);
 
@@ -170,7 +170,7 @@ public class ContratNewOrEdit extends Dialog {
     lieuFormation.setItems(Commune.getCommunesStr());
     lieuFormation.setClearButtonVisible(true);
 
-    // ajout des élément au formulaire principal
+    // ajout des éléments au formulaire principal
     form.add(etudiant, formation, entreprise, tuteur, codeContrat, typeContrat, representantLegal, new Div(), nomRepresentantLegal,
             prenomRepresentantLegal, relationAvecSalarie, adresseRepresentant, codePostalRepresentant, communeRepresentant,
             telephoneRepresentant, emailRepresentant, derogationAge, dateDelivranceDerogationAge, cadreAdministration, new Div(), cadreAdminNumEnregistrementContrat, cadreAdminNumAvenant,
@@ -206,6 +206,7 @@ public class ContratNewOrEdit extends Dialog {
 
   // fonction qui va alimenter le binder d'un contrat
   public void setContrat(Contrat contrat) {
+    titre.removeAll();
     this.contrat = contrat;
     // on doit remettre le cloneContrat à null (sinon garde ancienne valeur de l'edit)
     this.cloneContrat = null;

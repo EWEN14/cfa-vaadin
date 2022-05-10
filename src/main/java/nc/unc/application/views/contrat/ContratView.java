@@ -15,6 +15,7 @@ import nc.unc.application.data.entity.Contrat;
 import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.service.*;
 import nc.unc.application.views.MainLayout;
+import nc.unc.application.views.etudiant.EtudiantConsult;
 import nc.unc.application.views.etudiant.EtudiantNewOrEdit;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,7 @@ public class ContratView extends VerticalLayout {
   TextField filterText = new TextField();
   Button addContratButton;
 
-  //ContratConsult modalConsult;
+  ContratConsult modalConsult;
   ContratNewOrEdit modalNewOrEdit;
 
   ContratService contratService;
@@ -57,6 +58,14 @@ public class ContratView extends VerticalLayout {
     setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
     configureGrid(); // configuration de la grille (colonnes, données...)
 
+    // ajout de la modale de consultation de l'étudiant dans la vue
+    modalConsult = new ContratConsult();
+    // On définit que les différents events vont déclencher une fonction
+    // contenant l'objet etudiant (dans le cas du delete dans la modalConsult ou du save dans modalNewOrdEdit).
+    modalConsult.addListener(ContratConsult.DeleteEventConsult.class, this::deleteContrat);
+    modalConsult.addListener(ContratConsult.CloseEventConsult.class, e -> closeConsultModal());
+
+
     // ajout de la modale d'édition ou de création d'un étudiant dans la vue, en lui passant la liste des entreprises et des tuteurs
     modalNewOrEdit = new ContratNewOrEdit( entrepriseService.findAllEntreprises(), formationService.findAllFormations(""),
             etudiantService.findAllEtudiants(""), tuteurService.findAllTuteurs(""));
@@ -67,10 +76,9 @@ public class ContratView extends VerticalLayout {
 
     // ajout de la toolbar (recherche + nouveau contrat) et la grid
     // et des modales de consultation et de création/modification TODO
-    add(getToolbar(), grid, modalNewOrEdit);
+    add(getToolbar(), grid, modalConsult, modalNewOrEdit);
     // initialisation des données de la grille à l'ouverture de la vue
     updateList();
-
   }
 
   private void configureGrid() {
@@ -86,8 +94,7 @@ public class ContratView extends VerticalLayout {
 
     // ajout du bouton de consultation d'un contrat
     grid.addComponentColumn(contrat -> new Button(new Icon(VaadinIcon.EYE), click -> {
-      //consultEtudiant(etudiant);
-      Notification.show("modale consult");
+      consultContrat(contrat);
     })).setHeader("Consulter");
     // ajout du bouton d'édition d'un contrat
     grid.addComponentColumn(contrat -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
@@ -109,7 +116,7 @@ public class ContratView extends VerticalLayout {
     filterText.addValueChangeListener(e -> updateList());
 
     addContratButton = new Button("Nouveau contrat");
-    //addContratButton.addClickListener(click -> addContrat());
+    addContratButton.addClickListener(click -> addContrat());
 
     // on met le champ de recherche et le bouton d'ajout dans un HorizontalLayout, pour qu'ils soient côte à côte
     HorizontalLayout toolbar = new HorizontalLayout(filterText, addContratButton);
@@ -151,6 +158,21 @@ public class ContratView extends VerticalLayout {
     Notification.show("Contrat modifié.");
   }
 
+  // suppression du contrat
+  private void deleteContrat(ContratConsult.DeleteEventConsult event) {
+    Contrat contrat = event.getContrat();
+    if (contrat != null) {
+      contratService.deleteContrat(contrat);
+
+      // ajout du log de suppression
+      logEnregistrmentService.saveLogDeleteString(contrat.toString());
+
+      updateList();
+      closeConsultModal();
+      Notification.show("Contrat supprimé");
+    }
+  }
+
   // si contrat null, on ferme le formulaire, sinon on l'affiche (new or edit)
   public void editContratModal(Contrat contrat) {
     if (contrat == null) {
@@ -160,6 +182,26 @@ public class ContratView extends VerticalLayout {
       modalNewOrEdit.open();
       addClassName("editing");
     }
+  }
+
+  // ajout d'un contrat
+  void addContrat() {
+    // on retire le focus s'il y avait une ligne sélectionnée
+    grid.asSingleSelect().clear();
+    // appel de la fonction d'edition du contrat, en passant un nouveau contrat
+    editContratModal(new Contrat());
+  }
+
+  // ouverture de modale de consultation d'un étudiant
+  public void consultContrat(Contrat contrat) {
+    modalConsult.setContrat(contrat);
+    modalConsult.open();
+  }
+
+  private void closeConsultModal() {
+    modalConsult.setContrat(null);
+    modalConsult.close();
+    grid.asSingleSelect().clear();
   }
 
   private void closeNewOrEditModal() {

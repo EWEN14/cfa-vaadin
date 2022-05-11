@@ -13,6 +13,16 @@ import java.util.List;
 public interface ContratRepository extends JpaRepository<Contrat, Long> {
 
   @Query("select c from Contrat c " +
-          "where lower(c.codeContrat) like lower(concat('%', :searchTerm, '%')) " )
+          "where lower(c.codeContrat) like lower(concat('%', :searchTerm, '%')) " +
+          "or lower(c.etudiant.prenomEtudiant) like lower(concat('%', :searchTerm, '%')) " +
+          "or lower(c.etudiant.nomEtudiant) like lower(concat('%', :searchTerm, '%')) " +
+          "or lower(c.tuteur.prenomTuteur) like lower(concat('%', :searchTerm, '%')) " +
+          "or lower(c.tuteur.nomTuteur) like lower(concat('%', :searchTerm, '%')) " +
+          "or lower(c.entreprise.enseigne) like lower(concat('%', :searchTerm, '%')) " +
+          "or lower(c.formation.codeFormation) like lower(concat('%', :searchTerm, '%')) ")
   List<Contrat> search(@Param("searchTerm") String searchTerm);
+
+  List<Contrat> findAllByTuteurId(Long id);
+
+  List<Contrat> findAllByEtudiantId(Long id);
 }

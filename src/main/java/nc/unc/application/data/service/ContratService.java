@@ -34,4 +34,22 @@ public class ContratService {
   public void countContrats(){
     contratRepository.count();
   }
+
+  /**
+   * retourne la liste des contrats associés à un tuteur
+   * @param id identifiant d'un tuteur
+   * @return liste des contrats associé au tuteur
+   */
+  public List<Contrat> findAllContratByTuteurId(Long id) {
+    return contratRepository.findAllByTuteurId(id);
+  }
+
+  /**
+   * retourne la liste des contrats associés à un étudiant
+   * @param id identifiant de l'étudiant
+   * @return liste de contrats
+   */
+  public List<Contrat> findAllContratByEtudiantId(Long id) {
+    return contratRepository.findAllByEtudiantId(id);
+  }
 }

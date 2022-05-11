@@ -44,7 +44,7 @@ public class EtudiantView extends VerticalLayout {
   LogEnregistrmentService logEnregistrmentService;
 
   public EtudiantView(EtudiantService etudiantService, EntrepriseService entrepriseService, TuteurService tuteurService, FormationService formationService,
-                      ReferentPedagogiqueService referentPedagogiqueService, LogEnregistrmentService logEnregistrmentService) {
+                      ReferentPedagogiqueService referentPedagogiqueService, ContratService contratService, LogEnregistrmentService logEnregistrmentService) {
     this.etudiantService = etudiantService;
     this.entrepriseService = entrepriseService;
     this.tuteurService = tuteurService;
@@ -57,7 +57,7 @@ public class EtudiantView extends VerticalLayout {
     configureGrid(); // configuration de la grille (colonnes, données...)
 
     // ajout de la modale de consultation de l'étudiant dans la vue
-    modalConsult = new EtudiantConsult();
+    modalConsult = new EtudiantConsult(contratService);
     // On définit que les différents events vont déclencher une fonction
     // contenant l'objet etudiant (dans le cas du delete dans la modalConsult ou du save dans modalNewOrdEdit).
     modalConsult.addListener(EtudiantConsult.DeleteEvent.class, this::deleteEtudiant);

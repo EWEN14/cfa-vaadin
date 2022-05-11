@@ -43,7 +43,7 @@ public class EtudiantService {
   }
 
   /**
-   * Récupère tous les étudiants encadré par un tuteur
+   * Récupère tous les étudiants encadrés par un tuteur
    * @param id l'identifiant du tuteur
    * @return liste d'étudiants
    */

@@ -36,10 +36,10 @@ public class TuteurView extends VerticalLayout {
     TuteurConsult tuteurModalConsult;
 
     private TuteurService tuteurService;
-    private EntrepriseService entrepriseService;
     private LogEnregistrmentService logEnregistrmentService;
 
-    public TuteurView(TuteurService tuteurService, EntrepriseService entrepriseService, FormationService formationService, EtudiantService etudiantService, LogEnregistrmentService logEnregistrmentService){
+    public TuteurView(TuteurService tuteurService, EntrepriseService entrepriseService, FormationService formationService,
+                      EtudiantService etudiantService, LogEnregistrmentService logEnregistrmentService, ContratService contratService){
 
         this.tuteurService = tuteurService;
         this.logEnregistrmentService = logEnregistrmentService;
@@ -48,7 +48,7 @@ public class TuteurView extends VerticalLayout {
         setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
         configureGrid(); // configuration de la grille (colonnes, données...)
 
-        tuteurModalConsult = new TuteurConsult(etudiantService);
+        tuteurModalConsult = new TuteurConsult(etudiantService, contratService);
         // On définit que les différents events (TuteurForm.fooEvent) dans le Tuteur  vont déclencher une fonction
         // contenant l'objet tuteur (dans le cas du save ou delete).
         tuteurModalConsult.addListener(TuteurConsult.DeleteEvent.class, this::deleteTuteur);

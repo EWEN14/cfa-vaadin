@@ -86,11 +86,11 @@ public class ContratView extends VerticalLayout {
     grid.setSizeFull();
 
     // ajout des colonnes
-    grid.addColumn(contrat -> contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant()).setHeader("Étudiant");
-    grid.addColumn(contrat -> contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur()).setHeader("Tuteur");
-    grid.addColumn(contrat -> contrat.getEntreprise().getEnseigne()).setHeader("Entreprise");
-    grid.addColumn(contrat -> contrat.getFormation().getCodeFormation()).setHeader("Formation");
-    grid.addColumn(Contrat::getCodeContrat).setHeader("Code Contrat");
+    grid.addColumn(contrat -> contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant()).setHeader("Étudiant").setSortable(true);;
+    grid.addColumn(contrat -> contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur()).setHeader("Tuteur").setSortable(true);;
+    grid.addColumn(contrat -> contrat.getEntreprise().getEnseigne()).setHeader("Entreprise").setSortable(true);;
+    grid.addColumn(contrat -> contrat.getFormation().getCodeFormation()).setHeader("Formation").setSortable(true);;
+    grid.addColumn(Contrat::getCodeContrat).setHeader("Code Contrat").setSortable(true);;
 
     // ajout du bouton de consultation d'un contrat
     grid.addComponentColumn(contrat -> new Button(new Icon(VaadinIcon.EYE), click -> {
@@ -106,7 +106,8 @@ public class ContratView extends VerticalLayout {
   }
 
   private HorizontalLayout getToolbar(){
-    filterText.setHelperText("Recherche par numéro...");
+    filterText.setWidth("450px");
+    filterText.setHelperText("Recherche par prénom/nom étudiant ou tuteur, par enseigne entreprise, formation ou code contrat");
     filterText.setPrefixComponent(VaadinIcon.SEARCH.create()); // affiche une petite loupe au début du champ
     filterText.setClearButtonVisible(true); // affiche la petite croix dans le champ pour effacer
     // permet de rendre Lazy le changement de valeur, la recherche ne se fera donc qu'après que l'utilisateur

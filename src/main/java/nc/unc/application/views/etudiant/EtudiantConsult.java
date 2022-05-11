@@ -8,6 +8,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -24,6 +25,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.*;
 import nc.unc.application.data.enums.Civilite;
+import nc.unc.application.data.service.ContratService;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -35,8 +37,10 @@ public class EtudiantConsult extends Dialog {
 
   private Etudiant etudiant;
 
+  private ContratService contratService;
+
   // Layout qui contiendra le contenu en dessous des tabs
-  private final VerticalLayout content;
+  private final VerticalLayout content = new VerticalLayout();
 
   // form qui contiendra les informations générales relatives à l'étudiants
   private final FormLayout formEtudiantInfos = new FormLayout();
@@ -112,21 +116,28 @@ public class EtudiantConsult extends Dialog {
   // Binder qui sera utilisé pour remplir automatiquement les champs du référent pédagogique
   Binder<ReferentPedagogique> referentPedagogiqueBinder = new BeanValidationBinder<>(ReferentPedagogique.class);
 
+  // grid qui contiendra les contrats liés à l'étudiant
+  private final Grid<Contrat> contratGrid = new Grid<>(Contrat.class);
+
   // tab (onglet) qui seront insérés dans une tabs (ensemble d'onglets) les regroupant
   private final Tab etudiantInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(),new Span("Étudiant"));
   private final Tab entrepriseEtudiantInfosTab = new Tab(VaadinIcon.WORKPLACE.create(),new Span("Entreprise"));
   private final Tab tuteurEtudiantInfosTab = new Tab(VaadinIcon.USER.create(), new Span("Tuteur"));
   private final Tab formationEtudiantInfosTab = new Tab(VaadinIcon.DIPLOMA.create(), new Span("Formation"));
   private final Tab referentPedagoEtudiantInfosTab = new Tab(VaadinIcon.HANDSHAKE.create(), new Span("Référent pédagogique"));
+  private final Tab contratsEtudiantTab = new Tab(VaadinIcon.NEWSPAPER.create(), new Span("Contrats"));
 
   private final Button close = new Button("Fermer");
   private final Button delete = new Button("Supprimer l'étudiant");
 
-  public EtudiantConsult() {
+  public EtudiantConsult(ContratService contratService) {
+    this.contratService = contratService;
+
     // On définit que la fenêtre qui s'ouvre est une modale, ce qui fait qu'on ne peut rien faire sur l'application
     // tant que la modale n'est pas fermée
     this.setModal(true);
     this.setWidth("85vw");
+    this.setHeight("90vh");
 
     // fonction qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
     setAllFieldsToReadOnly();
@@ -141,10 +152,16 @@ public class EtudiantConsult extends Dialog {
     civiliteEtudiant.setLabel("Civilité");
     civiliteEtudiant.setItems(Civilite.values());
 
+    // grilles des contrats liées à l'étudiant
+    contratGrid.addClassName("tuteur-contrats-grid");
+    contratGrid.setColumns("codeContrat", "debutContrat", "finContrat", "numeroConventionFormation");
+    contratGrid.addColumn(contrat -> contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur()).setHeader("Tuteur").setSortable(true);
+    contratGrid.getColumns().forEach(col -> col.setAutoWidth(true));
+
     // On instancie la Tabs, et on lui donne les tab que l'on veut insérer
     // tabs qui contiendra les tab permettant de passer d'un groupe d'informations à un autre
     Tabs tabsEtudiant = new Tabs(etudiantInfosTab, entrepriseEtudiantInfosTab, tuteurEtudiantInfosTab,
-            formationEtudiantInfosTab, referentPedagoEtudiantInfosTab);
+            formationEtudiantInfosTab, referentPedagoEtudiantInfosTab, contratsEtudiantTab);
     // Au clic sur une des tab, on appelle notre méthode setContent pour pouvoir changer le contenu
     tabsEtudiant.addSelectedChangeListener(selectedChangeEvent ->
             setContent(selectedChangeEvent.getSelectedTab())
@@ -169,7 +186,6 @@ public class EtudiantConsult extends Dialog {
     formEtudiantReferentPedago.add(prenomReferentPedago, nomReferentPedago, telephoneReferentPedago, emailReferentPedago);
 
     // contenu qui sera affiché en dessous des tabs, qui change en fonction de la tab sélectionné
-    content = new VerticalLayout();
     content.setSpacing(false);
     // à l'ouverture, on ouvre la tab d'infos générales sur l'étudiant
     setContent(etudiantInfosTab);
@@ -191,6 +207,9 @@ public class EtudiantConsult extends Dialog {
 
       // définition de l'âge de l'étudiant en front, en se basant sur la base de données
       ageEtudiant.setValue(ChronoUnit.YEARS.between(etudiant.getDateNaissanceEtudiant(), LocalDate.now()) + " ans");
+
+      // on récupère les contrats qui ont l'étudiant avec l'id correspondant et on les passe à la grid
+      contratGrid.setItems(contratService.findAllContratByEtudiantId(etudiant.getId()));
     }
   }
 
@@ -220,6 +239,8 @@ public class EtudiantConsult extends Dialog {
       content.add(formEtudiantFormation);
     } else if (tab.equals(referentPedagoEtudiantInfosTab)) {
       content.add(formEtudiantReferentPedago);
+    } else if (tab.equals(contratsEtudiantTab)) {
+      content.add(contratGrid);
     }
   }
 

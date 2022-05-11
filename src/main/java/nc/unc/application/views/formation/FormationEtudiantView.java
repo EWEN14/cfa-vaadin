@@ -20,6 +20,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.entity.Formation;
+import nc.unc.application.data.service.ContratService;
 import nc.unc.application.data.service.EtudiantService;
 import nc.unc.application.data.service.FormationService;
 import nc.unc.application.views.MainLayout;
@@ -58,12 +59,12 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
   Grid.Column<Etudiant> fullNameColumn;
   Grid.Column<Etudiant> anneePromotionColumn;
 
-  public FormationEtudiantView(FormationService formationService, EtudiantService etudiantService) {
+  public FormationEtudiantView(FormationService formationService, EtudiantService etudiantService, ContratService contratService) {
     this.formationService = formationService;
     this.etudiantService = etudiantService;
 
     // ajout de la modale de consultation de l'étudiant dans la vue
-    modalConsult = new EtudiantConsult();
+    modalConsult = new EtudiantConsult(contratService);
     // On définit que les différents events vont déclencher une fonction
     // contenant l'objet etudiant (dans le cas du delete dans la modalConsult ou du save dans modalNewOrdEdit).
     modalConsult.addListener(EtudiantConsult.CloseEvent.class, e -> closeConsultModal());

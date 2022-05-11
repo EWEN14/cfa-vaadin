@@ -33,6 +33,7 @@ public class FormationConsult extends Dialog {
 
   public FormationConsult() {
     this.setWidth("85vw");
+    this.setHeight("90vh");
 
     // fonction qui met tous les champs en ReadOnly
     setAllFieldsToReadOnly();

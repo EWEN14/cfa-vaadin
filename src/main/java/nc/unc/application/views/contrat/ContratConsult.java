@@ -164,6 +164,7 @@ public class ContratConsult extends Dialog {
 
   public ContratConsult() {
     this.setWidth("85vw");
+    this.setHeight("90vh");
 
     // fonction qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
     setAllFieldsToReadOnly();

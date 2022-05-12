@@ -14,10 +14,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.enums.Sexe;
-import nc.unc.application.data.service.EtudiantService;
-import nc.unc.application.data.service.FormationService;
-import nc.unc.application.data.service.LogEnregistrmentService;
-import nc.unc.application.data.service.TuteurService;
+import nc.unc.application.data.service.*;
 import nc.unc.application.views.MainLayout;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -39,26 +36,25 @@ public class TuteurView extends VerticalLayout {
     TuteurConsult tuteurModalConsult;
 
     private TuteurService tuteurService;
-    private EtudiantService etudiantService;
     private LogEnregistrmentService logEnregistrmentService;
 
-    public TuteurView(TuteurService tuteurService, FormationService formationService, EtudiantService etudiantService, LogEnregistrmentService logEnregistrmentService){
+    public TuteurView(TuteurService tuteurService, EntrepriseService entrepriseService, FormationService formationService,
+                      EtudiantService etudiantService, LogEnregistrmentService logEnregistrmentService, ContratService contratService){
 
         this.tuteurService = tuteurService;
-        this.etudiantService = etudiantService;
         this.logEnregistrmentService = logEnregistrmentService;
 
         addClassName("list-view");
         setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
         configureGrid(); // configuration de la grille (colonnes, données...)
 
-        tuteurModalConsult = new TuteurConsult(etudiantService);
+        tuteurModalConsult = new TuteurConsult(etudiantService, contratService);
         // On définit que les différents events (TuteurForm.fooEvent) dans le Tuteur  vont déclencher une fonction
         // contenant l'objet tuteur (dans le cas du save ou delete).
         tuteurModalConsult.addListener(TuteurConsult.DeleteEvent.class, this::deleteTuteur);
         tuteurModalConsult.addListener(TuteurConsult.CloseEvent.class, e -> closeConsultModal());
 
-        tuteurModal = new TuteurNewOrEdit(tuteurService.findAllEntreprises(), formationService.findAllFormations(""),
+        tuteurModal = new TuteurNewOrEdit(entrepriseService.findAllEntreprises(), formationService.findAllFormations(""),
                 formationService, tuteurService, logEnregistrmentService);
         tuteurModal.addListener(TuteurNewOrEdit.SaveEvent.class, this::saveTuteur);
         tuteurModal.addListener(TuteurNewOrEdit.SaveEditedEvent.class, this::saveEditedTuteur);
@@ -86,12 +82,14 @@ public class TuteurView extends VerticalLayout {
         grid.addClassNames("tuteur-grid");
         grid.setSizeFull();
         grid.setColumns("prenomTuteur", "nomTuteur", "dateNaissanceTuteur");
+        // bouton consultation tuteur
         grid.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.EYE), click -> {
             consultTuteur(tuteur);
-        }));
+        })).setHeader("Consulter");;
+        // bouton édition tuteur
         grid.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
             editTuteurModal(tuteur);
-        }));
+        })).setHeader("Éditer");;
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
 

@@ -5,6 +5,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -50,6 +51,7 @@ public class Entreprise implements Cloneable {
   @Column(name = "nombre_salarie")
   private Long nombreSalarie;
 
+  @Pattern(message = "Le code NAF doit avoir le format suivant : 12.3 ou 12.34 ou 12.34Z", regexp = "\\d{2}\\.\\d{1,2}Z?$")
   @Column(name = "code_naf")
   private String codeNaf;
 
@@ -68,11 +70,19 @@ public class Entreprise implements Cloneable {
   @Column(name = "fonction_representant_employeur")
   private String fonctionRepresentantEmployeur;
 
-  @Column(name = "nom_contact_cfa")
-  private String nomContactCfa;
+  @Column(name = "telephone_entreprise")
+  @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
+  private Integer telephoneEntreprise;
+
+  @Email
+  @Column(name = "email_entreprise")
+  private String emailEntreprise;
 
   @Column(name = "prenom_contact_cfa")
   private String prenomContactCfa;
+
+  @Column(name = "nom_contact_cfa")
+  private String nomContactCfa;
 
   @Column(name = "fonction_contact_cfa")
   private String fonctionContactCfa;
@@ -104,11 +114,17 @@ public class Entreprise implements Cloneable {
   @Column(name = "adr_post_rue_ou_bp")
   private String adressePostaleRueOuBp;
 
+  @Column(name = "observations", length = 15000)
+  private String observations;
+
   @OneToMany(mappedBy = "entreprise", targetEntity = Etudiant.class)
   private List<Etudiant> etudiants = new ArrayList<>();
 
   @OneToMany(mappedBy = "entreprise", targetEntity = Tuteur.class)
   private List<Tuteur> tuteurs = new ArrayList<>();
+
+  @OneToMany(mappedBy = "entreprise", cascade = CascadeType.MERGE)
+  private List<Contrat> contrats = new ArrayList<>();
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
@@ -117,20 +133,6 @@ public class Entreprise implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
-
-  @Column(name = "observations", length = 15000)
-  private String observations;
-
-  @OneToMany(mappedBy = "entreprise", cascade = CascadeType.MERGE)
-  private List<Contrat> contrats = new ArrayList<>();
-
-  public List<Contrat> getContrats() {
-    return contrats;
-  }
-
-  public void setContrats(List<Contrat> contrats) {
-    this.contrats = contrats;
-  }
 
   // Getters et Setters
   public Long getId() {
@@ -245,28 +247,20 @@ public class Entreprise implements Cloneable {
     this.fonctionRepresentantEmployeur = fonctionRepresentantEmployeur;
   }
 
-  public String getEmailContactCfa() {
-    return emailContactCfa;
+  public Integer getTelephoneEntreprise() {
+    return telephoneEntreprise;
   }
 
-  public void setEmailContactCfa(String email_contact_cfa) {
-    this.emailContactCfa = email_contact_cfa;
+  public void setTelephoneEntreprise(Integer telephoneEntreprise) {
+    this.telephoneEntreprise = telephoneEntreprise;
   }
 
-  public @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999) Integer getTelephoneContactCfa() {
-    return telephoneContactCfa;
+  public String getEmailEntreprise() {
+    return emailEntreprise;
   }
 
-  public void setTelephoneContactCfa(@Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999) Integer telephone_contact_cfa) {
-    this.telephoneContactCfa = telephone_contact_cfa;
-  }
-
-  public String getFonctionContactCfa() {
-    return fonctionContactCfa;
-  }
-
-  public void setFonctionContactCfa(String fonction_contact_cfa) {
-    this.fonctionContactCfa = fonction_contact_cfa;
+  public void setEmailEntreprise(String emailEntreprise) {
+    this.emailEntreprise = emailEntreprise;
   }
 
   public String getPrenomContactCfa() {
@@ -283,6 +277,30 @@ public class Entreprise implements Cloneable {
 
   public void setNomContactCfa(String nom_contact_cfa) {
     this.nomContactCfa = nom_contact_cfa;
+  }
+
+  public String getFonctionContactCfa() {
+    return fonctionContactCfa;
+  }
+
+  public void setFonctionContactCfa(String fonction_contact_cfa) {
+    this.fonctionContactCfa = fonction_contact_cfa;
+  }
+
+  public @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999) Integer getTelephoneContactCfa() {
+    return telephoneContactCfa;
+  }
+
+  public void setTelephoneContactCfa(@Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999) Integer telephone_contact_cfa) {
+    this.telephoneContactCfa = telephone_contact_cfa;
+  }
+
+  public String getEmailContactCfa() {
+    return emailContactCfa;
+  }
+
+  public void setEmailContactCfa(String email_contact_cfa) {
+    this.emailContactCfa = email_contact_cfa;
   }
 
   public String getAdressePhysiqueCommune() {
@@ -357,6 +375,14 @@ public class Entreprise implements Cloneable {
     this.tuteurs = tuteurs;
   }
 
+  public List<Contrat> getContrats() {
+    return contrats;
+  }
+
+  public void setContrats(List<Contrat> contrats) {
+    this.contrats = contrats;
+  }
+
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
@@ -395,6 +421,8 @@ public class Entreprise implements Cloneable {
             "\n nomRepresentantEmployeur='" + nomRepresentantEmployeur + '\'' +
             "\n prenomRepresentantEmployeur='" + prenomRepresentantEmployeur + '\'' +
             "\n fonctionRepresentantEmployeur='" + fonctionRepresentantEmployeur + '\'' +
+            "\n telephoneEntreprise='" + telephoneEntreprise + '\'' +
+            "\n emailEntreprise='" + emailEntreprise + '\'' +
             "\n nomContactCfa='" + nomContactCfa + '\'' +
             "\n prenomContactCfa='" + prenomContactCfa + '\'' +
             "\n fonctionContactCfa='" + fonctionContactCfa + '\'' +

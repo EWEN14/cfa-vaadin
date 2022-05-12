@@ -32,7 +32,8 @@ public class EtudiantNewOrEdit extends Dialog {
   FormLayout form = new FormLayout();
   TextField nomEtudiant = new TextField("NOM");
   TextField prenomEtudiant = new TextField("Prénom");
-  // utilisation de select lorsque nombre de choix assez petis
+  IntegerField numeroEtudiant = new IntegerField("N° Étudiant");
+  // utilisation de select lorsque nombre de choix assez petits
   Select<Civilite> civiliteEtudiant = new Select<>();
   DatePicker dateNaissanceEtudiant = new DatePicker("Date de Naissance");
   IntegerField telephoneEtudiant1 = new IntegerField("Téléphone 1");
@@ -55,6 +56,7 @@ public class EtudiantNewOrEdit extends Dialog {
   ComboBox<String> communeEtudiant = new ComboBox<>("Commune");
   Select<String> situationAnneePrecedente = new Select<>();
   ComboBox<String> etablissementDeProvenance = new ComboBox<>("Établissement de provenance");
+  TextField dernierEmploiOccupe = new TextField("Dernier emploi occupé");
   Select<String> parcours = new Select<>();
   Checkbox travailleurHandicape = new Checkbox("Travailleur Handicapé");
   Checkbox veepap = new Checkbox("VEEPAP");
@@ -94,7 +96,7 @@ public class EtudiantNewOrEdit extends Dialog {
     dernierDiplomeObtenuOuEnCours.setClearButtonVisible(true);
 
     niveauDernierDiplome.setLabel("Niveau dernier diplôme obtenu ou en cours");
-    niveauDernierDiplome.setItems(1,2,3,4,5,6,7,8);
+    niveauDernierDiplome.setItems(3,4,5,6,7,8);
 
     admis.setLabel("Admission");
     admis.setItems(Admis.getAdmisStr());
@@ -147,10 +149,10 @@ public class EtudiantNewOrEdit extends Dialog {
     referentPedagogique.setItemLabelGenerator(rp -> rp.getPrenomReferentPedago()+ " " + rp.getNomReferentPedago());
 
     // ajout des champs et des boutons d'action dans le formulaire
-    form.add(nomEtudiant, prenomEtudiant, civiliteEtudiant, dateNaissanceEtudiant, telephoneEtudiant1, telephoneEtudiant2, emailEtudiant, dernierDiplomeObtenuOuEnCours,
-            niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, lieuNaissance, nationalite,
+    form.add(nomEtudiant, prenomEtudiant, numeroEtudiant, civiliteEtudiant, dateNaissanceEtudiant, telephoneEtudiant1, telephoneEtudiant2, emailEtudiant, dernierDiplomeObtenuOuEnCours,
+            niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, situationEntreprise, lieuNaissance, nationalite,
             numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente, etablissementDeProvenance,
-            parcours, travailleurHandicape, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention, entreprise,
+            dernierEmploiOccupe, parcours, travailleurHandicape, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention, entreprise,
             tuteur, formation, anneePromotion, referentPedagogique, observationsEtudiant, createButtonsLayout());
 
     // ajout du formulaire dans la modale
@@ -237,7 +239,7 @@ public class EtudiantNewOrEdit extends Dialog {
     }
   }
 
-  // Event au clic sur le bouton de fermerture du formulaire (classe fille)
+  // Event au clic sur le bouton de fermeture du formulaire (classe fille)
   public static class CloseEvent extends EtudiantNewOrEdit.EtudiantFormEvent {
     CloseEvent(EtudiantNewOrEdit source) {
       super(source, null, null);

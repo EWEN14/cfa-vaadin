@@ -35,16 +35,18 @@ public class EtudiantView extends VerticalLayout {
 
   EtudiantConsult modalConsult;
   EtudiantNewOrEdit modalNewOrEdit;
-  EtudiantService etudiantService;
 
+  EtudiantService etudiantService;
+  EntrepriseService entrepriseService;
   TuteurService tuteurService;
   FormationService formationService;
   ReferentPedagogiqueService referentPedagogiqueService;
   LogEnregistrmentService logEnregistrmentService;
 
-  public EtudiantView(EtudiantService etudiantService, TuteurService tuteurService, FormationService formationService,
-                      ReferentPedagogiqueService referentPedagogiqueService, LogEnregistrmentService logEnregistrmentService) {
+  public EtudiantView(EtudiantService etudiantService, EntrepriseService entrepriseService, TuteurService tuteurService, FormationService formationService,
+                      ReferentPedagogiqueService referentPedagogiqueService, ContratService contratService, LogEnregistrmentService logEnregistrmentService) {
     this.etudiantService = etudiantService;
+    this.entrepriseService = entrepriseService;
     this.tuteurService = tuteurService;
     this.formationService = formationService;
     this.referentPedagogiqueService = referentPedagogiqueService;
@@ -55,14 +57,14 @@ public class EtudiantView extends VerticalLayout {
     configureGrid(); // configuration de la grille (colonnes, données...)
 
     // ajout de la modale de consultation de l'étudiant dans la vue
-    modalConsult = new EtudiantConsult();
+    modalConsult = new EtudiantConsult(contratService);
     // On définit que les différents events vont déclencher une fonction
     // contenant l'objet etudiant (dans le cas du delete dans la modalConsult ou du save dans modalNewOrdEdit).
     modalConsult.addListener(EtudiantConsult.DeleteEvent.class, this::deleteEtudiant);
     modalConsult.addListener(EtudiantConsult.CloseEvent.class, e -> closeConsultModal());
 
     // ajout de la modale d'édition ou de création d'un étudiant dans la vue, en lui passant la liste des entreprises et des tuteurs
-    modalNewOrEdit = new EtudiantNewOrEdit(etudiantService.findAllEntreprises(), tuteurService.findAllTuteurs(""),
+    modalNewOrEdit = new EtudiantNewOrEdit(entrepriseService.findAllEntreprises(), tuteurService.findAllTuteurs(""),
             formationService.findAllFormations(""), referentPedagogiqueService.findAllReferentPedagogique(""));
     modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEvent.class, this::saveEtudiant);
     modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEditedEvent.class, this::saveEditedEtudiant);
@@ -94,10 +96,11 @@ public class EtudiantView extends VerticalLayout {
     // ajout du bouton de consultation d'un étudiant
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultEtudiant(etudiant);
-    }));
+    })).setHeader("Consulter");;
+    // bouton édition étudiant
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
       editEtudiantModal(etudiant);
-    }));
+    })).setHeader("Éditer");;
     // on définit que chaque colonne à une largeur autodéterminée
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
   }
@@ -143,7 +146,7 @@ public class EtudiantView extends VerticalLayout {
   private void saveEditedEtudiant(EtudiantNewOrEdit.SaveEditedEvent event) {
     // utilisation du getEtudiant de la classe mère EtudiantFormEvent pour récupérer l'étudiant
     Etudiant etudiant = event.getEtudiant();
-    // récupération de l'étudiant avant modification
+    // récupération de l'étudiant original avant modification
     Etudiant etudiantOriginal = event.getEtudiantOriginal();
     // mise en majuscule du nom, définition sexe et âge avant sauvegarde
     setNameSexeEtudiant(etudiant);

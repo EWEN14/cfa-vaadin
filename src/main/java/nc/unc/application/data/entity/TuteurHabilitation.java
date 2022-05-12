@@ -24,6 +24,12 @@ public class TuteurHabilitation implements Cloneable {
   @Column(name = "date_formation")
   private LocalDate dateFormation;
 
+  @Column(name = "modalite_formation")
+  private String modaliteFormation;
+
+  @Column(name = "date_habilitation")
+  private LocalDate dateHabilitation;
+
   @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Tuteur.class)
   @JoinColumn(name = "id_tuteur")
   private Tuteur tuteur;
@@ -66,12 +72,20 @@ public class TuteurHabilitation implements Cloneable {
     this.dateFormation = dateFormation;
   }
 
-  public Formation getFormation() {
-    return formation;
+  public String getModaliteFormation() {
+    return modaliteFormation;
   }
 
-  public void setFormation(Formation formation) {
-    this.formation = formation;
+  public void setModaliteFormation(String modaliteFormation) {
+    this.modaliteFormation = modaliteFormation;
+  }
+
+  public LocalDate getDateHabilitation() {
+    return dateHabilitation;
+  }
+
+  public void setDateHabilitation(LocalDate dateHabilitation) {
+    this.dateHabilitation = dateHabilitation;
   }
 
   public Tuteur getTuteur() {
@@ -80,6 +94,14 @@ public class TuteurHabilitation implements Cloneable {
 
   public void setTuteur(Tuteur tuteur) {
     this.tuteur = tuteur;
+  }
+
+  public Formation getFormation() {
+    return formation;
+  }
+
+  public void setFormation(Formation formation) {
+    this.formation = formation;
   }
 
   public LocalDateTime getCreatedAt() {
@@ -106,12 +128,12 @@ public class TuteurHabilitation implements Cloneable {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     TuteurHabilitation that = (TuteurHabilitation) o;
-    return Objects.equals(id, that.id) && Objects.equals(statutFormation, that.statutFormation) && Objects.equals(dateFormation, that.dateFormation) && Objects.equals(tuteur, that.tuteur) && Objects.equals(formation, that.formation) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+    return id.equals(that.id) && statutFormation.equals(that.statutFormation) && Objects.equals(dateFormation, that.dateFormation) && Objects.equals(modaliteFormation, that.modaliteFormation) && Objects.equals(dateHabilitation, that.dateHabilitation) && tuteur.equals(that.tuteur) && formation.equals(that.formation) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, statutFormation, dateFormation, tuteur, formation, createdAt, updatedAt);
+    return Objects.hash(id, statutFormation, dateFormation, modaliteFormation, dateHabilitation, tuteur, formation, createdAt, updatedAt);
   }
 
   public Object clone() throws CloneNotSupportedException {
@@ -120,12 +142,14 @@ public class TuteurHabilitation implements Cloneable {
 
   @Override
   public String toString() {
-    return "TuteurHabilitation {" +
-            "id=" + id +
-            ", statutFormation='" + statutFormation + '\'' +
-            ", dateFormation=" + dateFormation +
-            ", tuteur=" + tuteur +
-            ", formation=" + formation +
+    return "TuteurHabilitation{" +
+            "\n id=" + id +
+            "\n statutFormation='" + statutFormation + '\'' +
+            "\n dateFormation=" + dateFormation +
+            "\n modaliteFormation='" + modaliteFormation + '\'' +
+            "\n dateHabilitation=" + dateHabilitation +
+            "\n tuteur=" + (tuteur != null ? tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() : "") +
+            "\n formation=" + (formation != null ? formation.getLibelleFormation() : "") +
             '}';
   }
 }

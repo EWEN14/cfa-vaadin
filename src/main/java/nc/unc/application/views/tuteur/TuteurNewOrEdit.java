@@ -69,7 +69,7 @@ public class TuteurNewOrEdit extends Dialog {
   // Champs de notre formulaire
   FormLayout form = new FormLayout();
   TextField nomTuteur = new TextField("NOM");
-  TextField prenomTuteur = new TextField("Prenom");
+  TextField prenomTuteur = new TextField("Prénom");
   DatePicker dateNaissanceTuteur = new DatePicker("Date de naissance");
   EmailField emailTuteur = new EmailField("Email");
   IntegerField telephoneTuteur1 = new IntegerField("Téléphone 1");
@@ -93,6 +93,8 @@ public class TuteurNewOrEdit extends Dialog {
   FormLayout formNewHabilitation = new FormLayout();
   Select<String> statutFormation = new Select<>();
   DatePicker dateFormation = new DatePicker("Date de Formation");
+  Select<String> modaliteFormation = new Select<>("FACE À FACE","PRÉSENTIEL", "DISPENSÉ");
+  DatePicker dateHabilitation = new DatePicker("Date d'Habilitation");
   ComboBox<Formation> formation = new ComboBox<>("Formation");
 
   // Onglets
@@ -151,15 +153,15 @@ public class TuteurNewOrEdit extends Dialog {
 
     // grille des habilitations du tuteur
     tuteurHabilitations.addClassName("tuteur-habilitation-grid");
-    tuteurHabilitations.setColumns("dateFormation","formation.libelleFormation", "statutFormation");
+    tuteurHabilitations.setColumns("dateFormation","formation.libelleFormation", "statutFormation", "modaliteFormation", "dateHabilitation");
     // ajout d'un bouton d'édition pour pouvoir modifier une habilitation
     tuteurHabilitations.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
       editHabilitationTuteur(tuteur);
-    }));
+    })).setHeader("Éditer");
     // ajout d'un bouton de suppression pour pouvoir supprimer une habilitation
     tuteurHabilitations.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.TRASH), click -> {
       deleteHabilitationTuteur(tuteur);
-    }));
+    })).setHeader("Supprimer");
 
     // ajout des champs et des boutons d'action dans le formulaire
     form.add(nomTuteur, prenomTuteur, dateNaissanceTuteur, civiliteTuteur, emailTuteur, telephoneTuteur1, telephoneTuteur2, diplomeEleveObtenu, niveauDiplome,
@@ -175,13 +177,14 @@ public class TuteurNewOrEdit extends Dialog {
     statutFormation.setItems(StatutFormation.getStatutFormationStr());
 
     dateFormation.setI18n(multiFormatI18n);
+    dateHabilitation.setI18n(multiFormatI18n);
 
     // On propose au départ toutes les formations pour le champ de sélection d'habilitation
     formation.setItems(allFormations);
     formation.setItemLabelGenerator(Formation::getLibelleFormation);
 
     // ajout des champs dans le formulaire d'ajout d'habilités au tuteur
-    formNewHabilitation.add(statutFormation, dateFormation, formation, createSaveHabilitationButtonLayout());
+    formNewHabilitation.add(statutFormation, dateFormation, formation, modaliteFormation, dateHabilitation, createSaveHabilitationButtonLayout());
 
     // contenu qui sera affiché en dessous des tabs, qui change en fonction de la tab sélectionné
     content = new VerticalLayout();
@@ -279,7 +282,7 @@ public class TuteurNewOrEdit extends Dialog {
       tuteurHabilitationBinder.writeBean(tuteurHabilitation);
       if (tuteurHabilitation != null) {
         tuteurHabilitation.setTuteur(tuteur);
-        // cas où l'on créé un nouveau tuteur
+        // cas où l'on créé une nouvelle hablitation
         if (tuteurHabilitation.getId() == null) {
           tuteurService.saveTuteurHabilitation(tuteurHabilitation);
           logEnregistrmentService.saveLogAjoutString(tuteurHabilitation.toString());

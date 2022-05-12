@@ -13,11 +13,9 @@ import java.util.List;
 public class EtudiantService {
 
   private final EtudiantRepository etudiantRepository;
-  private final EntrepriseRepository entrepriseRepository;
 
-  public EtudiantService(EtudiantRepository etudiantRepository, EntrepriseRepository entrepriseRepository) {
+  public EtudiantService(EtudiantRepository etudiantRepository) {
     this.etudiantRepository = etudiantRepository;
-    this.entrepriseRepository = entrepriseRepository;
   }
 
   public List<Etudiant> findAllEtudiants(String stringFilter) {
@@ -45,7 +43,7 @@ public class EtudiantService {
   }
 
   /**
-   * Récupère tous les étudiants encadré par un tuteur
+   * Récupère tous les étudiants encadrés par un tuteur
    * @param id l'identifiant du tuteur
    * @return liste d'étudiants
    */
@@ -60,13 +58,5 @@ public class EtudiantService {
    */
   public List<Etudiant> findAllEtudiantsFormation(Long id) {
     return etudiantRepository.findAllByFormationId(id);
-  }
-
-  /**
-   * Récupère la liste de toutes les entreprises
-   * @return liste d'entreprises
-   */
-  public List<Entreprise> findAllEntreprises() {
-    return entrepriseRepository.findAll();
   }
 }

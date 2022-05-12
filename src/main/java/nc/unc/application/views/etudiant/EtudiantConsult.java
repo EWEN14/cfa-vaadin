@@ -5,10 +5,10 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -25,10 +25,9 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.*;
 import nc.unc.application.data.enums.Civilite;
+import nc.unc.application.data.service.ContratService;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -38,13 +37,16 @@ public class EtudiantConsult extends Dialog {
 
   private Etudiant etudiant;
 
+  private ContratService contratService;
+
   // Layout qui contiendra le contenu en dessous des tabs
-  private final VerticalLayout content;
+  private final VerticalLayout content = new VerticalLayout();
 
   // form qui contiendra les informations générales relatives à l'étudiants
   private final FormLayout formEtudiantInfos = new FormLayout();
   private final TextField nomEtudiant = new TextField("NOM");
   private final TextField prenomEtudiant = new TextField("Prénom");
+  private IntegerField numeroEtudiant = new IntegerField("N° Étudiant");
   // utilisation de select lorsque nombre de choix assez petis
   private final Select<Civilite> civiliteEtudiant = new Select<>();
   private final DatePicker dateNaissanceEtudiant = new DatePicker("Date de Naissance");
@@ -53,7 +55,7 @@ public class EtudiantConsult extends Dialog {
   private final IntegerField telephoneEtudiant2 = new IntegerField("Téléphone 2");
   private final EmailField emailEtudiant = new EmailField("Email");
   private final TextField dernierDiplomeObtenuOuEnCours = new TextField("Dernier diplôme obtenu ou en cours");
-  private final Select<Integer> niveauDernierDiplome = new Select<>();
+  private final IntegerField niveauDernierDiplome = new IntegerField("Niveau dernier diplôme obtenu");
   private final IntegerField anneeObtentionDernierDiplome = new IntegerField("Année d'obtention du dernier diplôme");
   private final TextField admis = new TextField("Admis");
   private final TextField situationUnc = new TextField("Situation à l'UNC");
@@ -67,6 +69,7 @@ public class EtudiantConsult extends Dialog {
   private final TextField communeEtudiant = new TextField("Commune");
   private final TextField situationAnneePrecedente = new TextField("Situation l'année précédente");
   private final TextField etablissementDeProvenance = new TextField("Établissement de provenance");
+  private final TextField dernierEmploiOccupe = new TextField("Dernier emploi occupé");
   private final TextField parcours = new TextField("Parcours");
   private final IntegerField anneePromotion = new IntegerField("Année de début de la promotion");
   private final Checkbox travailleurHandicape = new Checkbox("Travailleur Handicapé");
@@ -74,7 +77,7 @@ public class EtudiantConsult extends Dialog {
   private final TextField priseEnChargeFraisInscription = new TextField("Prise en charge des frais d'inscription");
   private final TextField obtentionDiplomeMention = new TextField("Obtention du diplôme et mention");
   private final TextArea observationsEtudiant = new TextArea("Observations");
-  // binder qui sera utilisé pour remlir automatiquement les champs d'infos générales sur l'étudiant
+  // binder qui sera utilisé pour remplir automatiquement les champs d'infos générales sur l'étudiant
   Binder<Etudiant> etudiantBinder = new BeanValidationBinder<>(Etudiant.class);
 
   // form qui contiendra les informations relatives à l'entreprise dans laquelle est l'étudiant
@@ -87,30 +90,34 @@ public class EtudiantConsult extends Dialog {
   Binder<Entreprise> entrepriseBinder = new BeanValidationBinder<>(Entreprise.class);
 
   // Champs du formulaire relatifs aux informations du tuteur lié à l'étudiant
-  FormLayout formEtudiantTuteur = new FormLayout();
-  TextField nomTuteur = new TextField("NOM");
-  TextField prenomTuteur = new TextField("Prenom");
-  EmailField emailTuteur = new EmailField("Email");
-  IntegerField telephoneTuteur1 = new IntegerField("Téléphone 1");
-  IntegerField telephoneTuteur2 = new IntegerField("Téléphone 2");
+  private final FormLayout formEtudiantTuteur = new FormLayout();
+  private final TextField nomTuteur = new TextField("NOM");
+  private final TextField prenomTuteur = new TextField("Prenom");
+  private final EmailField emailTuteur = new EmailField("Email");
+  private final IntegerField telephoneTuteur1 = new IntegerField("Téléphone 1");
+  private final IntegerField telephoneTuteur2 = new IntegerField("Téléphone 2");
   // Binder qui sera utilisé pour remplir automatiquement les champs du tuteur
   Binder<Tuteur> tuteurBinder = new BeanValidationBinder<>(Tuteur.class);
 
   // Champs du formulaire relatif aux informations de la formation lié à l'étudiant
-  FormLayout formEtudiantFormation = new FormLayout();
-  TextField libelleFormation = new TextField("Libellé de la formation");
-  TextField codeFormation = new TextField("Code de la formation");
+  private final FormLayout formEtudiantFormation = new FormLayout();
+  private final TextField libelleFormation = new TextField("Libellé de la formation");
+  private final TextField codeFormation = new TextField("Code de la formation");
+  private final TextField codeRome = new TextField("Code ROME de la formation");
   // Binder qui sera utilisé pour remplir automatiquement les champs de formation
   Binder<Formation> formationBinder = new BeanValidationBinder<>(Formation.class);
 
   // Champs du formulaire relatif aux informations du référent pédagogique lié à l'étudiant
-  FormLayout formEtudiantReferentPedago = new FormLayout();
-  TextField nomReferentPedago = new TextField("NOM");
-  TextField prenomReferentPedago = new TextField("Prénom");
-  IntegerField telephoneReferentPedago = new IntegerField("Téléphone");
-  EmailField emailReferentPedago = new EmailField("Email");
+  private final FormLayout formEtudiantReferentPedago = new FormLayout();
+  private final TextField nomReferentPedago = new TextField("NOM");
+  private final TextField prenomReferentPedago = new TextField("Prénom");
+  private final IntegerField telephoneReferentPedago = new IntegerField("Téléphone");
+  private final EmailField emailReferentPedago = new EmailField("Email");
   // Binder qui sera utilisé pour remplir automatiquement les champs du référent pédagogique
   Binder<ReferentPedagogique> referentPedagogiqueBinder = new BeanValidationBinder<>(ReferentPedagogique.class);
+
+  // grid qui contiendra les contrats liés à l'étudiant
+  private final Grid<Contrat> contratGrid = new Grid<>(Contrat.class);
 
   // tab (onglet) qui seront insérés dans une tabs (ensemble d'onglets) les regroupant
   private final Tab etudiantInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(),new Span("Étudiant"));
@@ -118,17 +125,21 @@ public class EtudiantConsult extends Dialog {
   private final Tab tuteurEtudiantInfosTab = new Tab(VaadinIcon.USER.create(), new Span("Tuteur"));
   private final Tab formationEtudiantInfosTab = new Tab(VaadinIcon.DIPLOMA.create(), new Span("Formation"));
   private final Tab referentPedagoEtudiantInfosTab = new Tab(VaadinIcon.HANDSHAKE.create(), new Span("Référent pédagogique"));
+  private final Tab contratsEtudiantTab = new Tab(VaadinIcon.NEWSPAPER.create(), new Span("Contrats"));
 
   private final Button close = new Button("Fermer");
   private final Button delete = new Button("Supprimer l'étudiant");
 
-  public EtudiantConsult() {
+  public EtudiantConsult(ContratService contratService) {
+    this.contratService = contratService;
+
     // On définit que la fenêtre qui s'ouvre est une modale, ce qui fait qu'on ne peut rien faire sur l'application
     // tant que la modale n'est pas fermée
     this.setModal(true);
     this.setWidth("85vw");
+    this.setHeight("90vh");
 
-    // fonction qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables TODO
+    // fonction qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
     setAllFieldsToReadOnly();
 
     // instanciation des différents binder qui serviront au remplissage automatique des formulaires d'informations rattachés à l'étudiant
@@ -141,20 +152,26 @@ public class EtudiantConsult extends Dialog {
     civiliteEtudiant.setLabel("Civilité");
     civiliteEtudiant.setItems(Civilite.values());
 
+    // grilles des contrats liées à l'étudiant
+    contratGrid.addClassName("tuteur-contrats-grid");
+    contratGrid.setColumns("codeContrat", "debutContrat", "finContrat", "numeroConventionFormation");
+    contratGrid.addColumn(contrat -> contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur()).setHeader("Tuteur").setSortable(true);
+    contratGrid.getColumns().forEach(col -> col.setAutoWidth(true));
+
     // On instancie la Tabs, et on lui donne les tab que l'on veut insérer
     // tabs qui contiendra les tab permettant de passer d'un groupe d'informations à un autre
     Tabs tabsEtudiant = new Tabs(etudiantInfosTab, entrepriseEtudiantInfosTab, tuteurEtudiantInfosTab,
-            formationEtudiantInfosTab, referentPedagoEtudiantInfosTab);
+            formationEtudiantInfosTab, referentPedagoEtudiantInfosTab, contratsEtudiantTab);
     // Au clic sur une des tab, on appelle notre méthode setContent pour pouvoir changer le contenu
     tabsEtudiant.addSelectedChangeListener(selectedChangeEvent ->
             setContent(selectedChangeEvent.getSelectedTab())
     );
 
     // on définit les champs qu'il y aura dans le formulaire d'informations générales de l'étudiant
-    formEtudiantInfos.add(nomEtudiant, prenomEtudiant, civiliteEtudiant, dateNaissanceEtudiant, ageEtudiant, telephoneEtudiant1, telephoneEtudiant2,
-            emailEtudiant, dernierDiplomeObtenuOuEnCours, niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc,
+    formEtudiantInfos.add(nomEtudiant, prenomEtudiant, numeroEtudiant, civiliteEtudiant, dateNaissanceEtudiant, ageEtudiant, telephoneEtudiant1, telephoneEtudiant2,
+            emailEtudiant, dernierDiplomeObtenuOuEnCours, niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, situationEntreprise,
             lieuNaissance, nationalite, numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente,
-            etablissementDeProvenance, parcours, anneePromotion, travailleurHandicape, veepap, priseEnChargeFraisInscription,
+            etablissementDeProvenance, dernierEmploiOccupe, parcours, anneePromotion, travailleurHandicape, veepap, priseEnChargeFraisInscription,
             obtentionDiplomeMention, observationsEtudiant);
     // pareil, mais pour le formulaire relatif à son entreprise
     formEtudiantEntrepriseInfos.add(enseigne, raisonSociale, statutActifEntreprise, telephoneContactCfa);
@@ -163,13 +180,12 @@ public class EtudiantConsult extends Dialog {
     formEtudiantTuteur.add(prenomTuteur, nomTuteur, emailTuteur, telephoneTuteur1, telephoneTuteur2);
 
     // ajout des champs dans le formulaire de la formation suivie par l'étudiant
-    formEtudiantFormation.add(libelleFormation, codeFormation);
+    formEtudiantFormation.add(libelleFormation, codeFormation, codeRome);
 
     // ajout des champs dans le formulaire du referent pédagogique qui encadre l'étudiant
     formEtudiantReferentPedago.add(prenomReferentPedago, nomReferentPedago, telephoneReferentPedago, emailReferentPedago);
 
     // contenu qui sera affiché en dessous des tabs, qui change en fonction de la tab sélectionné
-    content = new VerticalLayout();
     content.setSpacing(false);
     // à l'ouverture, on ouvre la tab d'infos générales sur l'étudiant
     setContent(etudiantInfosTab);
@@ -182,7 +198,7 @@ public class EtudiantConsult extends Dialog {
   public void setEtudiant(Etudiant etudiant) {
     this.etudiant = etudiant;
     if (etudiant != null) {
-      // lecture des binder pour compléter les champs dans les différents formulaire
+      // lecture des binder pour compléter les champs dans les différents formulaires
       etudiantBinder.readBean(etudiant);
       entrepriseBinder.readBean(etudiant.getEntreprise());
       tuteurBinder.readBean(etudiant.getTuteur());
@@ -191,6 +207,9 @@ public class EtudiantConsult extends Dialog {
 
       // définition de l'âge de l'étudiant en front, en se basant sur la base de données
       ageEtudiant.setValue(ChronoUnit.YEARS.between(etudiant.getDateNaissanceEtudiant(), LocalDate.now()) + " ans");
+
+      // on récupère les contrats qui ont l'étudiant avec l'id correspondant et on les passe à la grid
+      contratGrid.setItems(contratService.findAllContratByEtudiantId(etudiant.getId()));
     }
   }
 
@@ -220,6 +239,8 @@ public class EtudiantConsult extends Dialog {
       content.add(formEtudiantFormation);
     } else if (tab.equals(referentPedagoEtudiantInfosTab)) {
       content.add(formEtudiantReferentPedago);
+    } else if (tab.equals(contratsEtudiantTab)) {
+      content.add(contratGrid);
     }
   }
 
@@ -228,6 +249,7 @@ public class EtudiantConsult extends Dialog {
     // étudiant
     nomEtudiant.setReadOnly(true);
     prenomEtudiant.setReadOnly(true);
+    numeroEtudiant.setReadOnly(true);
     civiliteEtudiant.setReadOnly(true);
     dateNaissanceEtudiant.setReadOnly(true);
     ageEtudiant.setReadOnly(true);
@@ -249,6 +271,7 @@ public class EtudiantConsult extends Dialog {
     communeEtudiant.setReadOnly(true);
     situationAnneePrecedente.setReadOnly(true);
     etablissementDeProvenance.setReadOnly(true);
+    dernierEmploiOccupe.setReadOnly(true);
     parcours.setReadOnly(true);
     travailleurHandicape.setReadOnly(true);
     veepap.setReadOnly(true);
@@ -264,6 +287,7 @@ public class EtudiantConsult extends Dialog {
     // formation
     libelleFormation.setReadOnly(true);
     codeFormation.setReadOnly(true);
+    codeRome.setReadOnly(true);
     // tuteur
     prenomTuteur.setReadOnly(true);
     nomTuteur.setReadOnly(true);
@@ -275,6 +299,10 @@ public class EtudiantConsult extends Dialog {
     prenomReferentPedago.setReadOnly(true);
     telephoneReferentPedago.setReadOnly(true);
     emailReferentPedago.setReadOnly(true);
+  }
+
+  public void hideDeleteButton() {
+    delete.setVisible(false);
   }
 
   // Event "global" (class mère), qui étend les deux events ci-dessous, dont le but est de fournir l'étudiant

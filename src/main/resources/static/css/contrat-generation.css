@@ -1,0 +1,32 @@
+.blue {
+    color: #0066ff;
+}
+
+.blue-background {
+    background-color: #0c3b9a;
+    color: white;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+    border: black solid 1px;
+}
+
+@page {
+    size: A4 portrait;
+    outline: solid black 1px; /* sert à voir la délimitation que représente une feuille A4, à retirer après */
+}
+
+@media all {
+    body{
+        /* utilisé pour simuler les contours d'une page A4 */
+        width: 21cm;
+        height: 29.7cm;
+        /*margin: 30mm 45mm 30mm 45mm;*/
+        /* change the margins as you want them to be. */
+        outline: solid 1px; /* sert à voir la délimitation que représente une feuille A4, à retirer après */
+    }
+}

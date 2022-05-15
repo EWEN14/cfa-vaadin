@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <title>CUA</title>
+    <link rel="stylesheet" type="text/css" href="css/contrat-generation.css"/>
+</head>
+
+<body>
+<h1>CONTRAT UNIQUE D'ALTERNANCE</h1>
+
+<div><em>Régi par les articles Lp. 522-1 et suivants du code du travail de Nouvelle-Calédonie</em></div>
+
+<div data-th-object="${ contrat }" class="container-global">
+    <table>
+        <tbody>
+        <tr>
+            <td><strong>TYPE DE CONTRAT</strong></td>
+            <td data-th-text="*{ typeContrat }"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="blue-background"><strong>ENTRE L'EMPLOYEUR, désigné ci-dessous</strong></div>
+
+    <div data-th-object="${ contrat?.entreprise }" class="container-entreprise">
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>N° RIDET</strong></td>
+                <td data-th-text="*{ numeroRidet }"></td>
+                <td><strong>N° CAFAT</strong></td>
+                <td data-th-text="*{ numeroCafatEntreprise }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>CODE NAF</strong></td>
+                <td data-th-text="*{ codeNaf }"></td>
+                <td><strong>STATUT JURIDIQUE</strong></td>
+                <td data-th-text="*{ formeJuridique }"></td>
+                <td><strong>NOMBRE DE SALARIES</strong></td>
+                <td data-th-text="*{ nombreSalarie }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>ENSEIGNE ou SIGLE</strong></td>
+                <td data-th-text="*{ enseigne }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>NOM - PRENOM - FONCTION <br/>DU REPRESENTANT DE L'EMPLOYEUR</strong></td>
+                <td><span data-th-text="*{ nomRepresentantEmployeur }"></span> <span data-th-text="*{ prenomRepresentantEmployeur }"></span> - <span data-th-text="*{ fonctionRepresentantEmployeur }"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>ADRESSE PHYSIQUE<br/><em>(Lieu d'exécution du contrat)</em></strong></td>
+                <td>RUE : <span data-th-text="*{ adressePhysiqueRue }"></span><br/>
+                    CODE POSTAL : <span data-th-text="*{ adressePhysiqueCodePostal }"></span>
+                    COMMUNE : <span data-th-text="*{ adressePhysiqueCommune }"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>ADRESSE POSTALE</strong></td>
+                <td>RUE ou BP : <span data-th-text="*{ adressePostaleRueOuBp }"></span><br/>
+                    CODE POSTAL : <span data-th-text="*{ adressePostaleCodePostal }"></span>
+                    COMMUNE : <span data-th-text="*{ adressePostaleCommune }"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>TEL</strong></td>
+                <td data-th-text="*{ telephoneEntreprise }"></td>
+                <td><strong>COURRIEL</strong></td>
+                <td data-th-text="*{ emailEntreprise }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>CONVENTION COLLECTIVE <br/>APPLICABLE DANS L'ENTREPRISE</strong></td>
+                <td data-th-text="*{ conventionCollective }"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

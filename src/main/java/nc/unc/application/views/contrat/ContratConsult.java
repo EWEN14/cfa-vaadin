@@ -30,6 +30,9 @@ public class ContratConsult extends Dialog {
   // Layout qui contiendra le contenu en dessous des tabs
   private VerticalLayout content = new VerticalLayout();
 
+  private Anchor lienPreview = new Anchor("unc.nc", "Consulter le contrat");
+  private Anchor lienDownloadPdf = new Anchor("unc.nc", "Télécharger le contrat");
+
   // form qui contiendra les informations générales relatives au contrat
   private final FormLayout form = new FormLayout();
 
@@ -183,6 +186,10 @@ public class ContratConsult extends Dialog {
             setContent(selectedChangeEvent.getSelectedTab())
     );
 
+    // on ouvre la page du contrat à générer dans un pdf dans un nouvel onglet
+    lienPreview.setTarget("_blank");
+    lienDownloadPdf.setTarget("_blank");
+
     // ajout des éléments au formulaire principal
     form.add(codeContrat, typeContrat, representantLegal, new Div(), nomRepresentantLegal,
             prenomRepresentantLegal, relationAvecSalarie, adresseRepresentant, codePostalRepresentant, communeRepresentant,
@@ -209,12 +216,16 @@ public class ContratConsult extends Dialog {
     // à l'ouverture, on ouvre la tab d'infos générales sur le contrat
     setContent(contratInfosTab);
 
-    add(tabsContrat, titre, content, createButtonsLayout());
+    add(tabsContrat, titre, lienPreview, lienDownloadPdf, content, createButtonsLayout());
   }
 
   public void setContrat(Contrat contrat) {
     this.contrat = contrat;
     if (contrat != null) {
+      // on passe l'id du contrat pour la page de generation pdf du contrat
+      lienPreview.setHref("/contrat-generation/"+contrat.getId());
+      lienDownloadPdf.setHref("/contrat-generation/download/"+contrat.getId());
+
       // lecture des binder pour compléter les champs dans les différents formulaires
       contratBinder.readBean(contrat);
       etudiantBinder.readBean(contrat.getEtudiant());

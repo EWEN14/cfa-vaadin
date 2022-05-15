@@ -52,4 +52,13 @@ public class ContratService {
   public List<Contrat> findAllContratByEtudiantId(Long id) {
     return contratRepository.findAllByEtudiantId(id);
   }
+
+  /**
+   * retourne un contrat
+   * @param id identifiant du contrat
+   * @return le contrat avec l'identifiant passé en paramètre
+   */
+  public Contrat findContratById(Long id) {
+    return contratRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+  }
 }

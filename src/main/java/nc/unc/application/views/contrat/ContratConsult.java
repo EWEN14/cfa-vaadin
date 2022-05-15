@@ -30,12 +30,17 @@ public class ContratConsult extends Dialog {
   // Layout qui contiendra le contenu en dessous des tabs
   private VerticalLayout content = new VerticalLayout();
 
+  // Layout qui contiendra les liens vers la prévisualisation et le téléchargement d'un contrat
+  private HorizontalLayout lienContainer = new HorizontalLayout();
+  private Anchor lienPreview = new Anchor("unc.nc", "Consulter le contrat");
+  private Anchor lienDownloadPdf = new Anchor("unc.nc", "Télécharger le contrat");
+
   // form qui contiendra les informations générales relatives au contrat
   private final FormLayout form = new FormLayout();
 
   private final H3 titre = new H3("Consultation d'un contrat");
-  private final TextField codeContrat = new TextField();
-  private final TextField typeContrat = new TextField();
+  private final TextField codeContrat = new TextField("Code du Contrat");
+  private final TextField typeContrat = new TextField("Type du Contrat");
   private final Div representantLegal = new Div(new H4("Représentant légal du salarié et dérogation d'âge"));
   private final TextField nomRepresentantLegal = new TextField("NOM représentant légal");
   private final TextField prenomRepresentantLegal = new TextField("Prénom représentant légal");
@@ -57,7 +62,6 @@ public class ContratConsult extends Dialog {
   private final TextField emploiOccupeSalarieEtudiant = new TextField("Emploi occupé par le salarié");
   private final TextField codeRomeEmploiOccupe = new TextField("Code ROME de l'emploi occupé");
   private final IntegerField dureePeriodeEssai = new IntegerField("Durée de la période d'essai (nombre de semaines)");
-  private final IntegerField niveauCertificationPro = new IntegerField("Niveau de la certification professionnelle");
   private final TextField numeroConventionFormation = new TextField("Numéro de la convention de Formation");
   private final IntegerField semainesEntreprise = new IntegerField("Nombre de semaines en entreprise");
   private final IntegerField heuresFormation = new IntegerField("Nombre d'heures en formation");
@@ -126,6 +130,7 @@ public class ContratConsult extends Dialog {
   private final TextField libelleFormation = new TextField("Libellé de la formation");
   private final TextField codeFormation = new TextField("Code de la formation");
   private final TextField codeRome = new TextField("Code ROME de la formation");
+  private final IntegerField niveauCertificationProfessionnelle = new IntegerField("Niveau de la certification professionnelle");
   // Binder qui sera utilisé pour remplir automatiquement les champs de formation
   Binder<Formation> formationBinder = new BeanValidationBinder<>(Formation.class);
 
@@ -183,12 +188,19 @@ public class ContratConsult extends Dialog {
             setContent(selectedChangeEvent.getSelectedTab())
     );
 
+    // on ouvre la page du contrat à générer dans un pdf dans un nouvel onglet
+    lienPreview.setTarget("_blank");
+    lienDownloadPdf.setTarget("_blank");
+
+    // on met les liens dans des Div, qu'on met ensuite dans notre HorizontalLayout
+    lienContainer.add(new Div(lienPreview), new Div(lienDownloadPdf));
+
     // ajout des éléments au formulaire principal
     form.add(codeContrat, typeContrat, representantLegal, new Div(), nomRepresentantLegal,
             prenomRepresentantLegal, relationAvecSalarie, adresseRepresentant, codePostalRepresentant, communeRepresentant,
             telephoneRepresentant, emailRepresentant, derogationAge, dateDelivranceDerogationAge, cadreAdministration, new Div(), cadreAdminNumEnregistrementContrat, cadreAdminNumAvenant,
-            cadreAdminRecuLe, new Div(), infosContrat, new Div(), debutContrat, finContrat, emploiOccupeSalarieEtudiant, codeRomeEmploiOccupe, dureePeriodeEssai, niveauCertificationPro, numeroConventionFormation, semainesEntreprise,
-            heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail, decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua,
+            cadreAdminRecuLe, new Div(), infosContrat, new Div(), debutContrat, finContrat, emploiOccupeSalarieEtudiant, codeRomeEmploiOccupe, dureePeriodeEssai, numeroConventionFormation, semainesEntreprise,
+            heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail, new Div(), decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua,
             dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(), dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(),
             dateReceptionOriginauxConvention, exemplaireOriginauxRemisAlternantOuEntreprise, lea, new Div(), formationLea);
 
@@ -200,7 +212,7 @@ public class ContratConsult extends Dialog {
             dateRemiseOriginauxCuaAvn2, new Div(), suiviAvenantConv2, new Div(), dateMailOuRdvSignatureConvAvn2, dateDepotAlfrescoConvAvn2, dateRemiseOriginauxAvn2);
 
     formContratEtudiant.add(prenomEtudiant, nomEtudiant, numeroEtudiant, situationEntreprise, telephoneEtudiant1, emailEtudiant);
-    formContratFormation.add(libelleFormation, codeFormation, codeRome);
+    formContratFormation.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle);
     formContratEntrepriseInfos.add(enseigne, raisonSociale, statutActifEntreprise, telephoneContactCfa);
     formContratTuteur.add(prenomTuteur, nomTuteur, emailTuteur, telephoneTuteur1, telephoneTuteur2);
 
@@ -209,12 +221,19 @@ public class ContratConsult extends Dialog {
     // à l'ouverture, on ouvre la tab d'infos générales sur le contrat
     setContent(contratInfosTab);
 
-    add(tabsContrat, titre, content, createButtonsLayout());
+    add(tabsContrat, titre, lienContainer, content, createButtonsLayout());
   }
 
   public void setContrat(Contrat contrat) {
     this.contrat = contrat;
     if (contrat != null) {
+      // on passe l'id du contrat pour la page de generation pdf du contrat
+      lienPreview.setHref("/contrat-generation/"+contrat.getId());
+      lienDownloadPdf.setHref("/contrat-generation/download/"+contrat.getId());
+
+      // on affiche le layout avec les liens pour les contrats que si celui-ci contient étudiant, formation, entreprise et tuteur
+      lienContainer.setVisible(contrat.getEtudiant() != null && contrat.getFormation() != null && contrat.getEntreprise() != null && contrat.getTuteur() != null);
+
       // lecture des binder pour compléter les champs dans les différents formulaires
       contratBinder.readBean(contrat);
       etudiantBinder.readBean(contrat.getEtudiant());
@@ -282,7 +301,6 @@ public class ContratConsult extends Dialog {
     emploiOccupeSalarieEtudiant.setReadOnly(true);
     codeRomeEmploiOccupe.setReadOnly(true);
     dureePeriodeEssai.setReadOnly(true);
-    niveauCertificationPro.setReadOnly(true);
     numeroConventionFormation.setReadOnly(true);
     semainesEntreprise.setReadOnly(true);
     heuresFormation.setReadOnly(true);
@@ -325,6 +343,7 @@ public class ContratConsult extends Dialog {
     libelleFormation.setReadOnly(true);
     codeFormation.setReadOnly(true);
     codeRome.setReadOnly(true);
+    niveauCertificationProfessionnelle.setReadOnly(true);
 
     // entreprise
     enseigne.setReadOnly(true);

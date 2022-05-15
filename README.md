@@ -1,20 +1,35 @@
 # cfa_vaadin
 
-This project can be used as a starting point to create your own Vaadin application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
+Application de gestion des alternants pour le CFA de l'UNC
 
 ## Modification du application.properties
 
-vous devez ajouter 4 lignes dans le fichier application.properties (_src/main/resources/application.properties_) 
+vous devez mettre les éléments suivants dans le fichier application.properties (_src/main/resources/application.properties_) 
 pour connecter l'application avec votre base de données, préalablement créée et nommé cfa_sb, sans table ni contenu :
 
+```
+server.port=${PORT:8080}
+logging.level.org.atmosphere = warn
+spring.mustache.check-template-location = false
+
+# Launch the default browser when starting the application in development mode
+vaadin.launch-browser=true
+# To improve the performance during development.
+# For more information https://vaadin.com/docs/flow/spring/tutorial-spring-configuration.html#special-configuration-parameters
+vaadin.whitelisted-packages = com.vaadin,org.vaadin,dev.hilla,nc.unc.application
+
+# connexion à la base de données postgresql
 spring.datasource.url=jdbc:postgresql://localhost:5432/cfa_sb
-
-spring.datasource.username=votre username postgres, généralement "postgres"
-
-spring.datasource.password=votre mot de passe
-
+spring.datasource.username=(insérer nom d'utilisateur bdd)
+spring.datasource.password=(insérer mot de passe accès bdd)
 spring.datasource.driver-class-name=org.postgresql.Driver
+
+# permet de merger une entité qui a plusieurs représentations durant un enregistrement.
+# ex : lorsqu'on enregistre un étudiant, il a éventuellement une entreprise et un tuteur, et dans la plupart des cas
+# l'entreprise sera la même que celle du tuteur, ce qui entraînait une erreur sans l'ajout des propriétés suivantes :
+spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
+spring.jpa.properties.hibernate.event.merge.entity_copy_observer=allow
+```
 
 Au lancement de l'application, les tables se généreront grâce aux scripts de migration présents
 dans le dossier _src/main/resources/db/migration_. Ne tentez pas de modifier ces scripts !

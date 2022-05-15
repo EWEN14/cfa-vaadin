@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<!-- utilisation d'une condition qui change le link pour récupérer la CSS, qui diffère selon qu'on
+ télécharge le contrat ou si l'on regarde sa prévisualisation -->
+<head th:if="${ download }">
+    <title>CUA</title>
+    <link rel="stylesheet" type="text/css" href="css/contrat-generation.css"/>
+</head>
+<head th:unless="${ download }">
+    <title>CUA</title>
+    <link href="../static/css/contrat-generation.css" th:href="@{/css/contrat-generation.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<h1>CONTRAT UNIQUE D'ALTERNANCE</h1>
+
+<div><em>Régi par les articles Lp. 522-1 et suivants du code du travail de Nouvelle-Calédonie</em></div>
+
+<div data-th-object="${ contrat }" class="container-global">
+    <table>
+        <tbody>
+        <tr>
+            <td><strong>TYPE DE CONTRAT</strong></td>
+            <td data-th-text="*{ typeContrat }"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="blue-bg"><strong>ENTRE L'EMPLOYEUR, désigné ci-dessous</strong></div>
+
+    <div data-th-object="${ contrat?.entreprise }" class="container-entreprise">
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>N° RIDET</strong></td>
+                <td data-th-text="*{ numeroRidet }"></td>
+                <td><strong>N° CAFAT</strong></td>
+                <td data-th-text="*{ numeroCafatEntreprise }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>CODE NAF</strong></td>
+                <td data-th-text="*{ codeNaf }"></td>
+                <td><strong>STATUT JURIDIQUE</strong></td>
+                <td data-th-text="*{ formeJuridique }"></td>
+                <td><strong>NOMBRE DE SALARIES</strong></td>
+                <td data-th-text="*{ nombreSalarie }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>ENSEIGNE ou SIGLE</strong></td>
+                <td data-th-text="*{ enseigne }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>NOM - PRENOM - FONCTION <br/>DU REPRESENTANT DE L'EMPLOYEUR</strong></td>
+                <td><span data-th-text="*{ nomRepresentantEmployeur }"></span> <span data-th-text="*{ prenomRepresentantEmployeur }"></span> - <span data-th-text="*{ fonctionRepresentantEmployeur }"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>ADRESSE PHYSIQUE<br/><em>(Lieu d'exécution du contrat)</em></strong></td>
+                <td>RUE : <span data-th-text="*{ adressePhysiqueRue }"></span><br/>
+                    CODE POSTAL : <span data-th-text="*{ adressePhysiqueCodePostal }"></span>
+                    COMMUNE : <span data-th-text="*{ adressePhysiqueCommune }"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>ADRESSE POSTALE</strong></td>
+                <td>RUE ou BP : <span data-th-text="*{ adressePostaleRueOuBp }"></span><br/>
+                    CODE POSTAL : <span data-th-text="*{ adressePostaleCodePostal }"></span>
+                    COMMUNE : <span data-th-text="*{ adressePostaleCommune }"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>TEL</strong></td>
+                <td data-th-text="*{ telephoneEntreprise }"></td>
+                <td><strong>COURRIEL</strong></td>
+                <td data-th-text="*{ emailEntreprise }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>CONVENTION COLLECTIVE <br/>APPLICABLE DANS L'ENTREPRISE</strong></td>
+                <td data-th-text="*{ conventionCollective }"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="blue-bg"><strong>ET LE(LA) SALARIE(E),</strong></div>
+
+    <div data-th-object="${ contrat?.etudiant }" class="container-etudiant">
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>NOM</strong></td>
+                <td data-th-text="*{ nomEtudiant }"></td>
+                <td><strong>PRENOM(S)</strong></td>
+                <td data-th-text="*{ prenomEtudiant }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>CIVILITE</strong></td>
+                <td data-th-text="*{ civiliteEtudiant }"></td>
+                <td><strong>NATIONALITE</strong></td>
+                <td data-th-text="*{ nationalite }"></td>
+                <td><strong>N°CAFAT</strong></td>
+                <td data-th-text="*{ numeroCafatEtudiant }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>DATE DE NAISSANCE</strong></td>
+                <td th:text="${#temporals.format(contrat?.etudiant?.dateNaissanceEtudiant, 'dd/MM/yyyy')}"></td>
+                <td><strong>AGE</strong></td>
+                <td data-th-text="${ age }"></td>
+                <td><strong>LIEU DE NAISSANCE</strong><br/>(ville, dépt, pays)</td>
+                <td data-th-text="*{ lieuNaissance }"></td>
+                <td><strong>NATIONALITE</strong></td>
+                <td data-th-text="*{ lieuNaissance }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>TEL</strong></td>
+                <td><span data-th-text="*{ telephoneEtudiant1 }"></span>  /  <span data-th-text="*{ telephoneEtudiant2 }"></span></td>
+                <td><strong>COURRIEL</strong></td>
+                <td data-th-text="*{ emailEtudiant }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>ADRESSE</strong></td>
+                <td>RUE : <span data-th-text="*{ adresseEtudiant }"></span><br/>
+                    CODE POSTAL : <span data-th-text="*{ codePostalEtudiant }"></span>
+                    COMMUNE : <span data-th-text="*{ communeEtudiant }"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>DIPLOME LE PLUS ELEVE OBTENU</strong></td>
+                <td data-th-text="*{ dernierDiplomeObtenuOuEnCours }"></td>
+                <td><strong>NIVEAU</strong></td>
+                <td data-th-text="*{ niveauDernierDiplome }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>SITUATION AVANT CONTRAT</strong></td>
+                <td data-th-text="*{ situationAnneePrecedente }"></td>
+                <td><strong>DERNIER EMPLOI OCCUPE</strong></td>
+                <td data-th-text="*{ dernierEmploiOccupe }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>TRAVAILLEUR HANDICAPE</strong></td>
+                <td><input type="checkbox" name="travailleurH" th:checked="*{ travailleurHandicape }" /></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>DEROGATION D'AGE</strong></td>
+                <td><input type="checkbox" name="derogation" th:checked="${ contrat?.derogationAge }" /></td>
+                <td><strong>DATE DE DELIVRANCE DE LA DEROGATION</strong></td>
+                <td th:text="${#temporals.format(contrat?.dateDelivranceDerogationAge, 'dd/MM/yyyy')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="blue-bg"><strong>ET LE(LA) REPRESENTANT(E) LEGAL(E) DU (DE LA) SALARIE(E),</strong></div>
+
+    <table>
+        <tbody>
+        <tr>
+            <td><strong>NOM</strong></td>
+            <td data-th-text="*{ nomRepresentantLegal }"></td>
+            <td><strong>PRENOM(S)</strong></td>
+            <td data-th-text="*{ prenomRepresentantLegal }"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tbody>
+        <tr>
+            <td><strong>RELATION AVEC LE(LA) SALARIE(E)</strong>
+
+            </td>
+            <td>
+                <span>Père </span>
+                <input type="checkbox" name="pere" th:checked="${ contrat?.relationAvecSalarie == 'Père' }" />
+                <span>Mère </span>
+                <input type="checkbox" name="mere" th:checked="${ contrat?.relationAvecSalarie == 'Mère' }" />
+                <span>Tuteur </span>
+                <input type="checkbox" name="tuteur" th:checked="${ contrat?.relationAvecSalarie == 'Tuteur' }" />
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tbody>
+        <tr>
+            <td><strong>ADRESSE</strong></td>
+            <td>RUE : <span data-th-text="*{ adresseRepresentant }"></span><br/>
+                CODE POSTAL : <span data-th-text="*{ codePostalRepresentant }"></span>
+                COMMUNE : <span data-th-text="*{ communeRepresentant }"></span></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tbody>
+        <tr>
+            <td><strong>TEL</strong></td>
+            <td><span data-th-text="*{ telephoneRepresentant }"></span></td>
+            <td><strong>COURRIEL</strong></td>
+            <td data-th-text="*{ emailRepresentant }"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <thead>
+        <tr>
+            <th class="light-grey-bg">CADRE RESERVE A L'ADMNISTRATION</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                N° d'enregistrement du contrat : <span data-th-text="*{ cadreAdminNumEnregistrementContrat }"></span><br/>
+                N° d'avenant : <span data-th-text="*{ cadreAdminNumAvenant }"></span><br/>
+                Reçu la : <span data-th-text="*{ cadreAdminRecuLe }"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div>1 / 2</div>
+
+    <div><strong>IL EST CONVENU CE QUI SUIT :</strong></div>
+
+    <p>L'employeur engage le(la) salarié(e) à compter du <span data-th-text="*{ debutContrat }"></span> jusqu'au
+        <span data-th-text="*{ finContrat }"></span>.</p>
+
+    <p>La période d'essai a une durée de <span data-th-text="*{ dureePeriodeEssai }"></span> semaines.</p>
+
+    <p>Le(la) salarié(e) occupera l'emploi de : <span data-th-text="*{ emploiOccupeSalarieEtudiant }"></span>
+        - <span data-th-text="*{ codeRomeEmploiOccupe }"></span></p>
+
+    <p>Durant la période du contrat, le(la) salrié(e) suivra par alternance une formation en vue d'acquérir la
+        certification professionnelle suivante :</p>
+
+    <p><span data-th-text="${ contrat?.formation?.libelleFormation }"></span></p>
+    <p>(<span data-th-text="${ contrat?.formation?.niveauCertificationProfessionnelle }"></span> - Inscrit au RCP-NC)</p>
+
+    <p>dont l'autorité certificatrice est : l'Université de la Nouvelle-Calédonie</p>
+
+    <p>La formation est assurée</p>
+
+    <div class="border">
+        <p><strong>CFA SUP de l'Université de la Nouvelle-Calédonie</strong></p>
+        <p>(n° déclaration DFPC : 988/ 198/04U</p>
+    </div>
+
+    <p>L'organisation du parcours de formation du (de la) salarié(e) se déroulera conformément aux dispositions de la
+        convention de formation <span data-th-text="*{ numeroConventionFormation }"></span> et de ses éventuels avenants ultérieurs.</p>
+
+    <p>Il comprend <span data-th-text="*{ semainesEntreprise }"></span> en entreprise et <span data-th-text="*{ heuresFormation }"></span>
+        réparties sur <span data-th-text="*{ semainesFormation }"></span> semaines en centre de formation. Les périodes
+        de formation en centre se dérouleront à <span data-th-text="*{ lieuFormation }"></span></p>
+
+    <p>Durant les périodes en entreprise, le(la) salarié(e) est encadré(e) par un(e) tuteur(tutrice) désigné(e) ci-dessous :</p>
+
+    <div data-th-object="${ contrat?.tuteur }" class="container-tuteur">
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>NOM</strong></td>
+                <td data-th-text="*{ nomTuteur }"></td>
+                <td><strong>PRENOM</strong></td>
+                <td data-th-text="*{ prenomTuteur }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>EMPLOI OCCUPE</strong></td>
+                <td data-th-text="*{ posteOccupe }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>DIPLOME TECHNIQUE DETENU</strong></td>
+                <td data-th-text="*{ diplomeEleveObtenu }"></td>
+                <td><strong>NIVEAU</strong></td>
+                <td data-th-text="*{ niveauDiplome }"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>DUREE DE L'EXPERIENCE PROFESSIONNELLE DANS LE METIER</strong></td>
+                <td data-th-text="*{ anneeExperienceProfessionnelle }"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p>La durée hebdomadaire de travail est fixée à : <span data-th-text="*{ dureeHebdomadaireTravail }"></span></p>
+
+    <p>Le salaire brut mensuel est fixé à<sup>1</sup> :</p>
+
+    <p>Montant mensuel brut <sup>2</sup>:</p>
+
+    <p>Ou</p>
+
+    <table>
+        <tbody>
+        <tr>
+            <td>Pourcentage du SMG</td>
+            <td> %</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Pourcentage du SMG</td>
+            <td>  %</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p>Primes ou avantages en nature : </p>
+
+    <p>La visite médicale d'aptitude a été réalisée :   OUI □    NON □</p>
+
+    <p>Le(la) salarié(e) pourra être amené(e) à :</p>
+
+    <ul>
+        <li>travailler sur marchine(s) dangereuse(s) :   OUI □    NON □</li>
+        <li>être exposé à des risques particuliers :     OUI □    NON □ <br/>
+            <span>si oui, lesquels :</span></li>
+    </ul>
+
+    <div>
+        <div>□</div>
+        <p>L'employeur atteste être en capacité de signer un contrat unique d'alternance tel que prévue à l'article
+            Lp. 522-2 du code du travail de Nouvelle-Calédonie.</p>
+    </div>
+
+    <p>Fait à              , le</p>
+
+    <div class="signatures">
+        <div><strong>Le (la) salarié(e)</strong></div>
+        <div>
+            <strong>L'employeur</strong>
+            <em>Nom et qualité</em>
+        </div>
+    </div>
+
+    <hr/>
+
+    <p><em><sup>1</sup> Rappel : conformément aux dispositions de l'article Lp. 522-15 du code de travail de
+        Nouvelle-Calédonie, celui-ci ne peut pas être inférieur à un pourcentage du SMG fixé par un arrêté du
+        gouvernement de la Nouvelle-Calédonie.</em></p>
+
+    <p><em><sup>2</sup> Si celui-ci est supérieur au minimum légal ou conventionnel au titre de chaque année du contrat.</em></p>
+
+    <div>2 / 2</div>
+</div>
+
+</body>
+</html>

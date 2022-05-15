@@ -7,6 +7,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -17,13 +18,12 @@ import nc.unc.application.views.etudiant.EtudiantConsult;
 
 public class FormationConsult extends Dialog {
 
-  private Formation formation;
-
   // form qui contiendra les informations relatives à la formation
   private final FormLayout form = new FormLayout();
   private final TextField libelleFormation = new TextField("Libellé de la formation");
   private final TextField codeFormation = new TextField("Code de la formation");
   private final TextField codeRome = new TextField("Code ROME");
+  private final IntegerField niveauCertificationProfessionnelle = new IntegerField("Niveau de la certification professionnelle");
   private final TextField responsableDeFormation = new TextField("Responsable de formation");
   private final TextArea observations = new TextArea("Observations");
   // binder qui permettra le remplissage automatique des champs
@@ -42,14 +42,13 @@ public class FormationConsult extends Dialog {
     formationBinder.bindInstanceFields(this);
 
     // ajout des champs dans le formulaire
-    form.add(libelleFormation, codeFormation, codeRome, responsableDeFormation, observations);
+    form.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle, responsableDeFormation, observations);
 
     // ajout du formulaire dans la vue
-    add(form);
+    add(form, createButtonsLayout());
   }
 
   public void setFormation(Formation formation) {
-    this.formation = formation;
     if (formation != null) {
       // alimentation du binder
       formationBinder.readBean(formation);
@@ -65,7 +64,7 @@ public class FormationConsult extends Dialog {
   private HorizontalLayout createButtonsLayout() {
     close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
-    // évènements delete et close
+    // évènements de fermeture de la modale
     close.addClickListener(event -> fireEvent(new FormationConsult.CloseEvent(this)));
 
     return new HorizontalLayout(close);
@@ -75,6 +74,7 @@ public class FormationConsult extends Dialog {
     libelleFormation.setReadOnly(true);
     codeFormation.setReadOnly(true);
     codeRome.setReadOnly(true);
+    niveauCertificationProfessionnelle.setReadOnly(true);
     responsableDeFormation.setReadOnly(true);
     observations.setReadOnly(true);
   }

@@ -104,6 +104,7 @@ public class EtudiantConsult extends Dialog {
   private final TextField libelleFormation = new TextField("Libellé de la formation");
   private final TextField codeFormation = new TextField("Code de la formation");
   private final TextField codeRome = new TextField("Code ROME de la formation");
+  private final IntegerField niveauCertificationProfessionnelle = new IntegerField("Niveau de la certification professionnelle");
   // Binder qui sera utilisé pour remplir automatiquement les champs de formation
   Binder<Formation> formationBinder = new BeanValidationBinder<>(Formation.class);
 
@@ -180,7 +181,7 @@ public class EtudiantConsult extends Dialog {
     formEtudiantTuteur.add(prenomTuteur, nomTuteur, emailTuteur, telephoneTuteur1, telephoneTuteur2);
 
     // ajout des champs dans le formulaire de la formation suivie par l'étudiant
-    formEtudiantFormation.add(libelleFormation, codeFormation, codeRome);
+    formEtudiantFormation.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle);
 
     // ajout des champs dans le formulaire du referent pédagogique qui encadre l'étudiant
     formEtudiantReferentPedago.add(prenomReferentPedago, nomReferentPedago, telephoneReferentPedago, emailReferentPedago);
@@ -288,6 +289,7 @@ public class EtudiantConsult extends Dialog {
     libelleFormation.setReadOnly(true);
     codeFormation.setReadOnly(true);
     codeRome.setReadOnly(true);
+    niveauCertificationProfessionnelle.setReadOnly(true);
     // tuteur
     prenomTuteur.setReadOnly(true);
     nomTuteur.setReadOnly(true);

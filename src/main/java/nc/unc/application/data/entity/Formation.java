@@ -2,6 +2,7 @@ package nc.unc.application.data.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -33,6 +34,11 @@ public class Formation implements Cloneable {
   @Pattern(message = "Le code rome est composé d'une lettre majuscule puis de 4 chiffres. Ex : M1234", regexp = "[A-Z][0-9]{4}$")
   @Column(name = "code_rome", length = 15)
   private String codeRome;
+
+  @NotNull(message = "Le code rome ne peut pas être nul")
+  @Range(message = "Le niveau du diplôme doit être entre 3 et 8", min = 3, max = 8)
+  @Column(name = "niveau_certification_pro")
+  private Integer niveauCertificationProfessionnelle;
 
   @Column(name = "observations", length = 15000)
   private String observations;
@@ -90,6 +96,14 @@ public class Formation implements Cloneable {
 
   public void setCodeRome(String codeRome) {
     this.codeRome = codeRome;
+  }
+
+  public Integer getNiveauCertificationProfessionnelle() {
+    return niveauCertificationProfessionnelle;
+  }
+
+  public void setNiveauCertificationProfessionnelle(Integer niveauCertificationProfessionnelle) {
+    this.niveauCertificationProfessionnelle = niveauCertificationProfessionnelle;
   }
 
   public String getObservations() {
@@ -160,6 +174,7 @@ public class Formation implements Cloneable {
             "\n , libelleFormation='" + libelleFormation + '\'' +
             "\n , codeFormation='" + codeFormation + '\'' +
             "\n , codeRome='" + codeRome + '\'' +
+            "\n , niveauCertificationProfessionnelle=" + niveauCertificationProfessionnelle +
             "\n , observations='" + observations + '\'' +
             "\n , referentPedagogique=" +
             (referentPedagogique != null ? referentPedagogique.getPrenomReferentPedago()+" "+referentPedagogique.getNomReferentPedago() : "") +

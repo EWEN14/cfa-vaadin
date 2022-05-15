@@ -69,7 +69,6 @@ public class ContratNewOrEdit extends Dialog {
   TextField emploiOccupeSalarieEtudiant = new TextField("Emploi occupé par le salarié");
   TextField codeRomeEmploiOccupe = new TextField("Code ROME de l'emploi occupé");
   IntegerField dureePeriodeEssai = new IntegerField("Durée de la période d'essai (nombre de semaines)");
-  Select<Integer> niveauCertificationPro = new Select<>(3,4,5,6,7,8);
 
   TextField numeroConventionFormation = new TextField("Numéro de la convention de Formation");
   IntegerField semainesEntreprise = new IntegerField("Nombre de semaines en entreprise");
@@ -161,7 +160,6 @@ public class ContratNewOrEdit extends Dialog {
     // ajout de labels sur les select
     codeContrat.setLabel("Code du Contrat");
     typeContrat.setLabel("Type du Contrat");
-    niveauCertificationPro.setLabel("Niveau de la certification professionnelle");
     relationAvecSalarie.setLabel("Relation du représentant avec le salarié");
 
     // on passe les communes de NC dans nos combo box en ayant besoin
@@ -174,7 +172,7 @@ public class ContratNewOrEdit extends Dialog {
     form.add(etudiant, formation, entreprise, tuteur, codeContrat, typeContrat, representantLegal, new Div(), nomRepresentantLegal,
             prenomRepresentantLegal, relationAvecSalarie, adresseRepresentant, codePostalRepresentant, communeRepresentant,
             telephoneRepresentant, emailRepresentant, derogationAge, dateDelivranceDerogationAge, cadreAdministration, new Div(), cadreAdminNumEnregistrementContrat, cadreAdminNumAvenant,
-            cadreAdminRecuLe, new Div(), infosContrat, new Div(), debutContrat, finContrat, emploiOccupeSalarieEtudiant, codeRomeEmploiOccupe, dureePeriodeEssai, niveauCertificationPro, numeroConventionFormation, semainesEntreprise,
+            cadreAdminRecuLe, new Div(), infosContrat, new Div(), debutContrat, finContrat, emploiOccupeSalarieEtudiant, codeRomeEmploiOccupe, dureePeriodeEssai, numeroConventionFormation, semainesEntreprise,
             heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail, decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua,
             dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(), dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(),
             dateReceptionOriginauxConvention, exemplaireOriginauxRemisAlternantOuEntreprise, lea, new Div(), formationLea);

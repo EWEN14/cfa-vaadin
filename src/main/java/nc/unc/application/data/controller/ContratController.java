@@ -39,10 +39,10 @@ public class ContratController {
   public String getContratById(@PathVariable("id") long id, Model model) {
     Contrat contrat = contratService.findContratById(id);
     model.addAttribute("contrat", contrat);
-    /*model.addAttribute("download", false);
+    model.addAttribute("download", false);
     String age = String.valueOf(ChronoUnit.YEARS.between(contrat.getEtudiant().getDateNaissanceEtudiant(), LocalDate.now()));
-    model.addAttribute("age", age);*/
-    return "contrat_preview";
+    model.addAttribute("age", age);
+    return "contrat_pdf";
   }
 
   @GetMapping("/download/{id}")

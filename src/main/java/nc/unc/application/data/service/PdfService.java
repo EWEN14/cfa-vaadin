@@ -55,9 +55,9 @@ public class PdfService {
     Context context = new Context();
     Contrat contrat = contratService.findContratById(id);
     context.setVariable("contrat", contrat);
-    /*context.setVariable("download", true);
+    context.setVariable("download", true);
     String age = String.valueOf(ChronoUnit.YEARS.between(contrat.getEtudiant().getDateNaissanceEtudiant(), LocalDate.now()));
-    context.setVariable("age", age);*/
+    context.setVariable("age", age);
     return context;
   }
 

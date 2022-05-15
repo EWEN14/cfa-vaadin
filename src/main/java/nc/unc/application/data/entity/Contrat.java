@@ -81,9 +81,6 @@ public class Contrat implements Cloneable {
   @Column(name = "duree_periode_essai")
   private Integer dureePeriodeEssai;
 
-  @Column(name = "niveau_certification_pro")
-  private Integer niveauCertificationPro;
-
   @Column(name = "numero_convention_formation")
   private String numeroConventionFormation;
 
@@ -365,14 +362,6 @@ public class Contrat implements Cloneable {
 
   public void setDureePeriodeEssai(Integer dureePeriodeEssai) {
     this.dureePeriodeEssai = dureePeriodeEssai;
-  }
-
-  public Integer getNiveauCertificationPro() {
-    return niveauCertificationPro;
-  }
-
-  public void setNiveauCertificationPro(Integer niveauCertificationPro) {
-    this.niveauCertificationPro = niveauCertificationPro;
   }
 
   public String getNumeroConventionFormation() {
@@ -692,7 +681,6 @@ public class Contrat implements Cloneable {
             "\n emploiOccupeSalarieEtudiant='" + emploiOccupeSalarieEtudiant + '\'' +
             "\n codeRomeEmploiOccupe='" + codeRomeEmploiOccupe + '\'' +
             "\n dureePeriodeEssai=" + dureePeriodeEssai +
-            "\n niveauCertificationPro=" + niveauCertificationPro +
             "\n numeroConventionFormation='" + numeroConventionFormation + '\'' +
             "\n semainesEntreprise=" + semainesEntreprise +
             "\n heuresFormation=" + heuresFormation +

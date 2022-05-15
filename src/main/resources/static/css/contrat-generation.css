@@ -2,16 +2,20 @@
     color: #0066ff;
 }
 
-.blue-background {
+.blue-bg {
     background-color: #0c3b9a;
     color: white;
+}
+
+.light-grey-bg {
+    background-color: #9b9b9b;
 }
 
 table {
     border-collapse: collapse;
 }
 
-td {
+td, .border {
     border: black solid 1px;
 }
 
@@ -24,7 +28,7 @@ td {
     body{
         /* utilisé pour simuler les contours d'une page A4 */
         width: 21cm;
-        height: 29.7cm;
+        /*height: 29.7cm;*/
         /*margin: 30mm 45mm 30mm 45mm;*/
         /* change the margins as you want them to be. */
         outline: solid 1px; /* sert à voir la délimitation que représente une feuille A4, à retirer après */

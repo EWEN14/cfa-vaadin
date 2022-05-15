@@ -8,6 +8,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -28,6 +29,7 @@ public class FormationNewOrEdit extends Dialog {
   TextField libelleFormation = new TextField("Libellé de la formation");
   TextField codeFormation = new TextField("Code de la formation");
   TextField codeRome = new TextField("Code ROME");
+  Select<Integer> niveauCertificationProfessionnelle = new Select<>(3,4,5,6,7,8);
   TextArea observations = new TextArea("Observations");
   ComboBox<ReferentPedagogique> referentPedagogique = new ComboBox<>("Responsable de la formation");
 
@@ -41,6 +43,8 @@ public class FormationNewOrEdit extends Dialog {
 
     binder.bindInstanceFields(this);
 
+    niveauCertificationProfessionnelle.setLabel("Niveau de la certification professionnelle");
+
     codeRome.setPlaceholder("ex: M1234");
     codeRome.setPattern("[A-Z][0-9]{4}$");
 
@@ -48,7 +52,7 @@ public class FormationNewOrEdit extends Dialog {
     referentPedagogique.setItemLabelGenerator(rp -> rp.getPrenomReferentPedago() + " " + rp.getNomReferentPedago());
     referentPedagogique.setClearButtonVisible(true);
 
-    form.add(libelleFormation, codeFormation, codeRome, referentPedagogique, observations, createButtonsLayout());
+    form.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle, referentPedagogique, observations, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(form);

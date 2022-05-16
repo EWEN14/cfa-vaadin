@@ -140,7 +140,7 @@ public class Etudiant implements Cloneable {
   @Column(name = "observations", length = 15000)
   private String observationsEtudiant;
 
-  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Entreprise.class)
+  @ManyToOne(cascade={CascadeType.REFRESH, CascadeType.MERGE}, targetEntity = Entreprise.class)
   @JoinColumn(name = "id_entreprise")
   @JsonIgnoreProperties({"etudiants"})
   private Entreprise entreprise;

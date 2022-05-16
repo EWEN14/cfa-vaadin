@@ -37,7 +37,7 @@ public class EtudiantConsult extends Dialog {
 
   private Etudiant etudiant;
 
-  private ContratService contratService;
+  private final ContratService contratService;
 
   // Layout qui contiendra le contenu en dessous des tabs
   private final VerticalLayout content = new VerticalLayout();
@@ -46,7 +46,7 @@ public class EtudiantConsult extends Dialog {
   private final FormLayout formEtudiantInfos = new FormLayout();
   private final TextField nomEtudiant = new TextField("NOM");
   private final TextField prenomEtudiant = new TextField("Prénom");
-  private IntegerField numeroEtudiant = new IntegerField("N° Étudiant");
+  private final IntegerField numeroEtudiant = new IntegerField("N° Étudiant");
   // utilisation de select lorsque nombre de choix assez petis
   private final Select<Civilite> civiliteEtudiant = new Select<>();
   private final DatePicker dateNaissanceEtudiant = new DatePicker("Date de Naissance");

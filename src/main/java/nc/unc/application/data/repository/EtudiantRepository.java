@@ -19,4 +19,6 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
   List<Etudiant> findAllByTuteurId(Long id);
 
   List<Etudiant> findAllByFormationId(Long id);
+
+  List<Etudiant> findAllByEntrepriseId(Long id);
 }

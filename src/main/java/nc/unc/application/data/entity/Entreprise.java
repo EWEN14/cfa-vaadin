@@ -46,12 +46,11 @@ public class Entreprise implements Cloneable {
 
   @Range(message = "Le numéro de Cafat doit comporter 6 chiffres", min = 100000, max = 999999)
   @Column(name = "numero_cafat")
-  private Long numeroCafatEntreprise;
+  private Integer numeroCafatEntreprise;
 
   @Column(name = "nombre_salarie")
-  private Long nombreSalarie;
+  private Integer nombreSalarie;
 
-  @Pattern(message = "Le code NAF doit avoir le format suivant : 12.3 ou 12.34 ou 12.34Z", regexp = "\\d{2}\\.\\d{1,2}Z?$")
   @Column(name = "code_naf")
   private String codeNaf;
 
@@ -91,6 +90,7 @@ public class Entreprise implements Cloneable {
   @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
   private Integer telephoneContactCfa;
 
+  @Email
   @Column(name = "email_contact_cfa")
   private String emailContactCfa;
 
@@ -183,19 +183,19 @@ public class Entreprise implements Cloneable {
     this.formeJuridique = formeJuridique;
   }
 
-  public Long getNumeroCafatEntreprise() {
+  public Integer getNumeroCafatEntreprise() {
     return numeroCafatEntreprise;
   }
 
-  public void setNumeroCafatEntreprise(Long numeroCafat) {
+  public void setNumeroCafatEntreprise(Integer numeroCafat) {
     this.numeroCafatEntreprise = numeroCafat;
   }
 
-  public Long getNombreSalarie() {
+  public Integer getNombreSalarie() {
     return nombreSalarie;
   }
 
-  public void setNombreSalarie(Long nombreSalarie) {
+  public void setNombreSalarie(Integer nombreSalarie) {
     this.nombreSalarie = nombreSalarie;
   }
 

@@ -64,4 +64,13 @@ public class TuteurService {
     public void deleteTuteurHabilitation(TuteurHabilitation tuteurHabilitation) {
         tuteurHabilitationRepository.delete(tuteurHabilitation);
     }
+
+    /**
+     * Récupère la liste des tuteurs travailant à l'entreprise dont l'id est passée en paramètre
+     * @param id identifiant de l'entreprise
+     * @return liste de tuteurs
+     */
+    public List<Tuteur> findAllTuteursByEntrepriseId(Long id) {
+        return tuteurRepository.findAllByEntrepriseId(id);
+    }
 }

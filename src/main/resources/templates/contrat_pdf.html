@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
-<!-- utilisation d'une condition qui change le link pour récupérer la CSS, qui diffère selon qu'on
- télécharge le contrat ou si l'on regarde sa prévisualisation -->
-<head th:if="${ download }">
+<head>
     <title>CUA</title>
-    <link rel="stylesheet" type="text/css" href="css/contrat-generation.css"/>
-</head>
-<head th:unless="${ download }">
-    <title>CUA</title>
-    <link href="../static/css/contrat-generation.css" th:href="@{/css/contrat-generation.css}" rel="stylesheet"/>
+    <!-- utilisation d'une condition qui change le link pour récupérer la CSS, qui diffère selon qu'on
+        télécharge le contrat ou si l'on regarde sa prévisualisation -->
+    <link rel="stylesheet" type="text/css" href="css/contrat-generation.css" th:if="${ download }"/>
+    <link href="../static/css/contrat-generation.css" th:href="@{/css/contrat-generation.css}" rel="stylesheet" th:unless="${ download }"/>
 </head>
 
 <body>

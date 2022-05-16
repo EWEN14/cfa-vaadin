@@ -59,4 +59,13 @@ public class EtudiantService {
   public List<Etudiant> findAllEtudiantsFormation(Long id) {
     return etudiantRepository.findAllByFormationId(id);
   }
+
+  /**
+   * Récupère tous les étudiants qui sont liées à l'entreprise avec l'id correspondante
+   * @param id identifiant d'une entreprise
+   * @return liste d'étudiants
+   */
+  public List<Etudiant> findAllEtudiantsByEntrepriseId(Long id) {
+    return etudiantRepository.findAllByEntrepriseId(id);
+  }
 }

@@ -16,4 +16,6 @@ public interface TuteurRepository extends JpaRepository<Tuteur, UUID> {
             "where lower(t.nomTuteur) like lower(concat('%', :searchTerm, '%')) " +
             "or lower(t.prenomTuteur) like lower(concat('%', :searchTerm, '%'))")
     List<Tuteur> search(@Param("searchTerm") String searchTerm);
+
+    List<Tuteur> findAllByEntrepriseId(Long id);
 }

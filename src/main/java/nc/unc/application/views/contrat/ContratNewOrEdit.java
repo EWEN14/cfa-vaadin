@@ -128,8 +128,9 @@ public class ContratNewOrEdit extends Dialog {
 
   public ContratNewOrEdit(List<Entreprise> entrepriseList, List<Formation> formationList, List<Etudiant> etudiantList, List<Tuteur> tuteurList) {
     this.setWidth("85vw");
+    this.setHeight("90vh");
 
-    // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité étudiant,
+    // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)
     binder.bindInstanceFields(this);
 

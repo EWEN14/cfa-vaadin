@@ -54,7 +54,7 @@ public class TuteurView extends VerticalLayout {
         tuteurModalConsult.addListener(TuteurConsult.DeleteEvent.class, this::deleteTuteur);
         tuteurModalConsult.addListener(TuteurConsult.CloseEvent.class, e -> closeConsultModal());
 
-        tuteurModal = new TuteurNewOrEdit(entrepriseService.findAllEntreprises(), formationService.findAllFormations(""),
+        tuteurModal = new TuteurNewOrEdit(entrepriseService.findAllEntreprises(""), formationService.findAllFormations(""),
                 formationService, tuteurService, logEnregistrmentService);
         tuteurModal.addListener(TuteurNewOrEdit.SaveEvent.class, this::saveTuteur);
         tuteurModal.addListener(TuteurNewOrEdit.SaveEditedEvent.class, this::saveEditedTuteur);
@@ -85,11 +85,11 @@ public class TuteurView extends VerticalLayout {
         // bouton consultation tuteur
         grid.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.EYE), click -> {
             consultTuteur(tuteur);
-        })).setHeader("Consulter");;
+        })).setHeader("Consulter");
         // bouton édition tuteur
         grid.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
             editTuteurModal(tuteur);
-        })).setHeader("Éditer");;
+        })).setHeader("Éditer");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
 

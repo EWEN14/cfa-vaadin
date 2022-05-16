@@ -32,7 +32,11 @@ public class EntrepriseService {
   }
 
   // Récupérer toutes les entreprises
-  public List<Entreprise> findAllEntreprises() {
-    return entrepriseRepository.findAll();
+  public List<Entreprise> findAllEntreprises(String filtertext) {
+    if (filtertext == null || filtertext.isEmpty()) {
+      return entrepriseRepository.findAll();
+    } else {
+      return entrepriseRepository.search(filtertext);
+    }
   }
 }

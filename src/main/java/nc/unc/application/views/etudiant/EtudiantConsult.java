@@ -156,7 +156,7 @@ public class EtudiantConsult extends Dialog {
     // grilles des contrats liées à l'étudiant
     contratGrid.addClassName("tuteur-contrats-grid");
     contratGrid.setColumns("codeContrat", "debutContrat", "finContrat", "numeroConventionFormation");
-    contratGrid.addColumn(contrat -> contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur()).setHeader("Tuteur").setSortable(true);
+    contratGrid.addColumn(contrat -> contrat.getTuteur() != null ? contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur() : "").setHeader("Tuteur").setSortable(true);
     contratGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 
     // On instancie la Tabs, et on lui donne les tab que l'on veut insérer

@@ -171,19 +171,19 @@ public class Contrat implements Cloneable {
   @Column(name = "observations", length = 15000)
   private String observations;
 
-  @ManyToOne(cascade = CascadeType.MERGE)
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Entreprise.class)
   @JoinColumn(name = "id_entreprise")
   private Entreprise entreprise;
 
-  @ManyToOne(cascade = CascadeType.MERGE)
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Etudiant.class)
   @JoinColumn(name = "id_etudiant")
   private Etudiant etudiant;
 
-  @ManyToOne(cascade = CascadeType.MERGE)
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Formation.class)
   @JoinColumn(name = "id_formation")
   private Formation formation;
 
-  @ManyToOne(cascade = CascadeType.MERGE)
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Tuteur.class)
   @JoinColumn(name = "id_tuteur")
   private Tuteur tuteur;
 

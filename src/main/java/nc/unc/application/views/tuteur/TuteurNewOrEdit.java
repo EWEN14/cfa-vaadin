@@ -162,6 +162,7 @@ public class TuteurNewOrEdit extends Dialog {
     tuteurHabilitations.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.TRASH), click -> {
       deleteHabilitationTuteur(tuteur);
     })).setHeader("Supprimer");
+    tuteurHabilitations.getColumns().forEach(col -> col.setAutoWidth(true));
 
     // ajout des champs et des boutons d'action dans le formulaire
     form.add(nomTuteur, prenomTuteur, dateNaissanceTuteur, civiliteTuteur, emailTuteur, telephoneTuteur1, telephoneTuteur2, diplomeEleveObtenu, niveauDiplome,

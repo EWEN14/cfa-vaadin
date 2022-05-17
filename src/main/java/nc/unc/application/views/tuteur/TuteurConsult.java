@@ -116,7 +116,7 @@ public class TuteurConsult extends Dialog {
     // grilles des contrats liées au tuteur
     contratGrid.addClassName("tuteur-contrats-grid");
     contratGrid.setColumns("codeContrat", "debutContrat", "finContrat", "numeroConventionFormation");
-    contratGrid.addColumn(contrat -> contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant()).setHeader("Étudiant Salarié").setSortable(true);
+    contratGrid.addColumn(contrat -> contrat.getEtudiant() != null ? contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant() : "").setHeader("Étudiant Salarié").setSortable(true);
     contratGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 
     // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables

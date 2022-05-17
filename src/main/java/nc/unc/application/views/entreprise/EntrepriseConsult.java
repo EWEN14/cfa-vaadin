@@ -114,8 +114,8 @@ public class EntrepriseConsult extends Dialog {
     // grille des contrats
     entrepriseContratGrid.addClassName("entreprise-contrats-grid");
     entrepriseContratGrid.setColumns("codeContrat", "debutContrat", "finContrat", "numeroConventionFormation");
-    entrepriseContratGrid.addColumn(contrat -> contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur()).setHeader("Tuteur").setSortable(true);
-    entrepriseContratGrid.addColumn(contrat -> contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant()).setHeader("Étudiant").setSortable(true);
+    entrepriseContratGrid.addColumn(contrat -> contrat.getTuteur() != null ? contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur() : "").setHeader("Tuteur").setSortable(true);
+    entrepriseContratGrid.addColumn(contrat -> contrat.getEtudiant() != null ? contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant() : "").setHeader("Étudiant").setSortable(true);
     entrepriseContratGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 
     // tabs qui contiendra les tab permettant de passer d'un groupe d'informations à un autre

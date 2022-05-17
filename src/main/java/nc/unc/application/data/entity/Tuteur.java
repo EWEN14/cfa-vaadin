@@ -125,6 +125,19 @@ public class Tuteur implements Cloneable {
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
 
+  @PreRemove
+  private void preRemove() {
+    for (TuteurHabilitation th : tuteurHabilitations) {
+      th.setTuteur(null);
+    }
+    for (Etudiant e : etudiants) {
+      e.setTuteur(null);
+    }
+    for (Contrat c : contrats) {
+      c.setTuteur(null);
+    }
+  }
+
   // Getters et Setters
   public Long getId() {
     return id;

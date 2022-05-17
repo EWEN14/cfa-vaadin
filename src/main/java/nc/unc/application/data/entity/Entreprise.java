@@ -123,7 +123,7 @@ public class Entreprise implements Cloneable {
   @OneToMany(mappedBy = "entreprise", targetEntity = Tuteur.class)
   private List<Tuteur> tuteurs = new ArrayList<>();
 
-  @OneToMany(mappedBy = "entreprise", cascade = CascadeType.MERGE)
+  @OneToMany(mappedBy = "entreprise", targetEntity = Contrat.class)
   private List<Contrat> contrats = new ArrayList<>();
 
   @CreationTimestamp
@@ -133,6 +133,19 @@ public class Entreprise implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
+
+  @PreRemove
+  private void preRemove() {
+    for (Etudiant e : etudiants) {
+      e.setEntreprise(null);
+    }
+    for (Tuteur t : tuteurs) {
+      t.setEntreprise(null);
+    }
+    for (Contrat c: contrats) {
+      c.setEntreprise(null);
+    }
+  }
 
   // Getters et Setters
   public Long getId() {

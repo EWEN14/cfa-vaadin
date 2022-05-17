@@ -81,10 +81,11 @@ public class ContratView extends VerticalLayout {
     grid.setSizeFull();
 
     // ajout des colonnes
-    grid.addColumn(contrat -> contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant()).setHeader("Étudiant").setSortable(true);
-    grid.addColumn(contrat -> contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur()).setHeader("Tuteur").setSortable(true);
-    grid.addColumn(contrat -> contrat.getEntreprise().getEnseigne()).setHeader("Entreprise").setSortable(true);
-    grid.addColumn(contrat -> contrat.getFormation().getCodeFormation()).setHeader("Formation").setSortable(true);
+    // TODO : faire un affichage conditionnel de ces infos, sinon bug
+    grid.addColumn(contrat -> contrat.getEtudiant() != null ? contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant() : "").setHeader("Étudiant").setSortable(true);
+    grid.addColumn(contrat -> contrat.getTuteur() != null ? contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur() : "").setHeader("Tuteur").setSortable(true);
+    grid.addColumn(contrat -> contrat.getEntreprise() != null ? contrat.getEntreprise().getEnseigne() : "").setHeader("Entreprise").setSortable(true);
+    grid.addColumn(contrat -> contrat.getFormation() != null ? contrat.getFormation().getCodeFormation() : "").setHeader("Formation").setSortable(true);
     grid.addColumn(Contrat::getCodeContrat).setHeader("Code Contrat").setSortable(true);
 
     // ajout du bouton de consultation d'un contrat

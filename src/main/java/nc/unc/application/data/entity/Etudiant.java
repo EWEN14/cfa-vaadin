@@ -140,7 +140,7 @@ public class Etudiant implements Cloneable {
   @Column(name = "observations", length = 15000)
   private String observationsEtudiant;
 
-  @ManyToOne(cascade={CascadeType.REFRESH, CascadeType.MERGE}, targetEntity = Entreprise.class)
+  @ManyToOne(cascade=CascadeType.MERGE, targetEntity = Entreprise.class)
   @JoinColumn(name = "id_entreprise")
   @JsonIgnoreProperties({"etudiants"})
   private Entreprise entreprise;
@@ -168,6 +168,13 @@ public class Etudiant implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
+
+  @PreRemove
+  private void preRemove() {
+    for (Contrat c : contrats) {
+      c.setEtudiant(null);
+    }
+  }
 
   // Getters et Setters
   public Long getId() {

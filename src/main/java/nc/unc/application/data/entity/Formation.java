@@ -43,9 +43,8 @@ public class Formation implements Cloneable {
   @Column(name = "observations", length = 15000)
   private String observations;
 
-  @NotNull(message = "La formation doit avoir un responsable de formation")
-  @OneToOne(cascade = CascadeType.MERGE, optional = false, targetEntity = ReferentPedagogique.class)
-  @JoinColumn(name = "id_referent_pedagogique", nullable = false)
+  @OneToOne(cascade = CascadeType.MERGE, targetEntity = ReferentPedagogique.class)
+  @JoinColumn(name = "id_referent_pedagogique")
   private ReferentPedagogique referentPedagogique;
 
   @OneToMany(mappedBy = "formation", cascade = CascadeType.MERGE, targetEntity = TuteurHabilitation.class)
@@ -64,6 +63,19 @@ public class Formation implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
+
+  @PreRemove
+  private void preRemove() {
+    for (TuteurHabilitation th : tuteurHabilitations) {
+      th.setFormation(null);
+    }
+    for (Etudiant e : etudiants) {
+      e.setFormation(null);
+    }
+    for (Contrat c : contrats) {
+      c.setFormation(null);
+    }
+  }
 
   // Getters et Setters
   public Long getId() {

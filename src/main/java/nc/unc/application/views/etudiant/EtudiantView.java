@@ -28,7 +28,7 @@ import javax.annotation.security.PermitAll;
 @PermitAll // tous les utilisateurs connectés peuvent aller sur cette page
 public class EtudiantView extends VerticalLayout {
 
-  Grid<Etudiant> grid = new Grid<>(Etudiant.class);
+  Grid<Etudiant> grid = new Grid<>(Etudiant.class, false);
 
   TextField filterText = new TextField();
   Button addEtudiantButton;
@@ -92,7 +92,10 @@ public class EtudiantView extends VerticalLayout {
     grid.addClassNames("etudiant-grid");
     grid.setSizeFull();
     // ajout des colonnes
-    grid.setColumns("prenomEtudiant", "nomEtudiant","admis", "situationUnc");
+    grid.addColumn(etudiant -> etudiant.getNomEtudiant() + " " + etudiant.getPrenomEtudiant()).setHeader("NOM Prénom").setSortable(true);
+    grid.addColumn(Etudiant::getAnneePromotion).setHeader("Année de promotion").setSortable(true);
+    grid.addColumn(Etudiant::getTelephoneEtudiant1).setHeader("Téléphone");
+    grid.addColumn(Etudiant::getSituationUnc).setHeader("Situation à l'UNC").setSortable(true);
     // ajout du bouton de consultation d'un étudiant
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultEtudiant(etudiant);

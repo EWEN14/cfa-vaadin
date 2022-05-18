@@ -1,10 +1,7 @@
 package nc.unc.application.data.service;
 
-import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Etudiant;
-import nc.unc.application.data.repository.EntrepriseRepository;
 import nc.unc.application.data.repository.EtudiantRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +17,7 @@ public class EtudiantService {
 
   public List<Etudiant> findAllEtudiants(String stringFilter) {
     if (stringFilter == null || stringFilter.isEmpty()) {
-      return etudiantRepository.findAll();
+      return etudiantRepository.findAllByOrderByNomEtudiantAscAnneePromotionDesc();
     } else {
       return etudiantRepository.search(stringFilter);
     }
@@ -45,27 +42,27 @@ public class EtudiantService {
   /**
    * Récupère tous les étudiants encadrés par un tuteur
    * @param id l'identifiant du tuteur
-   * @return liste d'étudiants
+   * @return liste d'étudiants, ordonné par leur nom de famille et leur année de promotion
    */
   public List<Etudiant> findAllEtudiantsTuteur(Long id) {
-    return etudiantRepository.findAllByTuteurId(id);
+    return etudiantRepository.findAllByTuteurIdOrderByNomEtudiantAscAnneePromotionDesc(id);
   }
 
   /**
    * Récupère tous les étudiants d'une formation
    * @param id l'identidiant de la formation
-   * @return liste d'étudiants
+   * @return liste d'étudiants, ordonné par leur nom de famille et leur année de promotion
    */
   public List<Etudiant> findAllEtudiantsFormation(Long id) {
-    return etudiantRepository.findAllByFormationId(id);
+    return etudiantRepository.findAllByFormationIdOrderByNomEtudiantAscAnneePromotionDesc(id);
   }
 
   /**
    * Récupère tous les étudiants qui sont liées à l'entreprise avec l'id correspondante
    * @param id identifiant d'une entreprise
-   * @return liste d'étudiants
+   * @return liste d'étudiants, ordonné par leur nom de famille et leur année de promotion
    */
   public List<Etudiant> findAllEtudiantsByEntrepriseId(Long id) {
-    return etudiantRepository.findAllByEntrepriseId(id);
+    return etudiantRepository.findAllByEntrepriseIdOrderByNomEtudiantAscAnneePromotionDesc(id);
   }
 }

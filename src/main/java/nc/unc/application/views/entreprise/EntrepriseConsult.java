@@ -28,6 +28,8 @@ import nc.unc.application.data.service.ContratService;
 import nc.unc.application.data.service.EtudiantService;
 import nc.unc.application.data.service.TuteurService;
 
+import static nc.unc.application.utils.Utils.frenchDateFormater;
+
 public class EntrepriseConsult extends Dialog {
 
   private Entreprise entreprise;
@@ -72,11 +74,11 @@ public class EntrepriseConsult extends Dialog {
   Binder<Entreprise> entrepriseBinder = new BeanValidationBinder<>(Entreprise.class);
 
   // grid qui contiendra les etudiants en contrat (ou l'ayant été) avec l'entreprise
-  private final Grid<Etudiant> entrepriseEtudiantGrid = new Grid<>(Etudiant.class);
+  private final Grid<Etudiant> entrepriseEtudiantGrid = new Grid<>(Etudiant.class, false);
   // grid qui contiendra les tuteurs travaillant pour l'entreprise
-  private final Grid<Tuteur> entrepriseTuteurGrid = new Grid<>(Tuteur.class);
+  private final Grid<Tuteur> entrepriseTuteurGrid = new Grid<>(Tuteur.class, false);
   // grid qui contiendra les tuteurs travaillant pour l'entreprise
-  private final Grid<Contrat> entrepriseContratGrid = new Grid<>(Contrat.class);
+  private final Grid<Contrat> entrepriseContratGrid = new Grid<>(Contrat.class, false);
 
   // tab (onglet) qui seront insérés dans une tabs (ensemble d'onglets) les regroupant
   private final Tab entrepriseInfosTab = new Tab(VaadinIcon.WORKPLACE.create(), new Span("Entreprise"));
@@ -103,19 +105,26 @@ public class EntrepriseConsult extends Dialog {
 
     // grille des étudiants
     entrepriseEtudiantGrid.addClassName("entreprise-etudiants-grid");
-    entrepriseEtudiantGrid.setColumns("prenomEtudiant", "nomEtudiant", "telephoneEtudiant1", "emailEtudiant");
+    entrepriseEtudiantGrid.addColumn(etudiant -> etudiant.getNomEtudiant() + " " + etudiant.getPrenomEtudiant()).setHeader("NOM Prénom").setSortable(true);
+    entrepriseEtudiantGrid.addColumn(Etudiant::getTelephoneEtudiant1).setHeader("Téléphone");
+    entrepriseEtudiantGrid.addColumn(Etudiant::getEmailEtudiant).setHeader("Email");
     entrepriseEtudiantGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 
     // grille des tuteurs
     entrepriseTuteurGrid.addClassName("entreprise-tuteurs-grid");
-    entrepriseTuteurGrid.setColumns("prenomTuteur", "nomTuteur", "telephoneTuteur1", "emailTuteur");
+    entrepriseTuteurGrid.addColumn(tuteur -> tuteur.getNomTuteur() + " " + tuteur.getPrenomTuteur()).setHeader("NOM Prénom");
+    entrepriseTuteurGrid.addColumn(Tuteur::getTelephoneTuteur1).setHeader("Téléphone");
+    entrepriseTuteurGrid.addColumn(Tuteur::getEmailTuteur).setHeader("Email");
     entrepriseTuteurGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 
     // grille des contrats
     entrepriseContratGrid.addClassName("entreprise-contrats-grid");
-    entrepriseContratGrid.setColumns("codeContrat", "debutContrat", "finContrat", "numeroConventionFormation");
-    entrepriseContratGrid.addColumn(contrat -> contrat.getTuteur() != null ? contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur() : "").setHeader("Tuteur").setSortable(true);
-    entrepriseContratGrid.addColumn(contrat -> contrat.getEtudiant() != null ? contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant() : "").setHeader("Étudiant").setSortable(true);
+    entrepriseContratGrid.addColumn(Contrat::getCodeContrat).setHeader("Code Contrat").setSortable(true);
+    entrepriseContratGrid.addColumn(contrat -> contrat.getDebutContrat() != null ? frenchDateFormater(contrat.getDebutContrat()) : "").setHeader("Début Contrat").setSortable(true);
+    entrepriseContratGrid.addColumn(contrat -> contrat.getFinContrat() != null ? frenchDateFormater(contrat.getFinContrat()) : "").setHeader("Fin Contrat").setSortable(true);
+    entrepriseContratGrid.addColumn(Contrat::getNumeroConventionFormation).setHeader("Numéro de convention");
+    entrepriseContratGrid.addColumn(contrat -> contrat.getTuteur() != null ? contrat.getTuteur().getNomTuteur() + " " + contrat.getTuteur().getPrenomTuteur() : "").setHeader("Tuteur").setSortable(true);
+    entrepriseContratGrid.addColumn(contrat -> contrat.getEtudiant() != null ? contrat.getEtudiant().getNomEtudiant() + " " + contrat.getEtudiant().getPrenomEtudiant() : "").setHeader("Étudiant").setSortable(true);
     entrepriseContratGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 
     // tabs qui contiendra les tab permettant de passer d'un groupe d'informations à un autre

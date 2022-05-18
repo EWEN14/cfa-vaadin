@@ -40,6 +40,8 @@ import nc.unc.application.data.service.TuteurService;
 import java.util.ArrayList;
 import java.util.List;
 
+import static nc.unc.application.utils.Utils.frenchDateFormater;
+
 public class TuteurNewOrEdit extends Dialog {
 
   // Objets tuteurs
@@ -88,12 +90,12 @@ public class TuteurNewOrEdit extends Dialog {
 
   // éléments associés aux habilitations du tuteur
   // grid qui contient la liste des habilitations du tuteur
-  Grid<TuteurHabilitation> tuteurHabilitations = new Grid<>(TuteurHabilitation.class);
+  Grid<TuteurHabilitation> tuteurHabilitations = new Grid<>(TuteurHabilitation.class, false);
   // formulaire et éléments du formulaire pour l'ajout et l'édition d'habilitations
   FormLayout formNewHabilitation = new FormLayout();
   Select<String> statutFormation = new Select<>();
   DatePicker dateFormation = new DatePicker("Date de Formation");
-  Select<String> modaliteFormation = new Select<>("FACE À FACE","PRÉSENTIEL", "DISPENSÉ");
+  Select<String> modaliteFormation = new Select<>("FACE À FACE","PRÉSENTIEL");
   DatePicker dateHabilitation = new DatePicker("Date d'Habilitation");
   ComboBox<Formation> formation = new ComboBox<>("Formation");
 
@@ -151,9 +153,15 @@ public class TuteurNewOrEdit extends Dialog {
     dateNaissanceTuteur.setI18n(multiFormatI18n);
     dateNaissanceTuteur.isRequired();
 
+    modaliteFormation.setLabel("Modalité de formation");
+
     // grille des habilitations du tuteur
     tuteurHabilitations.addClassName("tuteur-habilitation-grid");
-    tuteurHabilitations.setColumns("dateFormation","formation.libelleFormation", "statutFormation", "modaliteFormation", "dateHabilitation");
+    tuteurHabilitations.addColumn(th -> frenchDateFormater(th.getDateFormation())).setHeader("Date de formation").setSortable(true);
+    tuteurHabilitations.addColumn(th -> frenchDateFormater(th.getDateHabilitation())).setHeader("Date d'habilitation").setSortable(true);
+    tuteurHabilitations.addColumn(th -> th.getFormation() != null ? th.getFormation().getCodeFormation() : "").setHeader("Formation");
+    tuteurHabilitations.addColumn(TuteurHabilitation::getStatutFormation).setHeader("Statut de formation").setSortable(true);
+    tuteurHabilitations.addColumn(TuteurHabilitation::getModaliteFormation).setHeader("Modalité de formation").setSortable(true);
     // ajout d'un bouton d'édition pour pouvoir modifier une habilitation
     tuteurHabilitations.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
       editHabilitationTuteur(tuteur);

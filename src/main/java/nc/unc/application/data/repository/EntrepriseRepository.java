@@ -12,6 +12,9 @@ import java.util.List;
 public interface EntrepriseRepository extends JpaRepository<Entreprise, Long> {
 
   @Query("select e from Entreprise e " +
-          "where lower(e.enseigne) like lower(concat('%', :searchTerm, '%'))")
+          "where lower(e.enseigne) like lower(concat('%', :searchTerm, '%'))" +
+          "order by e.enseigne asc")
   List<Entreprise> search(@Param("searchTerm") String searchTerm);
+
+  List<Entreprise> findAllByOrderByEnseigneAsc();
 }

@@ -34,7 +34,7 @@ public class EntrepriseService {
   // Récupérer toutes les entreprises
   public List<Entreprise> findAllEntreprises(String filtertext) {
     if (filtertext == null || filtertext.isEmpty()) {
-      return entrepriseRepository.findAll();
+      return entrepriseRepository.findAllByOrderByEnseigneAsc();
     } else {
       return entrepriseRepository.search(filtertext);
     }

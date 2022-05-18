@@ -29,7 +29,7 @@ import javax.annotation.security.PermitAll;
 public class TuteurView extends VerticalLayout {
 
     // Les attributs de notre vue
-    Grid<Tuteur> grid = new Grid<>(Tuteur.class);
+    Grid<Tuteur> grid = new Grid<>(Tuteur.class, false);
     TextField filterText = new TextField();
     Button addTuteurButton;
     TuteurNewOrEdit tuteurModal;
@@ -81,7 +81,9 @@ public class TuteurView extends VerticalLayout {
     private void configureGrid() {
         grid.addClassNames("tuteur-grid");
         grid.setSizeFull();
-        grid.setColumns("prenomTuteur", "nomTuteur", "dateNaissanceTuteur");
+        grid.addColumn(tuteur -> tuteur.getNomTuteur() + " " + tuteur.getPrenomTuteur()).setHeader("NOM Prénom").setSortable(true);
+        grid.addColumn(tuteur -> tuteur.getEntreprise() != null ? tuteur.getEntreprise().getEnseigne() : "").setHeader("Entreprise");
+        grid.addColumn(Tuteur::getTelephoneTuteur1).setHeader("Téléphone");
         // bouton consultation tuteur
         grid.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.EYE), click -> {
             consultTuteur(tuteur);

@@ -181,7 +181,7 @@ public class ContratConsult extends Dialog {
     tuteurBinder.bindInstanceFields(this);
     formationBinder.bindInstanceFields(this);
 
-    Tabs tabsContrat = new Tabs(contratInfosTab, etudiantContratInfosTab, formationContratInfosTab,
+    Tabs tabsContrat = new Tabs(contratInfosTab, etudiantContratInfosTab, formationContratInfosTab, tuteurContratInfosTab,
             entrepriseContratInfosTab, formationContratInfosTab, avenant1ContratInfosTab, avenant2ContratInfosTab, ruptureContratInfosTab);
     // Au clic sur une des tab, on appelle notre méthode setContent pour pouvoir changer le contenu
     tabsContrat.addSelectedChangeListener(selectedChangeEvent ->
@@ -344,6 +344,13 @@ public class ContratConsult extends Dialog {
     codeFormation.setReadOnly(true);
     codeRome.setReadOnly(true);
     niveauCertificationProfessionnelle.setReadOnly(true);
+
+    // tuteur
+    nomTuteur.setReadOnly(true);
+    prenomTuteur.setReadOnly(true);
+    telephoneTuteur1.setReadOnly(true);
+    telephoneTuteur2.setReadOnly(true);
+    emailTuteur.setReadOnly(true);
 
     // entreprise
     enseigne.setReadOnly(true);

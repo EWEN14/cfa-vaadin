@@ -30,6 +30,8 @@ import nc.unc.application.data.service.ContratService;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import static nc.unc.application.utils.Utils.frenchDateFormater;
+
 /**
  * Modale (Dialog) qui s'ouvre lorsque l'on clique sur le bouton de détail d'un étudiant
  */
@@ -118,7 +120,7 @@ public class EtudiantConsult extends Dialog {
   Binder<ReferentPedagogique> referentPedagogiqueBinder = new BeanValidationBinder<>(ReferentPedagogique.class);
 
   // grid qui contiendra les contrats liés à l'étudiant
-  private final Grid<Contrat> contratGrid = new Grid<>(Contrat.class);
+  private final Grid<Contrat> contratGrid = new Grid<>(Contrat.class, false);
 
   // tab (onglet) qui seront insérés dans une tabs (ensemble d'onglets) les regroupant
   private final Tab etudiantInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(),new Span("Étudiant"));
@@ -155,7 +157,10 @@ public class EtudiantConsult extends Dialog {
 
     // grilles des contrats liées à l'étudiant
     contratGrid.addClassName("tuteur-contrats-grid");
-    contratGrid.setColumns("codeContrat", "debutContrat", "finContrat", "numeroConventionFormation");
+    contratGrid.addColumn(Contrat::getCodeContrat).setHeader("Code Contrat").setSortable(true);
+    contratGrid.addColumn(contrat -> contrat.getDebutContrat() != null ? frenchDateFormater(contrat.getDebutContrat()) : "").setHeader("Début Contrat").setSortable(true);
+    contratGrid.addColumn(contrat -> contrat.getFinContrat() != null ? frenchDateFormater(contrat.getFinContrat()) : "").setHeader("Fin Contrat").setSortable(true);
+    contratGrid.addColumn(Contrat::getNumeroConventionFormation).setHeader("Numéro de convention");
     contratGrid.addColumn(contrat -> contrat.getTuteur() != null ? contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur() : "").setHeader("Tuteur").setSortable(true);
     contratGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 

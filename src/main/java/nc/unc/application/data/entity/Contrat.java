@@ -6,6 +6,8 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -57,26 +59,15 @@ public class Contrat implements Cloneable {
   @Column(name = "email_representant")
   private String emailRepresentant;
 
-  @Column(name = "cadre_admin_num_enregistrement_contrat")
-  private String cadreAdminNumEnregistrementContrat;
-
-  @Column(name = "cadre_admin_num_avenant")
-  private String cadreAdminNumAvenant;
-
-  @Column(name = "cadre_admin_recu_le")
-  private LocalDate cadreAdminRecuLe;
-
+  @FutureOrPresent(message = "La date du début du contrat ne peut être dans le passé")
+  @NotNull(message = "La date de début du contrat ne peut pas être nulle")
   @Column(name = "debut_contrat")
   private LocalDate debutContrat;
 
+  @FutureOrPresent(message = "La date de fin du contrat ne peut être dans le passé")
+  @NotNull(message = "La date de fin du contrat ne peut pas être nulle")
   @Column(name = "fin_contrat")
   private LocalDate finContrat;
-
-  @Column(name = "emploi_occupe_salarie_etudiant")
-  private String emploiOccupeSalarieEtudiant;
-
-  @Column(name = "code_rome_emploi_occupe", length = 15)
-  private String codeRomeEmploiOccupe;
 
   @Column(name = "duree_periode_essai")
   private Integer dureePeriodeEssai;
@@ -84,20 +75,11 @@ public class Contrat implements Cloneable {
   @Column(name = "numero_convention_formation")
   private String numeroConventionFormation;
 
-  @Column(name = "semaines_entreprise")
-  private Integer semainesEntreprise;
+  @Column(name = "date_convention_formation")
+  private LocalDate dateConventionFormation;
 
-  @Column(name = "heures_formation")
-  private Integer heuresFormation;
-
-  @Column(name = "semaines_formation")
-  private Integer semainesFormation;
-
-  @Column(name = "lieu_formation")
-  private String lieuFormation;
-
-  @Column(name = "duree_hebdomadaire_travail")
-  private Integer dureeHebdomadaireTravail;
+  @Column(name = "prime_avantage_nature")
+  private String primeAvantageNature;
 
   @Column(name = "date_rupture")
   private LocalDate dateRupture;
@@ -123,47 +105,38 @@ public class Contrat implements Cloneable {
   @Column(name = "date_reception_originaux_convention")
   private LocalDate dateReceptionOriginauxConvention;
 
-  @Column(name = "exemplaire_originaux_remis_alternant_ou_entreprise")
-  private String exemplaireOriginauxRemisAlternantOuEntreprise;
+  @Column(name = "conv_originale_remis_etudiant")
+  private Boolean convOriginaleRemisEtudiant;
 
-  @Column(name = "motif_avn_1")
-  private String motifAvn1;
+  @Column(name = "conv_originale_remis_tuteur")
+  private Boolean convOriginaleRemisTuteur;
 
-  @Column(name = "date_mail_ou_rdv_signature_cua_avn_1")
-  private LocalDate dateMailOuRdvSignatureCuaAvn1;
+  @Column(name = "conv_originale_remis_employeur")
+  private Boolean convOriginaleRemisEmployeur;
 
-  @Column(name = "date_depot_alfresco_cua_avn_1")
-  private LocalDate dateDepotAlfrescoCuaAvn1;
+  @Column(name = "motif_avn")
+  private String motifAvn;
 
-  @Column(name = "date_mail_ou_rdv_signature_conv_avn_1")
-  private LocalDate dateMailOuRdvSignatureConvAvn1;
+  @Column(name = "date_mail_ou_rdv_signature_cua_avn")
+  private LocalDate dateMailOuRdvSignatureCuaAvn;
 
-  @Column(name = "date_depot_alfresco_conv_avn_1")
-  private LocalDate dateDepotAlfrescoConvAvn1;
+  @Column(name = "date_depot_alfresco_cua_avn")
+  private LocalDate dateDepotAlfrescoCuaAvn;
 
-  @Column(name = "date_remise_originaux_avn_1")
-  private LocalDate dateRemiseOriginauxAvn1;
+  @Column(name = "date_mail_ou_rdv_signature_conv_avn")
+  private LocalDate dateMailOuRdvSignatureConvAvn;
 
-  @Column(name = "motif_avn_2")
-  private String motifAvn2;
+  @Column(name = "date_depot_alfresco_conv_avn")
+  private LocalDate dateDepotAlfrescoConvAvn;
 
-  @Column(name = "date_mail_ou_rdv_signature_cua_avn_2")
-  private LocalDate dateMailOuRdvSignatureCuaAvn2;
+  @Column(name = "conv_avenant_remis_etudiant")
+  private Boolean convAvenantRemisEtudiant;
 
-  @Column(name = "date_depot_alfresco_cua_avn_2")
-  private LocalDate dateDepotAlfrescoCuaAvn2;
+  @Column(name = "conv_avenant_remis_tuteur")
+  private Boolean convAvenantRemisTuteur;
 
-  @Column(name = "date_remise_originaux_cua_avn_2")
-  private LocalDate dateRemiseOriginauxCuaAvn2;
-
-  @Column(name = "date_mail_ou_rdv_signature_conv_avn_2")
-  private LocalDate dateMailOuRdvSignatureConvAvn2;
-
-  @Column(name = "date_depot_alfresco_conv_avn_2")
-  private LocalDate dateDepotAlfrescoConvAvn2;
-
-  @Column(name = "date_remise_originaux_avn_2")
-  private LocalDate dateRemiseOriginauxAvn2;
+  @Column(name = "conv_avenant_remis_employeur")
+  private Boolean convAvenantRemisEmployeur;
 
   @Column(name = "formation_lea")
   private LocalDate formationLea;
@@ -171,20 +144,24 @@ public class Contrat implements Cloneable {
   @Column(name = "observations", length = 15000)
   private String observations;
 
-  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Entreprise.class)
-  @JoinColumn(name = "id_entreprise")
+  @NotNull(message = "L'entreprise doit être renseignée")
+  @ManyToOne(cascade = CascadeType.MERGE, optional = false, targetEntity = Entreprise.class)
+  @JoinColumn(name = "id_entreprise", nullable = true)
   private Entreprise entreprise;
 
-  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Etudiant.class)
-  @JoinColumn(name = "id_etudiant")
+  @NotNull(message = "L'étudiant doit être renseigné")
+  @ManyToOne(cascade = CascadeType.MERGE, optional = false, targetEntity = Etudiant.class)
+  @JoinColumn(name = "id_etudiant", nullable = true)
   private Etudiant etudiant;
 
-  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Formation.class)
-  @JoinColumn(name = "id_formation")
+  @NotNull(message = "La formation doit être renseignée")
+  @ManyToOne(cascade = CascadeType.MERGE, optional = false, targetEntity = Formation.class)
+  @JoinColumn(name = "id_formation", nullable = true)
   private Formation formation;
 
-  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Tuteur.class)
-  @JoinColumn(name = "id_tuteur")
+  @NotNull(message = "Le tuteur doit être renseigné")
+  @ManyToOne(cascade = CascadeType.MERGE, optional = false, targetEntity = Tuteur.class)
+  @JoinColumn(name = "id_tuteur", nullable = true)
   private Tuteur tuteur;
 
   @CreationTimestamp
@@ -300,30 +277,6 @@ public class Contrat implements Cloneable {
     this.emailRepresentant = emailRepresentant;
   }
 
-  public String getCadreAdminNumEnregistrementContrat() {
-    return cadreAdminNumEnregistrementContrat;
-  }
-
-  public void setCadreAdminNumEnregistrementContrat(String cadreAdminNumEnregistrementContrat) {
-    this.cadreAdminNumEnregistrementContrat = cadreAdminNumEnregistrementContrat;
-  }
-
-  public String getCadreAdminNumAvenant() {
-    return cadreAdminNumAvenant;
-  }
-
-  public void setCadreAdminNumAvenant(String cadreAdminNumAvenant) {
-    this.cadreAdminNumAvenant = cadreAdminNumAvenant;
-  }
-
-  public LocalDate getCadreAdminRecuLe() {
-    return cadreAdminRecuLe;
-  }
-
-  public void setCadreAdminRecuLe(LocalDate cadreAdminRecuLe) {
-    this.cadreAdminRecuLe = cadreAdminRecuLe;
-  }
-
   public LocalDate getDebutContrat() {
     return debutContrat;
   }
@@ -338,22 +291,6 @@ public class Contrat implements Cloneable {
 
   public void setFinContrat(LocalDate finContrat) {
     this.finContrat = finContrat;
-  }
-
-  public String getEmploiOccupeSalarieEtudiant() {
-    return emploiOccupeSalarieEtudiant;
-  }
-
-  public void setEmploiOccupeSalarieEtudiant(String emploiOccupeSalarieEtudiant) {
-    this.emploiOccupeSalarieEtudiant = emploiOccupeSalarieEtudiant;
-  }
-
-  public String getCodeRomeEmploiOccupe() {
-    return codeRomeEmploiOccupe;
-  }
-
-  public void setCodeRomeEmploiOccupe(String codeRomeEmploiOccupe) {
-    this.codeRomeEmploiOccupe = codeRomeEmploiOccupe;
   }
 
   public Integer getDureePeriodeEssai() {
@@ -372,44 +309,20 @@ public class Contrat implements Cloneable {
     this.numeroConventionFormation = numeroConventionTripartie;
   }
 
-  public Integer getSemainesEntreprise() {
-    return semainesEntreprise;
+  public LocalDate getDateConventionFormation() {
+    return dateConventionFormation;
   }
 
-  public void setSemainesEntreprise(Integer semainesEntreprise) {
-    this.semainesEntreprise = semainesEntreprise;
+  public void setDateConventionFormation(LocalDate dateConventionFormation) {
+    this.dateConventionFormation = dateConventionFormation;
   }
 
-  public Integer getHeuresFormation() {
-    return heuresFormation;
+  public String getPrimeAvantageNature() {
+    return primeAvantageNature;
   }
 
-  public void setHeuresFormation(Integer heuresFormation) {
-    this.heuresFormation = heuresFormation;
-  }
-
-  public Integer getSemainesFormation() {
-    return semainesFormation;
-  }
-
-  public void setSemainesFormation(Integer semainesFormation) {
-    this.semainesFormation = semainesFormation;
-  }
-
-  public String getLieuFormation() {
-    return lieuFormation;
-  }
-
-  public void setLieuFormation(String lieuFormation) {
-    this.lieuFormation = lieuFormation;
-  }
-
-  public Integer getDureeHebdomadaireTravail() {
-    return dureeHebdomadaireTravail;
-  }
-
-  public void setDureeHebdomadaireTravail(Integer dureeHebdomadaireTravail) {
-    this.dureeHebdomadaireTravail = dureeHebdomadaireTravail;
+  public void setPrimeAvantageNature(String primeAvantageNature) {
+    this.primeAvantageNature = primeAvantageNature;
   }
 
   public LocalDate getDateRupture() {
@@ -476,116 +389,92 @@ public class Contrat implements Cloneable {
     this.dateReceptionOriginauxConvention = dateReceptionOriginauxConvention;
   }
 
-  public String getExemplaireOriginauxRemisAlternantOuEntreprise() {
-    return exemplaireOriginauxRemisAlternantOuEntreprise;
+  public Boolean getConvOriginaleRemisEtudiant() {
+    return convOriginaleRemisEtudiant;
   }
 
-  public void setExemplaireOriginauxRemisAlternantOuEntreprise(String exemplaire_originaux_remis_alternant_ou_entreprise) {
-    this.exemplaireOriginauxRemisAlternantOuEntreprise = exemplaire_originaux_remis_alternant_ou_entreprise;
+  public void setConvOriginaleRemisEtudiant(Boolean convOriginaleRemisEtudiant) {
+    this.convOriginaleRemisEtudiant = convOriginaleRemisEtudiant;
   }
 
-  public String getMotifAvn1() {
-    return motifAvn1;
+  public Boolean getConvOriginaleRemisTuteur() {
+    return convOriginaleRemisTuteur;
   }
 
-  public void setMotifAvn1(String motifAvn1) {
-    this.motifAvn1 = motifAvn1;
+  public void setConvOriginaleRemisTuteur(Boolean convOriginaleRemisTuteur) {
+    this.convOriginaleRemisTuteur = convOriginaleRemisTuteur;
   }
 
-  public LocalDate getDateMailOuRdvSignatureCuaAvn1() {
-    return dateMailOuRdvSignatureCuaAvn1;
+  public Boolean getConvOriginaleRemisEmployeur() {
+    return convOriginaleRemisEmployeur;
   }
 
-  public void setDateMailOuRdvSignatureCuaAvn1(LocalDate dateMailOuRdvSignatureCuaAvn1) {
-    this.dateMailOuRdvSignatureCuaAvn1 = dateMailOuRdvSignatureCuaAvn1;
+  public void setConvOriginaleRemisEmployeur(Boolean convOriginaleRemisEmployeur) {
+    this.convOriginaleRemisEmployeur = convOriginaleRemisEmployeur;
   }
 
-  public LocalDate getDateDepotAlfrescoCuaAvn1() {
-    return dateDepotAlfrescoCuaAvn1;
+  public String getMotifAvn() {
+    return motifAvn;
   }
 
-  public void setDateDepotAlfrescoCuaAvn1(LocalDate dateDepotAlfrescoCuaAvn1) {
-    this.dateDepotAlfrescoCuaAvn1 = dateDepotAlfrescoCuaAvn1;
+  public void setMotifAvn(String motifAvn1) {
+    this.motifAvn = motifAvn1;
   }
 
-  public LocalDate getDateMailOuRdvSignatureConvAvn1() {
-    return dateMailOuRdvSignatureConvAvn1;
+  public LocalDate getDateMailOuRdvSignatureCuaAvn() {
+    return dateMailOuRdvSignatureCuaAvn;
   }
 
-  public void setDateMailOuRdvSignatureConvAvn1(LocalDate dateMailOuRdvSignatureConvAvn1) {
-    this.dateMailOuRdvSignatureConvAvn1 = dateMailOuRdvSignatureConvAvn1;
+  public void setDateMailOuRdvSignatureCuaAvn(LocalDate dateMailOuRdvSignatureCuaAvn1) {
+    this.dateMailOuRdvSignatureCuaAvn = dateMailOuRdvSignatureCuaAvn1;
   }
 
-  public LocalDate getDateDepotAlfrescoConvAvn1() {
-    return dateDepotAlfrescoConvAvn1;
+  public LocalDate getDateDepotAlfrescoCuaAvn() {
+    return dateDepotAlfrescoCuaAvn;
   }
 
-  public void setDateDepotAlfrescoConvAvn1(LocalDate dateDepotAlfrescoConvAvn1) {
-    this.dateDepotAlfrescoConvAvn1 = dateDepotAlfrescoConvAvn1;
+  public void setDateDepotAlfrescoCuaAvn(LocalDate dateDepotAlfrescoCuaAvn1) {
+    this.dateDepotAlfrescoCuaAvn = dateDepotAlfrescoCuaAvn1;
   }
 
-  public LocalDate getDateRemiseOriginauxAvn1() {
-    return dateRemiseOriginauxAvn1;
+  public LocalDate getDateMailOuRdvSignatureConvAvn() {
+    return dateMailOuRdvSignatureConvAvn;
   }
 
-  public void setDateRemiseOriginauxAvn1(LocalDate dateRemiseOriginauxAvn1) {
-    this.dateRemiseOriginauxAvn1 = dateRemiseOriginauxAvn1;
+  public void setDateMailOuRdvSignatureConvAvn(LocalDate dateMailOuRdvSignatureConvAvn1) {
+    this.dateMailOuRdvSignatureConvAvn = dateMailOuRdvSignatureConvAvn1;
   }
 
-  public String getMotifAvn2() {
-    return motifAvn2;
+  public LocalDate getDateDepotAlfrescoConvAvn() {
+    return dateDepotAlfrescoConvAvn;
   }
 
-  public void setMotifAvn2(String motifAvn2) {
-    this.motifAvn2 = motifAvn2;
+  public void setDateDepotAlfrescoConvAvn(LocalDate dateDepotAlfrescoConvAvn1) {
+    this.dateDepotAlfrescoConvAvn = dateDepotAlfrescoConvAvn1;
   }
 
-  public LocalDate getDateMailOuRdvSignatureCuaAvn2() {
-    return dateMailOuRdvSignatureCuaAvn2;
+  public Boolean getConvAvenantRemisEtudiant() {
+    return convAvenantRemisEtudiant;
   }
 
-  public void setDateMailOuRdvSignatureCuaAvn2(LocalDate dateMailOuRdvSignatureCuaAvn2) {
-    this.dateMailOuRdvSignatureCuaAvn2 = dateMailOuRdvSignatureCuaAvn2;
+  public void setConvAvenantRemisEtudiant(Boolean convAvenantRemisEtudiant) {
+    this.convAvenantRemisEtudiant = convAvenantRemisEtudiant;
   }
 
-  public LocalDate getDateDepotAlfrescoCuaAvn2() {
-    return dateDepotAlfrescoCuaAvn2;
+  public Boolean getConvAvenantRemisEmployeur() {
+    return convAvenantRemisEmployeur;
   }
 
-  public void setDateDepotAlfrescoCuaAvn2(LocalDate dateDepotAlfrescoCuaAvn2) {
-    this.dateDepotAlfrescoCuaAvn2 = dateDepotAlfrescoCuaAvn2;
+  public void setConvAvenantRemisEmployeur(Boolean convAvenantRemisEmployeur) {
+    this.convAvenantRemisEmployeur = convAvenantRemisEmployeur;
   }
 
-  public LocalDate getDateRemiseOriginauxCuaAvn2() {
-    return dateRemiseOriginauxCuaAvn2;
+  public Boolean getConvAvenantRemisTuteur() {
+    return convAvenantRemisTuteur;
   }
 
-  public void setDateRemiseOriginauxCuaAvn2(LocalDate dateRemiseOriginauxCuaAvn2) {
-    this.dateRemiseOriginauxCuaAvn2 = dateRemiseOriginauxCuaAvn2;
-  }
-
-  public LocalDate getDateMailOuRdvSignatureConvAvn2() {
-    return dateMailOuRdvSignatureConvAvn2;
-  }
-
-  public void setDateMailOuRdvSignatureConvAvn2(LocalDate dateMailOuRdvSignatureConvAvn2) {
-    this.dateMailOuRdvSignatureConvAvn2 = dateMailOuRdvSignatureConvAvn2;
-  }
-
-  public LocalDate getDateDepotAlfrescoConvAvn2() {
-    return dateDepotAlfrescoConvAvn2;
-  }
-
-  public void setDateDepotAlfrescoConvAvn2(LocalDate dateDepotAlfrescoConvAvn2) {
-    this.dateDepotAlfrescoConvAvn2 = dateDepotAlfrescoConvAvn2;
-  }
-
-  public LocalDate getDateRemiseOriginauxAvn2() {
-    return dateRemiseOriginauxAvn2;
-  }
-
-  public void setDateRemiseOriginauxAvn2(LocalDate dateRemiseOriginauxAvn2) {
-    this.dateRemiseOriginauxAvn2 = dateRemiseOriginauxAvn2;
+  public void setConvAvenantRemisTuteur(Boolean convAvenantRemisTuteur) {
+    this.convAvenantRemisTuteur = convAvenantRemisTuteur;
   }
 
   public LocalDate getFormationLea() {
@@ -673,20 +562,11 @@ public class Contrat implements Cloneable {
             "\n communeRepresentant='" + communeRepresentant + '\'' +
             "\n telephoneRepresentant=" + telephoneRepresentant +
             "\n emailRepresentant='" + emailRepresentant + '\'' +
-            "\n cadreAdminNumEnregistrementContrat='" + cadreAdminNumEnregistrementContrat + '\'' +
-            "\n cadreAdminNumAvenant='" + cadreAdminNumAvenant + '\'' +
-            "\n cadreAdminRecuLe=" + cadreAdminRecuLe +
             "\n debutContrat=" + debutContrat +
             "\n finContrat=" + finContrat +
-            "\n emploiOccupeSalarieEtudiant='" + emploiOccupeSalarieEtudiant + '\'' +
-            "\n codeRomeEmploiOccupe='" + codeRomeEmploiOccupe + '\'' +
             "\n dureePeriodeEssai=" + dureePeriodeEssai +
             "\n numeroConventionFormation='" + numeroConventionFormation + '\'' +
-            "\n semainesEntreprise=" + semainesEntreprise +
-            "\n heuresFormation=" + heuresFormation +
-            "\n semainesFormation=" + semainesFormation +
-            "\n lieuFormation='" + lieuFormation + '\'' +
-            "\n dureeHebdomadaireTravail=" + dureeHebdomadaireTravail +
+            "\n primeAvantageNature='" + primeAvantageNature + '\'' +
             "\n dateRupture=" + dateRupture +
             "\n motifRupture='" + motifRupture + '\'' +
             "\n dateReceptionDecua=" + dateReceptionDecua +
@@ -695,20 +575,17 @@ public class Contrat implements Cloneable {
             "\n dateEnvoiEmailCuaConvention=" + dateEnvoiEmailCuaConvention +
             "\n dateDepotAlfrescoCuaConvSigne=" + dateDepotAlfrescoCuaConvSigne +
             "\n dateReceptionOriginauxConvention=" + dateReceptionOriginauxConvention +
-            "\n exemplaireOriginauxRemisAlternantOuEntreprise='" + exemplaireOriginauxRemisAlternantOuEntreprise + '\'' +
-            "\n motifAvn1='" + motifAvn1 + '\'' +
-            "\n dateMailOuRdvSignatureCuaAvn1=" + dateMailOuRdvSignatureCuaAvn1 +
-            "\n dateDepotAlfrescoCuaAvn1=" + dateDepotAlfrescoCuaAvn1 +
-            "\n dateMailOuRdvSignatureConvAvn1=" + dateMailOuRdvSignatureConvAvn1 +
-            "\n dateDepotAlfrescoConvAvn1=" + dateDepotAlfrescoConvAvn1 +
-            "\n dateRemiseOriginauxAvn1=" + dateRemiseOriginauxAvn1 +
-            "\n motifAvn2='" + motifAvn2 + '\'' +
-            "\n dateMailOuRdvSignatureCuaAvn2=" + dateMailOuRdvSignatureCuaAvn2 +
-            "\n dateDepotAlfrescoCuaAvn2=" + dateDepotAlfrescoCuaAvn2 +
-            "\n dateRemiseOriginauxCuaAvn2=" + dateRemiseOriginauxCuaAvn2 +
-            "\n dateMailOuRdvSignatureConvAvn2=" + dateMailOuRdvSignatureConvAvn2 +
-            "\n dateDepotAlfrescoConvAvn2=" + dateDepotAlfrescoConvAvn2 +
-            "\n dateRemiseOriginauxAvn2=" + dateRemiseOriginauxAvn2 +
+            "\n convOriginaleRemisEtudiant=" + convOriginaleRemisEtudiant +
+            "\n convOriginaleRemisTuteur='" + convOriginaleRemisTuteur + '\'' +
+            "\n convOriginaleRemisEmployeur='" + convOriginaleRemisEmployeur + '\'' +
+            "\n motifAvn='" + motifAvn + '\'' +
+            "\n dateMailOuRdvSignatureCuaAvn=" + dateMailOuRdvSignatureCuaAvn +
+            "\n dateDepotAlfrescoCuaAvn=" + dateDepotAlfrescoCuaAvn +
+            "\n dateMailOuRdvSignatureConvAvn=" + dateMailOuRdvSignatureConvAvn +
+            "\n dateDepotAlfrescoConvAvn=" + dateDepotAlfrescoConvAvn +
+            "\n convAvenantRemisEtudiant=" + convAvenantRemisEtudiant +
+            "\n convAvenantRemisTuteur=" + convAvenantRemisTuteur +
+            "\n convAvenantRemisEmployeur=" + convAvenantRemisEmployeur +
             "\n formationLea=" + formationLea +
             "\n observations='" + observations + '\'' +
             "\n entreprise=" + (entreprise != null ? entreprise.getEnseigne() : "") +

@@ -30,15 +30,30 @@ public class Formation implements Cloneable {
   @Column(name = "code_formation")
   private String codeFormation;
 
-  @NotNull(message = "Le code rome ne peut pas être nul")
-  @Pattern(message = "Le code rome est composé d'une lettre majuscule puis de 4 chiffres. Ex : M1234", regexp = "[A-Z][0-9]{4}$")
   @Column(name = "code_rome", length = 15)
   private String codeRome;
 
-  @NotNull(message = "Le code rome ne peut pas être nul")
   @Range(message = "Le niveau du diplôme doit être entre 3 et 8", min = 3, max = 8)
   @Column(name = "niveau_certification_pro")
   private Integer niveauCertificationProfessionnelle;
+
+  @Column(name = "type_emploi_exerce")
+  private String typeEmploiExerce;
+
+  @Column(name = "semaines_entreprise")
+  private Integer semainesEntreprise;
+
+  @Column(name = "duree_hebdomadaire_travail")
+  private Integer dureeHebdomadaireTravail;
+
+  @Column(name = "heures_formation")
+  private Integer heuresFormation;
+
+  @Column(name = "semaines_formation")
+  private Integer semainesFormation;
+
+  @Column(name = "lieu_formation")
+  private String lieuFormation;
 
   @Column(name = "observations", length = 15000)
   private String observations;
@@ -118,6 +133,54 @@ public class Formation implements Cloneable {
     this.niveauCertificationProfessionnelle = niveauCertificationProfessionnelle;
   }
 
+  public String getTypeEmploiExerce() {
+    return typeEmploiExerce;
+  }
+
+  public void setTypeEmploiExerce(String typeEmploiExerce) {
+    this.typeEmploiExerce = typeEmploiExerce;
+  }
+
+  public Integer getSemainesEntreprise() {
+    return semainesEntreprise;
+  }
+
+  public void setSemainesEntreprise(Integer semainesEntreprise) {
+    this.semainesEntreprise = semainesEntreprise;
+  }
+
+  public Integer getDureeHebdomadaireTravail() {
+    return dureeHebdomadaireTravail;
+  }
+
+  public void setDureeHebdomadaireTravail(Integer dureeHebdomadaireTravail) {
+    this.dureeHebdomadaireTravail = dureeHebdomadaireTravail;
+  }
+
+  public Integer getHeuresFormation() {
+    return heuresFormation;
+  }
+
+  public void setHeuresFormation(Integer heuresFormation) {
+    this.heuresFormation = heuresFormation;
+  }
+
+  public Integer getSemainesFormation() {
+    return semainesFormation;
+  }
+
+  public void setSemainesFormation(Integer semainesFormation) {
+    this.semainesFormation = semainesFormation;
+  }
+
+  public String getLieuFormation() {
+    return lieuFormation;
+  }
+
+  public void setLieuFormation(String lieuFormation) {
+    this.lieuFormation = lieuFormation;
+  }
+
   public String getObservations() {
     return observations;
   }
@@ -187,6 +250,12 @@ public class Formation implements Cloneable {
             "\n , codeFormation='" + codeFormation + '\'' +
             "\n , codeRome='" + codeRome + '\'' +
             "\n , niveauCertificationProfessionnelle=" + niveauCertificationProfessionnelle +
+            "\n , typeEmploiExerce='" + typeEmploiExerce + '\'' +
+            "\n , semainesEntreprise=" + semainesEntreprise +
+            "\n , dureeHebdomadaireTravail=" + dureeHebdomadaireTravail +
+            "\n , heuresFormation=" + heuresFormation +
+            "\n , semainesFormation=" + semainesFormation +
+            "\n , lieuFormation='" + lieuFormation + '\'' +
             "\n , observations='" + observations + '\'' +
             "\n , referentPedagogique=" +
             (referentPedagogique != null ? referentPedagogique.getPrenomReferentPedago()+" "+referentPedagogique.getNomReferentPedago() : "") +

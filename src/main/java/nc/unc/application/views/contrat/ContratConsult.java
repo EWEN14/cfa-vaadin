@@ -59,15 +59,9 @@ public class ContratConsult extends Dialog {
   private final Div infosContrat = new Div(new H4("Informations liées au contrat"));
   private final DatePicker debutContrat = new DatePicker("Date de début du contrat");
   private final DatePicker finContrat = new DatePicker("Date de fin du contrat");
-  private final TextField emploiOccupeSalarieEtudiant = new TextField("Emploi occupé par le salarié");
-  private final TextField codeRomeEmploiOccupe = new TextField("Code ROME de l'emploi occupé");
   private final IntegerField dureePeriodeEssai = new IntegerField("Durée de la période d'essai (nombre de semaines)");
   private final TextField numeroConventionFormation = new TextField("Numéro de la convention de Formation");
-  private final IntegerField semainesEntreprise = new IntegerField("Nombre de semaines en entreprise");
-  private final IntegerField heuresFormation = new IntegerField("Nombre d'heures en formation");
-  private final IntegerField semainesFormation = new IntegerField("Nombre de semaines en formation");
-  private final TextField lieuFormation = new TextField("Lieu de la formation");
-  private final IntegerField dureeHebdomadaireTravail = new IntegerField("Durée hebdomadaire de travail");
+  private final TextField primeAvantageNature = new TextField("Prime ou Avantage(s) en nature");
   private final Div decua = new Div(new H4("DECUA"));
   private final DatePicker dateReceptionDecua = new DatePicker("Date de réception du DECUA");
   private final DatePicker dateEnvoiRpDecua = new DatePicker("Date d'envoi au référent pédagogique du DECUA pour validation");
@@ -199,8 +193,7 @@ public class ContratConsult extends Dialog {
     form.add(codeContrat, typeContrat, representantLegal, new Div(), nomRepresentantLegal,
             prenomRepresentantLegal, relationAvecSalarie, adresseRepresentant, codePostalRepresentant, communeRepresentant,
             telephoneRepresentant, emailRepresentant, derogationAge, dateDelivranceDerogationAge, cadreAdministration, new Div(), cadreAdminNumEnregistrementContrat, cadreAdminNumAvenant,
-            cadreAdminRecuLe, new Div(), infosContrat, new Div(), debutContrat, finContrat, emploiOccupeSalarieEtudiant, codeRomeEmploiOccupe, dureePeriodeEssai, numeroConventionFormation, semainesEntreprise,
-            heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail, new Div(), decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua,
+            cadreAdminRecuLe, new Div(), infosContrat, new Div(), debutContrat, finContrat, dureePeriodeEssai, numeroConventionFormation, primeAvantageNature, new Div(), decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua,
             dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(), dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(),
             dateReceptionOriginauxConvention, exemplaireOriginauxRemisAlternantOuEntreprise, lea, new Div(), formationLea);
 
@@ -298,15 +291,9 @@ public class ContratConsult extends Dialog {
     cadreAdminRecuLe.setReadOnly(true);
     debutContrat.setReadOnly(true);
     finContrat.setReadOnly(true);
-    emploiOccupeSalarieEtudiant.setReadOnly(true);
-    codeRomeEmploiOccupe.setReadOnly(true);
     dureePeriodeEssai.setReadOnly(true);
     numeroConventionFormation.setReadOnly(true);
-    semainesEntreprise.setReadOnly(true);
-    heuresFormation.setReadOnly(true);
-    semainesFormation.setReadOnly(true);
-    lieuFormation.setReadOnly(true);
-    dureeHebdomadaireTravail.setReadOnly(true);
+    primeAvantageNature.setReadOnly(true);
     dateReceptionDecua.setReadOnly(true);
     dateEnvoiRpDecua.setReadOnly(true);
     dateRetourRpDecua.setReadOnly(true);

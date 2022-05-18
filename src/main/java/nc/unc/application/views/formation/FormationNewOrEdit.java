@@ -9,6 +9,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -17,6 +18,7 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.Formation;
 import nc.unc.application.data.entity.ReferentPedagogique;
+import nc.unc.application.data.enums.Commune;
 
 import java.util.List;
 
@@ -30,6 +32,12 @@ public class FormationNewOrEdit extends Dialog {
   TextField codeFormation = new TextField("Code de la formation");
   TextField codeRome = new TextField("Code ROME");
   Select<Integer> niveauCertificationProfessionnelle = new Select<>(3,4,5,6,7,8);
+  TextField typeEmploiOccupe = new TextField("Type d'emploi occupé");
+  IntegerField semainesEntreprise = new IntegerField("Nombre de semaines en entreprise");
+  IntegerField heuresFormation = new IntegerField("Nombre d'heures en formation");
+  IntegerField semainesFormation = new IntegerField("Nombre de semaines en formation");
+  ComboBox<String> lieuFormation = new ComboBox<>("Lieu de la formation");
+  IntegerField dureeHebdomadaireTravail = new IntegerField("Durée hebdomadaire de travail");
   TextArea observations = new TextArea("Observations");
   ComboBox<ReferentPedagogique> referentPedagogique = new ComboBox<>("Responsable de la formation");
 
@@ -48,11 +56,14 @@ public class FormationNewOrEdit extends Dialog {
     codeRome.setPlaceholder("ex: M1234");
     codeRome.setPattern("[A-Z][0-9]{4}$");
 
+    lieuFormation.setItems(Commune.getCommunesStr());
+
     referentPedagogique.setItems(referentPedagogiqueList);
     referentPedagogique.setItemLabelGenerator(rp -> rp.getPrenomReferentPedago() + " " + rp.getNomReferentPedago());
     referentPedagogique.setClearButtonVisible(true);
 
-    form.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle, referentPedagogique, observations, createButtonsLayout());
+    form.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle, referentPedagogique, observations,
+            typeEmploiOccupe, semainesEntreprise, heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(form);

@@ -1,5 +1,6 @@
 package nc.unc.application.data.entity;
 
+import nc.unc.application.data.enums.CodeContrat;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Range;
@@ -20,8 +21,9 @@ public class Contrat implements Cloneable {
   @Column(name = "id_contrat", nullable = false)
   private Long id;
 
-  @Column(name = "code_contrat")
-  private String codeContrat;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "code_contrat", nullable = false)
+  private CodeContrat codeContrat;
 
   @Column(name = "type_contrat")
   private String typeContrat;
@@ -114,6 +116,9 @@ public class Contrat implements Cloneable {
   @Column(name = "conv_originale_remis_employeur")
   private Boolean convOriginaleRemisEmployeur;
 
+  @Column(name = "numero_avenant")
+  private Integer numeroAvenant;
+
   @Column(name = "motif_avn")
   private String motifAvn;
 
@@ -181,11 +186,11 @@ public class Contrat implements Cloneable {
     this.id = id;
   }
 
-  public String getCodeContrat() {
+  public CodeContrat getCodeContrat() {
     return codeContrat;
   }
 
-  public void setCodeContrat(String codeContrat) {
+  public void setCodeContrat(CodeContrat codeContrat) {
     this.codeContrat = codeContrat;
   }
 
@@ -413,6 +418,14 @@ public class Contrat implements Cloneable {
     this.convOriginaleRemisEmployeur = convOriginaleRemisEmployeur;
   }
 
+  public Integer getNumeroAvenant() {
+    return numeroAvenant;
+  }
+
+  public void setNumeroAvenant(Integer numeroAvenant) {
+    this.numeroAvenant = numeroAvenant;
+  }
+
   public String getMotifAvn() {
     return motifAvn;
   }
@@ -578,6 +591,7 @@ public class Contrat implements Cloneable {
             "\n convOriginaleRemisEtudiant=" + convOriginaleRemisEtudiant +
             "\n convOriginaleRemisTuteur='" + convOriginaleRemisTuteur + '\'' +
             "\n convOriginaleRemisEmployeur='" + convOriginaleRemisEmployeur + '\'' +
+            "\n numeroAvenant=" + numeroAvenant +
             "\n motifAvn='" + motifAvn + '\'' +
             "\n dateMailOuRdvSignatureCuaAvn=" + dateMailOuRdvSignatureCuaAvn +
             "\n dateDepotAlfrescoCuaAvn=" + dateDepotAlfrescoCuaAvn +

@@ -32,7 +32,7 @@ public class FormationNewOrEdit extends Dialog {
   TextField codeFormation = new TextField("Code de la formation");
   TextField codeRome = new TextField("Code ROME");
   Select<Integer> niveauCertificationProfessionnelle = new Select<>(3,4,5,6,7,8);
-  TextField typeEmploiOccupe = new TextField("Type d'emploi occupé");
+  TextField typeEmploiExerce = new TextField("Type d'emploi occupé");
   IntegerField semainesEntreprise = new IntegerField("Nombre de semaines en entreprise");
   IntegerField heuresFormation = new IntegerField("Nombre d'heures en formation");
   IntegerField semainesFormation = new IntegerField("Nombre de semaines en formation");
@@ -62,8 +62,9 @@ public class FormationNewOrEdit extends Dialog {
     referentPedagogique.setItemLabelGenerator(rp -> rp.getPrenomReferentPedago() + " " + rp.getNomReferentPedago());
     referentPedagogique.setClearButtonVisible(true);
 
-    form.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle, referentPedagogique, observations,
-            typeEmploiOccupe, semainesEntreprise, heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail, createButtonsLayout());
+    form.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle,
+            typeEmploiExerce, semainesEntreprise, heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail,
+            referentPedagogique, observations, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(form);

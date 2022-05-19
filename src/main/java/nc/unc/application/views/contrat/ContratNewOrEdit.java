@@ -44,7 +44,6 @@ public class ContratNewOrEdit extends Dialog {
 
   H3 titre = new H3();
 
-  Select<String> codeContrat = new Select<>(CodeContrat.getCodeContratStr());
   Select<String> typeContrat = new Select<>("1","2","3","4");
 
   Div representantLegal = new Div(new H4("Représentant légal du salarié et dérogation d'âge"));
@@ -140,7 +139,6 @@ public class ContratNewOrEdit extends Dialog {
     setCustomDatePicker();
 
     // ajout de labels sur les select
-    codeContrat.setLabel("Code du Contrat");
     typeContrat.setLabel("Type du Contrat");
     relationAvecSalarie.setLabel("Relation du représentant avec le salarié");
 
@@ -149,7 +147,7 @@ public class ContratNewOrEdit extends Dialog {
     communeRepresentant.setClearButtonVisible(true);
 
     // ajout des éléments au formulaire principal
-    form.add(etudiant, formation, entreprise, tuteur, codeContrat, typeContrat, representantLegal, new Div(), nomRepresentantLegal,
+    form.add(etudiant, formation, entreprise, tuteur, typeContrat, representantLegal, new Div(), nomRepresentantLegal,
             prenomRepresentantLegal, relationAvecSalarie, adresseRepresentant, codePostalRepresentant, communeRepresentant,
             telephoneRepresentant, emailRepresentant, derogationAge, dateDelivranceDerogationAge, cadreAdministration, new Div(),
             new Div(), infosContrat, new Div(), debutContrat, finContrat, dureePeriodeEssai, numeroConventionFormation, dateConventionFormation, primeAvantageNature,
@@ -197,6 +195,10 @@ public class ContratNewOrEdit extends Dialog {
       }
     } else {
       titre.add("Création d'un nouveau contrat");
+      // si nouveau contrat, on définit qu'il s'agit d'un contrat et pas d'un avenant
+      if (contrat != null) {
+        this.contrat.setCodeContrat(CodeContrat.CONTRAT);
+      }
     }
     // alimentation du binder
     binder.readBean(contrat);

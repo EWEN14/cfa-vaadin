@@ -49,8 +49,9 @@ public class FormationListView extends VerticalLayout {
     cardLayout.setMargin(true);
 
     H3 libelleFormation = new H3(formation.getLibelleFormation());
-    Span directeurFormation = new Span("Directeur de formation : "+formation.getReferentPedagogique().getPrenomReferentPedago()
-            +" "+formation.getReferentPedagogique().getNomReferentPedago());
+    String prenomNomDirecteurFormation = formation.getReferentPedagogique() != null ? formation.getReferentPedagogique().getPrenomReferentPedago()
+            +" "+formation.getReferentPedagogique().getNomReferentPedago() : "";
+    Span directeurFormation = new Span("Directeur de formation : "+ prenomNomDirecteurFormation);
 
     // bouton de consultation de la formation
     Button consultFormationButton = new Button(VaadinIcon.EYE.create());

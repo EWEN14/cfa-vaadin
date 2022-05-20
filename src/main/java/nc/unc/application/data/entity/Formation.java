@@ -57,7 +57,7 @@ public class Formation implements Cloneable {
   @Column(name = "observations", length = 15000)
   private String observations;
 
-  @OneToOne(cascade = CascadeType.MERGE, targetEntity = ReferentPedagogique.class)
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = ReferentPedagogique.class)
   @JoinColumn(name = "id_referent_pedagogique")
   private ReferentPedagogique referentPedagogique;
 

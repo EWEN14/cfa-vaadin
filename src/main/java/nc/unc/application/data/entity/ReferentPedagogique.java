@@ -8,6 +8,8 @@ import org.hibernate.validator.constraints.Range;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "referent_pedagogique")
@@ -42,6 +44,9 @@ public class ReferentPedagogique implements Cloneable{
     @Column(name = "telephone", nullable = false)
     private Integer telephoneReferentPedago;
 
+    @OneToMany(mappedBy = "referentPedagogique", cascade = CascadeType.MERGE)
+    private List<Formation> formations = new ArrayList<>();
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -49,6 +54,13 @@ public class ReferentPedagogique implements Cloneable{
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @PreRemove
+    private void preRemove() {
+        for (Formation f : formations) {
+            f.setReferentPedagogique(null);
+        }
+    }
 
     // Getters et Setters
     public Long getId() {
@@ -97,6 +109,14 @@ public class ReferentPedagogique implements Cloneable{
 
     public void setTelephoneReferentPedago(Integer telephone) {
         this.telephoneReferentPedago = telephone;
+    }
+
+    public List<Formation> getFormations() {
+        return formations;
+    }
+
+    public void setFormations(List<Formation> formations) {
+        this.formations = formations;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -58,8 +58,7 @@ public class Etudiant implements Cloneable {
   private Integer telephoneEtudiant1;
 
   @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
-  @NotNull(message = "Le numéro de téléphone 2 ne doit pas être nul")
-  @Column(name = "telephone_2", nullable = false)
+  @Column(name = "telephone_2")
   private Integer telephoneEtudiant2;
 
   @Email

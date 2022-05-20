@@ -30,6 +30,9 @@ public class TuteurHabilitation implements Cloneable {
   @Column(name = "date_habilitation")
   private LocalDate dateHabilitation;
 
+  @Column(name = "observations", length = 15000)
+  private String observations;
+
   @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Tuteur.class)
   @JoinColumn(name = "id_tuteur")
   private Tuteur tuteur;
@@ -86,6 +89,14 @@ public class TuteurHabilitation implements Cloneable {
 
   public void setDateHabilitation(LocalDate dateHabilitation) {
     this.dateHabilitation = dateHabilitation;
+  }
+
+  public String getObservations() {
+    return observations;
+  }
+
+  public void setObservations(String observations) {
+    this.observations = observations;
   }
 
   public Tuteur getTuteur() {
@@ -147,6 +158,7 @@ public class TuteurHabilitation implements Cloneable {
             "\n statutFormation='" + statutFormation + '\'' +
             "\n dateFormation=" + dateFormation +
             "\n modaliteFormation='" + modaliteFormation + '\'' +
+            "\n observations='" + observations + '\'' +
             "\n dateHabilitation=" + dateHabilitation +
             "\n tuteur=" + (tuteur != null ? tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() : "") +
             "\n formation=" + (formation != null ? formation.getLibelleFormation() : "") +

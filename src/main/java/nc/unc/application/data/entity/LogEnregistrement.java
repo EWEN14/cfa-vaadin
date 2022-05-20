@@ -21,21 +21,14 @@ public class LogEnregistrement {
   @Column(name = "type_crud", nullable = false)
   private TypeCrud typeCrud;
 
+  @Column(name = "executant")
+  private String executant;
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private LocalDateTime createdAt;
 
-  @Column(name = "executant")
-  private String executant;
-
-  public String getExecutant() {
-    return executant;
-  }
-
-  public void setExecutant(String executant) {
-    this.executant = executant;
-  }
-
+  // Getters et Setters
   public Long getId() {
     return id;
   }
@@ -58,6 +51,14 @@ public class LogEnregistrement {
 
   public void setTypeCrud(TypeCrud typeCrud) {
     this.typeCrud = typeCrud;
+  }
+
+  public String getExecutant() {
+    return executant;
+  }
+
+  public void setExecutant(String executant) {
+    this.executant = executant;
   }
 
   public LocalDateTime getCreatedAt() {

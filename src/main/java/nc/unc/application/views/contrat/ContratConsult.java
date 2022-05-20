@@ -12,7 +12,6 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -23,7 +22,6 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.*;
-import nc.unc.application.data.enums.CodeContrat;
 
 public class ContratConsult extends Dialog {
 
@@ -41,25 +39,11 @@ public class ContratConsult extends Dialog {
   private final FormLayout form = new FormLayout();
 
   private final H3 titre = new H3("Consultation d'un contrat");
-  private final TextField typeContrat = new TextField("Type du Contrat");
-  private final Div representantLegal = new Div(new H4("Représentant légal du salarié et dérogation d'âge"));
-  private final TextField nomRepresentantLegal = new TextField("NOM représentant légal");
-  private final TextField prenomRepresentantLegal = new TextField("Prénom représentant légal");
-  private final TextField relationAvecSalarie = new TextField("Relation du représentant avec le salarié");
-  private final TextField adresseRepresentant = new TextField("Adresse représentant légal");
-  private final IntegerField codePostalRepresentant = new IntegerField("Code postal représentant légal");
-  private final TextField communeRepresentant = new TextField("Commune du représentant légal");
-  private final IntegerField telephoneRepresentant = new IntegerField("Téléphone du représentant légal");
-  private final EmailField emailRepresentant = new EmailField("Email du représentant légal");
-  private final Checkbox derogationAge = new Checkbox("Dérogation d'âge");
-  private final DatePicker dateDelivranceDerogationAge = new DatePicker("Date de délivrance de la dérogation d'âge");
-  private final Div cadreAdministration = new Div(new H4("Cadre réservé à l'administration"));
-  private final TextField cadreAdminNumEnregistrementContrat = new TextField("Numéro d'enregistrement du contrat");
-  private final TextField cadreAdminNumAvenant = new TextField("Numéro d'avenant");
-  private final DatePicker cadreAdminRecuLe = new DatePicker("Reçu le");
+
   private final Div infosContrat = new Div(new H4("Informations liées au contrat"));
   private final DatePicker debutContrat = new DatePicker("Date de début du contrat");
   private final DatePicker finContrat = new DatePicker("Date de fin du contrat");
+  private final TextField typeContrat = new TextField("Type du Contrat");
   private final IntegerField dureePeriodeEssai = new IntegerField("Durée de la période d'essai (nombre de semaines)");
   private final TextField numeroConventionFormation = new TextField("Numéro de la convention de Formation");
   private final TextField primeAvantageNature = new TextField("Prime ou Avantage(s) en nature");
@@ -72,6 +56,7 @@ public class ContratConsult extends Dialog {
   private final DatePicker dateDepotAlfrescoCuaConvSigne = new DatePicker("Date de dépôt Alfresco");
   private final Div convention = new Div(new H4("Convention"));
   private final DatePicker dateReceptionOriginauxConvention = new DatePicker("Date de réception des originaux");
+  private final H5 remiseExemplaireConv = new H5("Remise d'exemplaires de la convention (originale)");
   private final Checkbox convOriginaleRemisEtudiant = new Checkbox("Remis à l'étudiant");
   private final Checkbox convOriginaleRemisTuteur = new Checkbox("Remis au tuteur");
   private final Checkbox convOriginaleRemisEmployeur = new Checkbox("Remis à l'employeur");
@@ -80,26 +65,41 @@ public class ContratConsult extends Dialog {
   // binder qui sera utilisé pour remlir automatiquement les champs d'infos propres au contrat
   Binder<Contrat> contratBinder = new BeanValidationBinder<>(Contrat.class);
 
+  // form qui contiendra les informations relatives à la dérogation d'âge et du représentant légal
+  private final FormLayout derogationAgeRepresentantLegalForm = new FormLayout();
+  private final Div representantLegal = new Div(new H4("Dérogation d'âge et Représentant Légal du salarié"));
+  private final Checkbox derogationAge = new Checkbox("Dérogation d'âge");
+  private final DatePicker dateDelivranceDerogationAge = new DatePicker("Date de délivrance de la dérogation d'âge");
+  private final TextField nomRepresentantLegal = new TextField("NOM représentant légal");
+  private final TextField prenomRepresentantLegal = new TextField("Prénom représentant légal");
+  private final TextField relationAvecSalarie = new TextField("Relation du représentant avec le salarié");
+  private final TextField adresseRepresentant = new TextField("Adresse représentant légal");
+  private final IntegerField codePostalRepresentant = new IntegerField("Code postal représentant légal");
+  private final TextField communeRepresentant = new TextField("Commune du représentant légal");
+  private final IntegerField telephoneRepresentant = new IntegerField("Téléphone du représentant légal");
+  private final EmailField emailRepresentant = new EmailField("Email du représentant légal");
+
   // form qui contiendra les informations relatives à la rupture du contrat
   private final FormLayout ruptureContainer = new FormLayout();
   private final Div rupture = new Div(new H4("Rupture"));
   private final DatePicker dateRupture = new DatePicker("Date de rupture du contrat");
   private final TextArea motifRupture = new TextArea("Motif de la rupture");
 
-  // form qui contiendra les informations de l'avenant 1
+  // form qui contiendra les informations de l'avenant
   private final FormLayout avenantContainer = new FormLayout();
-  private final Div avenant = new Div(new H4("Avenant N°1"));
+  private final Div avenant = new Div(new H4("Informations Avenant"));
+  private final IntegerField numeroAvenant = new IntegerField("Numéro de l'avenant");
   private final TextArea motifAvn = new TextArea("Motif de l'avenant");
-  private final Div suiviAvenantCua = new Div(new H5("Suivi Avenant CUA N°1"));
+  private final Div suiviAvenantCua = new Div(new H5("Suivi Avenant CUA"));
   private final DatePicker dateMailOuRdvSignatureCuaAvn = new DatePicker("Date mail ou RDV pour signature");
   private final DatePicker dateDepotAlfrescoCuaAvn = new DatePicker("Date de dépôt sur Alfresco");
-  private final Div suiviAvenantConv = new Div(new H5("Suivi Avenant Convention N°1"));
+  private final Div suiviAvenantConv = new Div(new H5("Suivi Avenant Convention"));
   private final DatePicker dateMailOuRdvSignatureConvAvn = new DatePicker("Date mail ou RDV pour signature");
   private final DatePicker dateDepotAlfrescoConvAvn = new DatePicker("Date de dépôt sur Alfresco");
+  private final H5 remiseExemplaireConvAvn = new H5("Remise d'exemplaires de la convention (avenant)");
   private final Checkbox convAvenantRemisEtudiant = new Checkbox("Remis à l'étudiant");
   private final Checkbox convAvenantRemisTuteur = new Checkbox("Remis au tuteur");
   private final Checkbox convAvenantRemisEmployeur = new Checkbox("Remis à l'employeur");
-
 
   // form qui contiendra les informations relatives à l'étudiant lié au contrat
   private final FormLayout formContratEtudiant = new FormLayout();
@@ -146,9 +146,6 @@ public class ContratConsult extends Dialog {
   private final Tab entrepriseContratInfosTab = new Tab(VaadinIcon.WORKPLACE.create(),new Span("Entreprise"));
   private final Tab tuteurContratInfosTab = new Tab(VaadinIcon.USER.create(), new Span("Tuteur"));
   private final Tab formationContratInfosTab = new Tab(VaadinIcon.DIPLOMA.create(), new Span("Formation"));
-  private final Tab avenantContratInfosTab = new Tab(VaadinIcon.FILE_ADD.create(), new Span("Avenant N°1"));
-  /*private final Tab avenant2ContratInfosTab = new Tab(VaadinIcon.FILE_ADD.create(), new Span("Avenant N°2"));*/
-  private final Tab ruptureContratInfosTab = new Tab(VaadinIcon.CLOSE_SMALL.create(), new Span("Rupture"));
 
   private final Button close = new Button("Fermer");
   private final Button delete = new Button("Supprimer le contrat");
@@ -169,7 +166,7 @@ public class ContratConsult extends Dialog {
     formationBinder.bindInstanceFields(this);
 
     Tabs tabsContrat = new Tabs(contratInfosTab, etudiantContratInfosTab, formationContratInfosTab, tuteurContratInfosTab,
-            entrepriseContratInfosTab, formationContratInfosTab, avenantContratInfosTab, ruptureContratInfosTab);
+            entrepriseContratInfosTab, formationContratInfosTab);
     // Au clic sur une des tab, on appelle notre méthode setContent pour pouvoir changer le contenu
     tabsContrat.addSelectedChangeListener(selectedChangeEvent ->
             setContent(selectedChangeEvent.getSelectedTab())
@@ -183,20 +180,23 @@ public class ContratConsult extends Dialog {
     lienContainer.add(new Div(lienPreview), new Div(lienDownloadPdf));
 
     // ajout des éléments au formulaire principal
-    form.add(typeContrat, representantLegal, new Div(), nomRepresentantLegal,
-            prenomRepresentantLegal, relationAvecSalarie, adresseRepresentant, codePostalRepresentant, communeRepresentant,
-            telephoneRepresentant, emailRepresentant, derogationAge, dateDelivranceDerogationAge, cadreAdministration, new Div(), cadreAdminNumEnregistrementContrat, cadreAdminNumAvenant,
-            cadreAdminRecuLe, new Div(), infosContrat, new Div(), debutContrat, finContrat, dureePeriodeEssai, numeroConventionFormation, primeAvantageNature, new Div(), decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua,
+    form.add(infosContrat, new Div(), debutContrat, finContrat, typeContrat, dureePeriodeEssai, numeroConventionFormation, primeAvantageNature,
+            decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua,
             dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(), dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(),
-            dateReceptionOriginauxConvention, convOriginaleRemisEtudiant, convOriginaleRemisTuteur, convOriginaleRemisEmployeur,
+            dateReceptionOriginauxConvention, new Div(), remiseExemplaireConv, new Div(),
+            convOriginaleRemisEtudiant, convOriginaleRemisTuteur, convOriginaleRemisEmployeur, new Div(),
             lea, new Div(), formationLea);
 
-    // ajout des petits formulaires qui seront dans les autres tab
+    // ajout des petits formulaires qui seront présents ou non dans la tab principale selon qu'ils sont renseignés ou non
+    derogationAgeRepresentantLegalForm.add(representantLegal, new Div(), derogationAge, dateDelivranceDerogationAge, nomRepresentantLegal,
+            prenomRepresentantLegal, relationAvecSalarie, adresseRepresentant, codePostalRepresentant, communeRepresentant,
+            telephoneRepresentant, emailRepresentant);
     ruptureContainer.add(rupture, new Div(), motifRupture, dateRupture);
-    avenantContainer.add(avenant, new Div(), motifAvn, new Div(), suiviAvenantCua, new Div(), dateMailOuRdvSignatureCuaAvn, dateDepotAlfrescoCuaAvn,
-            suiviAvenantConv, new Div(), dateMailOuRdvSignatureConvAvn, dateDepotAlfrescoConvAvn, convAvenantRemisEtudiant,
-            convAvenantRemisTuteur, convAvenantRemisEmployeur);
+    avenantContainer.add(avenant, new Div(), numeroAvenant, motifAvn, suiviAvenantCua, new Div(), dateMailOuRdvSignatureCuaAvn, dateDepotAlfrescoCuaAvn,
+            suiviAvenantConv, new Div(), dateMailOuRdvSignatureConvAvn, dateDepotAlfrescoConvAvn, remiseExemplaireConvAvn, new Div(),
+            convAvenantRemisEtudiant, convAvenantRemisTuteur, convAvenantRemisEmployeur);
 
+    // ajout des petits formulaires qui seront dans les autres tab
     formContratEtudiant.add(prenomEtudiant, nomEtudiant, numeroEtudiant, situationEntreprise, telephoneEtudiant1, emailEtudiant);
     formContratFormation.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle);
     formContratEntrepriseInfos.add(enseigne, raisonSociale, statutActifEntreprise, telephoneContactCfa);
@@ -219,6 +219,9 @@ public class ContratConsult extends Dialog {
 
       // on affiche le layout avec les liens pour les contrats que si celui-ci contient étudiant, formation, entreprise et tuteur
       lienContainer.setVisible(contrat.getEtudiant() != null && contrat.getFormation() != null && contrat.getEntreprise() != null && contrat.getTuteur() != null);
+
+      showOrNotRuptureForm();
+      showOrNotDerogationAgeForm();
 
       // lecture des binder pour compléter les champs dans les différents formulaires
       contratBinder.readBean(contrat);
@@ -246,7 +249,7 @@ public class ContratConsult extends Dialog {
     content.removeAll();
     // on insère le contenu (formulaire) adéquat en fonction de la tab sélectionnée
     if (tab.equals(contratInfosTab)) {
-      content.add(form);
+      content.add(form, ruptureContainer, avenantContainer, derogationAgeRepresentantLegalForm);
     } else if (tab.equals(etudiantContratInfosTab)) {
       content.add(formContratEtudiant);
     } else if (tab.equals(formationContratInfosTab)) {
@@ -255,11 +258,19 @@ public class ContratConsult extends Dialog {
       content.add(formContratEntrepriseInfos);
     } else if (tab.equals(tuteurContratInfosTab)) {
       content.add(formContratTuteur);
-    } else if (tab.equals(avenantContratInfosTab)) {
-      content.add(avenantContainer);
-    } else if (tab.equals(ruptureContratInfosTab)) {
-      content.add(ruptureContainer);
     }
+  }
+
+  // fonction qui vérifie si le contrat a déjà des informations concernant la rupture du contrat
+  private void showOrNotRuptureForm() {
+    // si rupture (déterminé par la présence de la date de rupture),
+    // on affiche les champs du formulaire de rupture et on cache le bouton d'ajout de rupture sinon on fait l'inverse
+    ruptureContainer.setVisible(this.contrat.getDateRupture() != null);
+  }
+
+  // fonction qui vérifie si le contrat a déjà des informations concernant la dérogation d'âge sur le contrat
+  private void showOrNotDerogationAgeForm() {
+    derogationAgeRepresentantLegalForm.setVisible(this.contrat.getDerogationAge() || this.contrat.getRelationAvecSalarie() != null);
   }
 
   // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
@@ -276,9 +287,6 @@ public class ContratConsult extends Dialog {
     emailRepresentant.setReadOnly(true);
     derogationAge.setReadOnly(true);
     dateDelivranceDerogationAge.setReadOnly(true);
-    cadreAdminNumEnregistrementContrat.setReadOnly(true);
-    cadreAdminNumAvenant.setReadOnly(true);
-    cadreAdminRecuLe.setReadOnly(true);
     debutContrat.setReadOnly(true);
     finContrat.setReadOnly(true);
     dureePeriodeEssai.setReadOnly(true);
@@ -296,6 +304,7 @@ public class ContratConsult extends Dialog {
     formationLea.setReadOnly(true);
     dateRupture.setReadOnly(true);
     motifRupture.setReadOnly(true);
+    numeroAvenant.setReadOnly(true);
     motifAvn.setReadOnly(true);
     dateMailOuRdvSignatureCuaAvn.setReadOnly(true);
     dateDepotAlfrescoCuaAvn.setReadOnly(true);

@@ -82,12 +82,6 @@ public class Tuteur implements Cloneable {
   @Column(name = "annee_experience_professionnelle")
   private String anneeExperienceProfessionnelle;
 
-  // Entreprise du tuteur
-  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Entreprise.class)
-  @JoinColumn(name = "id_entreprise")
-  @JsonIgnoreProperties({"tuteurs"})
-  private Entreprise entreprise;
-
   // Casier judiciaire fourni du tuteur
   @Column(name = "casier_judiciaire_fourni")
   private Boolean casierJudiciaireFourni;
@@ -105,6 +99,12 @@ public class Tuteur implements Cloneable {
 
   @Column(name = "observations", length = 15000)
   private String observationsTuteur;
+
+  // Entreprise du tuteur
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Entreprise.class)
+  @JoinColumn(name = "id_entreprise")
+  @JsonIgnoreProperties({"tuteurs"})
+  private Entreprise entreprise;
 
   // Besoin de mettre en EAGER plutôt qu'en LAZY (par défaut), car sinon liste des Habilitations pas initialisées
   // quand le Tuteur est initialisé

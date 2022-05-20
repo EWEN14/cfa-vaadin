@@ -5,7 +5,6 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -14,6 +13,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -44,9 +44,8 @@ public class ContratNewOrEdit extends Dialog {
 
   H3 titre = new H3();
 
-  Select<String> typeContrat = new Select<>("1","2","3","4");
-
-  Div representantLegal = new Div(new H4("Représentant légal du salarié et dérogation d'âge"));
+  FormLayout derogationAgeRepresentantLegalForm = new FormLayout();
+  Div representantLegal = new Div(new H4("Dérogation d'âge et Représentant Légal du salarié"));
   TextField  nomRepresentantLegal = new TextField("NOM représentant légal");
   TextField prenomRepresentantLegal = new TextField("Prénom représentant légal");
   Select<String> relationAvecSalarie = new Select<>("Père", "Mère", "Tuteur");
@@ -58,9 +57,8 @@ public class ContratNewOrEdit extends Dialog {
   Checkbox derogationAge = new Checkbox("Dérogation d'âge");
   DatePicker dateDelivranceDerogationAge = new DatePicker("Date de délivrance de la dérogation d'âge");
 
-  Div cadreAdministration = new Div(new H4("Cadre réservé à l'administration"));
-
   Div infosContrat = new Div(new H4("Informations liées au contrat"));
+  Select<String> typeContrat = new Select<>("","1","2","3","4");
   DatePicker debutContrat = new DatePicker("Date de début du contrat");
   DatePicker finContrat = new DatePicker("Date de fin du contrat");
   IntegerField dureePeriodeEssai = new IntegerField("Durée de la période d'essai (nombre de semaines)");
@@ -80,6 +78,7 @@ public class ContratNewOrEdit extends Dialog {
 
   Div convention = new Div(new H4("Convention"));
   DatePicker dateReceptionOriginauxConvention = new DatePicker("Date de réception des originaux");
+  H5 remiseExemplaireConv = new H5("Remise d'exemplaires de la convention (originale)");
   Checkbox convOriginaleRemisEtudiant = new Checkbox("Remis à l'étudiant");
   Checkbox convOriginaleRemisTuteur = new Checkbox("Remis au tuteur");
   Checkbox convOriginaleRemisEmployeur = new Checkbox("Remis à l'employeur");
@@ -94,6 +93,7 @@ public class ContratNewOrEdit extends Dialog {
 
   FormLayout avenantContainer = new FormLayout();
   Div avenant = new Div(new H4("AVENANT"));
+  IntegerField numeroAvenant = new IntegerField("Numéro de l'avenant");
   TextArea motifAvn = new TextArea("Motif de l'avenant");
   Div suiviAvenantCua = new Div(new H5("Suivi Avenant CUA"));
   DatePicker dateMailOuRdvSignatureCuaAvn = new DatePicker("Date mail ou RDV pour signature");
@@ -101,11 +101,16 @@ public class ContratNewOrEdit extends Dialog {
   Div suiviAvenantConv = new Div(new H5("Suivi Avenant Convention"));
   DatePicker dateMailOuRdvSignatureConvAvn = new DatePicker("Date mail ou RDV pour signature");
   DatePicker dateDepotAlfrescoConvAvn = new DatePicker("Date de dépôt sur Alfresco");
+  H5 remiseExemplaireConvAvn = new H5("Remise d'exemplaires de la convention (avenant)");
   Checkbox convAvenantRemisEtudiant = new Checkbox("Remis à l'étudiant");
   Checkbox convAvenantRemisTuteur = new Checkbox("Remis au tuteur");
   Checkbox convAvenantRemisEmployeur = new Checkbox("Remis à l'employeur");
 
   Binder<Contrat> binder = new BeanValidationBinder<>(Contrat.class);
+
+  Button addRupture = new Button("+ Rupture");
+  Button addDerogation = new Button("+ Dérogation d'âge");
+  Button addAvenant = new Button("Créer un avenant à partir de ce Contrat");
 
   Button save = new Button("Sauvegarder");
   Button close = new Button("Fermer");
@@ -147,22 +152,33 @@ public class ContratNewOrEdit extends Dialog {
     communeRepresentant.setClearButtonVisible(true);
 
     // ajout des éléments au formulaire principal
-    form.add(etudiant, formation, entreprise, tuteur, typeContrat, representantLegal, new Div(), nomRepresentantLegal,
-            prenomRepresentantLegal, relationAvecSalarie, adresseRepresentant, codePostalRepresentant, communeRepresentant,
-            telephoneRepresentant, emailRepresentant, derogationAge, dateDelivranceDerogationAge, cadreAdministration, new Div(),
-            new Div(), infosContrat, new Div(), debutContrat, finContrat, dureePeriodeEssai, numeroConventionFormation, dateConventionFormation, primeAvantageNature,
-            decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua, dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(),
-            dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(), dateReceptionOriginauxConvention,
-            convOriginaleRemisEtudiant, convOriginaleRemisTuteur, convOriginaleRemisEmployeur, lea, new Div(), formationLea);
+    form.add(etudiant, formation, entreprise, tuteur,
+            infosContrat, new Div(), debutContrat, finContrat, typeContrat, dureePeriodeEssai, numeroConventionFormation, dateConventionFormation, primeAvantageNature,
+            new Div(), decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua, dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(),
+            dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(), dateReceptionOriginauxConvention, new Div(),
+            remiseExemplaireConv, new Div(), convOriginaleRemisEtudiant, convOriginaleRemisTuteur, convOriginaleRemisEmployeur,
+            new Div(), lea, new Div(), formationLea);
 
     // ajout des petits formulaires correspondants à des champs qui seront cachés ou non selon les circonstances
+    derogationAgeRepresentantLegalForm.add(representantLegal, new Div(), derogationAge, dateDelivranceDerogationAge, nomRepresentantLegal,
+            prenomRepresentantLegal, relationAvecSalarie, adresseRepresentant, codePostalRepresentant, communeRepresentant,
+            telephoneRepresentant, emailRepresentant);
     ruptureContainer.add(rupture, new Div(), motifRupture, dateRupture);
-    avenantContainer.add(avenant, new Div(), motifAvn, new Div(), suiviAvenantCua, new Div(), dateMailOuRdvSignatureCuaAvn, dateDepotAlfrescoCuaAvn,
-            suiviAvenantConv, new Div(), dateMailOuRdvSignatureConvAvn, dateDepotAlfrescoConvAvn, convAvenantRemisEtudiant,
-            convAvenantRemisTuteur, convAvenantRemisEmployeur);
+    avenantContainer.add(avenant, new Div(), numeroAvenant, motifAvn, suiviAvenantCua, new Div(), dateMailOuRdvSignatureCuaAvn, dateDepotAlfrescoCuaAvn,
+            suiviAvenantConv, new Div(), dateMailOuRdvSignatureConvAvn, dateDepotAlfrescoConvAvn, remiseExemplaireConvAvn, new Div(),
+            convAvenantRemisEtudiant, convAvenantRemisTuteur, convAvenantRemisEmployeur);
 
     // ajout des éléments à la modale
-    this.add(titre, form, ruptureContainer, avenantContainer, createButtonsLayout());
+    this.add(titre, createButtonsForSpecialFormDisplay(), form, ruptureContainer, avenantContainer,
+            derogationAgeRepresentantLegalForm, createButtonsLayout());
+  }
+
+  private HorizontalLayout createButtonsForSpecialFormDisplay() {
+    addRupture.addClickListener(event -> showOrNotRuptureForm(true));
+    addDerogation.addClickListener(event -> showOrNotDerogationAgeForm(true));
+    addAvenant.addClickListener(event -> Notification.show("Salut 3"));
+
+    return new HorizontalLayout(addRupture, addDerogation, addAvenant);
   }
 
   private HorizontalLayout createButtonsLayout() {
@@ -200,6 +216,13 @@ public class ContratNewOrEdit extends Dialog {
         this.contrat.setCodeContrat(CodeContrat.CONTRAT);
       }
     }
+
+    if (this.contrat != null) {
+      // détermine si on affiche on non le formulaire de rupture du contrat
+      showOrNotRuptureForm(false);
+      showOrNotDerogationAgeForm(false);
+    }
+
     // alimentation du binder
     binder.readBean(contrat);
   }
@@ -215,6 +238,36 @@ public class ContratNewOrEdit extends Dialog {
       }
     } catch (ValidationException e) {
       e.printStackTrace();
+    }
+  }
+
+  // fonction qui vérifie si le contrat a déjà des informations concernant la rupture du contrat
+  private void showOrNotRuptureForm(Boolean addRuptureButtonClicked) {
+    // si rupture (déterminé par la présence de la date de rupture), ou au clic sur le bouton d'ajout de rupture,
+    // on affiche les champs du formulaire de rupture et on cache le bouton d'ajout de rupture
+    if (this.contrat.getDateRupture() != null || addRuptureButtonClicked) {
+      ruptureContainer.setVisible(true);
+      addRupture.setVisible(false);
+      if (addRuptureButtonClicked) {
+        Notification.show("Ajout des champs de Rupture du contrat. Voir plus bas ↓");
+      }
+    } else { // sinon on fait l'inverse
+      ruptureContainer.setVisible(false);
+      addRupture.setVisible(true);
+    }
+  }
+
+  // fonction qui vérifie si le contrat a déjà des informations concernant la dérogation d'âge sur le contrat
+  private void showOrNotDerogationAgeForm(Boolean addDerogationButtonClicked) {
+    if (this.contrat.getDerogationAge() || this.contrat.getRelationAvecSalarie() != null || addDerogationButtonClicked) {
+      derogationAgeRepresentantLegalForm.setVisible(true);
+      addDerogation.setVisible(false);
+      if (addDerogationButtonClicked) {
+        Notification.show("Ajout des champs de Dérogation d'âge et du Représentant Légal. Voir plus bas ↓");
+      }
+    } else {
+      derogationAgeRepresentantLegalForm.setVisible(false);
+      addDerogation.setVisible(true);
     }
   }
 

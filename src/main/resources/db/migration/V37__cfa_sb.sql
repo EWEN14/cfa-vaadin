@@ -1,0 +1,2 @@
+ALTER TABLE etudiant
+    ALTER COLUMN telephone_2 DROP NOT NULL;

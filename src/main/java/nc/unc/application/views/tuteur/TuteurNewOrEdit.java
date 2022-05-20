@@ -97,6 +97,7 @@ public class TuteurNewOrEdit extends Dialog {
   DatePicker dateFormation = new DatePicker("Date de Formation");
   Select<String> modaliteFormation = new Select<>("FACE À FACE","PRÉSENTIEL");
   DatePicker dateHabilitation = new DatePicker("Date d'Habilitation");
+  TextArea observations = new TextArea("Observations");
   ComboBox<Formation> formation = new ComboBox<>("Formation");
 
   // Onglets
@@ -193,7 +194,8 @@ public class TuteurNewOrEdit extends Dialog {
     formation.setItemLabelGenerator(Formation::getLibelleFormation);
 
     // ajout des champs dans le formulaire d'ajout d'habilités au tuteur
-    formNewHabilitation.add(statutFormation, dateFormation, formation, modaliteFormation, dateHabilitation, createSaveHabilitationButtonLayout());
+    formNewHabilitation.add(statutFormation, dateFormation, formation, modaliteFormation, dateHabilitation,
+            observations, createSaveHabilitationButtonLayout());
 
     // contenu qui sera affiché en dessous des tabs, qui change en fonction de la tab sélectionné
     content = new VerticalLayout();

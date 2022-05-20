@@ -47,16 +47,13 @@ public class LogsView extends VerticalLayout {
 
         add(grid);
         updateList();
-
-
-
     }
+
     private void updateList() {
         grid.setItems(logEnregistrmentService.findAllLogs(""));
     }
 
     // Details
-
     private ComponentRenderer<LogsDetailFormLayout, LogEnregistrement> createLogsDetailRenderer(){
         return new ComponentRenderer<>(LogsDetailFormLayout::new, LogsDetailFormLayout::setLogs);
     }
@@ -73,16 +70,12 @@ public class LogsView extends VerticalLayout {
             executant.setReadOnly(true);
             date.setReadOnly(true);
             typemodif.setReadOnly(true);
-            add(description);
-            add(executant);
-            add(date);
-            add(typemodif);
+            add(executant, date, typemodif, description);
             setResponsiveSteps(new ResponsiveStep("0", 3));
             setColspan(description, 3);
             setColspan(executant, 1);
             setColspan(date, 1);
             setColspan(typemodif, 1);
-
         }
 
         public void setLogs(LogEnregistrement log){

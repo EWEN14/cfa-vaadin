@@ -14,6 +14,11 @@ public interface TuteurRepository extends JpaRepository<Tuteur, UUID> {
     //Récupérer le(s) tuteurs selon le paramètre searchTerm
     @Query("select t from Tuteur t " +
             "where lower(t.nomTuteur) like lower(concat('%', :searchTerm, '%')) " +
-            "or lower(t.prenomTuteur) like lower(concat('%', :searchTerm, '%'))")
+            "or lower(t.prenomTuteur) like lower(concat('%', :searchTerm, '%'))" +
+            "order by t.nomTuteur asc")
     List<Tuteur> search(@Param("searchTerm") String searchTerm);
+
+    List<Tuteur> findAllByOrderByNomTuteur();
+
+    List<Tuteur> findAllByEntrepriseIdOrderByNomTuteur(Long id);
 }

@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 
 @Service
 public class PdfService {
@@ -37,8 +38,9 @@ public class PdfService {
 
   private File renderPdf(String html, Long id) throws IOException, DocumentException {
     Contrat contrat = contratService.findContratById(id);
+    String annee = String.valueOf(Calendar.getInstance().get(Calendar.YEAR)).substring(2,4);
     String nomContrat = "CUA_"+contrat.getEtudiant().getNomEtudiant()+ " " + contrat.getEtudiant().getPrenomEtudiant() + "_" +
-            contrat.getEntreprise().getEnseigne() + "_" + contrat.getFormation().getCodeFormation() + "-";
+            contrat.getEntreprise().getEnseigne() + "_" + contrat.getFormation().getCodeFormation() + "_" + annee + "-";
 
     File file = File.createTempFile(nomContrat, ".pdf");
     OutputStream outputStream = new FileOutputStream(file);

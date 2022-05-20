@@ -48,7 +48,6 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
 
   EtudiantConsult modalConsult;
   String idFormationStr;
-  Span span = new Span("");
   Div messageErreur;
   H2 libelleFormation = new H2();
 
@@ -79,7 +78,6 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
   @Override
   public void beforeEnter(BeforeEnterEvent event) {
     idFormationStr = event.getRouteParameters().get("idFormation").get();
-    span.setText("id de la formation : "+idFormationStr);
 
     getFormation();
   }
@@ -88,15 +86,15 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
     etudiantGrid.addClassNames("etudiant-grid");
     etudiantGrid.setSizeFull();
     // ajout des colonnes
-    fullNameColumn = etudiantGrid.addColumn(etudiant -> etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant());
+    fullNameColumn = etudiantGrid.addColumn(etudiant -> etudiant.getNomEtudiant() + " " + etudiant.getPrenomEtudiant());
     anneePromotionColumn = etudiantGrid.addColumn(Etudiant::getAnneePromotion);
-    etudiantGrid.addColumn(Etudiant::getAdmis);
-    etudiantGrid.addColumn(Etudiant::getSituationUnc);
+    etudiantGrid.addColumn(Etudiant::getTelephoneEtudiant1).setHeader("Téléphone");
+    etudiantGrid.addColumn(Etudiant::getSituationUnc).setHeader("Situation à l'UNC").setSortable(true);
 
     // ajout du bouton de consultation d'un étudiant
     etudiantGrid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultEtudiant(etudiant);
-    }));
+    })).setHeader("Consulter");
 
     // on définit que chaque colonne à une largeur autodéterminée
     etudiantGrid.getColumns().forEach(col -> col.setAutoWidth(true));
@@ -146,7 +144,7 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
     HeaderRow headerRow = etudiantGrid.appendHeaderRow();
 
     // ajout de nos header customisés sur nos colonnes
-    headerRow.getCell(fullNameColumn).setComponent(createFilterHeader("Prénom NOM", etudiantFilter::setFullName));
+    headerRow.getCell(fullNameColumn).setComponent(createFilterHeader("NOM Prénom", etudiantFilter::setFullName));
     headerRow.getCell(anneePromotionColumn).setComponent(createYearFilterHeader(etudiantFilter::setAnneePromotion));
   }
 
@@ -220,8 +218,8 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
       this.dataView.addFilter(this::test);
     }
 
-    public void setFullName(String prenom) {
-      this.fullName = prenom;
+    public void setFullName(String nomComplet) {
+      this.fullName = nomComplet;
       this.dataView.refreshAll();
     }
 
@@ -231,7 +229,7 @@ public class FormationEtudiantView extends VerticalLayout implements BeforeEnter
     }
 
     public boolean test(Etudiant etudiant) {
-      boolean matchesFullName = matches(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant(), fullName);
+      boolean matchesFullName = matches(etudiant.getNomEtudiant() + " " + etudiant.getPrenomEtudiant(), fullName);
       boolean matchesAnneePromotion;
       if (etudiant.getAnneePromotion() != null) {
          matchesAnneePromotion = matches(etudiant.getAnneePromotion().toString(), anneePromotion);

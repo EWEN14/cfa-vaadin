@@ -30,6 +30,8 @@ import nc.unc.application.data.service.ContratService;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import static nc.unc.application.utils.Utils.frenchDateFormater;
+
 /**
  * Modale (Dialog) qui s'ouvre lorsque l'on clique sur le bouton de détail d'un étudiant
  */
@@ -37,7 +39,7 @@ public class EtudiantConsult extends Dialog {
 
   private Etudiant etudiant;
 
-  private ContratService contratService;
+  private final ContratService contratService;
 
   // Layout qui contiendra le contenu en dessous des tabs
   private final VerticalLayout content = new VerticalLayout();
@@ -46,7 +48,7 @@ public class EtudiantConsult extends Dialog {
   private final FormLayout formEtudiantInfos = new FormLayout();
   private final TextField nomEtudiant = new TextField("NOM");
   private final TextField prenomEtudiant = new TextField("Prénom");
-  private IntegerField numeroEtudiant = new IntegerField("N° Étudiant");
+  private final IntegerField numeroEtudiant = new IntegerField("N° Étudiant");
   // utilisation de select lorsque nombre de choix assez petis
   private final Select<Civilite> civiliteEtudiant = new Select<>();
   private final DatePicker dateNaissanceEtudiant = new DatePicker("Date de Naissance");
@@ -118,7 +120,7 @@ public class EtudiantConsult extends Dialog {
   Binder<ReferentPedagogique> referentPedagogiqueBinder = new BeanValidationBinder<>(ReferentPedagogique.class);
 
   // grid qui contiendra les contrats liés à l'étudiant
-  private final Grid<Contrat> contratGrid = new Grid<>(Contrat.class);
+  private final Grid<Contrat> contratGrid = new Grid<>(Contrat.class, false);
 
   // tab (onglet) qui seront insérés dans une tabs (ensemble d'onglets) les regroupant
   private final Tab etudiantInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(),new Span("Étudiant"));
@@ -155,8 +157,11 @@ public class EtudiantConsult extends Dialog {
 
     // grilles des contrats liées à l'étudiant
     contratGrid.addClassName("tuteur-contrats-grid");
-    contratGrid.setColumns("codeContrat", "debutContrat", "finContrat", "numeroConventionFormation");
-    contratGrid.addColumn(contrat -> contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur()).setHeader("Tuteur").setSortable(true);
+    contratGrid.addColumn(Contrat::getCodeContrat).setHeader("Code Contrat").setSortable(true);
+    contratGrid.addColumn(contrat -> contrat.getDebutContrat() != null ? frenchDateFormater(contrat.getDebutContrat()) : "").setHeader("Début Contrat").setSortable(true);
+    contratGrid.addColumn(contrat -> contrat.getFinContrat() != null ? frenchDateFormater(contrat.getFinContrat()) : "").setHeader("Fin Contrat").setSortable(true);
+    contratGrid.addColumn(Contrat::getNumeroConventionFormation).setHeader("Numéro de convention");
+    contratGrid.addColumn(contrat -> contrat.getTuteur() != null ? contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur() : "").setHeader("Tuteur").setSortable(true);
     contratGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 
     // On instancie la Tabs, et on lui donne les tab que l'on veut insérer

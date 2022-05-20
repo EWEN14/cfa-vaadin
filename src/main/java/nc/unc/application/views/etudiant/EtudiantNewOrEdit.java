@@ -76,6 +76,7 @@ public class EtudiantNewOrEdit extends Dialog {
 
   public EtudiantNewOrEdit(List<Entreprise> entreprises, List<Tuteur> tuteurs, List<Formation> formations, List<ReferentPedagogique> referentsPedagogiques) {
     this.setWidth("85vw");
+    this.setHeight("90vh");
 
     // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité étudiant,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)

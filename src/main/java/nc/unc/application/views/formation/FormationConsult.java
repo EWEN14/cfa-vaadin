@@ -14,7 +14,6 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.Formation;
-import nc.unc.application.views.etudiant.EtudiantConsult;
 
 public class FormationConsult extends Dialog {
 
@@ -24,6 +23,12 @@ public class FormationConsult extends Dialog {
   private final TextField codeFormation = new TextField("Code de la formation");
   private final TextField codeRome = new TextField("Code ROME");
   private final IntegerField niveauCertificationProfessionnelle = new IntegerField("Niveau de la certification professionnelle");
+  private final TextField typeEmploiExerce = new TextField("Type d'emploi occupé");
+  private final IntegerField semainesEntreprise = new IntegerField("Nombre de semaines en entreprise");
+  private final IntegerField heuresFormation = new IntegerField("Nombre d'heures en formation");
+  private final IntegerField semainesFormation = new IntegerField("Nombre de semaines en formation");
+  private final TextField lieuFormation = new TextField("Lieu de la formation");
+  private final IntegerField dureeHebdomadaireTravail = new IntegerField("Durée hebdomadaire de travail");
   private final TextField responsableDeFormation = new TextField("Responsable de formation");
   private final TextArea observations = new TextArea("Observations");
   // binder qui permettra le remplissage automatique des champs
@@ -42,7 +47,9 @@ public class FormationConsult extends Dialog {
     formationBinder.bindInstanceFields(this);
 
     // ajout des champs dans le formulaire
-    form.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle, responsableDeFormation, observations);
+    form.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle, typeEmploiExerce,
+            semainesEntreprise, heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail,
+            responsableDeFormation, observations);
 
     // ajout du formulaire dans la vue
     add(form, createButtonsLayout());
@@ -75,6 +82,12 @@ public class FormationConsult extends Dialog {
     codeFormation.setReadOnly(true);
     codeRome.setReadOnly(true);
     niveauCertificationProfessionnelle.setReadOnly(true);
+    typeEmploiExerce.setReadOnly(true);
+    semainesEntreprise.setReadOnly(true);
+    heuresFormation.setReadOnly(true);
+    semainesFormation.setReadOnly(true);
+    lieuFormation.setReadOnly(true);
+    dureeHebdomadaireTravail.setReadOnly(true);
     responsableDeFormation.setReadOnly(true);
     observations.setReadOnly(true);
   }

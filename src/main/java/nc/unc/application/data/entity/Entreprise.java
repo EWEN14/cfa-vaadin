@@ -46,12 +46,11 @@ public class Entreprise implements Cloneable {
 
   @Range(message = "Le numéro de Cafat doit comporter 6 chiffres", min = 100000, max = 999999)
   @Column(name = "numero_cafat")
-  private Long numeroCafatEntreprise;
+  private Integer numeroCafatEntreprise;
 
   @Column(name = "nombre_salarie")
-  private Long nombreSalarie;
+  private Integer nombreSalarie;
 
-  @Pattern(message = "Le code NAF doit avoir le format suivant : 12.3 ou 12.34 ou 12.34Z", regexp = "\\d{2}\\.\\d{1,2}Z?$")
   @Column(name = "code_naf")
   private String codeNaf;
 
@@ -91,6 +90,7 @@ public class Entreprise implements Cloneable {
   @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
   private Integer telephoneContactCfa;
 
+  @Email
   @Column(name = "email_contact_cfa")
   private String emailContactCfa;
 
@@ -123,7 +123,7 @@ public class Entreprise implements Cloneable {
   @OneToMany(mappedBy = "entreprise", targetEntity = Tuteur.class)
   private List<Tuteur> tuteurs = new ArrayList<>();
 
-  @OneToMany(mappedBy = "entreprise", cascade = CascadeType.MERGE)
+  @OneToMany(mappedBy = "entreprise", targetEntity = Contrat.class)
   private List<Contrat> contrats = new ArrayList<>();
 
   @CreationTimestamp
@@ -133,6 +133,19 @@ public class Entreprise implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
+
+  @PreRemove
+  private void preRemove() {
+    for (Etudiant e : etudiants) {
+      e.setEntreprise(null);
+    }
+    for (Tuteur t : tuteurs) {
+      t.setEntreprise(null);
+    }
+    for (Contrat c: contrats) {
+      c.setEntreprise(null);
+    }
+  }
 
   // Getters et Setters
   public Long getId() {
@@ -183,19 +196,19 @@ public class Entreprise implements Cloneable {
     this.formeJuridique = formeJuridique;
   }
 
-  public Long getNumeroCafatEntreprise() {
+  public Integer getNumeroCafatEntreprise() {
     return numeroCafatEntreprise;
   }
 
-  public void setNumeroCafatEntreprise(Long numeroCafat) {
+  public void setNumeroCafatEntreprise(Integer numeroCafat) {
     this.numeroCafatEntreprise = numeroCafat;
   }
 
-  public Long getNombreSalarie() {
+  public Integer getNombreSalarie() {
     return nombreSalarie;
   }
 
-  public void setNombreSalarie(Long nombreSalarie) {
+  public void setNombreSalarie(Integer nombreSalarie) {
     this.nombreSalarie = nombreSalarie;
   }
 

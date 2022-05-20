@@ -13,6 +13,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -43,10 +44,8 @@ public class ContratNewOrEdit extends Dialog {
 
   H3 titre = new H3();
 
-  Select<String> codeContrat = new Select<>(CodeContrat.getCodeContratStr());
-  Select<String> typeContrat = new Select<>("1","2","3","4");
-
-  Div representantLegal = new Div(new H4("Représentant légal du salarié et dérogation d'âge"));
+  FormLayout derogationAgeRepresentantLegalForm = new FormLayout();
+  Div representantLegal = new Div(new H4("Dérogation d'âge et Représentant Légal du salarié"));
   TextField  nomRepresentantLegal = new TextField("NOM représentant légal");
   TextField prenomRepresentantLegal = new TextField("Prénom représentant légal");
   Select<String> relationAvecSalarie = new Select<>("Père", "Mère", "Tuteur");
@@ -58,24 +57,15 @@ public class ContratNewOrEdit extends Dialog {
   Checkbox derogationAge = new Checkbox("Dérogation d'âge");
   DatePicker dateDelivranceDerogationAge = new DatePicker("Date de délivrance de la dérogation d'âge");
 
-  Div cadreAdministration = new Div(new H4("Cadre réservé à l'administration"));
-  TextField cadreAdminNumEnregistrementContrat = new TextField("Numéro d'enregistrement du contrat");
-  TextField cadreAdminNumAvenant = new TextField("Numéro d'avenant");
-  DatePicker cadreAdminRecuLe = new DatePicker("Reçu le");
-
   Div infosContrat = new Div(new H4("Informations liées au contrat"));
+  Select<String> typeContrat = new Select<>("","1","2","3","4");
   DatePicker debutContrat = new DatePicker("Date de début du contrat");
   DatePicker finContrat = new DatePicker("Date de fin du contrat");
-  TextField emploiOccupeSalarieEtudiant = new TextField("Emploi occupé par le salarié");
-  TextField codeRomeEmploiOccupe = new TextField("Code ROME de l'emploi occupé");
   IntegerField dureePeriodeEssai = new IntegerField("Durée de la période d'essai (nombre de semaines)");
 
   TextField numeroConventionFormation = new TextField("Numéro de la convention de Formation");
-  IntegerField semainesEntreprise = new IntegerField("Nombre de semaines en entreprise");
-  IntegerField heuresFormation = new IntegerField("Nombre d'heures en formation");
-  IntegerField semainesFormation = new IntegerField("Nombre de semaines en formation");
-  ComboBox<String> lieuFormation = new ComboBox<>("Lieu de la formation");
-  IntegerField dureeHebdomadaireTravail = new IntegerField("Durée hebdomadaire de travail");
+  DatePicker dateConventionFormation = new DatePicker("Date de la convention");
+  TextField primeAvantageNature = new TextField("Prime ou Avantage(s) en nature");
 
   Div decua = new Div(new H4("DECUA"));
   DatePicker dateReceptionDecua = new DatePicker("Date de réception du DECUA");
@@ -88,7 +78,10 @@ public class ContratNewOrEdit extends Dialog {
 
   Div convention = new Div(new H4("Convention"));
   DatePicker dateReceptionOriginauxConvention = new DatePicker("Date de réception des originaux");
-  TextField exemplaireOriginauxRemisAlternantOuEntreprise = new TextField("Exemplaires originaux (x3) remis à l'alternant ou à l'entreprise");
+  H5 remiseExemplaireConv = new H5("Remise d'exemplaires de la convention (originale)");
+  Checkbox convOriginaleRemisEtudiant = new Checkbox("Remis à l'étudiant");
+  Checkbox convOriginaleRemisTuteur = new Checkbox("Remis au tuteur");
+  Checkbox convOriginaleRemisEmployeur = new Checkbox("Remis à l'employeur");
 
   Div lea = new Div(new H4("Formation LEA"));
   DatePicker formationLea = new DatePicker("Date de formation au LEA");
@@ -98,38 +91,35 @@ public class ContratNewOrEdit extends Dialog {
   DatePicker dateRupture = new DatePicker("Date de rupture du contrat");
   TextArea motifRupture = new TextArea("Motif de la rupture");
 
-  FormLayout avenant1Container = new FormLayout();
-  Div avenant1 = new Div(new H4("Avenant N°1"));
-  TextArea motifAvn1 = new TextArea("Motif de l'avenant");
-  Div suiviAvenantCua1 = new Div(new H5("Suivi Avenant CUA N°1"));
-  DatePicker dateMailOuRdvSignatureCuaAvn1 = new DatePicker("Date mail ou RDV pour signature");
-  DatePicker dateDepotAlfrescoCuaAvn1 = new DatePicker("Date de dépôt sur Alfresco");
-  Div suiviAvenantConv1 = new Div(new H5("Suivi Avenant Convention N°1"));
-  DatePicker dateMailOuRdvSignatureConvAvn1 = new DatePicker("Date mail ou RDV pour signature");
-  DatePicker dateDepotAlfrescoConvAvn1 = new DatePicker("Date de dépôt sur Alfresco");
-  DatePicker dateRemiseOriginauxAvn1 = new DatePicker("Date de remise des exemplaires originaux (x3) à l'alternant");
-
-  FormLayout avenant2Container = new FormLayout();
-  Div avenant2 = new Div(new H4("Avenant N°2"));
-  TextArea motifAvn2 = new TextArea("Motif de l'avenant");
-  Div suiviAvenantCua2 = new Div(new H5("Suivi Avenant CUA N°1"));
-  DatePicker dateMailOuRdvSignatureCuaAvn2 = new DatePicker("Date mail ou RDV pour signature");
-  DatePicker dateDepotAlfrescoCuaAvn2 = new DatePicker("Date de dépôt sur Alfresco");
-  DatePicker dateRemiseOriginauxCuaAvn2 = new DatePicker("Date de remise des exemplaires originaux (x3) à l'alternant");
-  Div suiviAvenantConv2 = new Div(new H5("Suivi Avenant Convention N°1"));
-  DatePicker dateMailOuRdvSignatureConvAvn2 = new DatePicker("Date mail ou RDV pour signature");
-  DatePicker dateDepotAlfrescoConvAvn2 = new DatePicker("Date de dépôt sur Alfresco");
-  DatePicker dateRemiseOriginauxAvn2 = new DatePicker("Date de remise des exemplaires originaux (x3) à l'alternant");
+  FormLayout avenantContainer = new FormLayout();
+  Div avenant = new Div(new H4("AVENANT"));
+  IntegerField numeroAvenant = new IntegerField("Numéro de l'avenant");
+  TextArea motifAvn = new TextArea("Motif de l'avenant");
+  Div suiviAvenantCua = new Div(new H5("Suivi Avenant CUA"));
+  DatePicker dateMailOuRdvSignatureCuaAvn = new DatePicker("Date mail ou RDV pour signature");
+  DatePicker dateDepotAlfrescoCuaAvn = new DatePicker("Date de dépôt sur Alfresco");
+  Div suiviAvenantConv = new Div(new H5("Suivi Avenant Convention"));
+  DatePicker dateMailOuRdvSignatureConvAvn = new DatePicker("Date mail ou RDV pour signature");
+  DatePicker dateDepotAlfrescoConvAvn = new DatePicker("Date de dépôt sur Alfresco");
+  H5 remiseExemplaireConvAvn = new H5("Remise d'exemplaires de la convention (avenant)");
+  Checkbox convAvenantRemisEtudiant = new Checkbox("Remis à l'étudiant");
+  Checkbox convAvenantRemisTuteur = new Checkbox("Remis au tuteur");
+  Checkbox convAvenantRemisEmployeur = new Checkbox("Remis à l'employeur");
 
   Binder<Contrat> binder = new BeanValidationBinder<>(Contrat.class);
+
+  Button addRupture = new Button("+ Rupture");
+  Button addDerogation = new Button("+ Dérogation d'âge");
+  Button addAvenant = new Button("Créer un avenant à partir de ce Contrat");
 
   Button save = new Button("Sauvegarder");
   Button close = new Button("Fermer");
 
   public ContratNewOrEdit(List<Entreprise> entrepriseList, List<Formation> formationList, List<Etudiant> etudiantList, List<Tuteur> tuteurList) {
     this.setWidth("85vw");
+    this.setHeight("90vh");
 
-    // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité étudiant,
+    // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)
     binder.bindInstanceFields(this);
 
@@ -153,39 +143,42 @@ public class ContratNewOrEdit extends Dialog {
     // définition d'un picker customisé pour toutes les dates
     setCustomDatePicker();
 
-    // regex pour le code rome
-    codeRomeEmploiOccupe.setPlaceholder("ex: M1234");
-    codeRomeEmploiOccupe.setPattern("[A-Z][0-9]{4}$");
-
     // ajout de labels sur les select
-    codeContrat.setLabel("Code du Contrat");
     typeContrat.setLabel("Type du Contrat");
     relationAvecSalarie.setLabel("Relation du représentant avec le salarié");
 
     // on passe les communes de NC dans nos combo box en ayant besoin
     communeRepresentant.setItems(Commune.getCommunesStr());
     communeRepresentant.setClearButtonVisible(true);
-    lieuFormation.setItems(Commune.getCommunesStr());
-    lieuFormation.setClearButtonVisible(true);
 
     // ajout des éléments au formulaire principal
-    form.add(etudiant, formation, entreprise, tuteur, codeContrat, typeContrat, representantLegal, new Div(), nomRepresentantLegal,
-            prenomRepresentantLegal, relationAvecSalarie, adresseRepresentant, codePostalRepresentant, communeRepresentant,
-            telephoneRepresentant, emailRepresentant, derogationAge, dateDelivranceDerogationAge, cadreAdministration, new Div(), cadreAdminNumEnregistrementContrat, cadreAdminNumAvenant,
-            cadreAdminRecuLe, new Div(), infosContrat, new Div(), debutContrat, finContrat, emploiOccupeSalarieEtudiant, codeRomeEmploiOccupe, dureePeriodeEssai, numeroConventionFormation, semainesEntreprise,
-            heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail, decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua,
-            dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(), dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(),
-            dateReceptionOriginauxConvention, exemplaireOriginauxRemisAlternantOuEntreprise, lea, new Div(), formationLea);
+    form.add(etudiant, formation, entreprise, tuteur,
+            infosContrat, new Div(), debutContrat, finContrat, typeContrat, dureePeriodeEssai, numeroConventionFormation, dateConventionFormation, primeAvantageNature,
+            new Div(), decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua, dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(),
+            dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(), dateReceptionOriginauxConvention, new Div(),
+            remiseExemplaireConv, new Div(), convOriginaleRemisEtudiant, convOriginaleRemisTuteur, convOriginaleRemisEmployeur,
+            new Div(), lea, new Div(), formationLea);
 
     // ajout des petits formulaires correspondants à des champs qui seront cachés ou non selon les circonstances
+    derogationAgeRepresentantLegalForm.add(representantLegal, new Div(), derogationAge, dateDelivranceDerogationAge, nomRepresentantLegal,
+            prenomRepresentantLegal, relationAvecSalarie, adresseRepresentant, codePostalRepresentant, communeRepresentant,
+            telephoneRepresentant, emailRepresentant);
     ruptureContainer.add(rupture, new Div(), motifRupture, dateRupture);
-    avenant1Container.add(avenant1, new Div(), motifAvn1, new Div(), suiviAvenantCua1, new Div(), dateMailOuRdvSignatureCuaAvn1, dateDepotAlfrescoCuaAvn1,
-            suiviAvenantConv1, new Div(), dateMailOuRdvSignatureConvAvn1, dateDepotAlfrescoConvAvn1, dateRemiseOriginauxAvn1);
-    avenant2Container.add(avenant2, new Div(), motifAvn2, new Div(), suiviAvenantCua2, new Div(), dateMailOuRdvSignatureCuaAvn2, dateDepotAlfrescoCuaAvn2,
-            dateRemiseOriginauxCuaAvn2, new Div(), suiviAvenantConv2, new Div(), dateMailOuRdvSignatureConvAvn2, dateDepotAlfrescoConvAvn2, dateRemiseOriginauxAvn2);
+    avenantContainer.add(avenant, new Div(), numeroAvenant, motifAvn, suiviAvenantCua, new Div(), dateMailOuRdvSignatureCuaAvn, dateDepotAlfrescoCuaAvn,
+            suiviAvenantConv, new Div(), dateMailOuRdvSignatureConvAvn, dateDepotAlfrescoConvAvn, remiseExemplaireConvAvn, new Div(),
+            convAvenantRemisEtudiant, convAvenantRemisTuteur, convAvenantRemisEmployeur);
 
     // ajout des éléments à la modale
-    this.add(titre, form, ruptureContainer, avenant1Container, avenant2Container, createButtonsLayout());
+    this.add(titre, createButtonsForSpecialFormDisplay(), form, ruptureContainer, avenantContainer,
+            derogationAgeRepresentantLegalForm, createButtonsLayout());
+  }
+
+  private HorizontalLayout createButtonsForSpecialFormDisplay() {
+    addRupture.addClickListener(event -> showOrNotRuptureForm(true));
+    addDerogation.addClickListener(event -> showOrNotDerogationAgeForm(true));
+    addAvenant.addClickListener(event -> Notification.show("Salut 3"));
+
+    return new HorizontalLayout(addRupture, addDerogation, addAvenant);
   }
 
   private HorizontalLayout createButtonsLayout() {
@@ -218,7 +211,18 @@ public class ContratNewOrEdit extends Dialog {
       }
     } else {
       titre.add("Création d'un nouveau contrat");
+      // si nouveau contrat, on définit qu'il s'agit d'un contrat et pas d'un avenant
+      if (contrat != null) {
+        this.contrat.setCodeContrat(CodeContrat.CONTRAT);
+      }
     }
+
+    if (this.contrat != null) {
+      // détermine si on affiche on non le formulaire de rupture du contrat
+      showOrNotRuptureForm(false);
+      showOrNotDerogationAgeForm(false);
+    }
+
     // alimentation du binder
     binder.readBean(contrat);
   }
@@ -237,15 +241,45 @@ public class ContratNewOrEdit extends Dialog {
     }
   }
 
+  // fonction qui vérifie si le contrat a déjà des informations concernant la rupture du contrat
+  private void showOrNotRuptureForm(Boolean addRuptureButtonClicked) {
+    // si rupture (déterminé par la présence de la date de rupture), ou au clic sur le bouton d'ajout de rupture,
+    // on affiche les champs du formulaire de rupture et on cache le bouton d'ajout de rupture
+    if (this.contrat.getDateRupture() != null || addRuptureButtonClicked) {
+      ruptureContainer.setVisible(true);
+      addRupture.setVisible(false);
+      if (addRuptureButtonClicked) {
+        Notification.show("Ajout des champs de Rupture du contrat. Voir plus bas ↓");
+      }
+    } else { // sinon on fait l'inverse
+      ruptureContainer.setVisible(false);
+      addRupture.setVisible(true);
+    }
+  }
+
+  // fonction qui vérifie si le contrat a déjà des informations concernant la dérogation d'âge sur le contrat
+  private void showOrNotDerogationAgeForm(Boolean addDerogationButtonClicked) {
+    if (this.contrat.getDerogationAge() || this.contrat.getRelationAvecSalarie() != null || addDerogationButtonClicked) {
+      derogationAgeRepresentantLegalForm.setVisible(true);
+      addDerogation.setVisible(false);
+      if (addDerogationButtonClicked) {
+        Notification.show("Ajout des champs de Dérogation d'âge et du Représentant Légal. Voir plus bas ↓");
+      }
+    } else {
+      derogationAgeRepresentantLegalForm.setVisible(false);
+      addDerogation.setVisible(true);
+    }
+  }
+
   public void setCustomDatePicker() {
     DatePicker.DatePickerI18n multiFormatI18n = new DatePicker.DatePickerI18n();
     multiFormatI18n.setDateFormats("dd/MM/yyyy", "yyyy-MM-dd");
 
     dateDelivranceDerogationAge.setI18n(multiFormatI18n);
 
-    cadreAdminRecuLe.setI18n(multiFormatI18n);
     debutContrat.setI18n(multiFormatI18n);
     finContrat.setI18n(multiFormatI18n);
+    dateConventionFormation.setI18n(multiFormatI18n);
     dateRupture.setI18n(multiFormatI18n);
     dateReceptionDecua.setI18n(multiFormatI18n);
 
@@ -257,18 +291,10 @@ public class ContratNewOrEdit extends Dialog {
 
     dateReceptionOriginauxConvention.setI18n(multiFormatI18n);
 
-    dateMailOuRdvSignatureCuaAvn1.setI18n(multiFormatI18n);
-    dateDepotAlfrescoCuaAvn1.setI18n(multiFormatI18n);
-    dateMailOuRdvSignatureConvAvn1.setI18n(multiFormatI18n);
-    dateDepotAlfrescoConvAvn1.setI18n(multiFormatI18n);
-    dateRemiseOriginauxAvn1.setI18n(multiFormatI18n);
-
-    dateMailOuRdvSignatureCuaAvn2.setI18n(multiFormatI18n);
-    dateDepotAlfrescoCuaAvn2.setI18n(multiFormatI18n);
-    dateRemiseOriginauxCuaAvn2.setI18n(multiFormatI18n);
-    dateMailOuRdvSignatureConvAvn2.setI18n(multiFormatI18n);
-    dateDepotAlfrescoConvAvn2.setI18n(multiFormatI18n);
-    dateRemiseOriginauxAvn2.setI18n(multiFormatI18n);
+    dateMailOuRdvSignatureCuaAvn.setI18n(multiFormatI18n);
+    dateDepotAlfrescoCuaAvn.setI18n(multiFormatI18n);
+    dateMailOuRdvSignatureConvAvn.setI18n(multiFormatI18n);
+    dateDepotAlfrescoConvAvn.setI18n(multiFormatI18n);
 
     formationLea.setI18n(multiFormatI18n);
   }

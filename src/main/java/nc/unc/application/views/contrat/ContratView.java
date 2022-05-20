@@ -12,11 +12,8 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Contrat;
-import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.service.*;
 import nc.unc.application.views.MainLayout;
-import nc.unc.application.views.etudiant.EtudiantConsult;
-import nc.unc.application.views.etudiant.EtudiantNewOrEdit;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -58,21 +55,19 @@ public class ContratView extends VerticalLayout {
     setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
     configureGrid(); // configuration de la grille (colonnes, données...)
 
-    // ajout de la modale de consultation de l'étudiant dans la vue
+    // ajout de la modale de consultation du contrat dans la vue
     modalConsult = new ContratConsult();
     // On définit que les différents events vont déclencher une fonction
     // contenant l'objet etudiant (dans le cas du delete dans la modalConsult ou du save dans modalNewOrdEdit).
     modalConsult.addListener(ContratConsult.DeleteEventConsult.class, this::deleteContrat);
     modalConsult.addListener(ContratConsult.CloseEventConsult.class, e -> closeConsultModal());
 
-
-    // ajout de la modale d'édition ou de création d'un étudiant dans la vue, en lui passant la liste des entreprises et des tuteurs
-    modalNewOrEdit = new ContratNewOrEdit( entrepriseService.findAllEntreprises(), formationService.findAllFormations(""),
+    // ajout de la modale d'édition ou de création d'un contrat dans la vue
+    modalNewOrEdit = new ContratNewOrEdit(entrepriseService.findAllEntreprises(""), formationService.findAllFormations(""),
             etudiantService.findAllEtudiants(""), tuteurService.findAllTuteurs(""));
     modalNewOrEdit.addListener(ContratNewOrEdit.SaveEvent.class, this::saveContrat);
     modalNewOrEdit.addListener(ContratNewOrEdit.SaveEditedEvent.class, this::saveEditedContrat);
     modalNewOrEdit.addListener(ContratNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
-
 
     // ajout de la toolbar (recherche + nouveau contrat) et la grid
     // et des modales de consultation et de création/modification TODO
@@ -86,20 +81,19 @@ public class ContratView extends VerticalLayout {
     grid.setSizeFull();
 
     // ajout des colonnes
-    grid.addColumn(contrat -> contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant()).setHeader("Étudiant").setSortable(true);;
-    grid.addColumn(contrat -> contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur()).setHeader("Tuteur").setSortable(true);;
-    grid.addColumn(contrat -> contrat.getEntreprise().getEnseigne()).setHeader("Entreprise").setSortable(true);;
-    grid.addColumn(contrat -> contrat.getFormation().getCodeFormation()).setHeader("Formation").setSortable(true);;
-    grid.addColumn(Contrat::getCodeContrat).setHeader("Code Contrat").setSortable(true);;
+    // TODO : faire un affichage conditionnel de ces infos, sinon bug
+    grid.addColumn(contrat -> contrat.getEtudiant() != null ? contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant() : "").setHeader("Étudiant").setSortable(true);
+    grid.addColumn(contrat -> contrat.getTuteur() != null ? contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur() : "").setHeader("Tuteur").setSortable(true);
+    grid.addColumn(contrat -> contrat.getEntreprise() != null ? contrat.getEntreprise().getEnseigne() : "").setHeader("Entreprise").setSortable(true);
+    grid.addColumn(contrat -> contrat.getFormation() != null ? contrat.getFormation().getCodeFormation() : "").setHeader("Formation").setSortable(true);
+    grid.addColumn(Contrat::getCodeContrat).setHeader("Code Contrat").setSortable(true);
 
     // ajout du bouton de consultation d'un contrat
-    grid.addComponentColumn(contrat -> new Button(new Icon(VaadinIcon.EYE), click -> {
-      consultContrat(contrat);
-    })).setHeader("Consulter");
+    grid.addComponentColumn(contrat -> new Button(new Icon(VaadinIcon.EYE), click ->
+            consultContrat(contrat))).setHeader("Consulter");
     // ajout du bouton d'édition d'un contrat
-    grid.addComponentColumn(contrat -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
-      editContratModal(contrat);
-    })).setHeader("Éditer");
+    grid.addComponentColumn(contrat -> new Button(new Icon(VaadinIcon.PENCIL), click ->
+            editContratModal(contrat))).setHeader("Éditer");
 
     // on définit que chaque colonne à une largeur autodéterminée
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
@@ -193,7 +187,7 @@ public class ContratView extends VerticalLayout {
     editContratModal(new Contrat());
   }
 
-  // ouverture de modale de consultation d'un étudiant
+  // ouverture de modale de consultation d'un contrat
   public void consultContrat(Contrat contrat) {
     modalConsult.setContrat(contrat);
     modalConsult.open();
@@ -211,7 +205,7 @@ public class ContratView extends VerticalLayout {
     grid.asSingleSelect().clear();
   }
 
-  // fonction qui récupère la liste des contrat pour les afficher dans la grille (avec les valeurs de recherche)
+  // fonction qui récupère la liste des contrats pour les afficher dans la grille (avec les valeurs de recherche)
   private void updateList() {
     grid.setItems(contratService.findAllContrats(filterText.getValue()));
   }

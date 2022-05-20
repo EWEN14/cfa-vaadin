@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
-<!-- utilisation d'une condition qui change le link pour récupérer la CSS, qui diffère selon qu'on
- télécharge le contrat ou si l'on regarde sa prévisualisation -->
-<head th:if="${ download }">
+<head>
     <title>CUA</title>
-    <link rel="stylesheet" type="text/css" href="css/contrat-generation.css"/>
-</head>
-<head th:unless="${ download }">
-    <title>CUA</title>
-    <link href="../static/css/contrat-generation.css" th:href="@{/css/contrat-generation.css}" rel="stylesheet"/>
+    <!-- utilisation d'une condition qui change le link pour récupérer la CSS, qui diffère selon qu'on
+        télécharge le contrat ou si l'on regarde sa prévisualisation -->
+    <link rel="stylesheet" type="text/css" href="css/contrat-generation.css" th:if="${ download }"/>
+    <link href="../static/css/contrat-generation.css" th:href="@{/css/contrat-generation.css}" rel="stylesheet" th:unless="${ download }"/>
 </head>
 
 <body>
@@ -283,9 +280,9 @@
         <tbody>
         <tr>
             <td>
-                N° d'enregistrement du contrat : <span data-th-text="*{ cadreAdminNumEnregistrementContrat }"></span><br/>
-                N° d'avenant : <span data-th-text="*{ cadreAdminNumAvenant }"></span><br/>
-                Reçu la : <span data-th-text="*{ cadreAdminRecuLe }"></span>
+                N° d'enregistrement du contrat : <br/>
+                N° d'avenant : <br/>
+                Reçu le :
             </td>
         </tr>
         </tbody>
@@ -300,8 +297,8 @@
 
     <p>La période d'essai a une durée de <span data-th-text="*{ dureePeriodeEssai }"></span> semaines.</p>
 
-    <p>Le(la) salarié(e) occupera l'emploi de : <span data-th-text="*{ emploiOccupeSalarieEtudiant }"></span>
-        - <span data-th-text="*{ codeRomeEmploiOccupe }"></span></p>
+    <p>Le(la) salarié(e) occupera l'emploi de : <span data-th-text="${ contrat?.formation?.typeEmploiExerce }"></span>
+        - <span data-th-text="${ contrat?.formation?.codeRome }"></span></p>
 
     <p>Durant la période du contrat, le(la) salrié(e) suivra par alternance une formation en vue d'acquérir la
         certification professionnelle suivante :</p>
@@ -321,9 +318,9 @@
     <p>L'organisation du parcours de formation du (de la) salarié(e) se déroulera conformément aux dispositions de la
         convention de formation <span data-th-text="*{ numeroConventionFormation }"></span> et de ses éventuels avenants ultérieurs.</p>
 
-    <p>Il comprend <span data-th-text="*{ semainesEntreprise }"></span> en entreprise et <span data-th-text="*{ heuresFormation }"></span>
-        réparties sur <span data-th-text="*{ semainesFormation }"></span> semaines en centre de formation. Les périodes
-        de formation en centre se dérouleront à <span data-th-text="*{ lieuFormation }"></span></p>
+    <p>Il comprend <span data-th-text="${ contrat?.formation?.semainesEntreprise }"></span> semaines en entreprise et <span data-th-text="${ contrat?.formation?.heuresFormation }"></span>
+        heures réparties sur <span data-th-text="${ contrat?.formation?.semainesEntreprise }"></span> semaines en centre de formation. Les périodes
+        de formation en centre se dérouleront à <span data-th-text="${ contrat?.formation?.lieuFormation }"></span></p>
 
     <p>Durant les périodes en entreprise, le(la) salarié(e) est encadré(e) par un(e) tuteur(tutrice) désigné(e) ci-dessous :</p>
 
@@ -369,7 +366,7 @@
         </table>
     </div>
 
-    <p>La durée hebdomadaire de travail est fixée à : <span data-th-text="*{ dureeHebdomadaireTravail }"></span></p>
+    <p>La durée hebdomadaire de travail est fixée à : <span data-th-text="${ contrat?.formation?.dureeHebdomadaireTravail }"></span></p>
 
     <p>Le salaire brut mensuel est fixé à<sup>1</sup> :</p>
 

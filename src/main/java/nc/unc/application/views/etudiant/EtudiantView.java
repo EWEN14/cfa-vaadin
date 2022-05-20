@@ -28,7 +28,7 @@ import javax.annotation.security.PermitAll;
 @PermitAll // tous les utilisateurs connectés peuvent aller sur cette page
 public class EtudiantView extends VerticalLayout {
 
-  Grid<Etudiant> grid = new Grid<>(Etudiant.class);
+  Grid<Etudiant> grid = new Grid<>(Etudiant.class, false);
 
   TextField filterText = new TextField();
   Button addEtudiantButton;
@@ -64,7 +64,7 @@ public class EtudiantView extends VerticalLayout {
     modalConsult.addListener(EtudiantConsult.CloseEvent.class, e -> closeConsultModal());
 
     // ajout de la modale d'édition ou de création d'un étudiant dans la vue, en lui passant la liste des entreprises et des tuteurs
-    modalNewOrEdit = new EtudiantNewOrEdit(entrepriseService.findAllEntreprises(), tuteurService.findAllTuteurs(""),
+    modalNewOrEdit = new EtudiantNewOrEdit(entrepriseService.findAllEntreprises(""), tuteurService.findAllTuteurs(""),
             formationService.findAllFormations(""), referentPedagogiqueService.findAllReferentPedagogique(""));
     modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEvent.class, this::saveEtudiant);
     modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEditedEvent.class, this::saveEditedEtudiant);
@@ -92,15 +92,18 @@ public class EtudiantView extends VerticalLayout {
     grid.addClassNames("etudiant-grid");
     grid.setSizeFull();
     // ajout des colonnes
-    grid.setColumns("prenomEtudiant", "nomEtudiant","admis", "situationUnc");
+    grid.addColumn(etudiant -> etudiant.getNomEtudiant() + " " + etudiant.getPrenomEtudiant()).setHeader("NOM Prénom").setSortable(true);
+    grid.addColumn(Etudiant::getAnneePromotion).setHeader("Année de promotion").setSortable(true);
+    grid.addColumn(Etudiant::getTelephoneEtudiant1).setHeader("Téléphone");
+    grid.addColumn(Etudiant::getSituationUnc).setHeader("Situation à l'UNC").setSortable(true);
     // ajout du bouton de consultation d'un étudiant
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultEtudiant(etudiant);
-    })).setHeader("Consulter");;
+    })).setHeader("Consulter");
     // bouton édition étudiant
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
       editEtudiantModal(etudiant);
-    })).setHeader("Éditer");;
+    })).setHeader("Éditer");
     // on définit que chaque colonne à une largeur autodéterminée
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
   }
@@ -128,7 +131,7 @@ public class EtudiantView extends VerticalLayout {
   private void saveEtudiant(EtudiantNewOrEdit.SaveEvent event) {
     // utilisation du getEtudiant de la classe mère EtudiantFormEvent pour récupérer l'étudiant
     Etudiant etudiant = event.getEtudiant();
-    // mise en majuscule du nom, définition sexe et âge avant sauvegarde
+    // mise en majuscule du nom et définition sexe avant sauvegarde
     setNameSexeEtudiant(etudiant);
     // sauvegarde de l'étudiant
     etudiantService.saveEtudiant(etudiant);
@@ -148,7 +151,7 @@ public class EtudiantView extends VerticalLayout {
     Etudiant etudiant = event.getEtudiant();
     // récupération de l'étudiant original avant modification
     Etudiant etudiantOriginal = event.getEtudiantOriginal();
-    // mise en majuscule du nom, définition sexe et âge avant sauvegarde
+    // mise en majuscule du nom et définition sexe avant sauvegarde
     setNameSexeEtudiant(etudiant);
 
     // sauvegarde de l'étudiant

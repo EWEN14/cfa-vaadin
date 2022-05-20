@@ -54,6 +54,15 @@ public class ContratService {
   }
 
   /**
+   * retourne la liste des contrats associés à une entreprise
+   * @param id identifiant de l'entreprise
+   * @return liste de contrats
+   */
+  public List<Contrat> findAllContratByEntrepriseId(Long id) {
+    return contratRepository.findAllByEntrepriseId(id);
+  }
+
+  /**
    * retourne un contrat
    * @param id identifiant du contrat
    * @return le contrat avec l'identifiant passé en paramètre

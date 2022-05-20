@@ -13,10 +13,15 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
 
   @Query("select e from Etudiant e " +
           "where lower(e.nomEtudiant) like lower(concat('%', :searchTerm, '%')) " +
-          "or lower(e.prenomEtudiant) like lower(concat('%', :searchTerm, '%'))")
+          "or lower(e.prenomEtudiant) like lower(concat('%', :searchTerm, '%'))" +
+          "order by e.nomEtudiant, e.anneePromotion desc")
   List<Etudiant> search(@Param("searchTerm") String searchTerm);
 
-  List<Etudiant> findAllByTuteurId(Long id);
+  List<Etudiant> findAllByTuteurIdOrderByNomEtudiantAscAnneePromotionDesc(Long id);
 
-  List<Etudiant> findAllByFormationId(Long id);
+  List<Etudiant> findAllByFormationIdOrderByNomEtudiantAscAnneePromotionDesc(Long id);
+
+  List<Etudiant> findAllByEntrepriseIdOrderByNomEtudiantAscAnneePromotionDesc(Long id);
+
+  List<Etudiant> findAllByOrderByNomEtudiantAscAnneePromotionDesc();
 }

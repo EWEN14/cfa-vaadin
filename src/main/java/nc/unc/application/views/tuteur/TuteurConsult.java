@@ -28,6 +28,8 @@ import nc.unc.application.data.enums.Civilite;
 import nc.unc.application.data.service.ContratService;
 import nc.unc.application.data.service.EtudiantService;
 
+import static nc.unc.application.utils.Utils.frenchDateFormater;
+
 /**
  * Modale (Dialog) qui s'ouvre lorsque l'on clique sur le bouton de détail d'un tuteur
  */
@@ -71,11 +73,11 @@ public class TuteurConsult extends Dialog {
   Binder<Entreprise> entrepriseBinder = new BeanValidationBinder<>(Entreprise.class);
 
   // grid qui contiendra les habilitations du tuteur
-  private final Grid<TuteurHabilitation> tuteurHabilitationGrid = new Grid<>(TuteurHabilitation.class);
+  private final Grid<TuteurHabilitation> tuteurHabilitationGrid = new Grid<>(TuteurHabilitation.class, false);
   // grid qui contiendra les etudiants cadrés par le tuteur
-  private final Grid<Etudiant> tuteurEtudiantsGrid = new Grid<>(Etudiant.class);
+  private final Grid<Etudiant> tuteurEtudiantsGrid = new Grid<>(Etudiant.class, false);
   // grid qui contiendra les contrats liés au tuteur
-  private final Grid<Contrat> contratGrid = new Grid<>(Contrat.class);
+  private final Grid<Contrat> contratGrid = new Grid<>(Contrat.class, false);
 
   // tab (onglet) qui seront insérés dans une tabs (ensemble d'onglets) les regroupant
   private final Tab tuteursInfosTab = new Tab(VaadinIcon.USER.create(), new Span("Tuteur"));
@@ -107,16 +109,27 @@ public class TuteurConsult extends Dialog {
 
     // grille des habilitations du tuteur
     tuteurHabilitationGrid.addClassName("tuteur-habilitation-grid");
-    tuteurHabilitationGrid.setColumns("dateFormation","formation.libelleFormation", "statutFormation", "modaliteFormation", "dateHabilitation");
+    tuteurHabilitationGrid.addColumn(th -> frenchDateFormater(th.getDateFormation())).setHeader("Date de formation").setSortable(true);
+    tuteurHabilitationGrid.addColumn(th -> frenchDateFormater(th.getDateHabilitation())).setHeader("Date d'habilitation").setSortable(true);
+    tuteurHabilitationGrid.addColumn(th -> th.getFormation() != null ? th.getFormation().getCodeFormation() : "").setHeader("Formation");
+    tuteurHabilitationGrid.addColumn(TuteurHabilitation::getStatutFormation).setHeader("Statut de formation").setSortable(true);
+    tuteurHabilitationGrid.addColumn(TuteurHabilitation::getModaliteFormation).setHeader("Modalité de formation").setSortable(true);
+    tuteurHabilitationGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 
     // grille des étudiants cadrés par le tuteur
     tuteurEtudiantsGrid.addClassName("tuteur-etudiants-grid");
-    tuteurEtudiantsGrid.setColumns("prenomEtudiant", "nomEtudiant", "telephoneEtudiant1", "emailEtudiant");
+    tuteurEtudiantsGrid.addColumn(etudiant -> etudiant.getNomEtudiant() + " " + etudiant.getPrenomEtudiant()).setHeader("NOM Prénom").setSortable(true);
+    tuteurEtudiantsGrid.addColumn(Etudiant::getTelephoneEtudiant1).setHeader("Téléphone");
+    tuteurEtudiantsGrid.addColumn(Etudiant::getEmailEtudiant).setHeader("Email");
+    tuteurEtudiantsGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 
     // grilles des contrats liées au tuteur
     contratGrid.addClassName("tuteur-contrats-grid");
-    contratGrid.setColumns("codeContrat", "debutContrat", "finContrat", "numeroConventionFormation");
-    contratGrid.addColumn(contrat -> contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant()).setHeader("Étudiant Salarié").setSortable(true);
+    contratGrid.addColumn(Contrat::getCodeContrat).setHeader("Code Contrat").setSortable(true);
+    contratGrid.addColumn(contrat -> contrat.getDebutContrat() != null ? frenchDateFormater(contrat.getDebutContrat()) : "").setHeader("Début Contrat").setSortable(true);
+    contratGrid.addColumn(contrat -> contrat.getFinContrat() != null ? frenchDateFormater(contrat.getFinContrat()) : "").setHeader("Fin Contrat").setSortable(true);
+    contratGrid.addColumn(Contrat::getNumeroConventionFormation).setHeader("Numéro de convention");
+    contratGrid.addColumn(contrat -> contrat.getEtudiant() != null ? contrat.getEtudiant().getNomEtudiant() + " " + contrat.getEtudiant().getPrenomEtudiant() : "").setHeader("Étudiant Salarié").setSortable(true);
     contratGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 
     // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables

@@ -58,8 +58,7 @@ public class Etudiant implements Cloneable {
   private Integer telephoneEtudiant1;
 
   @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999)
-  @NotNull(message = "Le numéro de téléphone 2 ne doit pas être nul")
-  @Column(name = "telephone_2", nullable = false)
+  @Column(name = "telephone_2")
   private Integer telephoneEtudiant2;
 
   @Email
@@ -140,7 +139,7 @@ public class Etudiant implements Cloneable {
   @Column(name = "observations", length = 15000)
   private String observationsEtudiant;
 
-  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Entreprise.class)
+  @ManyToOne(cascade=CascadeType.MERGE, targetEntity = Entreprise.class)
   @JoinColumn(name = "id_entreprise")
   @JsonIgnoreProperties({"etudiants"})
   private Entreprise entreprise;
@@ -168,6 +167,13 @@ public class Etudiant implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
+
+  @PreRemove
+  private void preRemove() {
+    for (Contrat c : contrats) {
+      c.setEtudiant(null);
+    }
+  }
 
   // Getters et Setters
   public Long getId() {

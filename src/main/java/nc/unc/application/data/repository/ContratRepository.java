@@ -27,4 +27,7 @@ public interface ContratRepository extends JpaRepository<Contrat, Long> {
   List<Contrat> findAllByEtudiantId(Long id);
 
   List<Contrat> findAllByEntrepriseId(Long id);
+
+  @Query("select count(c) from Contrat c where c.contratParent = :contrat_parent")
+  Integer getCountOfAvenants(@Param("contrat_parent") Contrat contratParent);
 }

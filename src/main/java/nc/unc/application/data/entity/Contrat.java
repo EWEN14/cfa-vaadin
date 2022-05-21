@@ -1,5 +1,6 @@
 package nc.unc.application.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import nc.unc.application.data.enums.CodeContrat;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,6 +12,7 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "contrat")
@@ -20,6 +22,16 @@ public class Contrat implements Cloneable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id_contrat", nullable = false)
   private Long id;
+
+  // colonne désignant un contrat parent
+  @ManyToOne(cascade = CascadeType.MERGE)
+  @JoinColumn(name = "id_contrat_parent")
+  private Contrat contratParent;
+
+  // liste des contrats enfants (donc les avenants d'un contrat)
+  @OneToMany(mappedBy = "contratParent")
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private List<Contrat> avenants;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "code_contrat", nullable = false)
@@ -184,6 +196,22 @@ public class Contrat implements Cloneable {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public Contrat getContratParent() {
+    return contratParent;
+  }
+
+  public void setContratParent(Contrat contrat) {
+    this.contratParent = contrat;
+  }
+
+  public List<Contrat> getAvenants() {
+    return avenants;
+  }
+
+  public void setAvenants(List<Contrat> contrats) {
+    this.avenants = contrats;
   }
 
   public CodeContrat getCodeContrat() {

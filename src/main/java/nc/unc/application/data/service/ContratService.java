@@ -1,6 +1,7 @@
 package nc.unc.application.data.service;
 
 import nc.unc.application.data.entity.Contrat;
+import nc.unc.application.data.enums.CodeContrat;
 import nc.unc.application.data.repository.ContratRepository;
 import org.springframework.stereotype.Service;
 
@@ -69,5 +70,18 @@ public class ContratService {
    */
   public Contrat findContratById(Long id) {
     return contratRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+  }
+
+  /**
+   * retourne le nombre d'avenants que possède un contrat original
+   * @param avenant l'avenant depuis lequel on va récupérer le parent
+   * @return un entier représentant le nombre d'avenants
+   */
+  public Integer countAllAvenantsFromParents(Contrat avenant) {
+    if (avenant.getCodeContrat() == CodeContrat.AVENANT) {
+      Contrat contratParent = avenant.getContratParent();
+      return contratRepository.getCountOfAvenants(contratParent);
+    }
+    return 0;
   }
 }

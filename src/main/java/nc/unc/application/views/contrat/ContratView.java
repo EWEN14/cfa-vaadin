@@ -64,7 +64,7 @@ public class ContratView extends VerticalLayout {
 
     // ajout de la modale d'édition ou de création d'un contrat dans la vue
     modalNewOrEdit = new ContratNewOrEdit(entrepriseService.findAllEntreprises(""), formationService.findAllFormations(""),
-            etudiantService.findAllEtudiants(""), tuteurService.findAllTuteurs(""));
+            etudiantService.findAllEtudiants(""), tuteurService.findAllTuteurs(""), contratService);
     modalNewOrEdit.addListener(ContratNewOrEdit.SaveEvent.class, this::saveContrat);
     modalNewOrEdit.addListener(ContratNewOrEdit.SaveEditedEvent.class, this::saveEditedContrat);
     modalNewOrEdit.addListener(ContratNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
@@ -86,6 +86,8 @@ public class ContratView extends VerticalLayout {
     grid.addColumn(contrat -> contrat.getTuteur() != null ? contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur() : "").setHeader("Tuteur").setSortable(true);
     grid.addColumn(contrat -> contrat.getEntreprise() != null ? contrat.getEntreprise().getEnseigne() : "").setHeader("Entreprise").setSortable(true);
     grid.addColumn(contrat -> contrat.getFormation() != null ? contrat.getFormation().getCodeFormation() : "").setHeader("Formation").setSortable(true);
+    grid.addColumn(Contrat::getCodeContrat).setHeader("Contrat/Avenant").setSortable(true);
+    grid.addColumn(Contrat::getNumeroAvenant).setHeader("Numéro Avenant").setSortable(true);
     grid.addColumn(Contrat::getCodeContrat).setHeader("Code Contrat").setSortable(true);
 
     // ajout du bouton de consultation d'un contrat

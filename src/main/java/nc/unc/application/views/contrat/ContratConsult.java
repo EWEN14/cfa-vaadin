@@ -22,6 +22,7 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.*;
+import nc.unc.application.data.enums.CodeContrat;
 
 public class ContratConsult extends Dialog {
 
@@ -222,6 +223,7 @@ public class ContratConsult extends Dialog {
 
       showOrNotRuptureForm();
       showOrNotDerogationAgeForm();
+      showOrNotAvenantForm();
 
       // lecture des binder pour compléter les champs dans les différents formulaires
       contratBinder.readBean(contrat);
@@ -271,6 +273,11 @@ public class ContratConsult extends Dialog {
   // fonction qui vérifie si le contrat a déjà des informations concernant la dérogation d'âge sur le contrat
   private void showOrNotDerogationAgeForm() {
     derogationAgeRepresentantLegalForm.setVisible(this.contrat.getDerogationAge() || this.contrat.getRelationAvecSalarie() != null);
+  }
+
+  // fonction qui vérifie si le contrat est un contrat original ou un parent et affiche les informations d'avenant en conséquence
+  private void showOrNotAvenantForm() {
+    avenantContainer.setVisible(this.contrat.getCodeContrat() == CodeContrat.AVENANT);
   }
 
   // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables

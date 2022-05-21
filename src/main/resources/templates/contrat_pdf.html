@@ -23,6 +23,9 @@
         </tbody>
     </table>
 
+    <div th:if="${ avenant }">Avenant N°<span data-th-text="*{ numeroAvenant }"></span>
+        pour <span data-th-text="*{ motifAvn }"></span></div>
+
     <div class="blue-bg"><strong>ENTRE L'EMPLOYEUR, désigné ci-dessous</strong></div>
 
     <div data-th-object="${ contrat?.entreprise }" class="container-entreprise">

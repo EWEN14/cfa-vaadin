@@ -27,8 +27,10 @@ import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.*;
 import nc.unc.application.data.enums.CodeContrat;
 import nc.unc.application.data.enums.Commune;
+import nc.unc.application.data.service.ContratService;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ContratNewOrEdit extends Dialog {
 
@@ -41,6 +43,8 @@ public class ContratNewOrEdit extends Dialog {
   ComboBox<Formation> formation = new ComboBox<>("Formation");
   ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
   ComboBox<Tuteur> tuteur = new ComboBox<>("Tuteur");
+
+  ContratService contratService;
 
   H3 titre = new H3();
 
@@ -110,14 +114,17 @@ public class ContratNewOrEdit extends Dialog {
 
   Button addRupture = new Button("+ Rupture");
   Button addDerogation = new Button("+ Dérogation d'âge");
-  Button addAvenant = new Button("Créer un avenant à partir de ce Contrat");
+  Button addAvenant = new Button("Créer un Avenant à partir de ce Contrat");
 
   Button save = new Button("Sauvegarder");
   Button close = new Button("Fermer");
 
-  public ContratNewOrEdit(List<Entreprise> entrepriseList, List<Formation> formationList, List<Etudiant> etudiantList, List<Tuteur> tuteurList) {
+  public ContratNewOrEdit(List<Entreprise> entrepriseList, List<Formation> formationList, List<Etudiant> etudiantList,
+                          List<Tuteur> tuteurList, ContratService contratService) {
     this.setWidth("85vw");
     this.setHeight("90vh");
+
+    this.contratService = contratService;
 
     // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)
@@ -151,6 +158,9 @@ public class ContratNewOrEdit extends Dialog {
     communeRepresentant.setItems(Commune.getCommunesStr());
     communeRepresentant.setClearButtonVisible(true);
 
+    // numéro de l'avenant en ReadOnly, car à ne pas modifier, on le présente juste à caractère informatif
+    numeroAvenant.setReadOnly(true);
+
     // ajout des éléments au formulaire principal
     form.add(etudiant, formation, entreprise, tuteur,
             infosContrat, new Div(), debutContrat, finContrat, typeContrat, dureePeriodeEssai, numeroConventionFormation, dateConventionFormation, primeAvantageNature,
@@ -176,7 +186,9 @@ public class ContratNewOrEdit extends Dialog {
   private HorizontalLayout createButtonsForSpecialFormDisplay() {
     addRupture.addClickListener(event -> showOrNotRuptureForm(true));
     addDerogation.addClickListener(event -> showOrNotDerogationAgeForm(true));
-    addAvenant.addClickListener(event -> Notification.show("Salut 3"));
+    // on passe le cloneContrat en paramètre comme ça on est sûr qu'on passe un clone de l'élément "parent" qui n'a pas
+    // été modifié depuis le clic sur le bouton d'ajout de l'avenant.
+    addAvenant.addClickListener(event -> setNewAvenant(this.cloneContrat));
 
     return new HorizontalLayout(addRupture, addDerogation, addAvenant);
   }
@@ -205,7 +217,15 @@ public class ContratNewOrEdit extends Dialog {
     if (contrat != null && contrat.getId() != null) {
       try {
         this.cloneContrat = (Contrat) contrat.clone();
-        titre.add("Modification d'un contrat");
+        if (contrat.getCodeContrat() == CodeContrat.CONTRAT) {
+          titre.add("Modification d'un contrat");
+        } else {
+          titre.add("Modification de l'avenant N°"+contrat.getNumeroAvenant());
+          addAvenant.setText("Créer un nouvel Avenant à partir de cet Avenant");
+        }
+        showOrNotCreationAvenant();
+        showOrNotRuptureForm(false);
+        showOrNotDerogationAgeForm(false);
       } catch (CloneNotSupportedException e) {
         e.printStackTrace();
       }
@@ -217,14 +237,56 @@ public class ContratNewOrEdit extends Dialog {
       }
     }
 
-    if (this.contrat != null) {
-      // détermine si on affiche on non le formulaire de rupture du contrat
-      showOrNotRuptureForm(false);
+    // cas on l'on créé un nouveau contrat
+    if (this.contrat != null && this.contrat.getId() == null) {
+      // détermine si on affiche on non le formulaire de dérogation d'âge
+      this.contrat.setDerogationAge(false);
       showOrNotDerogationAgeForm(false);
+      // on n'affiche pas le bouton d'ajout de rupture de contrat et son formulaire et celui d'avenant si on créé le contrat
+      ruptureContainer.setVisible(false);
+      addRupture.setVisible(false);
+      avenantContainer.setVisible(false);
     }
 
     // alimentation du binder
     binder.readBean(contrat);
+  }
+
+  /**
+   * Création d'un avenant qui va reprendre les informations d'un contrat ou avenant existant que l'utilisateur pourra
+   * modifier avant de sauvegarder ce nouvel avenant.
+   * @param contratOrAvenant le contrat parent ou l'avenant depuis lequel on créé un nouvel avenant
+   */
+  public void setNewAvenant(Contrat contratOrAvenant) {
+    titre.removeAll();
+    try {
+      // on clone le contrat ou l'avenant en paramètre
+      this.contrat = (Contrat) contratOrAvenant.clone();
+      // si le contrat en paramètre est bien un contrat, on le définit en tant que parent
+      if (contratOrAvenant.getCodeContrat() == CodeContrat.CONTRAT) {
+        this.contrat.setContratParent(contratOrAvenant);
+        // cela implique que l'on créé le premier avenant, donc on définit le numéro d'avenant à 1
+        this.contrat.setNumeroAvenant(1);
+      } else { // mais si c'est un avenant en paramètre, on récupère son contrat parent et on définit que le nouvel avenant aura aussi ce parent
+        this.contrat.setContratParent(contratOrAvenant.getContratParent());
+        // on défini le numéro d'avenant à celui de l'avenant depuis lequel il est créé +1
+        this.contrat.setNumeroAvenant(contratOrAvenant.getNumeroAvenant()+1);
+      }
+      // on set l'id à null, pour définir que cet avenant n'existe pas encore et qu'il sera nouveau
+      this.contrat.setId(null);
+      this.contrat.setCodeContrat(CodeContrat.AVENANT);
+      this.contrat.setCreatedAt(null);
+      this.contrat.setUpdatedAt(null);
+      avenantContainer.setVisible(true);
+      addAvenant.setVisible(false);
+      titre.add("Création de l'avenant N°"+ this.contrat.getNumeroAvenant());
+      Notification.show("Avenant prêt à être créé. Voir et compléter plus bas les champs d'avenant avant sauvegarde ↓");
+    } catch (CloneNotSupportedException e) {
+      e.printStackTrace();
+    }
+
+    // alimentation du binder
+    binder.readBean(this.contrat);
   }
 
   // fonction qui vérifie que le bean a bien un contrat valide, avant de lancer l'event de sauvegarde
@@ -259,15 +321,39 @@ public class ContratNewOrEdit extends Dialog {
 
   // fonction qui vérifie si le contrat a déjà des informations concernant la dérogation d'âge sur le contrat
   private void showOrNotDerogationAgeForm(Boolean addDerogationButtonClicked) {
-    if (this.contrat.getDerogationAge() || this.contrat.getRelationAvecSalarie() != null || addDerogationButtonClicked) {
-      derogationAgeRepresentantLegalForm.setVisible(true);
-      addDerogation.setVisible(false);
-      if (addDerogationButtonClicked) {
-        Notification.show("Ajout des champs de Dérogation d'âge et du Représentant Légal. Voir plus bas ↓");
+    if (this.contrat.getDerogationAge() != null || this.contrat.getRelationAvecSalarie() != null || addDerogationButtonClicked) {
+      if (this.contrat.getDerogationAge() || this.contrat.getRelationAvecSalarie() != null && this.contrat.getId() != null) {
+        derogationAgeRepresentantLegalForm.setVisible(true);
+        addDerogation.setVisible(false);
+        if (addDerogationButtonClicked) {
+          Notification.show("Ajout des champs de Dérogation d'âge et du Représentant Légal. Voir plus bas ↓");
+        }
+      } else {
+        if (addDerogationButtonClicked) {
+          derogationAgeRepresentantLegalForm.setVisible(true);
+          addDerogation.setVisible(false);
+          Notification.show("Ajout des champs de Dérogation d'âge et du Représentant Légal. Voir plus bas ↓");
+        } else {
+          derogationAgeRepresentantLegalForm.setVisible(false);
+          addDerogation.setVisible(true);
+        }
       }
     } else {
       derogationAgeRepresentantLegalForm.setVisible(false);
       addDerogation.setVisible(true);
+    }
+  }
+
+  private void showOrNotCreationAvenant() {
+    // on cache les informations d'avenant si on est sur un contrat original
+    avenantContainer.setVisible(this.contrat.getCodeContrat() != CodeContrat.CONTRAT);
+
+    // on affiche le bouton d'ajout d'un avenant si la liste des avenants est vide dans un contrat d'origine
+    if (this.contrat.getCodeContrat() == CodeContrat.CONTRAT) {
+      addAvenant.setVisible(this.contrat.getAvenants().isEmpty());
+    } else {
+      // mais si on est dans un avenant, on affiche le bouton d'ajout d'un avenant que si c'est le dernier avenant
+      addAvenant.setVisible(Objects.equals(this.contrat.getNumeroAvenant(), contratService.countAllAvenantsFromParents(this.contrat)));
     }
   }
 

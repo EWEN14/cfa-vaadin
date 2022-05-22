@@ -18,9 +18,46 @@ public class ContratService {
 
   public void saveContrat(Contrat contrat){
     contratRepository.save(contrat);
+
+    // si après la mise à jour d'un contrat initial, ses informations de rupture de contrat ne sont pas nulles,
+    // on définit alors la date de rupture sur ses avenants comme étant la même
+    if (contrat.getCodeContrat() == CodeContrat.CONTRAT) {
+      List<Contrat> avenants = contrat.getAvenants();
+      if (avenants != null && !avenants.isEmpty()) {
+        for (Contrat avenant : avenants) {
+          if (contrat.getMotifRupture() != null && contrat.getDateRupture() != null) {
+            avenant.setDateRupture(contrat.getDateRupture());
+            avenant.setMotifRupture(contrat.getMotifRupture());
+          }
+        }
+        contratRepository.saveAll(avenants);
+      }
+    }
   }
 
+  /**
+   * Suppression d'un contrat et de ses avenants ou juste d'un avenant
+   * @param contrat un contrat ou un avenant
+   */
   public void deleteContrat(Contrat contrat){
+    if (contrat.getCodeContrat() == CodeContrat.AVENANT) {
+      // si on est sur un avenant on réduit de 1 tous les avenants dont le numéro d'avenant est supérieur
+      // à l'avenant qu'on va effacer
+      Contrat contratParent = contrat.getContratParent();
+      List<Contrat> avenants = contratParent.getAvenants();
+
+      // on retire l'avenant en paramètre, car pas besoin de passer dans la boucle
+      avenants.remove(contrat);
+
+      for (Contrat avenant : avenants) {
+        if (avenant.getNumeroAvenant() > contrat.getNumeroAvenant()) {
+          avenant.setNumeroAvenant(avenant.getNumeroAvenant() - 1);
+        }
+      }
+      // on sauvegarde pour mettre à jour le nouveau numéro d'avenant
+      contratRepository.saveAll(avenants);
+    }
+    // suppression du contrat ou de l'avenant
     contratRepository.delete(contrat);
   }
 

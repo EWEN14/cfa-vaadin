@@ -29,7 +29,8 @@ public class Contrat implements Cloneable {
   private Contrat contratParent;
 
   // liste des contrats enfants (donc les avenants d'un contrat)
-  @OneToMany(mappedBy = "contratParent")
+  // CascadeType.REMOVE pour supprimer les avenants quand le contrat initial est supprimé
+  @OneToMany(mappedBy = "contratParent", cascade = CascadeType.REMOVE)
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private List<Contrat> avenants;
 
@@ -188,6 +189,18 @@ public class Contrat implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
+
+  // si après la mise à jour d'un contrat initial, ses informations de rupture de contrat ne sont pas nulles,
+  // on définit alors la date de rupture sur ses avenants comme étant la même
+  /*@PostUpdate
+  private void postUpdate() {
+    for (Contrat avenant : this.getAvenants()) {
+      if (this.getMotifRupture() != null && this.getDateRupture() != null && this.getCodeContrat() == CodeContrat.CONTRAT) {
+        avenant.setDateRupture(this.getDateRupture());
+        avenant.setMotifRupture(this.getMotifRupture());
+      }
+    }
+  }*/
 
   // getters et setters
   public Long getId() {

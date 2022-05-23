@@ -15,6 +15,7 @@ import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.enums.Sexe;
 import nc.unc.application.data.service.*;
+import nc.unc.application.views.ConfirmDelete;
 import nc.unc.application.views.MainLayout;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,9 @@ public class EtudiantView extends VerticalLayout {
 
   EtudiantConsult modalConsult;
   EtudiantNewOrEdit modalNewOrEdit;
+  ConfirmDelete modalConfirmDelete;
+
+  Etudiant etudiantToMaybeDelete;
 
   EtudiantService etudiantService;
   EntrepriseService entrepriseService;
@@ -60,7 +64,7 @@ public class EtudiantView extends VerticalLayout {
     modalConsult = new EtudiantConsult(contratService);
     // On définit que les différents events vont déclencher une fonction
     // contenant l'objet etudiant (dans le cas du delete dans la modalConsult ou du save dans modalNewOrdEdit).
-    modalConsult.addListener(EtudiantConsult.DeleteEvent.class, this::deleteEtudiant);
+    modalConsult.addListener(EtudiantConsult.DeleteEvent.class, this::transfertEtudiantFromEventToDelete);
     modalConsult.addListener(EtudiantConsult.CloseEvent.class, e -> closeConsultModal());
 
     // ajout de la modale d'édition ou de création d'un étudiant dans la vue, en lui passant la liste des entreprises et des tuteurs
@@ -69,6 +73,9 @@ public class EtudiantView extends VerticalLayout {
     modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEvent.class, this::saveEtudiant);
     modalNewOrEdit.addListener(EtudiantNewOrEdit.SaveEditedEvent.class, this::saveEditedEtudiant);
     modalNewOrEdit.addListener(EtudiantNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
+
+    modalConfirmDelete = new ConfirmDelete("cet étudiant");
+    modalConfirmDelete.addListener(ConfirmDelete.DeleteEventGrid.class, this::deleteFromConfirmDelete);
 
     // ajout d'un FlexLayout dans lequel on place la grille
     FlexLayout content = new FlexLayout(grid);
@@ -104,6 +111,10 @@ public class EtudiantView extends VerticalLayout {
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
       editEtudiantModal(etudiant);
     })).setHeader("Éditer");
+    // bouton de suppression
+    grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.TRASH), click -> {
+      prepareToDelete(etudiant);
+    })).setHeader("Supprimer");
     // on définit que chaque colonne à une largeur autodéterminée
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
   }
@@ -165,19 +176,37 @@ public class EtudiantView extends VerticalLayout {
     Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " modifié(e)");
   }
 
-  // suppression de l'étudiant en utilisant EtudiantService
-  private void deleteEtudiant(EtudiantConsult.DeleteEvent event) {
+  private void transfertEtudiantFromEventToDelete(EtudiantConsult.DeleteEvent event) {
     Etudiant etudiant = event.getEtudiant();
-    if (etudiant != null) {
-      etudiantService.deleteEtudiant(etudiant);
+    deleteEtudiant(etudiant);
+  }
+
+  // suppression de l'étudiant en utilisant EtudiantService
+  private void deleteEtudiant(Etudiant etudiantToDelete) {
+    if (etudiantToDelete != null) {
+      etudiantService.deleteEtudiant(etudiantToDelete);
 
       // ajout du log de suppression
-      logEnregistrmentService.saveLogDeleteString(etudiant.toString());
+      logEnregistrmentService.saveLogDeleteString(etudiantToDelete.toString());
 
       updateList();
       closeConsultModal();
-      Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " retiré(e)");
+      Notification.show(etudiantToDelete.getPrenomEtudiant() + " " + etudiantToDelete.getNomEtudiant() + " retiré(e)");
     }
+  }
+
+  private void deleteFromConfirmDelete(ConfirmDelete.DeleteEventGrid event) {
+    Boolean supprimer = event.getSuppression();
+    if (supprimer) {
+      deleteEtudiant(etudiantToMaybeDelete);
+    }
+    etudiantToMaybeDelete = null;
+    closeConfirmDelete();
+  }
+
+  private void prepareToDelete(Etudiant etudiant) {
+    etudiantToMaybeDelete = etudiant;
+    openConfirmDelete();
   }
 
   // si étudiant null, on ferme le formulaire, sinon on l'affiche (new or edit)
@@ -214,6 +243,15 @@ public class EtudiantView extends VerticalLayout {
   private void closeNewOrEditModal() {
     modalNewOrEdit.setEtudiant(null);
     modalNewOrEdit.close();
+    grid.asSingleSelect().clear();
+  }
+
+  private void openConfirmDelete() {
+    modalConfirmDelete.open();
+  }
+
+  private void closeConfirmDelete() {
+    modalConfirmDelete.close();
     grid.asSingleSelect().clear();
   }
 

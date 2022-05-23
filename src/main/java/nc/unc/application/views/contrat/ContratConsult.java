@@ -8,6 +8,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -23,10 +24,18 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.*;
 import nc.unc.application.data.enums.CodeContrat;
+import nc.unc.application.data.service.ContratService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static nc.unc.application.utils.Utils.frenchDateFormater;
 
 public class ContratConsult extends Dialog {
 
   private Contrat contrat;
+
+  private ContratService contratService;
 
   // Layout qui contiendra le contenu en dessous des tabs
   private VerticalLayout content = new VerticalLayout();
@@ -141,20 +150,27 @@ public class ContratConsult extends Dialog {
   // Binder qui sera utilisé pour remplir automatiquement les champs du tuteur
   Binder<Tuteur> tuteurBinder = new BeanValidationBinder<>(Tuteur.class);
 
+  // titre et grille pour les avenants du contrat (ou des autres avenants de l'avenant)
+  H4 titreGridAvenants = new H4();
+  Grid<Contrat> gridAvenants = new Grid<>(Contrat.class, false);
+
   // tab (onglet) qui seront insérés dans une tabs (ensemble d'onglets) les regroupant
   private final Tab contratInfosTab = new Tab(VaadinIcon.NEWSPAPER.create(), new Span("Contrat"));
   private final Tab etudiantContratInfosTab = new Tab(VaadinIcon.ACADEMY_CAP.create(),new Span("Étudiant"));
   private final Tab entrepriseContratInfosTab = new Tab(VaadinIcon.WORKPLACE.create(),new Span("Entreprise"));
   private final Tab tuteurContratInfosTab = new Tab(VaadinIcon.USER.create(), new Span("Tuteur"));
   private final Tab formationContratInfosTab = new Tab(VaadinIcon.DIPLOMA.create(), new Span("Formation"));
+  private final Tab avenantsContratTab = new Tab(VaadinIcon.COPY.create(), new Span("Avenants"));
 
   private final Button close = new Button("Fermer");
   private final Button delete = new Button("Supprimer le contrat");
 
 
-  public ContratConsult() {
+  public ContratConsult(ContratService contratService) {
     this.setWidth("85vw");
     this.setHeight("90vh");
+
+    this.contratService = contratService;
 
     // fonction qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
     setAllFieldsToReadOnly();
@@ -167,7 +183,7 @@ public class ContratConsult extends Dialog {
     formationBinder.bindInstanceFields(this);
 
     Tabs tabsContrat = new Tabs(contratInfosTab, etudiantContratInfosTab, formationContratInfosTab, tuteurContratInfosTab,
-            entrepriseContratInfosTab, formationContratInfosTab);
+            entrepriseContratInfosTab, formationContratInfosTab, avenantsContratTab);
     // Au clic sur une des tab, on appelle notre méthode setContent pour pouvoir changer le contenu
     tabsContrat.addSelectedChangeListener(selectedChangeEvent ->
             setContent(selectedChangeEvent.getSelectedTab())
@@ -179,6 +195,9 @@ public class ContratConsult extends Dialog {
 
     // on met les liens dans des Div, qu'on met ensuite dans notre HorizontalLayout
     lienContainer.add(new Div(lienPreview), new Div(lienDownloadPdf));
+
+    // configuration de la grille des avenants
+    configureGrid();
 
     // ajout des éléments au formulaire principal
     form.add(infosContrat, new Div(), debutContrat, finContrat, typeContrat, dureePeriodeEssai, numeroConventionFormation, primeAvantageNature,
@@ -225,12 +244,48 @@ public class ContratConsult extends Dialog {
       showOrNotDerogationAgeForm();
       showOrNotAvenantForm();
 
+      // on met une grille vide par défaut
+      gridAvenants.setItems(new ArrayList<Contrat>());
+      // alimentation de la grille des avenants
+      setAvenantsGrid();
+
       // lecture des binder pour compléter les champs dans les différents formulaires
       contratBinder.readBean(contrat);
       etudiantBinder.readBean(contrat.getEtudiant());
       entrepriseBinder.readBean(contrat.getEntreprise());
       tuteurBinder.readBean(contrat.getTuteur());
       formationBinder.readBean(contrat.getFormation());
+    }
+  }
+
+  private void configureGrid() {
+    gridAvenants.addClassNames("contrat-avenants-grid");
+
+    // ajout des colonnes
+    gridAvenants.addColumn(contrat -> contrat.getTuteur() != null ? contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur() : "").setHeader("Tuteur").setSortable(true);
+    gridAvenants.addColumn(Contrat::getCodeContrat).setHeader("Contrat/Avenant").setSortable(true);
+    gridAvenants.addColumn(Contrat::getNumeroAvenant).setHeader("Numéro Avenant").setSortable(true);
+    gridAvenants.addColumn(contrat -> contrat.getCreatedAt() != null ? frenchDateFormater(contrat.getCreatedAt().toLocalDate()) : "").setHeader("Date Création").setSortable(true);
+
+    // on définit que chaque colonne à une largeur autodéterminée
+    gridAvenants.getColumns().forEach(col -> col.setAutoWidth(true));
+  }
+
+  private void setAvenantsGrid() {
+    titreGridAvenants.removeAll();
+    if (this.contrat.getCodeContrat() == CodeContrat.CONTRAT) {
+      if (this.contrat.getAvenants() != null && !this.contrat.getAvenants().isEmpty()) {
+        gridAvenants.setItems(contratService.findAllAvenants(contrat));
+        titreGridAvenants.setText("Liste des Avenants liés à ce Contrat");
+      } else {
+        titreGridAvenants.setText("Ce Contrat n'a aucun Avenant");
+      }
+    } else {
+      titreGridAvenants.setText("Autre(s) Avenant(s) et Contrat initial");
+      Contrat contratParent = this.contrat.getContratParent();
+      List<Contrat> listContratEtAvenants = new ArrayList<>(contratService.findAllAvenants(contratParent));
+      listContratEtAvenants.add(0,contratParent);
+      gridAvenants.setItems(listContratEtAvenants);
     }
   }
 
@@ -260,6 +315,8 @@ public class ContratConsult extends Dialog {
       content.add(formContratEntrepriseInfos);
     } else if (tab.equals(tuteurContratInfosTab)) {
       content.add(formContratTuteur);
+    } else if (tab.equals(avenantsContratTab)) {
+      content.add(titreGridAvenants, gridAvenants);
     }
   }
 
@@ -277,7 +334,14 @@ public class ContratConsult extends Dialog {
 
   // fonction qui vérifie si le contrat est un contrat original ou un parent et affiche les informations d'avenant en conséquence
   private void showOrNotAvenantForm() {
+    titre.removeAll();
     avenantContainer.setVisible(this.contrat.getCodeContrat() == CodeContrat.AVENANT);
+    if (this.contrat.getCodeContrat() == CodeContrat.AVENANT) {
+      titre.removeAll();
+      titre.setText("Consultation de l'Avenant N°"+this.contrat.getNumeroAvenant());
+    } else {
+      titre.setText("Consultation d'un contrat");
+    }
   }
 
   // Méthode qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables

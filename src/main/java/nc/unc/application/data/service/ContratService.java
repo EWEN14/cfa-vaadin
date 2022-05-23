@@ -63,7 +63,7 @@ public class ContratService {
 
   public List<Contrat> findAllContrats(String filtertext){
     if(filtertext == null || filtertext.isEmpty()){
-      return contratRepository.findAll();
+      return contratRepository.findAllByOrderByCreatedAtDesc();
     } else {
       return contratRepository.search(filtertext);
     }
@@ -120,5 +120,14 @@ public class ContratService {
       return contratRepository.getCountOfAvenants(contratParent);
     }
     return 0;
+  }
+
+  /**
+   * Récupère tous les avenants d'un contrat initial
+   * @param contrat le contrat initial "parent"
+   * @return une liste de contrats de type avenants, liste potentiellement vide
+   */
+  public List<Contrat> findAllAvenants(Contrat contrat) {
+    return contratRepository.findAllByContratParentOrderByNumeroAvenantAsc(contrat);
   }
 }

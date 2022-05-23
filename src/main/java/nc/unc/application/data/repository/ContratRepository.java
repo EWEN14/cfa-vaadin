@@ -19,12 +19,20 @@ public interface ContratRepository extends JpaRepository<Contrat, Long> {
           "or lower(c.tuteur.prenomTuteur) like lower(concat('%', :searchTerm, '%')) " +
           "or lower(c.tuteur.nomTuteur) like lower(concat('%', :searchTerm, '%')) " +
           "or lower(c.entreprise.enseigne) like lower(concat('%', :searchTerm, '%')) " +
-          "or lower(c.formation.codeFormation) like lower(concat('%', :searchTerm, '%')) ")
+          "or lower(c.formation.codeFormation) like lower(concat('%', :searchTerm, '%')) " +
+          "order by c.createdAt desc")
   List<Contrat> search(@Param("searchTerm") String searchTerm);
+
+  List<Contrat> findAllByOrderByCreatedAtDesc();
 
   List<Contrat> findAllByTuteurId(Long id);
 
   List<Contrat> findAllByEtudiantId(Long id);
 
   List<Contrat> findAllByEntrepriseId(Long id);
+
+  @Query("select count(c) from Contrat c where c.contratParent = :contrat_parent")
+  Integer getCountOfAvenants(@Param("contrat_parent") Contrat contratParent);
+
+  List<Contrat> findAllByContratParentOrderByNumeroAvenantAsc(Contrat contrat);
 }

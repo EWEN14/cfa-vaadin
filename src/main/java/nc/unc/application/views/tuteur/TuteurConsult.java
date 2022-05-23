@@ -109,8 +109,8 @@ public class TuteurConsult extends Dialog {
 
     // grille des habilitations du tuteur
     tuteurHabilitationGrid.addClassName("tuteur-habilitation-grid");
-    tuteurHabilitationGrid.addColumn(th -> frenchDateFormater(th.getDateFormation())).setHeader("Date de formation").setSortable(true);
-    tuteurHabilitationGrid.addColumn(th -> frenchDateFormater(th.getDateHabilitation())).setHeader("Date d'habilitation").setSortable(true);
+    tuteurHabilitationGrid.addColumn(th -> th.getDateFormation() != null ? frenchDateFormater(th.getDateFormation()) : "").setHeader("Date de formation").setSortable(true);
+    tuteurHabilitationGrid.addColumn(th -> th.getDateHabilitation() != null ? frenchDateFormater(th.getDateHabilitation()) : "").setHeader("Date d'habilitation").setSortable(true);
     tuteurHabilitationGrid.addColumn(th -> th.getFormation() != null ? th.getFormation().getCodeFormation() : "").setHeader("Formation");
     tuteurHabilitationGrid.addColumn(TuteurHabilitation::getStatutFormation).setHeader("Statut de formation").setSortable(true);
     tuteurHabilitationGrid.addColumn(TuteurHabilitation::getModaliteFormation).setHeader("Modalité de formation").setSortable(true);

@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
 
+import static nc.unc.application.utils.Utils.frenchDateFormater;
+
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests
 @Route(value = "contrats", layout = MainLayout.class) // inclusion du MainLayout (header + nav)
@@ -56,7 +58,7 @@ public class ContratView extends VerticalLayout {
     configureGrid(); // configuration de la grille (colonnes, données...)
 
     // ajout de la modale de consultation du contrat dans la vue
-    modalConsult = new ContratConsult();
+    modalConsult = new ContratConsult(contratService);
     // On définit que les différents events vont déclencher une fonction
     // contenant l'objet etudiant (dans le cas du delete dans la modalConsult ou du save dans modalNewOrdEdit).
     modalConsult.addListener(ContratConsult.DeleteEventConsult.class, this::deleteContrat);
@@ -64,7 +66,7 @@ public class ContratView extends VerticalLayout {
 
     // ajout de la modale d'édition ou de création d'un contrat dans la vue
     modalNewOrEdit = new ContratNewOrEdit(entrepriseService.findAllEntreprises(""), formationService.findAllFormations(""),
-            etudiantService.findAllEtudiants(""), tuteurService.findAllTuteurs(""));
+            etudiantService.findAllEtudiants(""), tuteurService.findAllTuteurs(""), contratService);
     modalNewOrEdit.addListener(ContratNewOrEdit.SaveEvent.class, this::saveContrat);
     modalNewOrEdit.addListener(ContratNewOrEdit.SaveEditedEvent.class, this::saveEditedContrat);
     modalNewOrEdit.addListener(ContratNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
@@ -81,12 +83,13 @@ public class ContratView extends VerticalLayout {
     grid.setSizeFull();
 
     // ajout des colonnes
-    // TODO : faire un affichage conditionnel de ces infos, sinon bug
     grid.addColumn(contrat -> contrat.getEtudiant() != null ? contrat.getEtudiant().getPrenomEtudiant() + " " + contrat.getEtudiant().getNomEtudiant() : "").setHeader("Étudiant").setSortable(true);
     grid.addColumn(contrat -> contrat.getTuteur() != null ? contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur() : "").setHeader("Tuteur").setSortable(true);
     grid.addColumn(contrat -> contrat.getEntreprise() != null ? contrat.getEntreprise().getEnseigne() : "").setHeader("Entreprise").setSortable(true);
     grid.addColumn(contrat -> contrat.getFormation() != null ? contrat.getFormation().getCodeFormation() : "").setHeader("Formation").setSortable(true);
-    grid.addColumn(Contrat::getCodeContrat).setHeader("Code Contrat").setSortable(true);
+    grid.addColumn(Contrat::getCodeContrat).setHeader("Contrat/Avenant").setSortable(true);
+    grid.addColumn(Contrat::getNumeroAvenant).setHeader("Numéro Avenant").setSortable(true);
+    grid.addColumn(contrat -> contrat.getCreatedAt() != null ? frenchDateFormater(contrat.getCreatedAt().toLocalDate()) : "").setHeader("Date Création").setSortable(true);
 
     // ajout du bouton de consultation d'un contrat
     grid.addComponentColumn(contrat -> new Button(new Icon(VaadinIcon.EYE), click ->

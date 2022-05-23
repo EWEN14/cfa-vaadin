@@ -4,8 +4,8 @@ Application de gestion des alternants pour le CFA de l'UNC
 
 ## Modification du application.properties
 
-vous devez mettre les éléments suivants dans le fichier application.properties (_src/main/resources/application.properties_) 
-pour connecter l'application avec votre base de données, préalablement créée et nommé cfa_sb, sans table ni contenu :
+Vous devez mettre les éléments suivants dans le fichier application.properties (_src/main/resources/application.properties_) 
+pour connecter l'application avec votre base de données, préalablement créée et nommée cfa_sb, sans table ni contenu :
 
 ```
 server.port=${PORT:8080}
@@ -33,6 +33,9 @@ spring.jpa.properties.hibernate.event.merge.entity_copy_observer=allow
 
 Au lancement de l'application, les tables se généreront grâce aux scripts de migration présents
 dans le dossier _src/main/resources/db/migration_. Ne tentez pas de modifier ces scripts !
+
+Ces scripts ont été générés en tenant compte du fait que la base de données est en Postgresql. Utiliser un autre SGBB
+entraînera très probablement des erreurs lors du lancement des scripts de migrations (c'est le cas notamment avec H2).
 
 ## Génération de 2 utilisateurs
 

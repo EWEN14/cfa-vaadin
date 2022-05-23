@@ -2,6 +2,7 @@ package nc.unc.application.data.controller;
 
 import com.lowagie.text.DocumentException;
 import nc.unc.application.data.entity.Contrat;
+import nc.unc.application.data.enums.CodeContrat;
 import nc.unc.application.data.repository.ContratRepository;
 import nc.unc.application.data.service.ContratService;
 import nc.unc.application.data.service.PdfService;
@@ -40,6 +41,7 @@ public class ContratController {
     Contrat contrat = contratService.findContratById(id);
     model.addAttribute("contrat", contrat);
     model.addAttribute("download", false);
+    model.addAttribute("avenant", contrat.getCodeContrat() == CodeContrat.AVENANT);
     String age = String.valueOf(ChronoUnit.YEARS.between(contrat.getEtudiant().getDateNaissanceEtudiant(), LocalDate.now()));
     model.addAttribute("age", age);
     return "contrat_pdf";

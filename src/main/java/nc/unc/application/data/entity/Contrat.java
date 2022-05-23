@@ -1,5 +1,6 @@
 package nc.unc.application.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import nc.unc.application.data.enums.CodeContrat;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,6 +12,7 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "contrat")
@@ -20,6 +22,17 @@ public class Contrat implements Cloneable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id_contrat", nullable = false)
   private Long id;
+
+  // colonne désignant un contrat parent
+  @ManyToOne(cascade = CascadeType.MERGE)
+  @JoinColumn(name = "id_contrat_parent")
+  private Contrat contratParent;
+
+  // liste des contrats enfants (donc les avenants d'un contrat)
+  // CascadeType.REMOVE pour supprimer les avenants quand le contrat initial est supprimé
+  @OneToMany(mappedBy = "contratParent", cascade = CascadeType.REMOVE)
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private List<Contrat> avenants;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "code_contrat", nullable = false)
@@ -177,6 +190,18 @@ public class Contrat implements Cloneable {
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
+  // si après la mise à jour d'un contrat initial, ses informations de rupture de contrat ne sont pas nulles,
+  // on définit alors la date de rupture sur ses avenants comme étant la même
+  /*@PostUpdate
+  private void postUpdate() {
+    for (Contrat avenant : this.getAvenants()) {
+      if (this.getMotifRupture() != null && this.getDateRupture() != null && this.getCodeContrat() == CodeContrat.CONTRAT) {
+        avenant.setDateRupture(this.getDateRupture());
+        avenant.setMotifRupture(this.getMotifRupture());
+      }
+    }
+  }*/
+
   // getters et setters
   public Long getId() {
     return id;
@@ -184,6 +209,22 @@ public class Contrat implements Cloneable {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public Contrat getContratParent() {
+    return contratParent;
+  }
+
+  public void setContratParent(Contrat contrat) {
+    this.contratParent = contrat;
+  }
+
+  public List<Contrat> getAvenants() {
+    return avenants;
+  }
+
+  public void setAvenants(List<Contrat> contrats) {
+    this.avenants = contrats;
   }
 
   public CodeContrat getCodeContrat() {

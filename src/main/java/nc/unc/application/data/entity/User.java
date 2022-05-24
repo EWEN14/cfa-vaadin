@@ -14,7 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "application_user")
-public class User extends AbstractEntity {
+public class User extends AbstractEntity implements Cloneable{
 
   @NotNull(message = "L'identifiant ne peut pas être nul")
   @Column(name = "username", nullable = false)
@@ -22,16 +22,16 @@ public class User extends AbstractEntity {
 
   @NotNull(message = "Le nom ne peut pas être nul")
   @Column(name = "nom", nullable = false)
-  private String nom;
+  private String nomUser;
 
   @NotNull(message = "Le prénom ne peut pas être nul")
   @Column(name = "prenom", nullable = false)
-  private String prenom;
+  private String prenomUtilisateur;
 
   @NotNull(message = "Le mot de passe ne peut pas être vide")
   @Column(name = "hashed_password", nullable = false)
   @JsonIgnore
-  private String hashedPassword;
+  private String hashedPasswordUser;
 
   @Enumerated(EnumType.STRING)
   @ElementCollection(fetch = FetchType.EAGER)
@@ -54,27 +54,27 @@ public class User extends AbstractEntity {
   }
 
   public String getNom() {
-    return nom;
+    return nomUser;
   }
 
   public void setNom(String nom) {
-    this.nom = nom;
+    this.nomUser = nom;
   }
 
   public String getPrenom() {
-    return prenom;
+    return prenomUtilisateur;
   }
 
   public void setPrenom(String prenom) {
-    this.prenom = prenom;
+    this.prenomUtilisateur = prenom;
   }
 
   public String getHashedPassword() {
-    return hashedPassword;
+    return hashedPasswordUser;
   }
 
   public void setHashedPassword(String hashedPassword) {
-    this.hashedPassword = hashedPassword;
+    this.hashedPasswordUser = hashedPassword;
   }
 
   public Set<Role> getRoles() {
@@ -99,5 +99,23 @@ public class User extends AbstractEntity {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  // autres fonctions
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+            "\n username='" + username + '\'' +
+            "\n nomUser='" + nomUser + '\'' +
+            "\n prenomUser='" + prenomUtilisateur + '\'' +
+            "\n hashedPasswordUser='" + hashedPasswordUser + '\'' +
+            "\n roles=" + roles +
+            "\n createdAt=" + createdAt +
+            "\n updatedAt=" + updatedAt +
+            '}';
   }
 }

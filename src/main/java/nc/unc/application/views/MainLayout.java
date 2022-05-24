@@ -31,6 +31,7 @@ import nc.unc.application.views.helloworld.HelloWorldView;
 import nc.unc.application.views.logs.LogsView;
 import nc.unc.application.views.referentPedagogique.ReferentPedagogiqueView;
 import nc.unc.application.views.tuteur.TuteurView;
+import nc.unc.application.views.user.UserView;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -154,6 +155,8 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("Entreprises", "las la-building", EntrepriseView.class),
 
                 new MenuItemInfo("Tuteurs", "las la-user-tie", TuteurView.class),
+
+                new MenuItemInfo("Utilisateurs", "las la-award", UserView.class),
 
                 new MenuItemInfo("Contrats", "las la-file-contract", ContratView.class),
 

@@ -147,17 +147,13 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Étudiants", "las la-user-graduate", EtudiantView.class),
 
-                new MenuItemInfo("Formations", "las la-award", FormationListView.class),
-
-                new MenuItemInfo("Tuteurs", "las la-user-tie", TuteurView.class),
-
-                new MenuItemInfo("Formations", "las la-award", FormationListView.class),
-                
                 new MenuItemInfo("Référent Pédagogique", "las la-chalkboard-teacher", ReferentPedagogiqueView.class),
 
                 new MenuItemInfo("Formations", "las la-award", FormationListView.class),
                 
                 new MenuItemInfo("Entreprises", "las la-building", EntrepriseView.class),
+
+                new MenuItemInfo("Tuteurs", "las la-user-tie", TuteurView.class),
 
                 new MenuItemInfo("Contrats", "las la-file-contract", ContratView.class),
 

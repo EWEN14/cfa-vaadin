@@ -142,7 +142,7 @@ public class ReferentPedagogique implements Cloneable{
 
     @Override
     public String toString() {
-        return "Tuteur { " +
+        return "Référent Pédagogique : { " +
                 "\n id=" + id +
                 "\n nom='" + nomReferentPedago + '\'' +
                 "\n prenom='" + prenomReferentPedago + '\'' +

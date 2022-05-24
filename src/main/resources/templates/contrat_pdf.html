@@ -9,16 +9,16 @@
 </head>
 
 <body>
-<h1>CONTRAT UNIQUE D'ALTERNANCE</h1>
+<h1 class="titre">CONTRAT UNIQUE </br> D'ALTERNANCE</h1>
 
-<div><em>Régi par les articles Lp. 522-1 et suivants du code du travail de Nouvelle-Calédonie</em></div>
+<div class="subtitle"><em>régi par les articles Lp. 522-1 et suivants du code du travail de Nouvelle-Calédonie</em></div>
 
 <div data-th-object="${ contrat }" class="container-global">
     <table>
         <tbody>
-        <tr>
-            <td><strong>TYPE DE CONTRAT</strong></td>
-            <td data-th-text="*{ typeContrat }"></td>
+        <tr class="type-contrat">
+            <td class="type-title"><strong>TYPE DE CONTRAT</strong></td>
+            <td class="type-data" data-th-text="*{ typeContrat }"></td>
         </tr>
         </tbody>
     </table>

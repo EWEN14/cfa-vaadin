@@ -60,6 +60,9 @@ public class TuteurConsult extends Dialog {
   private final Checkbox diplomeFourni = new Checkbox("Diplôme fourni");
   private final Checkbox certificatTravailFourni = new Checkbox("Certificat de Travail fourni");
   private final Checkbox cvFourni = new Checkbox("CV fourni");
+  private final DatePicker dateCreation = new DatePicker();
+  private final DatePicker dateMiseAJour = new DatePicker();
+
   // binder qui sera utilisé pour remplir automatiquement les champs d'infos générales du tuteur
   Binder<Tuteur> tuteurBinder = new BeanValidationBinder<>(Tuteur.class);
 
@@ -103,6 +106,9 @@ public class TuteurConsult extends Dialog {
     tuteurBinder.bindInstanceFields(this);
     entrepriseBinder.bindInstanceFields(this);
 
+    //Labels des dates de création et mise à jour du tuteur
+    dateCreation.setLabel("Date de création");
+    dateMiseAJour.setLabel("Date de mise à jour");
     // nécessité de set les items de civilité (étant donné que ce n'est pas une des enums qui retourne des String)
     civiliteTuteur.setLabel("Civilité");
     civiliteTuteur.setItems(Civilite.values());
@@ -145,7 +151,7 @@ public class TuteurConsult extends Dialog {
 
     // on définit les champs qu'il y aura dans le formulaire d'informations générales de l'étudiant
     form.add(nomTuteur, prenomTuteur, dateNaissanceTuteur, emailTuteur, civiliteTuteur, telephoneTuteur1, telephoneTuteur2, diplomeEleveObtenu, niveauDiplome, posteOccupe,
-            anneeExperienceProfessionnelle, observationsTuteur, casierJudiciaireFourni, diplomeFourni, certificatTravailFourni,
+            anneeExperienceProfessionnelle, observationsTuteur,  dateCreation, dateMiseAJour, casierJudiciaireFourni, diplomeFourni, certificatTravailFourni,
             cvFourni, createButtonsLayout());
 
     // pareil, mais pour le formulaire relatif à son entreprise
@@ -164,6 +170,9 @@ public class TuteurConsult extends Dialog {
   public void setTuteur(Tuteur tuteur) {
     this.tuteur = tuteur;
     if (tuteur != null) {
+      //Transforme les dates en LocalDate et remplies les champs de dates
+      dateCreation.setValue(tuteur.getCreatedAt().toLocalDate());
+      dateMiseAJour.setValue(tuteur.getUpdatedAt().toLocalDate());
       // on passe les éléments du tuteur en paramètre pour les appliquer sur les champs du formulaire
       tuteurBinder.readBean(tuteur);
       entrepriseBinder.readBean(tuteur.getEntreprise());
@@ -223,6 +232,12 @@ public class TuteurConsult extends Dialog {
     posteOccupe.setReadOnly(true);
     anneeExperienceProfessionnelle.setReadOnly(true);
     observationsTuteur.setReadOnly(true);
+    dateCreation.setReadOnly(true);
+    dateMiseAJour.setReadOnly(true);
+    casierJudiciaireFourni.setReadOnly(true);
+    cvFourni.setReadOnly(true);
+    diplomeFourni.setReadOnly(true);
+    certificatTravailFourni.setReadOnly(true);
     // entreprise
     enseigne.setReadOnly(true);
     raisonSociale.setReadOnly(true);

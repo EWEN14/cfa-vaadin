@@ -4,6 +4,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -70,6 +71,8 @@ public class EntrepriseConsult extends Dialog {
   private final IntegerField adressePostaleCodePostal = new IntegerField("Code Postal (adresse postale)");
   private final TextField adressePostaleRueOuBp = new TextField("Adresse/Rue ou Boîte Postale (adresse postale)");
   private final TextArea observations = new TextArea("Observations");
+  private final DatePicker dateCreation = new DatePicker();
+  private final DatePicker dateMiseAJour = new DatePicker();
   // binder qui sera utilisé pour remlir automatiquement les champs d'infos propres à l'entreprise
   Binder<Entreprise> entrepriseBinder = new BeanValidationBinder<>(Entreprise.class);
 
@@ -102,6 +105,10 @@ public class EntrepriseConsult extends Dialog {
 
     // instanciation du binder qui servira au remplissage automatique des champs
     entrepriseBinder.bindInstanceFields(this);
+
+    //Labels des dates de création et mise à jour de l'entreprise
+    dateCreation.setLabel("Date de création");
+    dateMiseAJour.setLabel("Date de mise à jour");
 
     // grille des étudiants
     entrepriseEtudiantGrid.addClassName("entreprise-etudiants-grid");
@@ -150,6 +157,10 @@ public class EntrepriseConsult extends Dialog {
   public void setEntreprise(Entreprise entreprise) {
     this.entreprise = entreprise;
     if (entreprise != null) {
+      //Transforme les dates en LocalDate et remplies les champs de dates
+      dateCreation.setValue(entreprise.getCreatedAt().toLocalDate());
+      dateMiseAJour.setValue(entreprise.getUpdatedAt().toLocalDate());
+
       entrepriseBinder.readBean(entreprise);
 
       // on récupère les étudiants qui ont l'entreprise avec l'id correspondant

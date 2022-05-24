@@ -6,6 +6,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -26,7 +27,8 @@ public class UserConsult extends Dialog {
   TextField username = new TextField("Username");
   TextField prenomUser = new TextField("PrenomUser");
   CheckboxGroup<Role> roles = new CheckboxGroup<>();
-
+  private final DatePicker dateCreation = new DatePicker();
+  private final DatePicker dateMiseAJour = new DatePicker();
   Binder<User> binder = new BeanValidationBinder<>(User.class);
 
   private final Button close = new Button("Fermer");
@@ -48,6 +50,10 @@ public class UserConsult extends Dialog {
     // fonction qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
     setAllFieldsToReadOnly();
 
+    //Labels des dates de création et mise à jour du referrent
+    dateCreation.setLabel("Date de création");
+    dateMiseAJour.setLabel("Date de mise à jour");
+
     // instanciation du binder qui servira au remplissage automatique du formulaire d'informations rattachés à l'user
     binder.bindInstanceFields(this);
 
@@ -62,6 +68,9 @@ public class UserConsult extends Dialog {
   public void setUser(User user) {
     this.user = user;
     if (user != null) {
+      //Transforme les dates en LocalDate et remplies les champs de dates
+      dateCreation.setValue(user.getCreatedAt().toLocalDate());
+      dateMiseAJour.setValue(user.getUpdatedAt().toLocalDate());
       // on passe les éléments du user en paramètre pour les appliquer sur les champs du formulaire
       binder.readBean(user);
     }

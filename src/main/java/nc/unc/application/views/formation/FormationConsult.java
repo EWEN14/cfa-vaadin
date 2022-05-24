@@ -4,6 +4,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -31,6 +32,8 @@ public class FormationConsult extends Dialog {
   private final IntegerField dureeHebdomadaireTravail = new IntegerField("Durée hebdomadaire de travail");
   private final TextField responsableDeFormation = new TextField("Responsable de formation");
   private final TextArea observations = new TextArea("Observations");
+  private final DatePicker dateCreation = new DatePicker();
+  private final DatePicker dateMiseAJour = new DatePicker();
   // binder qui permettra le remplissage automatique des champs
   Binder<Formation> formationBinder = new BeanValidationBinder<>(Formation.class);
 
@@ -46,6 +49,10 @@ public class FormationConsult extends Dialog {
     // instanciation du binder
     formationBinder.bindInstanceFields(this);
 
+    //Labels des dates de création et mise à jour de la formation
+    dateCreation.setLabel("Date de création");
+    dateMiseAJour.setLabel("Date de mise à jour");
+
     // ajout des champs dans le formulaire
     form.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle, typeEmploiExerce,
             semainesEntreprise, heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail,
@@ -57,6 +64,9 @@ public class FormationConsult extends Dialog {
 
   public void setFormation(Formation formation) {
     if (formation != null) {
+      //Transforme les dates en LocalDate et remplies les champs de dates
+      dateCreation.setValue(formation.getCreatedAt().toLocalDate());
+      dateMiseAJour.setValue(formation.getUpdatedAt().toLocalDate());
       // alimentation du binder
       formationBinder.readBean(formation);
       // normalement il y aura toujours un referent pédagogique, mais par précaution ajout d'un if/else

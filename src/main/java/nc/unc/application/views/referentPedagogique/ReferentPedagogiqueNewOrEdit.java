@@ -81,7 +81,6 @@ public class ReferentPedagogiqueNewOrEdit extends Dialog {
       binder.writeBean(referentPedagogique);
       if (this.cloneReferentPedagogique == null) {
         fireEvent(new ReferentPedagogiqueNewOrEdit.SaveEvent(this, referentPedagogique));
-        System.out.println("-------------------------" + cloneReferentPedagogique);
       } else {
         fireEvent(new ReferentPedagogiqueNewOrEdit.SaveEditedEvent(this, referentPedagogique, cloneReferentPedagogique));
       }

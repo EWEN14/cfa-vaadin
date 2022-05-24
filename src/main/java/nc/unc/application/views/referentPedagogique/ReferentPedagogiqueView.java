@@ -19,12 +19,10 @@ import nc.unc.application.data.service.LogEnregistrmentService;
 import nc.unc.application.data.service.ReferentPedagogiqueService;
 import nc.unc.application.views.ConfirmDelete;
 import nc.unc.application.views.MainLayout;
-import nc.unc.application.views.etudiant.EtudiantConsult;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
-import java.util.Locale;
 
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests

@@ -13,6 +13,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Contrat;
 import nc.unc.application.data.service.*;
+import nc.unc.application.views.ConfirmDelete;
 import nc.unc.application.views.MainLayout;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -33,8 +34,11 @@ public class ContratView extends VerticalLayout {
   TextField filterText = new TextField();
   Button addContratButton;
 
+  Contrat contratMaybeToDelete;
+
   ContratConsult modalConsult;
   ContratNewOrEdit modalNewOrEdit;
+  ConfirmDelete confirmDelete;
 
   ContratService contratService;
   EtudiantService etudiantService;
@@ -44,7 +48,7 @@ public class ContratView extends VerticalLayout {
   LogEnregistrmentService logEnregistrmentService;
 
   public ContratView(ContratService contratService, EtudiantService etudiantService, FormationService formationService,
-                     EntrepriseService entrepriseService, TuteurService tuteurService, LogEnregistrmentService logEnregistrmentService){
+                     EntrepriseService entrepriseService, TuteurService tuteurService, LogEnregistrmentService logEnregistrmentService) {
 
     this.contratService = contratService;
     this.etudiantService = etudiantService;
@@ -61,7 +65,7 @@ public class ContratView extends VerticalLayout {
     modalConsult = new ContratConsult(contratService);
     // On définit que les différents events vont déclencher une fonction
     // contenant l'objet etudiant (dans le cas du delete dans la modalConsult ou du save dans modalNewOrdEdit).
-    modalConsult.addListener(ContratConsult.DeleteEventConsult.class, this::deleteContrat);
+    modalConsult.addListener(ContratConsult.DeleteEventConsult.class, this::transfertContractFromEventToDelete);
     modalConsult.addListener(ContratConsult.CloseEventConsult.class, e -> closeConsultModal());
 
     // ajout de la modale d'édition ou de création d'un contrat dans la vue
@@ -70,6 +74,10 @@ public class ContratView extends VerticalLayout {
     modalNewOrEdit.addListener(ContratNewOrEdit.SaveEvent.class, this::saveContrat);
     modalNewOrEdit.addListener(ContratNewOrEdit.SaveEditedEvent.class, this::saveEditedContrat);
     modalNewOrEdit.addListener(ContratNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
+
+    confirmDelete = new ConfirmDelete("ce contrat");
+    confirmDelete.addListener(ConfirmDelete.DeleteEventGrid.class, this::deleteFromConfirmDelete);
+
 
     // ajout de la toolbar (recherche + nouveau contrat) et la grid
     // et des modales de consultation et de création/modification TODO
@@ -97,12 +105,16 @@ public class ContratView extends VerticalLayout {
     // ajout du bouton d'édition d'un contrat
     grid.addComponentColumn(contrat -> new Button(new Icon(VaadinIcon.PENCIL), click ->
             editContratModal(contrat))).setHeader("Éditer");
+    // ajout du bouton de suppresion d'un contract
+    grid.addComponentColumn(contrat -> new Button(new Icon(VaadinIcon.TRASH), click -> {
+      prepareToDelete(contrat);
+    })).setHeader("Supprimer");
 
     // on définit que chaque colonne à une largeur autodéterminée
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
   }
 
-  private HorizontalLayout getToolbar(){
+  private HorizontalLayout getToolbar() {
     filterText.setWidth("450px");
     filterText.setHelperText("Recherche par prénom/nom étudiant ou tuteur, par enseigne entreprise, formation ou code contrat");
     filterText.setPrefixComponent(VaadinIcon.SEARCH.create()); // affiche une petite loupe au début du champ
@@ -156,9 +168,13 @@ public class ContratView extends VerticalLayout {
     Notification.show("Contrat modifié.");
   }
 
-  // suppression du contrat
-  private void deleteContrat(ContratConsult.DeleteEventConsult event) {
+  private void transfertContractFromEventToDelete(ContratConsult.DeleteEventConsult event) {
     Contrat contrat = event.getContrat();
+    deleteContrat(contrat);
+  }
+
+  // suppression du contrat
+  private void deleteContrat(Contrat contrat) {
     if (contrat != null) {
       contratService.deleteContrat(contrat);
 
@@ -169,6 +185,20 @@ public class ContratView extends VerticalLayout {
       closeConsultModal();
       Notification.show("Contrat supprimé");
     }
+  }
+
+  private void deleteFromConfirmDelete(ConfirmDelete.DeleteEventGrid event) {
+    Boolean supprimer = event.getSuppression();
+    if (supprimer) {
+      deleteContrat(contratMaybeToDelete);
+    }
+    contratMaybeToDelete = null;
+    closeConfirmDelete();
+  }
+
+  public void prepareToDelete(Contrat contrat) {
+    contratMaybeToDelete = contrat;
+    openConfirmDelete();
   }
 
   // si contrat null, on ferme le formulaire, sinon on l'affiche (new or edit)
@@ -205,6 +235,15 @@ public class ContratView extends VerticalLayout {
   private void closeNewOrEditModal() {
     modalNewOrEdit.setContrat(null);
     modalNewOrEdit.close();
+    grid.asSingleSelect().clear();
+  }
+
+  private void openConfirmDelete() {
+    confirmDelete.open();
+  }
+
+  private void closeConfirmDelete() {
+    confirmDelete.close();
     grid.asSingleSelect().clear();
   }
 

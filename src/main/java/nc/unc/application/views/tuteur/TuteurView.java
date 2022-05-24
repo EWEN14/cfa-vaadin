@@ -15,6 +15,7 @@ import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.enums.Sexe;
 import nc.unc.application.data.service.*;
+import nc.unc.application.views.ConfirmDelete;
 import nc.unc.application.views.MainLayout;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -32,8 +33,12 @@ public class TuteurView extends VerticalLayout {
     Grid<Tuteur> grid = new Grid<>(Tuteur.class, false);
     TextField filterText = new TextField();
     Button addTuteurButton;
+
+    Tuteur tuteurMaybeToDelete;
+
     TuteurNewOrEdit tuteurModal;
     TuteurConsult tuteurModalConsult;
+    ConfirmDelete confirmDelete;
 
     private TuteurService tuteurService;
     private LogEnregistrmentService logEnregistrmentService;
@@ -51,7 +56,7 @@ public class TuteurView extends VerticalLayout {
         tuteurModalConsult = new TuteurConsult(etudiantService, contratService);
         // On définit que les différents events (TuteurForm.fooEvent) dans le Tuteur  vont déclencher une fonction
         // contenant l'objet tuteur (dans le cas du save ou delete).
-        tuteurModalConsult.addListener(TuteurConsult.DeleteEvent.class, this::deleteTuteur);
+        tuteurModalConsult.addListener(TuteurConsult.DeleteEvent.class, this::transfertTuteurFromEventToDelete);
         tuteurModalConsult.addListener(TuteurConsult.CloseEvent.class, e -> closeConsultModal());
 
         tuteurModal = new TuteurNewOrEdit(entrepriseService.findAllEntreprises(""), formationService.findAllFormations(""),
@@ -60,6 +65,9 @@ public class TuteurView extends VerticalLayout {
         tuteurModal.addListener(TuteurNewOrEdit.SaveEditedEvent.class, this::saveEditedTuteur);
         tuteurModal.addListener(TuteurNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
         tuteurModal.addListener(TuteurNewOrEdit.CloseAndReloadEvent.class, e -> closeNewOrEditModalAndRefreshGrid());
+
+        confirmDelete = new ConfirmDelete("ce tuteur");
+        confirmDelete.addListener(ConfirmDelete.DeleteEventGrid.class, this::deleFromConfirmDelete);
 
         // ajout d'un FlexLayout qui place la grille
         FlexLayout content = new FlexLayout(grid);
@@ -92,6 +100,12 @@ public class TuteurView extends VerticalLayout {
         grid.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
             editTuteurModal(tuteur);
         })).setHeader("Éditer");
+        // bouton suppression tuteur
+        grid.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.TRASH), click -> {
+            prepareToDelete(tuteur);
+        })).setHeader("Supprimer");
+
+
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
 
@@ -151,9 +165,13 @@ public class TuteurView extends VerticalLayout {
         Notification.show(tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() + " modifié(e)");
     }
 
-    // suppression du tuteur en utilisant TuteurService
-    private void deleteTuteur(TuteurConsult.DeleteEvent event) {
+    private void transfertTuteurFromEventToDelete(TuteurConsult.DeleteEvent event){
         Tuteur tuteur = event.getTuteur();
+        deleteTuteur(tuteur);
+    }
+
+    // suppression du tuteur en utilisant TuteurService
+    private void deleteTuteur(Tuteur tuteur) {
         if (tuteur != null) {
             tuteurService.deleteTuteur(tuteur);
 
@@ -164,6 +182,20 @@ public class TuteurView extends VerticalLayout {
             closeConsultModal();
             Notification.show(tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() + " retiré(e)");
         }
+    }
+
+    private void deleFromConfirmDelete(ConfirmDelete.DeleteEventGrid event){
+        Boolean supprimer = event.getSuppression();
+        if(supprimer){
+            deleteTuteur(tuteurMaybeToDelete);
+        }
+        tuteurMaybeToDelete = null;
+        closeConfirmDelete();
+    }
+
+    public void prepareToDelete(Tuteur tuteur){
+        tuteurMaybeToDelete = tuteur;
+        openConfirmDelete();
     }
 
     public void consultTuteur(Tuteur tuteur) {
@@ -199,6 +231,15 @@ public class TuteurView extends VerticalLayout {
     private void closeNewOrEditModal() {
         tuteurModal.setTuteur(null);
         tuteurModal.close();
+        grid.asSingleSelect().clear();
+    }
+
+    private void openConfirmDelete() {
+        confirmDelete.open();
+    }
+
+    private void closeConfirmDelete(){
+        confirmDelete.close();
         grid.asSingleSelect().clear();
     }
 

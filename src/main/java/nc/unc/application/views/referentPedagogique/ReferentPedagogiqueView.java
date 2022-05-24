@@ -12,11 +12,14 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.entity.ReferentPedagogique;
 import nc.unc.application.data.service.FormationService;
 import nc.unc.application.data.service.LogEnregistrmentService;
 import nc.unc.application.data.service.ReferentPedagogiqueService;
+import nc.unc.application.views.ConfirmDelete;
 import nc.unc.application.views.MainLayout;
+import nc.unc.application.views.etudiant.EtudiantConsult;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -30,21 +33,24 @@ import java.util.Locale;
 @PermitAll //tous les utilisateurs connectés peuvent aller sur
 
 
-public class ReferentPedagogiqueView extends VerticalLayout{
+public class ReferentPedagogiqueView extends VerticalLayout {
   Grid<ReferentPedagogique> grid = new Grid<>(ReferentPedagogique.class, false);
 
   TextField filterText = new TextField();
   Button addReferentButton;
 
+  ReferentPedagogique referentPedagogiqueMaybeToDelete;
+
   ReferentPedagogiqueConsult modalConsult;
   ReferentPedagogiqueNewOrEdit modalNewOrEdit;
+  ConfirmDelete confirmDelete;
 
   ReferentPedagogiqueService referentPedagogiqueService;
   LogEnregistrmentService logEnregistrmentService;
   FormationService formationService;
 
 
-  public ReferentPedagogiqueView(ReferentPedagogiqueService referentPedagogiqueService,LogEnregistrmentService logEnregistrmentService, FormationService formationService){
+  public ReferentPedagogiqueView(ReferentPedagogiqueService referentPedagogiqueService, LogEnregistrmentService logEnregistrmentService, FormationService formationService) {
     this.referentPedagogiqueService = referentPedagogiqueService;
     this.logEnregistrmentService = logEnregistrmentService;
     this.formationService = formationService;
@@ -53,18 +59,20 @@ public class ReferentPedagogiqueView extends VerticalLayout{
     configureGrid();
 
     modalConsult = new ReferentPedagogiqueConsult();
-    modalConsult.addListener(ReferentPedagogiqueConsult.DeleteEvent.class,this::deleteReferentPedagogique);
-    modalConsult.addListener(ReferentPedagogiqueConsult.CloseEvent.class,e -> closeConsultModal());
+    modalConsult.addListener(ReferentPedagogiqueConsult.DeleteEvent.class, this::transfertEtudiantFromEventToDelete);
+    modalConsult.addListener(ReferentPedagogiqueConsult.CloseEvent.class, e -> closeConsultModal());
 
     modalNewOrEdit = new ReferentPedagogiqueNewOrEdit();
-
     modalNewOrEdit.addListener(ReferentPedagogiqueNewOrEdit.SaveEvent.class, this::saveReferentPedagogique);
     modalNewOrEdit.addListener(ReferentPedagogiqueNewOrEdit.SaveEditedEvent.class, this::saveEditedReferentPedagogique);
     modalNewOrEdit.addListener(ReferentPedagogiqueNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
 
+    confirmDelete = new ConfirmDelete("ce référent pédagogique");
+    confirmDelete.addListener(ConfirmDelete.DeleteEventGrid.class, this::deleteFromConfirmDelete);
+
     FlexLayout content = new FlexLayout(grid);
-    content.setFlexGrow(2,grid);
-    content.addClassNames("content","gap-m");
+    content.setFlexGrow(2, grid);
+    content.addClassNames("content", "gap-m");
     content.setSizeFull();
 
     add(getToolbar(), content, modalConsult, modalNewOrEdit);
@@ -84,16 +92,19 @@ public class ReferentPedagogiqueView extends VerticalLayout{
 
     grid.addComponentColumn(referentPedagogique -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultReferentPedagogique(referentPedagogique);
-    })).setHeader("Consulter");;
+    })).setHeader("Consulter");
     // bouton édition référent pédagogique
     grid.addComponentColumn(referentPedagogique -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
       editReferentModal(referentPedagogique);
-    })).setHeader("Éditer");;
+    })).setHeader("Éditer");
+    grid.addComponentColumn(referentPedagogique -> new Button(new Icon(VaadinIcon.TRASH), click -> {
+      prepareToDelete(referentPedagogique);
+    })).setHeader("Supprimer");
 
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
   }
 
-  private HorizontalLayout getToolbar(){
+  private HorizontalLayout getToolbar() {
     filterText.setHelperText("Recherche par nom ou prénom...");
     filterText.setPrefixComponent(VaadinIcon.SEARCH.create());
     filterText.setClearButtonVisible(true);
@@ -109,7 +120,7 @@ public class ReferentPedagogiqueView extends VerticalLayout{
     return toolbar;
   }
 
-  private void saveReferentPedagogique(ReferentPedagogiqueNewOrEdit.SaveEvent event){
+  private void saveReferentPedagogique(ReferentPedagogiqueNewOrEdit.SaveEvent event) {
     ReferentPedagogique referentPedagogique = event.getReferentPedagogique();
 
     referentPedagogiqueService.addReferentPedagogique(referentPedagogique);
@@ -121,7 +132,7 @@ public class ReferentPedagogiqueView extends VerticalLayout{
     Notification.show(referentPedagogique.getPrenomReferentPedago() + " " + referentPedagogique.getNomReferentPedago() + " créé(e).");
   }
 
-  private void saveEditedReferentPedagogique(ReferentPedagogiqueNewOrEdit.SaveEditedEvent event){
+  private void saveEditedReferentPedagogique(ReferentPedagogiqueNewOrEdit.SaveEditedEvent event) {
     ReferentPedagogique referentPedagogique = event.getReferentPedagogique();
     ReferentPedagogique referentPedagogiqueOriginal = event.getReferentPedagogiqueOriginal();
 
@@ -136,50 +147,80 @@ public class ReferentPedagogiqueView extends VerticalLayout{
     Notification.show(referentPedagogique.getPrenomReferentPedago() + " " + referentPedagogique.getNomReferentPedago() + " modifiée(e)");
   }
 
-  private void deleteReferentPedagogique(ReferentPedagogiqueConsult.DeleteEvent event){
+  private void transfertEtudiantFromEventToDelete(ReferentPedagogiqueConsult.DeleteEvent event) {
     ReferentPedagogique referentPedagogique = event.getReferentPedagogique();
-    if(referentPedagogique != null){
-      referentPedagogiqueService.removeReferentPedagogique(referentPedagogique);
+    deleteReferentPedagogique(referentPedagogique);
+  }
 
-      logEnregistrmentService.saveLogDeleteString(referentPedagogique.toString());
+  private void deleteReferentPedagogique(ReferentPedagogique referentPedago) {
+    if (referentPedago != null) {
+      referentPedagogiqueService.removeReferentPedagogique(referentPedago);
+
+      logEnregistrmentService.saveLogDeleteString(referentPedago.toString());
 
       updateList();
       closeConsultModal();
-      Notification.show(referentPedagogique.getPrenomReferentPedago() + " " + referentPedagogique.getNomReferentPedago() + " retirée(e)");
+      Notification.show(referentPedago.getPrenomReferentPedago() + " " + referentPedago.getNomReferentPedago() + " retirée(e)");
     }
   }
-  public void editReferentModal(ReferentPedagogique referentPedagogique){
-    if(referentPedagogique == null){
+
+  private void deleteFromConfirmDelete(ConfirmDelete.DeleteEventGrid event) {
+    Boolean supprimer = event.getSuppression();
+    if (supprimer) {
+      deleteReferentPedagogique(referentPedagogiqueMaybeToDelete);
+    }
+    referentPedagogiqueMaybeToDelete = null;
+    closeConfirmDelete();
+  }
+
+  private void prepareToDelete(ReferentPedagogique referentPedagogique) {
+    referentPedagogiqueMaybeToDelete = referentPedagogique;
+    openConfirmDelete();
+  }
+
+  public void editReferentModal(ReferentPedagogique referentPedagogique) {
+    if (referentPedagogique == null) {
       closeNewOrEditModal();
-    }else{
+    } else {
       modalNewOrEdit.setReferentPedagogique(referentPedagogique);
       modalNewOrEdit.open();
       addClassName("editing");
     }
   }
 
-  void addReferent(){
+  void addReferent() {
     grid.asSingleSelect().clear();
     editReferentModal(new ReferentPedagogique());
   }
 
-  public void consultReferentPedagogique(ReferentPedagogique referentPedagogique){
+  public void consultReferentPedagogique(ReferentPedagogique referentPedagogique) {
     modalConsult.setReferentPedagogique(referentPedagogique);
     modalConsult.open();
   }
 
-  private void closeConsultModal(){
+  private void closeConsultModal() {
     modalConsult.setReferentPedagogique(null);
     modalConsult.close();
     grid.asSingleSelect().clear();
   }
 
-  private void closeNewOrEditModal(){
+  private void closeNewOrEditModal() {
     modalNewOrEdit.setReferentPedagogique(null);
     modalNewOrEdit.close();
     grid.asSingleSelect().clear();
   }
 
-  private void updateList(){ grid.setItems(referentPedagogiqueService.findAllReferentPedagogique(filterText.getValue()));}
+  private void openConfirmDelete() {
+    confirmDelete.open();
+  }
+
+  private void closeConfirmDelete() {
+    confirmDelete.close();
+    grid.asSingleSelect().clear();
+  }
+
+  private void updateList() {
+    grid.setItems(referentPedagogiqueService.findAllReferentPedagogique(filterText.getValue()));
+  }
 
 }

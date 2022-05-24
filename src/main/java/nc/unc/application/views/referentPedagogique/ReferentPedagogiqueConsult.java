@@ -74,8 +74,7 @@ public class ReferentPedagogiqueConsult extends Dialog{
   }
 
   private HorizontalLayout createButtonsLayout(){
-    close.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    delete.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+    delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
     delete.addClickListener(event -> fireEvent(new DeleteEvent(this, referentPedagogique)));
     close.addClickListener(event -> fireEvent(new CloseEvent(this)));

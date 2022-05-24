@@ -7,11 +7,14 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -32,16 +35,35 @@ import java.util.stream.Stream;
 public class LogsView extends VerticalLayout {
     Grid<LogEnregistrement> grid = new Grid<>(LogEnregistrement.class);
     LogEnregistrmentService logEnregistrmentService;
+    TextField filtertext = new TextField();
+
+    private HorizontalLayout getToolbar(){
+        filtertext.setHelperText("Recherche par description...");
+        filtertext.setPrefixComponent(VaadinIcon.SEARCH.create());
+        filtertext.setClearButtonVisible(true);
+        filtertext.setValueChangeMode(ValueChangeMode.LAZY);
+        filtertext.addValueChangeListener(e -> updateList());
+
+        HorizontalLayout toolbar = new HorizontalLayout(filtertext);
+        toolbar.addClassName("toolbar");
+        return toolbar;
+    }
+
     public LogsView(LogEnregistrmentService logEnregistrmentService){
         this.logEnregistrmentService = logEnregistrmentService;
         addClassName("list-view");
         setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
         add(new H2("Registre des dernières activités"));
+
+        add(getToolbar());
+
+        // Ajout de la grid
         grid.addClassNames("logs-grid");
         grid.setSizeFull();
         grid.setColumns("createdAt","executant","typeCrud","description_log");
         grid.getColumnByKey("description_log").setWidth("30em").setFlexGrow(0);
 
+        // Ajout des détails des items
         grid.setDetailsVisibleOnClick(true);
         grid.setItemDetailsRenderer(createLogsDetailRenderer());
 
@@ -50,10 +72,10 @@ public class LogsView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.setItems(logEnregistrmentService.findAllLogs(""));
+        grid.setItems(logEnregistrmentService.findAllLogs(filtertext.getValue()));
     }
 
-    // Details
+    // Création de l'interface des détails des items
     private ComponentRenderer<LogsDetailFormLayout, LogEnregistrement> createLogsDetailRenderer(){
         return new ComponentRenderer<>(LogsDetailFormLayout::new, LogsDetailFormLayout::setLogs);
     }

@@ -29,6 +29,7 @@ import nc.unc.application.views.etudiant.EtudiantView;
 import nc.unc.application.views.formation.FormationListView;
 import nc.unc.application.views.helloworld.HelloWorldView;
 import nc.unc.application.views.logs.LogsView;
+import nc.unc.application.views.referentPedagogique.ReferentPedagogiqueView;
 import nc.unc.application.views.tuteur.TuteurView;
 
 /**
@@ -146,11 +147,13 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Étudiants", "las la-user-graduate", EtudiantView.class),
 
+                new MenuItemInfo("Référent Pédagogique", "las la-chalkboard-teacher", ReferentPedagogiqueView.class),
+
                 new MenuItemInfo("Formations", "las la-award", FormationListView.class),
+                
+                new MenuItemInfo("Entreprises", "las la-building", EntrepriseView.class),
 
                 new MenuItemInfo("Tuteurs", "las la-user-tie", TuteurView.class),
-
-                new MenuItemInfo("Entreprises", "las la-building", EntrepriseView.class),
 
                 new MenuItemInfo("Contrats", "las la-file-contract", ContratView.class),
 

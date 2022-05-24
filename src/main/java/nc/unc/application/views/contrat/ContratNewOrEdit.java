@@ -131,18 +131,22 @@ public class ContratNewOrEdit extends Dialog {
     binder.bindInstanceFields(this);
 
     // on set les éléments des différentes entités qui sont liées aux contrats
+    etudiant.setRequired(true);
     etudiant.setItems(etudiantList);
     etudiant.setItemLabelGenerator(etudiant -> etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant());
     etudiant.setClearButtonVisible(true);
 
+    formation.setRequired(true);
     formation.setItems(formationList);
     formation.setItemLabelGenerator(Formation::getLibelleFormation);
     formation.setClearButtonVisible(true);
 
+    entreprise.setRequired(true);
     entreprise.setItems(entrepriseList);
     entreprise.setItemLabelGenerator(Entreprise::getEnseigne);
     entreprise.setClearButtonVisible(true);
 
+    tuteur.setRequired(true);
     tuteur.setItems(tuteurList);
     tuteur.setItemLabelGenerator(tuteur1 -> tuteur1.getPrenomTuteur() + " " + tuteur1.getNomTuteur());
     tuteur.setClearButtonVisible(true);
@@ -202,7 +206,8 @@ public class ContratNewOrEdit extends Dialog {
     close.addClickListener(event -> fireEvent(new ContratNewOrEdit.CloseEvent(this)));
 
     // met le bouton de sauvegarde actif que si le binder est valide
-    binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
+    binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()
+            && !etudiant.isEmpty() && !formation.isEmpty() && !entreprise.isEmpty() && !tuteur.isEmpty()));
 
     return new HorizontalLayout(save, close);
   }

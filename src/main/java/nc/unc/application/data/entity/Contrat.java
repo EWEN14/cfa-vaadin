@@ -162,23 +162,19 @@ public class Contrat implements Cloneable {
   @Column(name = "observations", length = 15000)
   private String observations;
 
-  @NotNull(message = "L'entreprise doit être renseignée")
-  @ManyToOne(cascade = CascadeType.MERGE, optional = false, targetEntity = Entreprise.class)
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Entreprise.class)
   @JoinColumn(name = "id_entreprise", nullable = true)
   private Entreprise entreprise;
 
-  @NotNull(message = "L'étudiant doit être renseigné")
-  @ManyToOne(cascade = CascadeType.MERGE, optional = false, targetEntity = Etudiant.class)
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Etudiant.class)
   @JoinColumn(name = "id_etudiant", nullable = true)
   private Etudiant etudiant;
 
-  @NotNull(message = "La formation doit être renseignée")
-  @ManyToOne(cascade = CascadeType.MERGE, optional = false, targetEntity = Formation.class)
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Formation.class)
   @JoinColumn(name = "id_formation", nullable = true)
   private Formation formation;
 
-  @NotNull(message = "Le tuteur doit être renseigné")
-  @ManyToOne(cascade = CascadeType.MERGE, optional = false, targetEntity = Tuteur.class)
+  @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Tuteur.class)
   @JoinColumn(name = "id_tuteur", nullable = true)
   private Tuteur tuteur;
 

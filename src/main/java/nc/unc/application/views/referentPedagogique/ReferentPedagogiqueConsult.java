@@ -4,6 +4,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Span;
@@ -34,7 +35,8 @@ public class ReferentPedagogiqueConsult extends Dialog{
   private final EmailField emailReferentPedago = new EmailField("Email");
   private final Select<Civilite> civiliteReferentPedago = new Select<>(Civilite.values());
   Binder<ReferentPedagogique> referentPedagogiqueBinder = new BeanValidationBinder<>(ReferentPedagogique.class);
-
+  private final DatePicker dateCreation = new DatePicker();
+  private final DatePicker dateMiseAJour = new DatePicker();
   private final Tab referentPedagogiqueInfosTab = new Tab(VaadinIcon.MALE.create(),new Span("Référent Pédagogique"));
 
   private final Button close = new Button("Fermer");
@@ -53,6 +55,10 @@ public class ReferentPedagogiqueConsult extends Dialog{
 
     civiliteReferentPedago.setLabel("Civilité");
 
+    //Labels des dates de création et mise à jour du referrent
+    dateCreation.setLabel("Date de création");
+    dateMiseAJour.setLabel("Date de mise à jour");
+
     Tabs tabsReferentPedagogique = new Tabs(referentPedagogiqueInfosTab);
     // Au clic sur une des tab, on appelle notre méthode setContent pour pouvoir changer le contenu
     tabsReferentPedagogique.addSelectedChangeListener(selectedChangeEvent ->
@@ -69,6 +75,9 @@ public class ReferentPedagogiqueConsult extends Dialog{
   public void setReferentPedagogique(ReferentPedagogique referentPedagogique){
     this.referentPedagogique = referentPedagogique;
     if(referentPedagogique != null){
+      //Transforme les dates en LocalDate et remplies les champs de dates
+      dateCreation.setValue(referentPedagogique.getCreatedAt().toLocalDate());
+      dateMiseAJour.setValue(referentPedagogique.getUpdatedAt().toLocalDate());
       referentPedagogiqueBinder.readBean(referentPedagogique);
     }
   }

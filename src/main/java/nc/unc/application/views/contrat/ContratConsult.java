@@ -72,6 +72,8 @@ public class ContratConsult extends Dialog {
   private final Checkbox convOriginaleRemisEmployeur = new Checkbox("Remis à l'employeur");
   private final Div lea = new Div(new H4("Formation LEA"));
   private final DatePicker formationLea = new DatePicker("Date de formation au LEA");
+  private final DatePicker dateCreation = new DatePicker();
+  private final DatePicker dateMiseAJour = new DatePicker();
   // binder qui sera utilisé pour remlir automatiquement les champs d'infos propres au contrat
   Binder<Contrat> contratBinder = new BeanValidationBinder<>(Contrat.class);
 
@@ -175,6 +177,10 @@ public class ContratConsult extends Dialog {
     // fonction qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
     setAllFieldsToReadOnly();
 
+    //Labels des dates de création et mise à jour du contrat
+    dateCreation.setLabel("Date de création");
+    dateMiseAJour.setLabel("Date de mise à jour");
+
     // instanciation des différents binder qui serviront au remplissage automatique des formulaires d'informations rattachés à l'étudiant
     contratBinder.bindInstanceFields(this);
     etudiantBinder.bindInstanceFields(this);
@@ -233,6 +239,9 @@ public class ContratConsult extends Dialog {
   public void setContrat(Contrat contrat) {
     this.contrat = contrat;
     if (contrat != null) {
+      //Transforme les dates en LocalDate et remplies les champs de dates
+      dateCreation.setValue(contrat.getCreatedAt().toLocalDate());
+      dateMiseAJour.setValue(contrat.getUpdatedAt().toLocalDate());
       // on passe l'id du contrat pour la page de generation pdf du contrat
       lienPreview.setHref("/contrat-generation/"+contrat.getId());
       lienDownloadPdf.setHref("/contrat-generation/download/"+contrat.getId());

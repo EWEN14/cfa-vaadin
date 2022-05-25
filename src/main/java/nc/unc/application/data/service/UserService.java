@@ -1,5 +1,6 @@
 package nc.unc.application.data.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import nc.unc.application.data.entity.User;
@@ -22,6 +23,16 @@ public class UserService {
         return repository.findById(id);
     }
 
+    public User save(User user){
+        return repository.save(user);
+    }
+
+    public List<User> findAllUsers(String filterText){
+        if(filterText != null){
+            return repository.search(filterText);
+        }
+        return repository.findAll();
+    }
     public User update(User entity) {
         return repository.save(entity);
     }

@@ -14,7 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "application_user")
-public class User extends AbstractEntity {
+public class User extends AbstractEntity implements Cloneable{
 
   @NotNull(message = "L'identifiant ne peut pas être nul")
   @Column(name = "username", nullable = false)
@@ -99,5 +99,23 @@ public class User extends AbstractEntity {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  // autres fonctions
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+            "\n username='" + username + '\'' +
+            "\n nomUser='" + nom + '\'' +
+            "\n prenomUser='" + prenom + '\'' +
+            "\n hashedPasswordUser='" + hashedPassword + '\'' +
+            "\n roles=" + roles +
+            "\n createdAt=" + createdAt +
+            "\n updatedAt=" + updatedAt +
+            '}';
   }
 }

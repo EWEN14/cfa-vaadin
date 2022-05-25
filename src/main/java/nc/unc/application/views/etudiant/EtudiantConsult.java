@@ -119,6 +119,9 @@ public class EtudiantConsult extends Dialog {
   // Binder qui sera utilisé pour remplir automatiquement les champs du référent pédagogique
   Binder<ReferentPedagogique> referentPedagogiqueBinder = new BeanValidationBinder<>(ReferentPedagogique.class);
 
+  private final DatePicker dateCreation = new DatePicker();
+  private final DatePicker dateMiseAJour = new DatePicker();
+
   // grid qui contiendra les contrats liés à l'étudiant
   private final Grid<Contrat> contratGrid = new Grid<>(Contrat.class, false);
 
@@ -151,6 +154,10 @@ public class EtudiantConsult extends Dialog {
     tuteurBinder.bindInstanceFields(this);
     formationBinder.bindInstanceFields(this);
     referentPedagogiqueBinder.bindInstanceFields(this);
+
+    //Labels des dates de création et mise à jour de l'étudiant
+    dateCreation.setLabel("Date de création");
+    dateMiseAJour.setLabel("Date de mise à jour");
 
     civiliteEtudiant.setLabel("Civilité");
     civiliteEtudiant.setItems(Civilite.values());
@@ -204,6 +211,9 @@ public class EtudiantConsult extends Dialog {
   public void setEtudiant(Etudiant etudiant) {
     this.etudiant = etudiant;
     if (etudiant != null) {
+      //Transforme les dates en LocalDate et remplies les champs de dates
+      dateCreation.setValue(etudiant.getCreatedAt().toLocalDate());
+      dateMiseAJour.setValue(etudiant.getUpdatedAt().toLocalDate());
       // lecture des binder pour compléter les champs dans les différents formulaires
       etudiantBinder.readBean(etudiant);
       entrepriseBinder.readBean(etudiant.getEntreprise());

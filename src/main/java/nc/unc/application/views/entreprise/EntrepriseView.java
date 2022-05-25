@@ -13,6 +13,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.service.*;
+import nc.unc.application.views.ConfirmDelete;
 import nc.unc.application.views.MainLayout;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -31,8 +32,11 @@ public class EntrepriseView extends VerticalLayout {
   TextField filterText = new TextField();
   Button addEntrepriseButton;
 
+  Entreprise entrepriseMaybeToDelete;
+
   EntrepriseConsult modalConsult;
   EntrepriseNewOrEdit modalNewOrEdit;
+  ConfirmDelete confirmDelete;
 
   EntrepriseService entrepriseService;
   ContratService contratService;
@@ -55,7 +59,7 @@ public class EntrepriseView extends VerticalLayout {
 
     // ajout de la modale de consultation de l'entreprise dans la vue
     modalConsult = new EntrepriseConsult(etudiantService, tuteurService, contratService);
-    modalConsult.addListener(EntrepriseConsult.DeleteEvent.class, this::deleteEntreprise);
+    modalConsult.addListener(EntrepriseConsult.DeleteEvent.class, this::transfertEntrepriseFromEventToDelete);
     modalConsult.addListener(EntrepriseConsult.CloseEvent.class, e -> closeConsultModal());
 
     // ajout de la modale d'édition ou de création d'une entreprise dans la vue
@@ -63,6 +67,9 @@ public class EntrepriseView extends VerticalLayout {
     modalNewOrEdit.addListener(EntrepriseNewOrEdit.SaveEvent.class, this::saveEntreprise);
     modalNewOrEdit.addListener(EntrepriseNewOrEdit.SaveEditedEvent.class, this::saveEditedEntreprise);
     modalNewOrEdit.addListener(EntrepriseNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
+
+    confirmDelete = new ConfirmDelete("cette entreprise");
+    confirmDelete.addListener(ConfirmDelete.DeleteEventGrid.class, this::deleteFromConfirmDelete);
 
     // ajout de la toolbar (recherche + nouveau contrat) et la grid
     // et des modales de consultation et de création/modification TODO
@@ -83,6 +90,10 @@ public class EntrepriseView extends VerticalLayout {
     // bouton édition entreprise
     grid.addComponentColumn(entreprise -> new Button(new Icon(VaadinIcon.PENCIL), click ->
             editEntrepriseModal(entreprise))).setHeader("Éditer");
+    // bouton suppression entreprise
+    grid.addComponentColumn(entreprise -> new Button(new Icon(VaadinIcon.TRASH), click -> {
+      prepareToDelete(entreprise);
+    })).setHeader("Supprimer");
     // on définit que chaque colonne à une largeur autodéterminée
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
   }
@@ -147,9 +158,13 @@ public class EntrepriseView extends VerticalLayout {
     Notification.show("Entreprise modifiée.");
   }
 
-  // suppression d'une entreprise
-  private void deleteEntreprise(EntrepriseConsult.DeleteEvent event) {
+  private void transfertEntrepriseFromEventToDelete(EntrepriseConsult.DeleteEvent event){
     Entreprise entreprise = event.getEntreprise();
+    deleteEntreprise(entreprise);
+  }
+
+  // suppression d'une entreprise
+  private void deleteEntreprise(Entreprise entreprise) {
     if (entreprise != null) {
       // suppression de l'entreprise
       entrepriseService.deleteEntreprise(entreprise);
@@ -161,6 +176,20 @@ public class EntrepriseView extends VerticalLayout {
       closeConsultModal();
       Notification.show("Entreprise supprimée");
     }
+  }
+
+  private void deleteFromConfirmDelete(ConfirmDelete.DeleteEventGrid event){
+    Boolean supprimer = event.getSuppression();
+    if(supprimer){
+      deleteEntreprise(entrepriseMaybeToDelete);
+    }
+    entrepriseMaybeToDelete = null;
+    closeConfirmDelete();
+  }
+
+  private void prepareToDelete(Entreprise entreprise){
+    entrepriseMaybeToDelete = entreprise;
+    openConfirmDelete();
   }
 
   // si entreprise null, on ferme le formulaire, sinon on l'affiche (new or edit)
@@ -195,6 +224,13 @@ public class EntrepriseView extends VerticalLayout {
   private void closeNewOrEditModal() {
     modalNewOrEdit.setEntreprise(null);
     modalNewOrEdit.close();
+    grid.asSingleSelect().clear();
+  }
+
+  private void openConfirmDelete() { confirmDelete.open(); }
+
+  private void closeConfirmDelete(){
+    confirmDelete.close();
     grid.asSingleSelect().clear();
   }
 

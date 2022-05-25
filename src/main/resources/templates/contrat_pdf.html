@@ -9,19 +9,20 @@
 </head>
 
 <body>
-<h1>CONTRAT UNIQUE D'ALTERNANCE</h1>
+<h1 class="titre-big">CONTRAT UNIQUE <br/> D'ALTERNANCE</h1>
 
-<div><em>Régi par les articles Lp. 522-1 et suivants du code du travail de Nouvelle-Calédonie</em></div>
+<div class="subtitle"><em>régi par les articles Lp. 522-1 et suivants du code du travail de Nouvelle-Calédonie</em></div>
 
 <div data-th-object="${ contrat }" class="container-global">
     <table>
         <tbody>
-        <tr>
-            <td><strong>TYPE DE CONTRAT</strong></td>
-            <td data-th-text="*{ typeContrat }"></td>
+        <tr class="type-border">
+            <td class="type-title"><strong>TYPE DE CONTRAT</strong></td>
+            <td class="type-data" data-th-text="*{ typeContrat }"></td>
         </tr>
         </tbody>
     </table>
+    <br/>
 
     <div th:if="${ avenant }">Avenant N°<span data-th-text="*{ numeroAvenant }"></span>
         pour <span data-th-text="*{ motifAvn }"></span></div>
@@ -32,23 +33,25 @@
         <table>
             <tbody>
             <tr>
-                <td><strong>N° RIDET</strong></td>
-                <td data-th-text="*{ numeroRidet }"></td>
-                <td><strong>N° CAFAT</strong></td>
-                <td data-th-text="*{ numeroCafatEntreprise }"></td>
+                <td class="type-title"><strong>N° RIDET</strong></td>
+                <td class="type-data" data-th-text="*{ numeroRidet }"></td>
+                <td class="type-title"><strong>N° CAFAT</strong></td>
+                <td class="type-data" data-th-text="*{ numeroCafatEntreprise }"></td>
             </tr>
             </tbody>
         </table>
 
+        <br/>
+
         <table>
             <tbody>
             <tr>
-                <td><strong>CODE NAF</strong></td>
-                <td data-th-text="*{ codeNaf }"></td>
-                <td><strong>STATUT JURIDIQUE</strong></td>
-                <td data-th-text="*{ formeJuridique }"></td>
-                <td><strong>NOMBRE DE SALARIES</strong></td>
-                <td data-th-text="*{ nombreSalarie }"></td>
+                <td class="type-title"><strong>CODE NAF</strong></td>
+                <td class="type-data" data-th-text="*{ codeNaf }"></td>
+                <td class="type-title"><strong>STATUT JURIDIQUE</strong></td>
+                <td class="type-data" data-th-text="*{ formeJuridique }"></td>
+                <td class="type-title"><strong>NOMBRE DE SALARIES</strong></td>
+                <td class="type-data" data-th-text="*{ nombreSalarie }"></td>
             </tr>
             </tbody>
         </table>

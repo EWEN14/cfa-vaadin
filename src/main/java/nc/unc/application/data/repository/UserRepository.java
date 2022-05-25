@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     User findByUsername(String username);
 
     @Query("select e from User e " +
-            "where lower(e.nomUser) like lower(concat('%', :searchTerm, '%')) " +
-            "or lower(e.prenomUtilisateur) like lower(concat('%', :searchTerm, '%'))")
+            "where lower(e.nom) like lower(concat('%', :searchTerm, '%')) " +
+            "or lower(e.prenom) like lower(concat('%', :searchTerm, '%'))")
     List<User> search(@Param("searchTerm") String searchTerm);
 }

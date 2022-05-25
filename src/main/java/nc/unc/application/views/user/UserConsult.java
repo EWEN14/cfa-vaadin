@@ -9,6 +9,7 @@ import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -24,11 +25,13 @@ public class UserConsult extends Dialog {
   private User user;
 
   FormLayout form = new FormLayout();
-  TextField username = new TextField("Username");
-  TextField prenomUser = new TextField("PrenomUser");
+  TextField username = new TextField("Identifiant utilisateur");
+  PasswordField hashedPassword = new PasswordField("Mot de passe");
+  TextField nom = new TextField("NOM");
+  TextField prenom = new TextField("Prénom");
   CheckboxGroup<Role> roles = new CheckboxGroup<>();
-  private final DatePicker dateCreation = new DatePicker();
-  private final DatePicker dateMiseAJour = new DatePicker();
+  private final DatePicker dateCreation = new DatePicker("Date de création");
+  private final DatePicker dateMiseAJour = new DatePicker("Date de mise à jour");
   Binder<User> binder = new BeanValidationBinder<>(User.class);
 
   private final Button close = new Button("Fermer");
@@ -50,15 +53,13 @@ public class UserConsult extends Dialog {
     // fonction qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
     setAllFieldsToReadOnly();
 
-    //Labels des dates de création et mise à jour du referrent
-    dateCreation.setLabel("Date de création");
-    dateMiseAJour.setLabel("Date de mise à jour");
+    hashedPassword.setHelperText("Mot de passe encodé");
 
     // instanciation du binder qui servira au remplissage automatique du formulaire d'informations rattachés à l'user
     binder.bindInstanceFields(this);
 
     // ajout des champs et des boutons d'action dans le formulaire
-    form.add(username, prenomUser, roles, createButtonsLayout());
+    form.add(username, hashedPassword, nom, prenom, roles, new Div(), dateCreation, dateMiseAJour, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(form);
@@ -68,7 +69,7 @@ public class UserConsult extends Dialog {
   public void setUser(User user) {
     this.user = user;
     if (user != null) {
-      //Transforme les dates en LocalDate et remplies les champs de dates
+      //Transforme les dates en LocalDate et rempli les champs de dates
       dateCreation.setValue(user.getCreatedAt().toLocalDate());
       dateMiseAJour.setValue(user.getUpdatedAt().toLocalDate());
       // on passe les éléments du user en paramètre pour les appliquer sur les champs du formulaire
@@ -90,8 +91,12 @@ public class UserConsult extends Dialog {
   private void setAllFieldsToReadOnly() {
     // champs d'infos générales de l'user
     username.setReadOnly(true);
-    prenomUser.setReadOnly(true);
+    hashedPassword.setReadOnly(true);
+    nom.setReadOnly(true);
+    prenom.setReadOnly(true);
     roles.setReadOnly(true);
+    dateCreation.setReadOnly(true);
+    dateMiseAJour.setReadOnly(true);
   }
 
   // Event "global" (class mère), qui étend les deux events ci-dessous, dont le but est de fournir l'user

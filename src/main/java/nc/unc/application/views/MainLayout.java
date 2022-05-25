@@ -156,7 +156,7 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Tuteurs", "las la-user-tie", TuteurView.class),
 
-                new MenuItemInfo("Utilisateurs", "las la-award", UserView.class),
+                new MenuItemInfo("Utilisateurs", "las la-user", UserView.class),
 
                 new MenuItemInfo("Contrats", "las la-file-contract", ContratView.class),
 

@@ -22,16 +22,16 @@ public class User extends AbstractEntity implements Cloneable{
 
   @NotNull(message = "Le nom ne peut pas être nul")
   @Column(name = "nom", nullable = false)
-  private String nomUser;
+  private String nom;
 
   @NotNull(message = "Le prénom ne peut pas être nul")
   @Column(name = "prenom", nullable = false)
-  private String prenomUtilisateur;
+  private String prenom;
 
   @NotNull(message = "Le mot de passe ne peut pas être vide")
   @Column(name = "hashed_password", nullable = false)
   @JsonIgnore
-  private String hashedPasswordUser;
+  private String hashedPassword;
 
   @Enumerated(EnumType.STRING)
   @ElementCollection(fetch = FetchType.EAGER)
@@ -54,27 +54,27 @@ public class User extends AbstractEntity implements Cloneable{
   }
 
   public String getNom() {
-    return nomUser;
+    return nom;
   }
 
   public void setNom(String nom) {
-    this.nomUser = nom;
+    this.nom = nom;
   }
 
   public String getPrenom() {
-    return prenomUtilisateur;
+    return prenom;
   }
 
   public void setPrenom(String prenom) {
-    this.prenomUtilisateur = prenom;
+    this.prenom = prenom;
   }
 
   public String getHashedPassword() {
-    return hashedPasswordUser;
+    return hashedPassword;
   }
 
   public void setHashedPassword(String hashedPassword) {
-    this.hashedPasswordUser = hashedPassword;
+    this.hashedPassword = hashedPassword;
   }
 
   public Set<Role> getRoles() {
@@ -110,9 +110,9 @@ public class User extends AbstractEntity implements Cloneable{
   public String toString() {
     return "User{" +
             "\n username='" + username + '\'' +
-            "\n nomUser='" + nomUser + '\'' +
-            "\n prenomUser='" + prenomUtilisateur + '\'' +
-            "\n hashedPasswordUser='" + hashedPasswordUser + '\'' +
+            "\n nomUser='" + nom + '\'' +
+            "\n prenomUser='" + prenom + '\'' +
+            "\n hashedPasswordUser='" + hashedPassword + '\'' +
             "\n roles=" + roles +
             "\n createdAt=" + createdAt +
             "\n updatedAt=" + updatedAt +

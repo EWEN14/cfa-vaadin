@@ -16,16 +16,17 @@ import nc.unc.application.data.entity.User;
 import nc.unc.application.data.service.*;
 import nc.unc.application.views.MainLayout;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.annotation.security.PermitAll;// utilisé pour les tests
+import javax.annotation.security.RolesAllowed;
 
 @Scope("prototype") // utilisé pour les tests
 @Route(value = "users", layout = MainLayout.class) // inclusion du MainLayout (header + nav)
 @PageTitle("Utilisateurs | CFA") // title de la page
-@PermitAll // tous les utilisateurs connectés peuvent aller sur cette page
+@RolesAllowed("ADMIN") // seuls ceux avec le role "ADMIN" peuvent accéder à cette page.
 public class UserView extends VerticalLayout {
 
-  Grid<User> grid = new Grid<>(User.class);
+  Grid<User> grid = new Grid<>(User.class, false);
 
   TextField filterText = new TextField();
   Button addUserButton;
@@ -35,11 +36,14 @@ public class UserView extends VerticalLayout {
 
   UserService userService;
   LogEnregistrmentService logEnregistrmentService;
+  PasswordEncoder passwordEncoder;
 
 
-  public UserView(UserService userService, LogEnregistrmentService logEnregistrmentService) {
+  public UserView(UserService userService, LogEnregistrmentService logEnregistrmentService,
+                  PasswordEncoder passwordEncoder) {
     this.userService = userService;
     this.logEnregistrmentService = logEnregistrmentService;
+    this.passwordEncoder = passwordEncoder;
 
     addClassName("list-view");
     setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
@@ -77,16 +81,15 @@ public class UserView extends VerticalLayout {
     grid.addClassNames("user-grid");
     grid.setSizeFull();
     // ajout des colonnes
-    grid.setColumns("prenom", "nom");
+    grid.addColumn(User::getUsername).setHeader("Identifiant");
+    grid.addColumn(user -> user.getNom() + " " + user.getPrenom()).setHeader("NOM Prénom");
+    grid.addColumn(user -> user.getRoles().toString()).setHeader("Rôle(s)");
     // ajout du bouton de consultation d'un utilisateur
-    grid.addComponentColumn(user -> new Button(new Icon(VaadinIcon.EYE), click -> {
-      consultUser(user);
-    })).setHeader("Consulter");;
+    grid.addComponentColumn(user -> new Button(new Icon(VaadinIcon.EYE), click ->
+            consultUser(user))).setHeader("Consulter");
     // bouton édition utilisateur
-    grid.addComponentColumn(user -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
-      System.out.println("*************************************************user"+user);
-      editUserModal(user);
-    })).setHeader("Éditer");;
+    grid.addComponentColumn(user -> new Button(new Icon(VaadinIcon.PENCIL), click ->
+            editUserModal(user))).setHeader("Éditer");
     // on définit que chaque colonne à une largeur autodéterminée
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
   }
@@ -137,6 +140,8 @@ public class UserView extends VerticalLayout {
     User userOriginal = event.getUserOriginal();
     // mise en majuscule du nom avant sauvegarde
     setName(user);
+    // encodage du mot de passe
+    user.setHashedPassword(passwordEncoder.encode(user.getHashedPassword()));
 
     // sauvegarde de l'user
     userService.save(user);
@@ -203,9 +208,8 @@ public class UserView extends VerticalLayout {
     grid.setItems(userService.findAllUsers(filterText.getValue()));
   }
 
-  // fonction qui met le nom de l'étudiant en majuscule
+  // fonction qui met le nom de l'utilisateur en majuscule
   private void setName(User user) {
-    System.out.println("***************************************************"+user.getNom() + " "+user.getPrenom());
     user.setNom(user.getNom().toUpperCase());
   }
 }

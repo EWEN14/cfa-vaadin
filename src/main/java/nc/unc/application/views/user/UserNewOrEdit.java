@@ -9,6 +9,7 @@ import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
@@ -25,10 +26,11 @@ public class UserNewOrEdit extends Dialog {
   private User cloneUser;
 
   FormLayout form = new FormLayout();
-  TextField username = new TextField("Username");
-  TextField prenomUtilisateur = new TextField("Prenom");
+  TextField username = new TextField("Identifiant utilisateur");
+  PasswordField hashedPassword = new PasswordField("Mot de Passe");
+  TextField nom = new TextField("NOM");
+  TextField prenom = new TextField("Prénom");
   CheckboxGroup<Role> roles = new CheckboxGroup<>();
-
 
   Binder<User> binder = new BeanValidationBinder<>(User.class);
 
@@ -48,8 +50,10 @@ public class UserNewOrEdit extends Dialog {
     roles.select(Role.USER);
     roles.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
 
+    hashedPassword.setHelperText("Mot de passe actuel encodé. Changer de valeur pour changer de mot de passe.");
+
     // ajout des champs et des boutons d'action dans le formulaire
-    form.add(username, prenomUtilisateur, roles, createButtonsLayout());
+    form.add(username, hashedPassword, nom, prenom, roles, createButtonsLayout());
     // ajout du formulaire dans la modale
     add(form);
   }

@@ -3,7 +3,7 @@ body {
     margin: 0;
 }
 
-.titre {
+.titre-big {
     font-family: 'Calibri Bold', sans-serif;
     font-weight: 800;
     line-height: 1.4em;
@@ -11,20 +11,31 @@ body {
     margin: 0;
     display: block;
     text-align: center;
-    width: 75%;
+    width: 100%;
+}
+
+.titre {
+    font-family: 'Calibri Bold', sans-serif;
+    font-weight: 500;
+    line-height: 1.4em;
+    color: #4a5488;
+    margin: 0;
+    display: block;
+    text-align: center;
+    width: 100%;
 }
 
 .subtitle {
     text-align: right;
     font-size: small;
-    width: 56%;
+    width: 97%;
     margin-top: 2rem;
 }
 
 .blue-bg {
     padding: 0.2rem;
     margin: 0;
-    width: 75%;
+    width: 100%;
     text-align: center;
     color: white;
     background-color: #4a5488;
@@ -32,9 +43,7 @@ body {
 
 .type-title {
     border: 1px solid gray;
-    padding: 0.2rem;
-    padding-left: 4rem;
-    padding-right: 4rem;
+    padding: 0.2rem 4rem;
     text-align: center;
     vertical-align: center;
 }
@@ -44,4 +53,13 @@ body {
     padding: 0.2rem;
     text-align: center;
     vertical-align: center;
+    margin-bottom: 1rem;
+}
+
+.type-border {
+    vertical-align: center;
+}
+
+table {
+    border-collapse: collapse;
 }

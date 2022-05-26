@@ -12,7 +12,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.entity.ReferentPedagogique;
 import nc.unc.application.data.service.FormationService;
 import nc.unc.application.data.service.LogEnregistrmentService;
@@ -121,7 +120,9 @@ public class ReferentPedagogiqueView extends VerticalLayout {
   private void saveReferentPedagogique(ReferentPedagogiqueNewOrEdit.SaveEvent event) {
     ReferentPedagogique referentPedagogique = event.getReferentPedagogique();
 
-    referentPedagogiqueService.addReferentPedagogique(referentPedagogique);
+    referentPedagogique.setNomReferentPedago(referentPedagogique.getNomReferentPedago().toUpperCase());
+
+    referentPedagogiqueService.saveReferentPedagogique(referentPedagogique);
 
     logEnregistrmentService.saveLogAjoutString(referentPedagogique.toString());
 
@@ -136,7 +137,7 @@ public class ReferentPedagogiqueView extends VerticalLayout {
 
     referentPedagogique.setNomReferentPedago(referentPedagogique.getNomReferentPedago().toUpperCase());
 
-    referentPedagogiqueService.addReferentPedagogique(referentPedagogique);
+    referentPedagogiqueService.saveReferentPedagogique(referentPedagogique);
 
     logEnregistrmentService.saveLogEditString(referentPedagogiqueOriginal.toString(), referentPedagogique.toString());
 

@@ -235,22 +235,20 @@ public class ContratNewOrEdit extends Dialog {
         e.printStackTrace();
       }
     } else {
+      // cas on l'on créé un nouveau contrat
       titre.add("Création d'un nouveau contrat");
-      // si nouveau contrat, on définit qu'il s'agit d'un contrat et pas d'un avenant
-      if (contrat != null) {
+      if (this.contrat != null && this.contrat.getId() == null) {
+        // si nouveau contrat, on définit qu'il s'agit d'un contrat et pas d'un avenant
         this.contrat.setCodeContrat(CodeContrat.CONTRAT);
+        // détermine si on affiche on non le formulaire de dérogation d'âge
+        this.contrat.setDerogationAge(false);
+        showOrNotDerogationAgeForm(false);
+        // on n'affiche pas le bouton d'ajout de rupture de contrat et son formulaire et celui d'avenant si on créé le contrat
+        ruptureContainer.setVisible(false);
+        addRupture.setVisible(false);
+        avenantContainer.setVisible(false);
+        showOrNotCreationAvenant();
       }
-    }
-
-    // cas on l'on créé un nouveau contrat
-    if (this.contrat != null && this.contrat.getId() == null) {
-      // détermine si on affiche on non le formulaire de dérogation d'âge
-      this.contrat.setDerogationAge(false);
-      showOrNotDerogationAgeForm(false);
-      // on n'affiche pas le bouton d'ajout de rupture de contrat et son formulaire et celui d'avenant si on créé le contrat
-      ruptureContainer.setVisible(false);
-      addRupture.setVisible(false);
-      avenantContainer.setVisible(false);
     }
 
     // alimentation du binder
@@ -354,7 +352,7 @@ public class ContratNewOrEdit extends Dialog {
     avenantContainer.setVisible(this.contrat.getCodeContrat() != CodeContrat.CONTRAT);
 
     // on affiche le bouton d'ajout d'un avenant si la liste des avenants est vide dans un contrat d'origine
-    if (this.contrat.getCodeContrat() == CodeContrat.CONTRAT) {
+    if (this.contrat.getCodeContrat() == CodeContrat.CONTRAT && this.contrat.getId() != null) {
       addAvenant.setVisible(this.contrat.getAvenants().isEmpty());
     } else {
       // mais si on est dans un avenant, on affiche le bouton d'ajout d'un avenant que si c'est le dernier avenant

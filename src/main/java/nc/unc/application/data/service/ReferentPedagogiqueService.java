@@ -33,7 +33,7 @@ public class ReferentPedagogiqueService {
   }
 
   //Sauvegarder un référent pédagogique
-  public void addReferentPedagogique(ReferentPedagogique referentPedagogique){
+  public void saveReferentPedagogique(ReferentPedagogique referentPedagogique){
     if (referentPedagogique == null) {
       System.err.println("Le référent pédagogique est nul, le formulaire est-il bien connecté à l'application ?");
       return;

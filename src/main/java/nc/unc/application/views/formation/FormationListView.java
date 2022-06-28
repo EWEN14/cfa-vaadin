@@ -65,9 +65,10 @@ public class FormationListView extends VerticalLayout {
     HorizontalLayout buttonsContainer = new HorizontalLayout(consultFormationButton, editFormationButton);
 
     Div lienPageFormation = new Div(new RouterLink("Voir les étudiants", FormationEtudiantView.class, new RouteParameters("idFormation", String.valueOf(formation.getId()))));
+    Div lienPageEvenements = new Div(new RouterLink("Voir les évènements", FormationEvenementView.class, new RouteParameters("idFormation", String.valueOf(formation.getId()))));
 
     VerticalLayout insideCardLayout = new VerticalLayout();
-    insideCardLayout.add(libelleFormation, directeurFormation, buttonsContainer, lienPageFormation);
+    insideCardLayout.add(libelleFormation, directeurFormation, buttonsContainer, lienPageFormation, lienPageEvenements);
 
     // ajout des éléments dans l'horizontal layout
     cardLayout.add(insideCardLayout);

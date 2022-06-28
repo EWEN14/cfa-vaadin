@@ -9,7 +9,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "formation")
@@ -77,6 +79,17 @@ public class Formation implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
+
+  @ManyToMany(mappedBy = "formations", cascade = CascadeType.MERGE)
+  private Set<Evenement> evenements = new LinkedHashSet<>();
+
+  public Set<Evenement> getEvenements() {
+    return evenements;
+  }
+
+  public void setEvenements(Set<Evenement> evenements) {
+    this.evenements = evenements;
+  }
 
   @PreRemove
   private void preRemove() {

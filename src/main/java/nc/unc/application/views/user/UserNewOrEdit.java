@@ -47,7 +47,6 @@ public class UserNewOrEdit extends Dialog {
 
     roles.setLabel("Rôles");
     roles.setItems(Role.values());
-    roles.select(Role.USER);
     roles.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
 
     hashedPassword.setHelperText("Mot de passe actuel encodé. Changer de valeur pour changer de mot de passe.");

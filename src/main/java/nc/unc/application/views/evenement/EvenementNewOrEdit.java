@@ -42,7 +42,7 @@ public class EvenementNewOrEdit extends Dialog {
   private final Button save = new Button("Sauvegarder");
   private final Button close = new Button("Fermer");
 
-  public EvenementNewOrEdit(List<Formation> lesFormations){
+  public EvenementNewOrEdit(List<Formation> lesFormations) {
 
     // On définit que la fenêtre qui s'ouvre est une modale, ce qui fait qu'on ne peut rien faire sur l'application
     // tant que la modale n'est pas fermée
@@ -68,6 +68,8 @@ public class EvenementNewOrEdit extends Dialog {
     formations.setLabel("Formations");
     formations.setItemLabelGenerator(Formation::getLibelleFormation);
     formations.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+    // ajout d'un binder spécifiquement pour la création et édition d'un événement
+    // pour obliger la sélection d'au moins une formation avant de pouvoir sauvegarder
     evenementBinder.forField(formations)
             .asRequired("Veuillez sélectionner au moins une formation")
             .bind(Evenement::getFormations, Evenement::setFormations);
@@ -107,7 +109,7 @@ public class EvenementNewOrEdit extends Dialog {
       e.printStackTrace();
     }
   }
-  
+
   // fonction qui va alimenter le binder d'un évenement
   public void setEvenement(Evenement evenement) {
     this.evenement = evenement;
@@ -116,9 +118,6 @@ public class EvenementNewOrEdit extends Dialog {
     // copie de l'évenement si c'est un edit (pour garder les anciennes valeurs qu'on mettra dans le log)
     if (evenement != null && evenement.getId() != null) {
       try {
-        // formations.select(this.evenement.getFormations());
-        // formations.updateSelection(evenement.getFormations(), null);
-        // formations.setValue(this.evenement.getFormations());
         this.cloneEvenement = (Evenement) evenement.clone();
       } catch (CloneNotSupportedException e) {
         e.printStackTrace();

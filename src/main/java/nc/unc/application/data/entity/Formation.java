@@ -280,7 +280,7 @@ public class Formation implements Cloneable {
             "\n , lieuFormation='" + lieuFormation + '\'' +
             "\n , observations='" + observations + '\'' +
             "\n , referentPedagogique=" +
-            (referentPedagogique != null ? referentPedagogique.getPrenomReferentPedago()+" "+referentPedagogique.getNomReferentPedago() : "") +
+            (referentPedagogique != null ? referentPedagogique.getPrenomReferentPedago() + " " + referentPedagogique.getNomReferentPedago() : "") +
             '}';
   }
 }

@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "evenement")
-public class Evenement implements Cloneable{
+public class Evenement implements Cloneable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id_evenement", nullable = false)
@@ -29,6 +29,7 @@ public class Evenement implements Cloneable{
   @Column(name = "date_fin", nullable = false)
   private LocalDate dateFin;
 
+  @NotNull(message = "l'événement doit être liée à au moins une formation")
   @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
   @JoinTable(name = "evenement_formations",
           joinColumns = @JoinColumn(name = "evenement_id"),

@@ -8,10 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "formation")
@@ -82,14 +79,6 @@ public class Formation implements Cloneable {
 
   @ManyToMany(mappedBy = "formations", cascade = CascadeType.MERGE)
   private Set<Evenement> evenements = new LinkedHashSet<>();
-
-  public Set<Evenement> getEvenements() {
-    return evenements;
-  }
-
-  public void setEvenements(Set<Evenement> evenements) {
-    this.evenements = evenements;
-  }
 
   @PreRemove
   private void preRemove() {
@@ -233,6 +222,14 @@ public class Formation implements Cloneable {
     this.etudiants = etudiants;
   }
 
+  public Set<Evenement> getEvenements() {
+    return evenements;
+  }
+
+  public void setEvenements(Set<Evenement> evenements) {
+    this.evenements = evenements;
+  }
+
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
@@ -252,6 +249,19 @@ public class Formation implements Cloneable {
   // Autres méthodes
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Formation formation = (Formation) o;
+    return id.equals(formation.id) && Objects.equals(libelleFormation, formation.libelleFormation) && Objects.equals(codeFormation, formation.codeFormation) && Objects.equals(codeRome, formation.codeRome) && Objects.equals(niveauCertificationProfessionnelle, formation.niveauCertificationProfessionnelle) && Objects.equals(typeEmploiExerce, formation.typeEmploiExerce) && Objects.equals(semainesEntreprise, formation.semainesEntreprise) && Objects.equals(dureeHebdomadaireTravail, formation.dureeHebdomadaireTravail) && Objects.equals(heuresFormation, formation.heuresFormation) && Objects.equals(semainesFormation, formation.semainesFormation) && Objects.equals(lieuFormation, formation.lieuFormation) && Objects.equals(observations, formation.observations) && createdAt.equals(formation.createdAt) && updatedAt.equals(formation.updatedAt);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle, typeEmploiExerce, semainesEntreprise, dureeHebdomadaireTravail, heuresFormation, semainesFormation, lieuFormation, observations, createdAt, updatedAt);
   }
 
   @Override

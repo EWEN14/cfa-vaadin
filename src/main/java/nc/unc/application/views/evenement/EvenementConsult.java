@@ -9,7 +9,6 @@ import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -20,8 +19,6 @@ import nc.unc.application.data.entity.Evenement;
 import nc.unc.application.data.entity.Formation;
 import nc.unc.application.data.service.EvenementService;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class EvenementConsult extends Dialog {
@@ -34,9 +31,10 @@ public class EvenementConsult extends Dialog {
   private final TextArea description = new TextArea("Description");
   private final DatePicker dateDebut = new DatePicker("Date de début");
   private final DatePicker dateFin = new DatePicker("Date de fin");
+  CheckboxGroup<Formation> formations = new CheckboxGroup<>();
+
   // binder qui sera utilisé pour remplir automatiquement les champs d'infos générales sur l'évenement
   Binder<Evenement> binder = new BeanValidationBinder<>(Evenement.class);
-  CheckboxGroup<Formation> formation = new CheckboxGroup<>();
 
   private final Button delete = new Button("Supprimer l'évenement");
   private final Button close = new Button("Fermer");
@@ -56,12 +54,13 @@ public class EvenementConsult extends Dialog {
 
     binder.bindInstanceFields(this);
 
-    formation.setItems(lesFormations);
-    formation.setLabel("Formations");
-    formation.setItemLabelGenerator(Formation::getLibelleFormation);
-    formation.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+    formations.setItems(lesFormations);
+    formations.setLabel("Formations");
+    formations.setItemLabelGenerator(Formation::getLibelleFormation);
+    formations.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+
     // ajout des champs et des boutons d'action dans le formulaire
-    form.add(libelle, description, dateDebut, dateFin, formation, createButtonsLayout());
+    form.add(libelle, description, dateDebut, dateFin, formations, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(form);
@@ -71,12 +70,12 @@ public class EvenementConsult extends Dialog {
   public void setEvenement(Evenement evenement) {
     this.evenement = evenement;
     if (evenement != null) {
-      formation.select(evenement.getFormations());
       //Transforme les dates en LocalDate et remplies les champs de dates
       //dateCreation.setValue(evenement.getCreatedAt().toLocalDate());
       //dateMiseAJour.setValue(evenement.getUpdatedAt().toLocalDate());
       // lecture du binder pour compléter les champs dans le formulaire
       binder.readBean(evenement);
+      // formations.select(evenement.getFormations());
     }
   }
 
@@ -96,7 +95,7 @@ public class EvenementConsult extends Dialog {
     description.setReadOnly(true);
     dateDebut.setReadOnly(true);
     dateFin.setReadOnly(true);
-    formation.setReadOnly(true);
+    formations.setReadOnly(true);
   }
 
   // Event "global" (class mère), qui étend les deux events ci-dessous, dont le but est de fournir l'évenement

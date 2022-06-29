@@ -19,7 +19,9 @@ import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.Evenement;
 import nc.unc.application.data.entity.Formation;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class EvenementNewOrEdit extends Dialog {
 
@@ -32,7 +34,7 @@ public class EvenementNewOrEdit extends Dialog {
   private final TextArea description = new TextArea("Description");
   private final DatePicker dateDebut = new DatePicker("Date de début");
   private final DatePicker dateFin = new DatePicker("Date de fin");
-  CheckboxGroup<Formation> formations = new CheckboxGroup<>();
+  private final CheckboxGroup<Formation> formations = new CheckboxGroup<>();
 
   // binder qui sera utilisé pour remplir automatiquement les champs d'infos générales sur l'évenement
   Binder<Evenement> evenementBinder = new BeanValidationBinder<>(Evenement.class);
@@ -61,10 +63,15 @@ public class EvenementNewOrEdit extends Dialog {
     dateFin.setI18n(multiFormatI18n);
     dateFin.isRequired();
 
-    formations.setItems(lesFormations);
+    Set<Formation> setDeFormations = new HashSet<>(lesFormations);
+    formations.setItems(setDeFormations);
     formations.setLabel("Formations");
     formations.setItemLabelGenerator(Formation::getLibelleFormation);
     formations.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+    evenementBinder.forField(formations)
+            .asRequired("Veuillez sélectionner au moins une formation")
+            .bind(Evenement::getFormations, Evenement::setFormations);
+
     // ajout des champs et des boutons d'action dans le formulaire
     form.add(libelle, description, dateDebut, dateFin, formations, createButtonsLayout());
 
@@ -109,7 +116,9 @@ public class EvenementNewOrEdit extends Dialog {
     // copie de l'évenement si c'est un edit (pour garder les anciennes valeurs qu'on mettra dans le log)
     if (evenement != null && evenement.getId() != null) {
       try {
-        formations.select(evenement.getFormations());
+        // formations.select(this.evenement.getFormations());
+        // formations.updateSelection(evenement.getFormations(), null);
+        // formations.setValue(this.evenement.getFormations());
         this.cloneEvenement = (Evenement) evenement.clone();
       } catch (CloneNotSupportedException e) {
         e.printStackTrace();
@@ -117,7 +126,6 @@ public class EvenementNewOrEdit extends Dialog {
     }
     // alimentation du binder
     evenementBinder.readBean(this.evenement);
-
   }
 
   // Event "global" (class mère), qui étend les trois event ci-dessous, dont le but est de fournir l'étudiant

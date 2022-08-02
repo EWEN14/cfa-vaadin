@@ -30,6 +30,7 @@ import nc.unc.application.data.service.EvenementService;
 import nc.unc.application.data.service.FormationService;
 import nc.unc.application.views.MainLayout;
 import nc.unc.application.views.etudiant.EtudiantConsult;
+import nc.unc.application.views.evenement.EvenementConsult;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
@@ -49,6 +50,7 @@ public class FormationEvenementView extends VerticalLayout implements BeforeEnte
   EvenementService evenementService;
   FormationService formationService;
 
+
   Optional<Formation> formationExist;
   Formation formation;
 
@@ -56,17 +58,25 @@ public class FormationEvenementView extends VerticalLayout implements BeforeEnte
   Div messageErreur;
   H2 libelleFormation = new H2();
 
+  EvenementConsult modalConsult;
+
   private final Button close = new Button("Fermer");
   private final Button delete = new Button("Supprimer l'étudiant");
 
   Grid<Evenement> evenementGrid = new Grid<>(Evenement.class, false);
-  Grid.Column<Evenement> description;
-  Grid.Column<Evenement> dateDebut;
-  Grid.Column<Evenement> dateFin;
+  Grid.Column<Evenement> libelle;
 
   public FormationEvenementView(EvenementService evenementService, FormationService formationService){
       this.formationService = formationService;
       this.evenementService = evenementService;
+
+
+    // ajout de la modale de consultation de l'évenement dans la vue
+    modalConsult = new EvenementConsult(evenementService, formationService.findAllFormations(null));
+    // On définit que les différents events vont déclencher une fonction
+    // contenant l'objet evenement (dans le cas du delete dans la modalConsult ou du save dans modalNewOrdEdit).
+    modalConsult.addListener(EvenementConsult.CloseEvent.class, e -> closeConsultModal());
+    modalConsult.hideDeleteButton();
 
     setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
     configureGrid(); // configuration de la grille (colonnes, données...)
@@ -85,16 +95,36 @@ public class FormationEvenementView extends VerticalLayout implements BeforeEnte
     evenementGrid.addClassNames("evenement-grid");
     evenementGrid.setSizeFull();
     // ajout des colonnes
-    description = evenementGrid.addColumn(evenement -> evenement.getDescription());
-    dateDebut = evenementGrid.addColumn(evenement -> evenement.getDateDebut());
-    dateFin = evenementGrid.addColumn(evenement -> evenement.getDateFin());
+    libelle = evenementGrid.addColumn(evenement -> evenement.getLibelle());
+    //dateDebut = evenementGrid.addColumn(evenement -> evenement.getDateDebut());
+    //dateFin = evenementGrid.addColumn(evenement -> evenement.getDateFin());
+    evenementGrid.addColumn(Evenement::getDateDebut).setHeader("Date début");
+    evenementGrid.addColumn(Evenement::getDateFin).setHeader("Date fin");
+
 
     /*evenementGrid.addColumn(Evenement::getDescription).setHeader("Description");
     evenementGrid.addColumn(Evenement::getDateDebut).setHeader("Date de début");
     evenementGrid.addColumn(Evenement::getDateFin).setHeader("Date de fin");*/
 
+    // ajout du bouton de consultation d'un évenement
+    evenementGrid.addComponentColumn(evenement -> new Button(new Icon(VaadinIcon.EYE), click -> {
+      consultEvenement(evenement);
+    })).setHeader("Consulter");
     // on définit que chaque colonne à une largeur autodéterminée
     evenementGrid.getColumns().forEach(col -> col.setAutoWidth(true));
+  }
+
+  // ouverture de modale de consultation d'un évenement
+  public void consultEvenement(Evenement evenement) {
+    modalConsult.setEvenement(evenement);
+    modalConsult.open();
+  }
+
+  // fermeture de la modale de consultation d'un évenement
+  private void closeConsultModal() {
+    modalConsult.setEvenement(null);
+    modalConsult.close();
+    evenementGrid.asSingleSelect().clear();
   }
 
   /**
@@ -141,9 +171,9 @@ public class FormationEvenementView extends VerticalLayout implements BeforeEnte
       HeaderRow headerRow = evenementGrid.appendHeaderRow();
 
       // ajout de nos header customisés sur nos colonnes
-      headerRow.getCell(description).setComponent(createFilterHeader("Description", evenementFilter::setDescription));
-      headerRow.getCell(dateDebut).setComponent(createDateFilterHeader("Date début", evenementFilter::setDateDebut));
-      headerRow.getCell(dateFin).setComponent(createDateFilterHeader("Date fin", evenementFilter::setDateFin));
+      headerRow.getCell(libelle).setComponent(createFilterHeader("Libelle", evenementFilter::setLibelle));
+      //headerRow.getCell(dateDebut).setComponent(createDateFilterHeader("Date début", evenementFilter::setDateDebut));
+      //headerRow.getCell(dateFin).setComponent(createDateFilterHeader("Date fin", evenementFilter::setDateFin));
     }
 
   /**
@@ -177,10 +207,10 @@ public class FormationEvenementView extends VerticalLayout implements BeforeEnte
 
   /**
    * Même principe que la fonction précédente, mais spécifiquement pour l'année, avec l'année en cours par défaut.
-   * @param filterChangeConsumer
-   * @return
+   * //@param filterChangeConsumer
+   * //@return
    */
-  private static VerticalLayout createDateFilterHeader(String labelText, Consumer<String> filterChangeConsumer) {
+  /*private static VerticalLayout createDateFilterHeader(String labelText, Consumer<String> filterChangeConsumer) {
     // label au dessus du champ
     Label label = new Label(labelText);
     label.getStyle().set("padding-top", "var(--lumo-space-m)")
@@ -188,13 +218,13 @@ public class FormationEvenementView extends VerticalLayout implements BeforeEnte
     // champ pour le filtrage
     DatePicker date = new DatePicker();
     // changeMode en EAGER (direct) car on a déjà les données récupérées, donc pas d'intérêt à rendre LAZY car on filtre, on ne recherche pas
-    /*date.setValueChangeMode(ValueChangeMode.EAGER);
+    date.setValueChangeMode(ValueChangeMode.EAGER);
     textField.setClearButtonVisible(true);
     textField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
     textField.setWidthFull();
     textField.getStyle().set("max-width", "100%");
-    textField.addValueChangeListener(e -> filterChangeConsumer.accept(e.getValue()));*/
-   // date.addValueChangeListener(e -> filterChangeConsumer.accept(e.getValue()));
+    textField.addValueChangeListener(e -> filterChangeConsumer.accept(e.getValue()));
+    // date.addValueChangeListener(e -> filterChangeConsumer.accept(e.getValue()));
 
     // on met l'année en cours par défaut dans le champ de filtre de l'année
     date.setWidthFull();
@@ -205,12 +235,12 @@ public class FormationEvenementView extends VerticalLayout implements BeforeEnte
     layout.getThemeList().add("spacing-xs");
 
     return layout;
-  }
+  }*/
 
     private static class EvenementFilter {
       private final GridListDataView<Evenement> dataView;
 
-      private String description;
+      private String libelle;
       private String dateDebut;
       private String dateFin;
 
@@ -220,8 +250,8 @@ public class FormationEvenementView extends VerticalLayout implements BeforeEnte
         this.dataView.addFilter(this::test);
       }
 
-      public void setDescription(String description) {
-        this.description = description;
+      public void setLibelle(String libelle) {
+        this.libelle = libelle;
         this.dataView.refreshAll();
       }
 
@@ -236,20 +266,8 @@ public class FormationEvenementView extends VerticalLayout implements BeforeEnte
       }
 
       public boolean test(Evenement evenement) {
-        boolean matchesDescription = matches(evenement.getDescription(), description);
-        boolean matchesDateDebut;
-        boolean matchesDateFin;
-        if (evenement.getDateDebut() != null) {
-          matchesDateDebut = matches(evenement.getDateDebut().toString(), dateDebut);
-        } else {
-          matchesDateDebut = matches("", dateDebut);
-        }
-        if (evenement.getDateFin() != null) {
-          matchesDateFin = matches(evenement.getDateFin().toString(), dateFin);
-        } else {
-          matchesDateFin = matches("", dateFin);
-        }
-        return matchesDescription && matchesDateDebut && matchesDateFin;
+        boolean matchesLibelle = matches(evenement.getLibelle(), libelle);
+        return matchesLibelle;
       }
 
       private boolean matches(String value, String searchTerm) {
@@ -257,7 +275,6 @@ public class FormationEvenementView extends VerticalLayout implements BeforeEnte
                 .toLowerCase().contains(searchTerm.toLowerCase());
       }
     }
-
 
     public void showErrorMessage(String message) {
       this.remove(libelleFormation, evenementGrid);

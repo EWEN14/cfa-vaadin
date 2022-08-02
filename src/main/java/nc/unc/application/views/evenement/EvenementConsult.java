@@ -98,6 +98,10 @@ public class EvenementConsult extends Dialog {
     formations.setReadOnly(true);
   }
 
+  public void hideDeleteButton() {
+    delete.setVisible(false);
+  }
+
   // Event "global" (class mère), qui étend les deux events ci-dessous, dont le but est de fournir l'évenement
   // que l'on consulte dans le formulaire.
   public static abstract class EvenementConsultFormEvent extends ComponentEvent<EvenementConsult> {

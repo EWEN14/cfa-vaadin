@@ -6,6 +6,7 @@ import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Footer;
@@ -37,6 +38,7 @@ import nc.unc.application.views.user.UserView;
 /**
  * The main view is a top-level placeholder for other views.
  */
+@CssImport("./styles/evenement.css")
 public class MainLayout extends AppLayout {
 
     /**
@@ -123,7 +125,7 @@ public class MainLayout extends AppLayout {
 
     private Nav createNavigation() {
         Nav nav = new Nav();
-        nav.addClassNames("border-b", "border-contrast-10", "flex-grow", "overflow-auto");
+        nav.addClassNames("menu", "border-b", "border-contrast-10", "flex-grow", "overflow-auto");
         nav.getElement().setAttribute("aria-labelledby", "views");
 
         // Wrap the links in a list; improves accessibility

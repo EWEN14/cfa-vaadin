@@ -1,8 +1,12 @@
 package nc.unc.application.data.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -35,6 +39,15 @@ public class Evenement implements Cloneable {
           joinColumns = @JoinColumn(name = "evenement_id"),
           inverseJoinColumns = @JoinColumn(name = "formations_id"))
   private Set<Formation> formations;
+
+  @CreationTimestamp
+  @Column(name = "created_at")
+  private LocalDateTime created_at;
+
+  @UpdateTimestamp
+  @Column(name = "updated_at")
+  private LocalDateTime updated_at;
+
 
   public Long getId() {
     return id;
@@ -82,6 +95,22 @@ public class Evenement implements Cloneable {
 
   public void setFormations(Set<Formation> formations) {
     this.formations = formations;
+  }
+
+  public LocalDateTime getCreated_at() {
+    return created_at;
+  }
+
+  public void setCreated_at(LocalDateTime created_at) {
+    this.created_at = created_at;
+  }
+
+  public LocalDateTime getUpdated_at() {
+    return updated_at;
+  }
+
+  public void setUpdated_at(LocalDateTime updated_at) {
+    this.updated_at = updated_at;
   }
 
   // Autres méthodes

@@ -26,6 +26,7 @@ import nc.unc.application.security.AuthenticatedUser;
 import nc.unc.application.views.about.AboutView;
 import nc.unc.application.views.contrat.ContratView;
 import nc.unc.application.views.entreprise.EntrepriseView;
+import nc.unc.application.views.entretienIndividuelle.EntretienIndividuelView;
 import nc.unc.application.views.etudiant.EtudiantView;
 import nc.unc.application.views.evenement.EvenementView;
 import nc.unc.application.views.formation.FormationListView;
@@ -163,6 +164,8 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("Entreprises", "las la-building", EntrepriseView.class),
 
                 new MenuItemInfo("Tuteurs", "las la-user-tie", TuteurView.class),
+
+                new MenuItemInfo("Entretien individuel", "las la-user", EntretienIndividuelView.class),
 
                 new MenuItemInfo("Contrats", "las la-file-contract", ContratView.class),
 

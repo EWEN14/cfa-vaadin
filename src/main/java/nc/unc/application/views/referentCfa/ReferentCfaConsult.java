@@ -40,7 +40,7 @@ public class ReferentCfaConsult extends Dialog{
   private final DatePicker dateMiseAJour = new DatePicker();
 
   private final Button close = new Button("Fermer");
-  private final Button delete = new Button("Supprimer le référent pédagogique");
+  private final Button delete = new Button("Supprimer le référent CFA");
 
 
 

@@ -12,7 +12,8 @@ import java.util.List;
 public interface EntretienIndividuelRepository extends JpaRepository<EntretienIndividuel, Long> {
 
   @Query("select e from EntretienIndividuel e " +
-          "where lower(e.observations) like lower(concat('%', :searchTerm, '%')) " +
+          "where lower(e.etudiant.nomEtudiant) like lower(concat('%', :searchTerm, '%')) " +
+          "or lower(e.etudiant.prenomEtudiant) like lower(concat('%', :searchTerm, '%')) " +
           "order by e.date desc")
   List<EntretienIndividuel> search(@Param("searchTerm") String searchTerm);
 

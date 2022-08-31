@@ -114,7 +114,7 @@ public class EntretienIndividuelView extends VerticalLayout {
     }
 
     private HorizontalLayout getToolbar() {
-        filterText.setPlaceholder("Recherche par nom ou prénom...");
+        filterText.setPlaceholder("Recherche par étudiant...");
         filterText.setClearButtonVisible(true); // affiche la petite croix dans le champ pour effacer
         // permet de rendre Lazy le changement de valeur, la recherche ne se fera donc que après que l'utilisateur
         // a arrêté de taper dans le champ depuis un petit moment.

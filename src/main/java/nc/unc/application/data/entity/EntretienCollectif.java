@@ -4,14 +4,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "entretien_individuelle")
-public class EntretienIndividuel implements Cloneable{
+public class EntretienCollectif implements Cloneable{
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id", nullable = false)
@@ -22,7 +21,7 @@ public class EntretienIndividuel implements Cloneable{
   private LocalDate date;
 
   @Column(name = "observations", length = 15000)
-  private String observations_entretien_individuel;
+  private String observations;
 
   @CreationTimestamp
   @Column(name = "created_at")
@@ -32,17 +31,17 @@ public class EntretienIndividuel implements Cloneable{
   @Column(name = "updated_at")
   private LocalDateTime updated_at;
 
-  @NotNull(message = "L'étudiant ne peut pas être null")
+  @NotNull(message = "La formation ne peut pas être null")
   @ManyToOne(cascade = CascadeType.MERGE)
-  @JoinColumn(name = "id_etudiant")
-  private Etudiant etudiant;
+  @JoinColumn(name = "id_formation")
+  private Formation formation;
 
   @NotNull(message = "Le référent cfa ne peut pas être null")
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "id_referent_cfa")
   private ReferentCfa referentCfa;
 
-  public EntretienIndividuel(){
+  public EntretienCollectif(){
 
   }
 
@@ -62,12 +61,12 @@ public class EntretienIndividuel implements Cloneable{
     this.date = date;
   }
 
-  public String getObservations_entretien_individuel() {
-    return observations_entretien_individuel;
+  public String getObservations() {
+    return observations;
   }
 
-  public void setObservations_entretien_individuel(String observations_entretien_individuel) {
-    this.observations_entretien_individuel = observations_entretien_individuel;
+  public void setObservations(String observations) {
+    this.observations = observations;
   }
 
   public LocalDateTime getCreated_at() {
@@ -86,12 +85,12 @@ public class EntretienIndividuel implements Cloneable{
     this.updated_at = updated_at;
   }
 
-  public Etudiant getEtudiant() {
-    return etudiant;
+  public Formation getFormation() {
+    return formation;
   }
 
-  public void setEtudiant(Etudiant etudiant) {
-    this.etudiant = etudiant;
+  public void setFormation(Formation formation) {
+    this.formation = formation;
   }
 
   public ReferentCfa getReferentCfa() {

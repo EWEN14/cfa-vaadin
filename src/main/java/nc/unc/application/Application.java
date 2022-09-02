@@ -16,7 +16,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  *
  */
 @SpringBootApplication
-@Theme(value = "cfavaadin")
+@Theme(value = "cfavaadin-custom")
 @PWA(name = "cfa_vaadin", shortName = "cfa_vaadin", offlineResources = {"images/logo.png"})
 @NpmPackage(value = "line-awesome", version = "1.3.0")
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator {

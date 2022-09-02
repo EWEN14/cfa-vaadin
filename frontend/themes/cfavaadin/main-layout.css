@@ -34,3 +34,8 @@
   align-items: center;
   display: flex;
 }
+
+
+vaadin-login-overlay-wrapper, :host{
+  background-image: url("/img/bg-login.png");
+}

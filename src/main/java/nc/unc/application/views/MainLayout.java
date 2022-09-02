@@ -8,15 +8,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.NpmPackage;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Footer;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Header;
-import com.vaadin.flow.component.html.ListItem;
-import com.vaadin.flow.component.html.Nav;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.html.UnorderedList;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
@@ -116,10 +108,9 @@ public class MainLayout extends AppLayout {
     }
 
     private Component createDrawerContent() {
-        H2 appName = new H2("CFA");
-        appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
 
-        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(appName,
+
+        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(
                 createNavigation(), createFooter());
         section.addClassNames("flex", "flex-col", "items-stretch", "max-h-full", "min-h-full");
         return section;
@@ -127,13 +118,25 @@ public class MainLayout extends AppLayout {
 
     private Nav createNavigation() {
         Nav nav = new Nav();
+        Div div = new Div();
+
+
+        Image image = new Image("images/CFA.jpg","logo cfa");
+        div.add(image);
+        div.addClassNames("cfa-container-icon");
+
+        image.addClassNames("cfa-icon");
+        nav.add(div);
         nav.addClassNames("menu", "border-b", "border-contrast-10", "flex-grow", "overflow-auto");
         nav.getElement().setAttribute("aria-labelledby", "views");
+
+
 
         // Wrap the links in a list; improves accessibility
         UnorderedList list = new UnorderedList();
         list.addClassNames("list-none", "m-0", "p-0");
         nav.add(list);
+
 
         for (MenuItemInfo menuItem : createMenuItems()) {
             // on ajoute à la navbar les éléments auxquels l'utilisateur a le droit d'accéder
@@ -184,7 +187,7 @@ public class MainLayout extends AppLayout {
             User user = maybeUser.get();
 
             Span name = new Span(user.getPrenom()+" "+user.getNom());
-            name.addClassNames("font-medium", "text-s", "text-secondary");
+            name.addClassNames("font-medium", "text-s", "text-secondary","text-center");
 
             ContextMenu userMenu = new ContextMenu(name);
             userMenu.setOpenOnClick(true);

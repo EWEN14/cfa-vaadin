@@ -1,0 +1,40 @@
+html, :host{
+    --lumo-base-color: none;
+    background: unset;
+}
+vaadin-login-overlay-wrapper, :host{
+    background-image: url("./img/bg-login.png");
+}
+vaadin-login-form-wrapper, host{
+    background: white;
+}
+li{
+    list-style: none;
+    text-align: center;
+}
+a{
+    color: #1d1d2b;
+    font-size: 1.5rem;
+}
+.cfa-icon{
+    width: 12rem;
+    margin: 1rem;
+    align-self: center;
+    justify-self: center;
+}
+ul{
+    padding: 0 1rem;
+}
+.text-center{
+    text-align: center;
+}
+.cfa-container-icon{
+    justify-content: center;
+    display: flex;
+}
+div [content], :host{
+    background: red;
+}
+th{
+    background: white;
+}

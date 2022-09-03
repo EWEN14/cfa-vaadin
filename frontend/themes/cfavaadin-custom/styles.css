@@ -1,8 +1,8 @@
 html, :host{
-    --lumo-base-color: none;
     background: unset;
 }
 vaadin-login-overlay-wrapper, :host{
+    --lumo-base-color: none;
     background-image: url("./img/bg-login.png");
 }
 vaadin-login-form-wrapper, host{
@@ -14,7 +14,7 @@ li{
 }
 a{
     color: #1d1d2b;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 }
 .cfa-icon{
     width: 12rem;
@@ -37,4 +37,19 @@ div [content], :host{
 }
 th{
     background: white;
+}
+[part="content"], :host{
+    --lumo-base-color: white !important;
+    background: var(--lumo-base-color);
+}
+h1, :host{
+    text-align: center;
+}
+header{
+    width: 100%;
+}
+.items-center{
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
 }

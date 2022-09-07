@@ -1,3 +1,5 @@
+@import url('line-awesome/dist/line-awesome/css/line-awesome.min.css');
+
 html, :host{
     background: unset;
 }
@@ -10,11 +12,12 @@ vaadin-login-form-wrapper, host{
 }
 li{
     list-style: none;
-    text-align: center;
+    margin: 0.8rem 0;
 }
 a{
-    color: #1d1d2b;
+    color: white;
     font-size: 1.2rem;
+    padding-left: 0.5rem;
 }
 .cfa-icon{
     width: 8rem;
@@ -53,6 +56,34 @@ header{
     align-items: center;
     justify-content: center;
 }
-[content=""]{
-    background: red;
+[slot="drawer"], :host{
+    background: #2A2A2A !important;
+    min-height: 100%;
+}
+[slot="drawer"]:before, :host {
+    background: #2A2A2A !important;
+}
+[slot="drawer"] nav, :host{
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    background: #2A2A2A !important;
+}
+[slot="drawer"] nav ul, :host{
+    margin: auto !important;
+    background: #2A2A2A !important;
+}
+[slot="drawer"] footer, :host{
+    margin-top: 6rem;
+    display: flex;
+    flex-direction: column;
+}
+[slot="drawer"] footer span{
+    color: white;
+    background: #002BD8;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+}
+.link-formation a{
+    color: #2A2A2A !important;
 }

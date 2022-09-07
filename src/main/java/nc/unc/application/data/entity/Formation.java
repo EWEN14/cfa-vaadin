@@ -51,7 +51,7 @@ public class Formation implements Cloneable {
   private Integer semainesFormation;
 
   @Column(name = "lieu_formation")
-  private String lieuFormation;
+    private String lieuFormation;
 
   @Column(name = "observations", length = 15000)
   private String observations;

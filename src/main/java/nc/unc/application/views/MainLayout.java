@@ -9,6 +9,7 @@ import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
@@ -121,7 +122,7 @@ public class MainLayout extends AppLayout {
         Div div = new Div();
 
 
-        Image image = new Image("images/CFA.jpg","logo cfa");
+        Image image = new Image("images/CFA.png","logo cfa");
         div.add(image);
         div.addClassNames("cfa-container-icon");
 
@@ -160,9 +161,9 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Formations", "las la-award", FormationListView.class),
 
-                new MenuItemInfo("Evenements", "las la-history", EvenementView.class),
+                new MenuItemInfo("Evénements", "las la-history", EvenementView.class),
 
-                new MenuItemInfo("Referent CFA", "las la-user", ReferentCfaView.class),
+                new MenuItemInfo("Référent CFA", "las la-user", ReferentCfaView.class),
 
                 new MenuItemInfo("Entreprises", "las la-building", EntrepriseView.class),
 

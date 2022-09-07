@@ -3,6 +3,7 @@ package nc.unc.application.views.formation;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -49,9 +50,22 @@ public class FormationListView extends VerticalLayout {
     cardLayout.setMargin(true);
 
     H3 libelleFormation = new H3(formation.getLibelleFormation());
+    Span nbHeure = new Span();
+    Span nbSemaineFormation = new Span();
+    Span nbSemaineEntreprise = new Span();
+    if (formation.getHeuresFormation() != null) {
+      nbHeure.add("Nombre d'heures dans l'année : " + formation.getHeuresFormation().toString() + " heures");
+    }
+    if(formation.getSemainesFormation() != null){
+      nbSemaineFormation.add("Nombre de semaine de formation : " + formation.getSemainesFormation() + " semaines");
+    }
+    if(formation.getSemainesEntreprise() != null){
+      nbSemaineEntreprise.add("Nombre de semaine d'entreprise : " + formation.getSemainesEntreprise() + "semaines");
+    }
+
     String prenomNomDirecteurFormation = formation.getReferentPedagogique() != null ? formation.getReferentPedagogique().getPrenomReferentPedago()
-            +" "+formation.getReferentPedagogique().getNomReferentPedago() : "";
-    Span directeurFormation = new Span("Directeur de formation : "+ prenomNomDirecteurFormation);
+            + " " + formation.getReferentPedagogique().getNomReferentPedago() : "";
+    Span directeurFormation = new Span("Directeur de formation : " + prenomNomDirecteurFormation);
 
     // bouton de consultation de la formation
     Button consultFormationButton = new Button(VaadinIcon.EYE.create());
@@ -67,8 +81,11 @@ public class FormationListView extends VerticalLayout {
     Div lienPageFormation = new Div(new RouterLink("Voir les étudiants", FormationEtudiantView.class, new RouteParameters("idFormation", String.valueOf(formation.getId()))));
     Div lienPageEvenements = new Div(new RouterLink("Voir les évènements", FormationEvenementView.class, new RouteParameters("idFormation", String.valueOf(formation.getId()))));
 
+    lienPageEvenements.addClassNames("link-formation");
+    lienPageFormation.addClassNames("link-formation");
+
     VerticalLayout insideCardLayout = new VerticalLayout();
-    insideCardLayout.add(libelleFormation, directeurFormation, buttonsContainer, lienPageFormation, lienPageEvenements);
+    insideCardLayout.add(libelleFormation, directeurFormation, nbSemaineFormation, nbSemaineEntreprise, nbHeure, buttonsContainer, lienPageFormation, lienPageEvenements);
 
     // ajout des éléments dans l'horizontal layout
     cardLayout.add(insideCardLayout);
@@ -105,6 +122,7 @@ public class FormationListView extends VerticalLayout {
 
   /**
    * Sauvegarde d'une nouvelle formation
+   *
    * @param event
    */
   private void saveFormation(FormationNewOrEdit.SaveEvent event) {
@@ -119,11 +137,12 @@ public class FormationListView extends VerticalLayout {
     // mise à jour de la VitualList et fermeture de la modale
     updateVirtualList();
     closeNewOrEditModal();
-    Notification.show("Formation "+formationtoSave.getCodeFormation()+" créée.");
+    Notification.show("Formation " + formationtoSave.getCodeFormation() + " créée.");
   }
 
   /**
    * Modification d'une formation
+   *
    * @param event
    */
   private void saveEditedFormation(FormationNewOrEdit.SaveEditedEvent event) {
@@ -136,7 +155,7 @@ public class FormationListView extends VerticalLayout {
 
     updateVirtualList();
     closeNewOrEditModal();
-    Notification.show("Formation "+ formationToEdit.getCodeFormation() + " modifiée.");
+    Notification.show("Formation " + formationToEdit.getCodeFormation() + " modifiée.");
   }
 
   private void editFormationModal(Formation formation) {

@@ -83,6 +83,7 @@ header{
     background: #002BD8;
     padding: 1rem 2rem;
     border-radius: 1rem;
+    cursor: pointer;
 }
 .link-formation a{
     color: #2A2A2A !important;

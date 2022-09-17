@@ -203,6 +203,10 @@ public class ContratConsult extends Dialog {
     lienPreview.setTarget("_blank");
     lienDownloadPdf.setTarget("_blank");
 
+    // ajout des classes sur les liens
+    lienPreview.addClassNames("contrat-link");
+    lienDownloadPdf.addClassNames("contrat-link");
+
     // on met les liens dans des Div, qu'on met ensuite dans notre HorizontalLayout
     lienContainer.add(new Div(lienPreview), new Div(lienDownloadPdf));
 

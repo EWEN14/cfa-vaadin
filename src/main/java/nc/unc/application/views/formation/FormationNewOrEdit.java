@@ -7,6 +7,10 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -27,6 +31,8 @@ public class FormationNewOrEdit extends Dialog {
   private Formation formation;
   private Formation cloneFormation;
 
+  private FormationListView formationListView;
+
   FormLayout form = new FormLayout();
   TextField libelleFormation = new TextField("Libellé de la formation");
   TextField codeFormation = new TextField("Code de la formation");
@@ -40,15 +46,17 @@ public class FormationNewOrEdit extends Dialog {
   IntegerField dureeHebdomadaireTravail = new IntegerField("Durée hebdomadaire de travail");
   TextArea observations = new TextArea("Observations");
   ComboBox<ReferentPedagogique> referentPedagogique = new ComboBox<>("Responsable de la formation");
+  Icon addReferentButton = new Icon(VaadinIcon.PLUS);
 
   Binder<Formation> binder = new BeanValidationBinder<>(Formation.class);
 
   Button save = new Button("Sauvegarder");
   Button close = new Button("Fermer");
 
-  public FormationNewOrEdit(List<ReferentPedagogique> referentPedagogiqueList) {
+  public FormationNewOrEdit(List<ReferentPedagogique> referentPedagogiqueList, FormationListView formationListView) {
     this.setWidth("85vw");
 
+    this.formationListView = formationListView;
     binder.bindInstanceFields(this);
 
     niveauCertificationProfessionnelle.setLabel("Niveau de la certification professionnelle");
@@ -58,13 +66,22 @@ public class FormationNewOrEdit extends Dialog {
 
     lieuFormation.setItems(Commune.getCommunesStr());
 
+    FlexLayout content = new FlexLayout(referentPedagogique);
+    content.setFlexGrow(2, referentPedagogique);
+    content.setSizeFull();
+
+    HorizontalLayout layoutReferent = new HorizontalLayout();
+    layoutReferent.setSpacing(false);
+    layoutReferent.add(content,addReferentButton);
+    layoutReferent.setAlignItems(FlexComponent.Alignment.CENTER);
+
     referentPedagogique.setItems(referentPedagogiqueList);
     referentPedagogique.setItemLabelGenerator(rp -> rp.getPrenomReferentPedago() + " " + rp.getNomReferentPedago());
     referentPedagogique.setClearButtonVisible(true);
 
     form.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle,
             typeEmploiExerce, semainesEntreprise, heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail,
-            referentPedagogique, observations, createButtonsLayout());
+            layoutReferent, observations, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(form);
@@ -77,6 +94,9 @@ public class FormationNewOrEdit extends Dialog {
     // évènements save, close
     save.addClickListener(event -> validateAndSave());
     close.addClickListener(event -> fireEvent(new FormationNewOrEdit.CloseEvent(this)));
+
+    //Evènement sur le click sur le bouton ajouter un tuteur
+    addReferentButton.addClickListener(click -> formationListView.addReferent());
 
     // met le bouton de sauvegarde actif que si le binder est valide
     binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
@@ -112,6 +132,10 @@ public class FormationNewOrEdit extends Dialog {
     } catch (ValidationException e) {
       e.printStackTrace();
     }
+  }
+
+  public void modifyReferents(List<ReferentPedagogique> referentPedagogiqueList){
+    this.referentPedagogique.setItems(referentPedagogiqueList);
   }
 
   public static abstract class FormationFormEvent extends ComponentEvent<FormationNewOrEdit> {

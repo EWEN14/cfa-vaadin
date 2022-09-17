@@ -15,11 +15,14 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteParameters;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.Formation;
+import nc.unc.application.data.entity.ReferentPedagogique;
 import nc.unc.application.data.service.FormationService;
 import nc.unc.application.data.service.LogEnregistrmentService;
 import nc.unc.application.data.service.ReferentPedagogiqueService;
 import nc.unc.application.views.MainLayout;
+import nc.unc.application.views.referentPedagogique.ReferentPedagogiqueNewOrEdit;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +43,7 @@ public class FormationListView extends VerticalLayout {
   // modales
   FormationConsult modalConsult;
   FormationNewOrEdit modalNewOrEdit;
+  ReferentPedagogiqueNewOrEdit referentNewOrEdit;
 
   VirtualList<Formation> cardsFormations = new VirtualList<>();
   Button addFormationButton = new Button("Nouvelle Formation");
@@ -106,10 +110,14 @@ public class FormationListView extends VerticalLayout {
     // et on lui définit son rendu graphique avec notre petit composant formationCardRenderer
     cardsFormations.setRenderer(formationCardRenderer);
 
-    modalNewOrEdit = new FormationNewOrEdit(referentPedagogiqueService.findAllReferentPedagogique(""));
+    modalNewOrEdit = new FormationNewOrEdit(referentPedagogiqueService.findAllReferentPedagogique(""), this);
     modalNewOrEdit.addListener(FormationNewOrEdit.SaveEvent.class, this::saveFormation);
     modalNewOrEdit.addListener(FormationNewOrEdit.SaveEditedEvent.class, this::saveEditedFormation);
     modalNewOrEdit.addListener(FormationNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
+
+    referentNewOrEdit = new ReferentPedagogiqueNewOrEdit();
+    referentNewOrEdit.addListener(ReferentPedagogiqueNewOrEdit.CloseEvent.class, e -> closeNewOrEditModalReferent());
+    referentNewOrEdit.addListener(ReferentPedagogiqueNewOrEdit.SaveEvent.class, this::saveReferentPedagogique);
 
     modalConsult = new FormationConsult();
     modalConsult.addListener(FormationConsult.CloseEvent.class, e -> closeConsultModal());
@@ -168,6 +176,16 @@ public class FormationListView extends VerticalLayout {
     }
   }
 
+  private void editReferentModal(ReferentPedagogique referentPedagogique) {
+    if (referentPedagogique == null) {
+      closeNewOrEditModalReferent();
+    } else {
+      referentNewOrEdit.setReferentPedagogique(referentPedagogique);
+      referentNewOrEdit.open();
+      addClassName("editing");
+    }
+  }
+
   void addFormation() {
     // appel de la fonction d'edition de la formation, en passant une nouvelle formation
     editFormationModal(new Formation());
@@ -195,4 +213,33 @@ public class FormationListView extends VerticalLayout {
   public void updateVirtualList() {
     cardsFormations.setItems(formationService.findAllFormations(""));
   }
+
+  public void addReferent(){
+    closeNewOrEditModal();
+    editReferentModal(new ReferentPedagogique());
+  }
+
+  //Sauvegarder un référent pédagogique
+  private void saveReferentPedagogique(ReferentPedagogiqueNewOrEdit.SaveEvent event) {
+    ReferentPedagogique referentPedagogique = event.getReferentPedagogique();
+
+    referentPedagogique.setNomReferentPedago(referentPedagogique.getNomReferentPedago().toUpperCase());
+
+    referentPedagogiqueService.saveReferentPedagogique(referentPedagogique);
+
+    logEnregistrmentService.saveLogAjoutString(referentPedagogique.toString());
+
+    closeNewOrEditModalReferent();
+
+    modalNewOrEdit.modifyReferents(referentPedagogiqueService.findAllReferentPedagogique(null));
+    Notification.show(referentPedagogique.getPrenomReferentPedago() + " " + referentPedagogique.getNomReferentPedago() + " créé(e).");
+  }
+
+
+  private void closeNewOrEditModalReferent() {
+    referentNewOrEdit.setReferentPedagogique(null);
+    referentNewOrEdit.close();
+  }
+
 }
+

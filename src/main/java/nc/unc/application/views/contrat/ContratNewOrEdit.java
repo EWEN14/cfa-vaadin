@@ -48,8 +48,6 @@ public class ContratNewOrEdit extends Dialog {
   ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
 
   HorizontalLayout layoutTuteur = new HorizontalLayout();
-  VerticalLayout plus = new VerticalLayout();
-  VerticalLayout tuteurs = new VerticalLayout();
   ComboBox<Tuteur> tuteur = new ComboBox<>("Tuteur");
   Icon addTuteurButton = new Icon(VaadinIcon.PLUS);
 
@@ -176,12 +174,12 @@ public class ContratNewOrEdit extends Dialog {
     // numéro de l'avenant en ReadOnly, car à ne pas modifier, on le présente juste à caractère informatif
     numeroAvenant.setReadOnly(true);
 
-    // ajout des éléments au formulaire principal
     FlexLayout content = new FlexLayout(tuteur);
     content.setFlexGrow(2, tuteur);
     content.setSizeFull();
     layoutTuteur.setSpacing(false);
     layoutTuteur.add(content,addTuteurButton);
+
     layoutTuteur.setAlignItems(FlexComponent.Alignment.CENTER);
 
     addTuteurButton.addClassNames("tuteurcontrat-button");

@@ -34,7 +34,7 @@ public class ReferentCfaConsult extends Dialog{
   private final TextField prenomReferentCfa = new TextField("Prénom");
   private final IntegerField telephoneReferentCfa = new IntegerField("Téléphone");
   private final EmailField emailReferentCfa = new EmailField("Email");
-  private final Select<Civilite> civiliteReferentCfa = new Select<>(Civilite.values());
+  private final Select<Civilite> civiliteReferentCfa = new Select<>();
   Binder<ReferentCfa> referentCfaBinder = new BeanValidationBinder<>(ReferentCfa.class);
   private final DatePicker dateCreation = new DatePicker();
   private final DatePicker dateMiseAJour = new DatePicker();
@@ -54,6 +54,7 @@ public class ReferentCfaConsult extends Dialog{
     setAllFieldsToReadOnly();
 
     civiliteReferentCfa.setLabel("Civilité");
+    civiliteReferentCfa.setItems(Civilite.values());
 
     //Labels des dates de création et mise à jour du referrent
     dateCreation.setLabel("Date de création");

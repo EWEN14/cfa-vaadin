@@ -1,4 +1,4 @@
-package nc.unc.application.views.entretienIndividuelle;
+package nc.unc.application.views.entretienCollectif;
 
 
 import com.vaadin.flow.component.button.Button;
@@ -13,14 +13,13 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import nc.unc.application.data.entity.EntretienCollectif;
 import nc.unc.application.data.entity.EntretienIndividuel;
-import nc.unc.application.data.entity.Tuteur;
-import nc.unc.application.data.enums.Sexe;
 import nc.unc.application.data.service.*;
 import nc.unc.application.views.ConfirmDelete;
 import nc.unc.application.views.MainLayout;
-import nc.unc.application.views.tuteur.TuteurConsult;
-import nc.unc.application.views.tuteur.TuteurNewOrEdit;
+import nc.unc.application.views.entretienIndividuelle.EntretienIndividuelConsult;
+import nc.unc.application.views.entretienIndividuelle.EntretienIndividuelNewOrEdit;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -28,50 +27,50 @@ import javax.annotation.security.PermitAll;
 
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests
-@Route(value = "entretiensIndividuels", layout = MainLayout.class) // inclusion du MainLayout (header + nav)
-@PageTitle("Entretiens Individuels | CFA") // title de la page
+@Route(value = "entretiensCollectifs", layout = MainLayout.class) // inclusion du MainLayout (header + nav)
+@PageTitle("Entretiens Collectifs | CFA") // title de la page
 @PermitAll // tous les utilisateurs connectés peuvent aller sur cette page
-public class EntretienIndividuelView extends VerticalLayout {
+public class EntretienCollectifView extends VerticalLayout {
 
     // Les attributs de notre vue
-    Grid<EntretienIndividuel> grid = new Grid<>(EntretienIndividuel.class, false);
+    Grid<EntretienCollectif> grid = new Grid<>(EntretienCollectif.class, false);
     TextField filterText = new TextField();
     Button addEntretienButton;
 
-    EntretienIndividuel entretienMaybeToDelete;
+    EntretienCollectif entretienMaybeToDelete;
 
-    EntretienIndividuelNewOrEdit entretienModal;
-    EntretienIndividuelConsult entretienModalConsult;
+    EntretienCollectifNewOrEdit entretienModal;
+    EntretienCollectifConsult entretienModalConsult;
     ConfirmDelete confirmDelete;
 
-    private EntretienIndividuelService entretienIndividuelService;
+    private EntretienCollectifService entretienCollectifService;
     private LogEnregistrmentService logEnregistrmentService;
     private ReferentCfaService referentCfaService;
-    private EtudiantService etudiantService;
+    private FormationService formationService;
 
-    public EntretienIndividuelView(LogEnregistrmentService logEnregistrmentService, EntretienIndividuelService entretienIndividuelService, ReferentCfaService referentCfaService, EtudiantService etudiantService){
+    public EntretienCollectifView(LogEnregistrmentService logEnregistrmentService, EntretienCollectifService entretienCollectifService, ReferentCfaService referentCfaService, FormationService formationService){
 
-        this.entretienIndividuelService = entretienIndividuelService;
+        this.entretienCollectifService = entretienCollectifService;
         this.logEnregistrmentService = logEnregistrmentService;
-        this.etudiantService = etudiantService;
+        this.formationService = formationService;
         this.referentCfaService = referentCfaService;
 
         addClassName("list-view");
         setSizeFull(); // permet que le verticalLayout prenne tout l'espace sur l'écran (pas de "vide" en bas)
         configureGrid(); // configuration de la grille (colonnes, données...)
 
-        entretienModalConsult = new EntretienIndividuelConsult(etudiantService, referentCfaService, entretienIndividuelService);
+        entretienModalConsult = new EntretienCollectifConsult(formationService, referentCfaService, entretienCollectifService);
         // On définit que les différents events (EntretienIndividuelForm.fooEvent) vont déclencher une fonction
-        // contenant l'objet tuteur (dans le cas du save ou delete).
-        entretienModalConsult.addListener(EntretienIndividuelConsult.DeleteEvent.class, this::transfertEntretienFromEventToDelete);
-        entretienModalConsult.addListener(EntretienIndividuelConsult.CloseEvent.class, e -> closeConsultModal());
+        // contenant l'objet entretien (dans le cas du save ou delete).
+        entretienModalConsult.addListener(EntretienCollectifConsult.DeleteEvent.class, this::transfertEntretienFromEventToDelete);
+        entretienModalConsult.addListener(EntretienCollectifConsult.CloseEvent.class, e -> closeConsultModal());
 
-        entretienModal = new EntretienIndividuelNewOrEdit(referentCfaService.findAllReferentCfa(null), etudiantService.findAllEtudiants(null));
-        entretienModal.addListener(EntretienIndividuelNewOrEdit.SaveEvent.class, this::saveEntretien);
-        entretienModal.addListener(EntretienIndividuelNewOrEdit.SaveEditedEvent.class, this::saveEditedEntretien);
-        entretienModal.addListener(EntretienIndividuelNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
+        entretienModal = new EntretienCollectifNewOrEdit(referentCfaService.findAllReferentCfa(null), formationService.findAllFormations(null));
+        entretienModal.addListener(EntretienCollectifNewOrEdit.SaveEvent.class, this::saveEntretien);
+        entretienModal.addListener(EntretienCollectifNewOrEdit.SaveEditedEvent.class, this::saveEditedEntretien);
+        entretienModal.addListener(EntretienCollectifNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
 
-        confirmDelete = new ConfirmDelete("cet entretien individuel");
+        confirmDelete = new ConfirmDelete("cet entretien collectif");
         confirmDelete.addListener(ConfirmDelete.DeleteEventGrid.class, this::deleFromConfirmDelete);
 
         // ajout d'un FlexLayout qui place la grille
@@ -94,27 +93,27 @@ public class EntretienIndividuelView extends VerticalLayout {
     private void configureGrid() {
         grid.addClassNames("entretien-grid");
         grid.setSizeFull();
-        grid.addColumn(entretienIndividuel -> entretienIndividuel.getDate()).setHeader("Date de l'entretien").setSortable(true);
-        grid.addColumn(entretienIndividuel -> entretienIndividuel.getEtudiant().getNomEtudiant() + ' ' + entretienIndividuel.getEtudiant().getPrenomEtudiant()).setHeader("Etudiant");
-        grid.addColumn(entretienIndividuel -> entretienIndividuel.getReferentCfa().getNomReferentCfa() + ' ' + entretienIndividuel.getReferentCfa().getPrenomReferentCfa()).setHeader("Référent CFA");
+        grid.addColumn(entretienCollectif -> entretienCollectif.getDate()).setHeader("Date de l'entretien").setSortable(true);
+        grid.addColumn(entretienCollectif -> entretienCollectif.getFormation().getLibelleFormation()).setHeader("Formation");
+        grid.addColumn(entretienCollectif -> entretienCollectif.getReferentCfa().getNomReferentCfa() + ' ' + entretienCollectif.getReferentCfa().getPrenomReferentCfa()).setHeader("Référent CFA");
         // bouton consultation entretien
-        grid.addComponentColumn(entretienIndividuel -> new Button(new Icon(VaadinIcon.EYE), click -> {
-            consultEntretien(entretienIndividuel);
+        grid.addComponentColumn(entretienCollectif -> new Button(new Icon(VaadinIcon.EYE), click -> {
+            consultEntretien(entretienCollectif);
         })).setHeader("Consulter");
         // bouton édition entretien
-        grid.addComponentColumn(entretienIndividuel -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
-            editEntretien(entretienIndividuel);
+        grid.addComponentColumn(entretienCollectif -> new Button(new Icon(VaadinIcon.PENCIL), click -> {
+            editEntretien(entretienCollectif);
         })).setHeader("Éditer");
         // bouton suppression entretien
-        grid.addComponentColumn(entretienIndividuel -> new Button(new Icon(VaadinIcon.TRASH), click -> {
-            prepareToDelete(entretienIndividuel);
+        grid.addComponentColumn(entretienCollectif -> new Button(new Icon(VaadinIcon.TRASH), click -> {
+            prepareToDelete(entretienCollectif);
         })).setHeader("Supprimer");
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
 
     private HorizontalLayout getToolbar() {
-        filterText.setPlaceholder("Recherche par étudiant...");
+        filterText.setPlaceholder("Recherche par formation...");
         filterText.setClearButtonVisible(true); // affiche la petite croix dans le champ pour effacer
         // permet de rendre Lazy le changement de valeur, la recherche ne se fera donc que après que l'utilisateur
         // a arrêté de taper dans le champ depuis un petit moment.
@@ -132,13 +131,13 @@ public class EntretienIndividuelView extends VerticalLayout {
     }
 
     // sauvegarde de l'entretien(nouveau)
-    private void saveEntretien(EntretienIndividuelNewOrEdit.SaveEvent event) {
-        EntretienIndividuel entretienIndividuel = event.getEntretienIndividuel();
+    private void saveEntretien(EntretienCollectifNewOrEdit.SaveEvent event) {
+        EntretienCollectif entretienCollectif = event.getEntretienCollectif();
         // sauvegarde de l'entretien
-        entretienIndividuelService.save(entretienIndividuel);
+        entretienCollectifService.save(entretienCollectif);
 
         // ajout du log d'ajout
-        logEnregistrmentService.saveLogAjoutString(entretienIndividuel.toString());
+        logEnregistrmentService.saveLogAjoutString(entretienCollectif.toString());
 
         // mise à jour de la grid, fermeture du formulaire et notification
         updateList();
@@ -147,34 +146,34 @@ public class EntretienIndividuelView extends VerticalLayout {
     }
 
     // sauvegarde du tuteur modifié
-    private void saveEditedEntretien(EntretienIndividuelNewOrEdit.SaveEditedEvent event) {
-        EntretienIndividuel entretienIndividuel = event.getEntretienIndividuel();
+    private void saveEditedEntretien(EntretienCollectifNewOrEdit.SaveEditedEvent event) {
+        EntretienCollectif entretienCollectif = event.getEntretienCollectif();
         // récupération du tuteur avant modification
-        EntretienIndividuel entretienIndividuelOriginal = event.getEntretienOriginal();
+        EntretienCollectif entretienCollectifOriginal = event.getEntretienOriginal();
 
         // sauvegarde de l'entretien
-        entretienIndividuelService.save(entretienIndividuel);
+        entretienCollectifService.save(entretienCollectif);
 
         // ajout du log de modification
-        logEnregistrmentService.saveLogEditString(entretienIndividuelOriginal.toString(), entretienIndividuel.toString());
+        logEnregistrmentService.saveLogEditString(entretienCollectifOriginal.toString(), entretienCollectif.toString());
 
         updateList();
         closeNewOrEditModal();
         Notification.show("Entretien modifié(e)");
     }
 
-    private void transfertEntretienFromEventToDelete(EntretienIndividuelConsult.DeleteEvent event){
-        EntretienIndividuel entretienIndividuel = event.getEntretien();
-        deleteEntretien(entretienIndividuel);
+    private void transfertEntretienFromEventToDelete(EntretienCollectifConsult.DeleteEvent event){
+        EntretienCollectif entretienCollectif = event.getEntretien();
+        deleteEntretien(entretienCollectif);
     }
 
     // suppression de l'entretien
-    private void deleteEntretien(EntretienIndividuel entretienIndividuel) {
-        if (entretienIndividuel != null) {
-            entretienIndividuelService.delete(entretienIndividuel);
+    private void deleteEntretien(EntretienCollectif entretienCollectif) {
+        if (entretienCollectif != null) {
+            entretienCollectifService.delete(entretienCollectif);
 
             // ajout du log de suppression
-            logEnregistrmentService.saveLogDeleteString(entretienIndividuel.toString());
+            logEnregistrmentService.saveLogDeleteString(entretienCollectif.toString());
 
             updateList();
             closeConsultModal();
@@ -191,22 +190,22 @@ public class EntretienIndividuelView extends VerticalLayout {
         closeConfirmDelete();
     }
 
-    public void prepareToDelete(EntretienIndividuel entretienIndividuel){
-        entretienMaybeToDelete = entretienIndividuel;
+    public void prepareToDelete(EntretienCollectif entretienCollectif){
+        entretienMaybeToDelete = entretienCollectif;
         openConfirmDelete();
     }
 
-    public void consultEntretien(EntretienIndividuel entretienIndividuel) {
-        entretienModalConsult.setEntretien(entretienIndividuel);
+    public void consultEntretien(EntretienCollectif entretienCollectif) {
+        entretienModalConsult.setEntretien(entretienCollectif);
         entretienModalConsult.open();
     }
 
     // si entretien null, on ferme le formulaire, sinon on l'affiche (new or edit)
-    public void editEntretien(EntretienIndividuel entretienIndividuel) {
-        if (entretienIndividuel == null) {
+    public void editEntretien(EntretienCollectif entretienCollectif) {
+        if (entretienCollectif == null) {
             closeNewOrEditModal();
         } else {
-            entretienModal.setEntretienIndividuel(entretienIndividuel);
+            entretienModal.setEntretienCollectif(entretienCollectif);
             entretienModal.open();
             addClassName("editing");
         }
@@ -216,7 +215,7 @@ public class EntretienIndividuelView extends VerticalLayout {
     void addEntretien() {
         // on retire le focus s'il y avait une ligne sélectionnée
         grid.asSingleSelect().clear();
-        editEntretien(new EntretienIndividuel());
+        editEntretien(new EntretienCollectif());
     }
 
     private void closeConsultModal() {
@@ -226,7 +225,7 @@ public class EntretienIndividuelView extends VerticalLayout {
     }
 
     private void closeNewOrEditModal() {
-        entretienModal.setEntretienIndividuel(null);
+        entretienModal.setEntretienCollectif(null);
         entretienModal.close();
         grid.asSingleSelect().clear();
     }
@@ -247,6 +246,6 @@ public class EntretienIndividuelView extends VerticalLayout {
 
     // fonction qui récupère la liste des entretiens pour les afficher dans la grille (avec les valeurs de recherche)
     private void updateList() {
-        grid.setItems(entretienIndividuelService.findAll(filterText.getValue()));
+        grid.setItems(entretienCollectifService.findAll(filterText.getValue()));
     }
 }

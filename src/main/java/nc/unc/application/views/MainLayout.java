@@ -16,9 +16,10 @@ import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import java.util.Optional;
 import nc.unc.application.data.entity.User;
 import nc.unc.application.security.AuthenticatedUser;
-import nc.unc.application.views.about.AboutView;
+import nc.unc.application.views.about.HomeView;
 import nc.unc.application.views.contrat.ContratView;
 import nc.unc.application.views.entreprise.EntrepriseView;
+import nc.unc.application.views.entretienCollectif.EntretienCollectifView;
 import nc.unc.application.views.entretienIndividuelle.EntretienIndividuelView;
 import nc.unc.application.views.etudiant.EtudiantView;
 import nc.unc.application.views.evenement.EvenementView;
@@ -151,9 +152,8 @@ public class MainLayout extends AppLayout {
 
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
-                new MenuItemInfo("Hello World", "la la-globe", HelloWorldView.class),
 
-                new MenuItemInfo("About", "la la-file", AboutView.class),
+                new MenuItemInfo("Accueil", "la la-file", HomeView.class),
 
                 new MenuItemInfo("Étudiants", "las la-user-graduate", EtudiantView.class),
 
@@ -170,6 +170,8 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("Tuteurs", "las la-user-tie", TuteurView.class),
 
                 new MenuItemInfo("Entretien individuel", "las la-user", EntretienIndividuelView.class),
+
+                new MenuItemInfo("Entretien Collectif", "las la-user", EntretienCollectifView.class),
 
                 new MenuItemInfo("Contrats", "las la-file-contract", ContratView.class),
 

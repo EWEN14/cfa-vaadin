@@ -70,4 +70,8 @@ public class TuteurService {
     public List<Tuteur> findAllTuteursByEntrepriseId(Long id) {
         return tuteurRepository.findAllByEntrepriseIdOrderByNomTuteur(id);
     }
+
+    public List<Tuteur> findAllTuteursSansHabilitations(){
+        return tuteurRepository.findAllByTuteurHabilitationsIsNullOrderByNomTuteur();
+    }
 }

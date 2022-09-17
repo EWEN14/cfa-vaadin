@@ -37,6 +37,8 @@ public class ContratConsult extends Dialog {
 
   private ContratService contratService;
 
+  private final ContratView contratView;
+
   // Layout qui contiendra le contenu en dessous des tabs
   private VerticalLayout content = new VerticalLayout();
 
@@ -144,11 +146,13 @@ public class ContratConsult extends Dialog {
 
   // Champs du formulaire relatifs aux informations du tuteur lié au contrat
   private final FormLayout formContratTuteur = new FormLayout();
+  Button addTuteurButton = new Button("Tuteur");
   private final TextField nomTuteur = new TextField("NOM");
   private final TextField prenomTuteur = new TextField("Prenom");
   private final EmailField emailTuteur = new EmailField("Email");
   private final IntegerField telephoneTuteur1 = new IntegerField("Téléphone 1");
   private final IntegerField telephoneTuteur2 = new IntegerField("Téléphone 2");
+  private final HorizontalLayout layoutTuteur = new HorizontalLayout();
   // Binder qui sera utilisé pour remplir automatiquement les champs du tuteur
   Binder<Tuteur> tuteurBinder = new BeanValidationBinder<>(Tuteur.class);
 
@@ -167,11 +171,11 @@ public class ContratConsult extends Dialog {
   private final Button close = new Button("Fermer");
   private final Button delete = new Button("Supprimer le contrat");
 
-
-  public ContratConsult(ContratService contratService) {
+  public ContratConsult(ContratService contratService, ContratView contratView) {
     this.setWidth("85vw");
     this.setHeight("90vh");
 
+    this.contratView = contratView;
     this.contratService = contratService;
 
     // fonction qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
@@ -226,7 +230,8 @@ public class ContratConsult extends Dialog {
     formContratEtudiant.add(prenomEtudiant, nomEtudiant, numeroEtudiant, situationEntreprise, telephoneEtudiant1, emailEtudiant);
     formContratFormation.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle);
     formContratEntrepriseInfos.add(enseigne, raisonSociale, statutActifEntreprise, telephoneContactCfa);
-    formContratTuteur.add(prenomTuteur, nomTuteur, emailTuteur, telephoneTuteur1, telephoneTuteur2);
+    layoutTuteur.add(prenomTuteur, addTuteurButton);
+    formContratTuteur.add(layoutTuteur, nomTuteur, emailTuteur, telephoneTuteur1, telephoneTuteur2);
 
     // contenu qui sera affiché en dessous des tabs, qui change en fonction de la tab sélectionné
     content.setSpacing(false);
@@ -305,6 +310,9 @@ public class ContratConsult extends Dialog {
     // évènements delete et close
     delete.addClickListener(event -> fireEvent(new ContratConsult.DeleteEventConsult(this, contrat)));
     close.addClickListener(event -> fireEvent(new ContratConsult.CloseEventConsult(this)));
+
+    //Evènement sur le click sur le bouton ajouter un tuteur
+    addTuteurButton.addClickListener(click -> contratView.addTuteur());
 
     return new HorizontalLayout(delete, close);
   }

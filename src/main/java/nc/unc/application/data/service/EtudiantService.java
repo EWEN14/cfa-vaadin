@@ -1,5 +1,6 @@
 package nc.unc.application.data.service;
 
+import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.repository.EtudiantRepository;
 import org.springframework.stereotype.Service;
@@ -64,5 +65,13 @@ public class EtudiantService {
    */
   public List<Etudiant> findAllEtudiantsByEntrepriseId(Long id) {
     return etudiantRepository.findAllByEntrepriseIdOrderByNomEtudiantAscAnneePromotionDesc(id);
+  }
+
+  /**
+   * Récupère tous les étudiants dont la situation entreprise est "sans objet"
+   * @return liste d'étudiants, ordonné par leur nom de famille et leur année de promotion
+   */
+  public List<Etudiant> findAllEtudiantsSansEntreprise(){
+    return etudiantRepository.findAllByEntrepriseIsNullOrderByNomEtudiantAscAnneePromotionDesc();
   }
 }

@@ -13,8 +13,13 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -37,12 +42,19 @@ public class ContratNewOrEdit extends Dialog {
   private Contrat contrat;
   private Contrat cloneContrat;
 
+  private final ContratView contratView;
+
   FormLayout form = new FormLayout();
 
   ComboBox<Etudiant> etudiant = new ComboBox<>("Étudiant");
   ComboBox<Formation> formation = new ComboBox<>("Formation");
   ComboBox<Entreprise> entreprise = new ComboBox<>("Entreprise");
+
+  HorizontalLayout layoutTuteur = new HorizontalLayout();
+  VerticalLayout plus = new VerticalLayout();
+  VerticalLayout tuteurs = new VerticalLayout();
   ComboBox<Tuteur> tuteur = new ComboBox<>("Tuteur");
+  Icon addTuteurButton = new Icon(VaadinIcon.PLUS);
 
   ContratService contratService;
 
@@ -119,10 +131,12 @@ public class ContratNewOrEdit extends Dialog {
   Button save = new Button("Sauvegarder");
   Button close = new Button("Fermer");
 
-  public ContratNewOrEdit(List<Entreprise> entrepriseList, List<Formation> formationList, List<Etudiant> etudiantList,
+  public ContratNewOrEdit(ContratView contratView, List<Entreprise> entrepriseList, List<Formation> formationList, List<Etudiant> etudiantList,
                           List<Tuteur> tuteurList, ContratService contratService) {
     this.setWidth("85vw");
     this.setHeight("90vh");
+
+    this.contratView = contratView;
 
     this.contratService = contratService;
 
@@ -166,7 +180,13 @@ public class ContratNewOrEdit extends Dialog {
     numeroAvenant.setReadOnly(true);
 
     // ajout des éléments au formulaire principal
-    form.add(etudiant, formation, entreprise, tuteur,
+    FlexLayout content = new FlexLayout(tuteur);
+    content.setFlexGrow(2, tuteur);
+    content.setSizeFull();
+    layoutTuteur.setSpacing(false);
+    layoutTuteur.add(content,addTuteurButton);
+    layoutTuteur.setAlignItems(FlexComponent.Alignment.CENTER);
+    form.add(etudiant, formation, entreprise, layoutTuteur,
             infosContrat, new Div(), debutContrat, finContrat, typeContrat, dureePeriodeEssai, numeroConventionFormation, dateConventionFormation, primeAvantageNature,
             new Div(), decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua, dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(),
             dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(), dateReceptionOriginauxConvention, new Div(),
@@ -187,6 +207,10 @@ public class ContratNewOrEdit extends Dialog {
             derogationAgeRepresentantLegalForm, createButtonsLayout());
   }
 
+  public void modifyTuteurs(List<Tuteur> tuteurs){
+    tuteur.setItems(tuteurs);
+  }
+
   private HorizontalLayout createButtonsForSpecialFormDisplay() {
     addRupture.addClickListener(event -> showOrNotRuptureForm(true));
     addDerogation.addClickListener(event -> showOrNotDerogationAgeForm(true));
@@ -204,6 +228,9 @@ public class ContratNewOrEdit extends Dialog {
     // évènements save, close
     save.addClickListener(event -> validateAndSave());
     close.addClickListener(event -> fireEvent(new ContratNewOrEdit.CloseEvent(this)));
+
+    //Evènement sur le click sur le bouton ajouter un tuteur
+    addTuteurButton.addClickListener(click -> contratView.addTuteur());
 
     // met le bouton de sauvegarde actif que si le binder est valide
     binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()

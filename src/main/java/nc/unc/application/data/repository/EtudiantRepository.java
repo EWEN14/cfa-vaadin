@@ -1,5 +1,6 @@
 package nc.unc.application.data.repository;
 
+import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Etudiant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +25,8 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
   List<Etudiant> findAllByEntrepriseIdOrderByNomEtudiantAscAnneePromotionDesc(Long id);
 
   List<Etudiant> findAllByOrderByNomEtudiantAscAnneePromotionDesc();
+
+  List<Etudiant> findAllBySituationEntrepriseOrderByNomEtudiantAscAnneePromotionDesc(String situationEntreprise);
+
+  List<Etudiant> findAllByEntrepriseIsNullOrderByNomEtudiantAscAnneePromotionDesc();
 }

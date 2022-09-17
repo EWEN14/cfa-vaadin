@@ -88,3 +88,12 @@ header{
 .link-formation a{
     color: #2A2A2A !important;
 }
+.contrat-link{
+    color: #2A2A2A;
+}
+.tuteurcontrat-button{
+    cursor: pointer;
+    margin-top: auto;
+    margin-bottom: 12px;
+    padding-left: 8px;
+}

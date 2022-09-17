@@ -3,6 +3,12 @@ body {
     margin: 0;
 }
 
+table, tr, td, th{
+    border: 1px solid black;
+}
+table{
+    width: 100%;
+}
 .titre-big {
     font-family: 'Calibri Bold', sans-serif;
     font-weight: 800;

@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class EntretienCollectif implements Cloneable{
@@ -21,7 +22,7 @@ public class EntretienCollectif implements Cloneable{
   private LocalDate date;
 
   @Column(name = "observations", length = 15000)
-  private String observations;
+  private String observations_entretien_collectif;
 
   @CreationTimestamp
   @Column(name = "created_at")
@@ -61,12 +62,12 @@ public class EntretienCollectif implements Cloneable{
     this.date = date;
   }
 
-  public String getObservations() {
-    return observations;
+  public String getObservations_entretien_collectif() {
+    return observations_entretien_collectif;
   }
 
-  public void setObservations(String observations) {
-    this.observations = observations;
+  public void setObservations_entretien_collectif(String observations_entretien_collectif) {
+    this.observations_entretien_collectif = observations_entretien_collectif;
   }
 
   public LocalDateTime getCreated_at() {
@@ -103,5 +104,18 @@ public class EntretienCollectif implements Cloneable{
 
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    EntretienCollectif that = (EntretienCollectif) o;
+    return Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(observations_entretien_collectif, that.observations_entretien_collectif) && Objects.equals(created_at, that.created_at) && Objects.equals(updated_at, that.updated_at) && Objects.equals(formation, that.formation) && Objects.equals(referentCfa, that.referentCfa);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, date, observations_entretien_collectif, created_at, updated_at, formation, referentCfa);
   }
 }

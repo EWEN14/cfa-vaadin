@@ -31,7 +31,7 @@ public class EntretienIndividuelNewOrEdit extends Dialog {
 
   // form qui contient les informations générales de l'entretien individuel
   private final FormLayout formEntretien = new FormLayout();
-  private final TextArea observations = new TextArea("Observations");
+  private final TextArea observations_entretien_individuel = new TextArea("Observations");
   private final DatePicker date = new DatePicker("Date");
   ComboBox<Etudiant> etudiant = new ComboBox<>("Etudiant concerné par l'entretien");
   ComboBox<ReferentCfa> referentCfa = new ComboBox<>("Référent CFA concerné par l'entretien");
@@ -43,7 +43,7 @@ public class EntretienIndividuelNewOrEdit extends Dialog {
 
   public EntretienIndividuelNewOrEdit(List<ReferentCfa> referentCfas, List<Etudiant> etudiants) {
     this.setWidth("60vw");
-    this.setHeight("60vh");
+    this.setHeight("55vh");
 
     // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité entretienIndividuel,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)
@@ -65,7 +65,7 @@ public class EntretienIndividuelNewOrEdit extends Dialog {
     referentCfa.setClearButtonVisible(true);
 
     // ajout des champs et des boutons d'action dans le formulaire
-    formEntretien.add(date, etudiant, referentCfa, observations, createButtonsLayout());
+    formEntretien.add(date, etudiant, referentCfa, observations_entretien_individuel, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(formEntretien);

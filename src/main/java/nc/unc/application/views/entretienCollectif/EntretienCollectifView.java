@@ -70,7 +70,7 @@ public class EntretienCollectifView extends VerticalLayout {
         entretienModal.addListener(EntretienCollectifNewOrEdit.SaveEditedEvent.class, this::saveEditedEntretien);
         entretienModal.addListener(EntretienCollectifNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
 
-        confirmDelete = new ConfirmDelete("ce tuteur");
+        confirmDelete = new ConfirmDelete("cet entretien collectif");
         confirmDelete.addListener(ConfirmDelete.DeleteEventGrid.class, this::deleFromConfirmDelete);
 
         // ajout d'un FlexLayout qui place la grille

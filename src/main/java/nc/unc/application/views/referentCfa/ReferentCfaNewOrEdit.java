@@ -29,7 +29,6 @@ public class ReferentCfaNewOrEdit extends Dialog {
   Select<Civilite> civiliteReferentCfa = new Select<>();
   IntegerField telephoneReferentCfa = new IntegerField("Téléphone");
   EmailField emailReferentCfa = new EmailField("Email");
-
   Binder<ReferentCfa> binder = new BeanValidationBinder<>(ReferentCfa.class);
 
   Button save = new Button("Sauvegarder");

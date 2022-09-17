@@ -12,9 +12,12 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Contrat;
+import nc.unc.application.data.entity.Tuteur;
+import nc.unc.application.data.enums.Sexe;
 import nc.unc.application.data.service.*;
 import nc.unc.application.views.ConfirmDelete;
 import nc.unc.application.views.MainLayout;
+import nc.unc.application.views.tuteur.TuteurNewOrEdit;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +36,8 @@ public class ContratView extends VerticalLayout {
 
   TextField filterText = new TextField();
   Button addContratButton;
+
+  TuteurNewOrEdit tuteurModal;
 
   Contrat contratMaybeToDelete;
 
@@ -62,14 +67,14 @@ public class ContratView extends VerticalLayout {
     configureGrid(); // configuration de la grille (colonnes, données...)
 
     // ajout de la modale de consultation du contrat dans la vue
-    modalConsult = new ContratConsult(contratService);
+    modalConsult = new ContratConsult(contratService, this);
     // On définit que les différents events vont déclencher une fonction
     // contenant l'objet etudiant (dans le cas du delete dans la modalConsult ou du save dans modalNewOrdEdit).
     modalConsult.addListener(ContratConsult.DeleteEventConsult.class, this::transfertContractFromEventToDelete);
     modalConsult.addListener(ContratConsult.CloseEventConsult.class, e -> closeConsultModal());
 
     // ajout de la modale d'édition ou de création d'un contrat dans la vue
-    modalNewOrEdit = new ContratNewOrEdit(entrepriseService.findAllEntreprises(""), formationService.findAllFormations(""),
+    modalNewOrEdit = new ContratNewOrEdit(this, entrepriseService.findAllEntreprises(""), formationService.findAllFormations(""),
             etudiantService.findAllEtudiants(""), tuteurService.findAllTuteurs(""), contratService);
     modalNewOrEdit.addListener(ContratNewOrEdit.SaveEvent.class, this::saveContrat);
     modalNewOrEdit.addListener(ContratNewOrEdit.SaveEditedEvent.class, this::saveEditedContrat);
@@ -78,6 +83,11 @@ public class ContratView extends VerticalLayout {
     confirmDelete = new ConfirmDelete("ce contrat");
     confirmDelete.addListener(ConfirmDelete.DeleteEventGrid.class, this::deleteFromConfirmDelete);
 
+    tuteurModal = new TuteurNewOrEdit(entrepriseService.findAllEntreprises(""), formationService.findAllFormations(""),
+            formationService, tuteurService, logEnregistrmentService);
+    tuteurModal.addListener(TuteurNewOrEdit.SaveEvent.class, this::saveTuteur);
+    tuteurModal.addListener(TuteurNewOrEdit.SaveEditedEvent.class, this::saveEditedTuteur);
+    tuteurModal.addListener(TuteurNewOrEdit.CloseEvent.class, e -> closeNewOrEditModalTuteur());
 
     // ajout de la toolbar (recherche + nouveau contrat) et la grid
     // et des modales de consultation et de création/modification TODO
@@ -250,5 +260,86 @@ public class ContratView extends VerticalLayout {
   // fonction qui récupère la liste des contrats pour les afficher dans la grille (avec les valeurs de recherche)
   private void updateList() {
     grid.setItems(contratService.findAllContrats(filterText.getValue()));
+  }
+
+  // sauvegarde du tuteur en utilisant TuteurService (nouveau)
+  private void saveTuteur(TuteurNewOrEdit.SaveEvent event) {
+    // utilisation du getTuteur de la classe mère TuteurFormEvent pour récupérer le tuteur
+    Tuteur tuteur = event.getTuteur();
+    // mise en majuscule du nom et définition du sexe avant sauvegarde
+    setSexeTuteur(tuteur);
+    // sauvegarde de l'étudiant
+    tuteurService.saveTuteur(tuteur);
+
+    // ajout du log d'ajout
+    logEnregistrmentService.saveLogAjoutString(tuteur.toString());
+
+    //fermeture du formulaire et notification
+    closeNewOrEditModalTuteur();
+
+    //Recharger la liste des tuteurs dans la modale d'edit d'un contrat pour récupérer le tuteur crée dans la vue contrat
+    modalNewOrEdit.modifyTuteurs(tuteurService.findAllTuteurs(""));
+
+    Notification.show(tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() + " créé(e)");
+  }
+
+  // fonction qui met le nom du tuteur en majuscule et défini son sexe en fonction de sa civilté
+  private void setSexeTuteur(Tuteur tuteur) {
+    tuteur.setNomTuteur(tuteur.getNomTuteur().toUpperCase());
+    // définition du sexe que si le champ civilité est rempli
+    if (tuteur.getCiviliteTuteur() != null) {
+      switch (tuteur.getCiviliteTuteur()) {
+        case MONSIEUR:
+          tuteur.setSexe(Sexe.M);
+          break;
+        case MADAME:
+          tuteur.setSexe(Sexe.F);
+          break;
+        case NON_BINAIRE:
+          tuteur.setSexe(Sexe.NB);
+      }
+    }
+  }
+
+  // sauvegarde du tuteur modifié en utilisant TuteurService
+  private void saveEditedTuteur(TuteurNewOrEdit.SaveEditedEvent event) {
+    // utilisation du getTuteur de la classe mère TuteurFormEvent pour récupérer le tuteur
+    Tuteur tuteur = event.getTuteur();
+    // récupération du tuteur avant modification
+    Tuteur tuteurOriginal = event.getTuteurOriginal();
+    // mise en majuscule du nom et définition du sexe avant sauvegarde
+    setSexeTuteur(tuteur);
+
+    // sauvegarde du tuteur
+    tuteurService.saveTuteur(tuteur);
+
+    // ajout du log de modification
+    logEnregistrmentService.saveLogEditString(tuteurOriginal.toString(), tuteur.toString());
+
+    closeNewOrEditModalTuteur();
+
+    modalNewOrEdit.modifyTuteurs(tuteurService.findAllTuteurs(""));
+    Notification.show(tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() + " modifié(e)");
+  }
+
+  private void closeNewOrEditModalTuteur() {
+    tuteurModal.setTuteur(null);
+    tuteurModal.close();
+  }
+
+  public void addTuteur() {
+    closeNewOrEditModal();
+    editTuteurModal(new Tuteur());
+  }
+
+  // si tuteur null, on ferme le formulaire, sinon on l'affiche (new or edit)
+  public void editTuteurModal(Tuteur tuteur) {
+    if (tuteur == null) {
+      closeNewOrEditModalTuteur();
+    } else {
+      tuteurModal.setTuteur(tuteur);
+      tuteurModal.open();
+      addClassName("editing");
+    }
   }
 }

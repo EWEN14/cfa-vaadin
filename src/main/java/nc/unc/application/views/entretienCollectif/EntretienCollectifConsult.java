@@ -42,7 +42,7 @@ public class EntretienCollectifConsult extends Dialog {
 
   // form qui contient les informations générales de l'entretien collectif
   private final FormLayout formEntretien = new FormLayout();
-  private final TextArea observations_entretien_individuel = new TextArea("Observations");
+  private final TextArea observations_entretien_collectif = new TextArea("Observations");
   private final DatePicker date = new DatePicker();
   ComboBox<Formation> formation = new ComboBox<>("Formation concerné par l'entretien");
   ComboBox<ReferentCfa> referentCfa = new ComboBox<>("Référent CFA concerné par l'entretien");
@@ -131,7 +131,7 @@ public class EntretienCollectifConsult extends Dialog {
 
 
     //Le formulaire concernant l'entretien
-    formEntretien.add(date, formation, referentCfa, observations);
+    formEntretien.add(date, formation, referentCfa, observations_entretien_collectif);
 
     //Le formulaire du référent CFA
     formReferentCFAInfos.add(nomReferentCfa, prenomReferentCfa, emailReferentCfa, civiliteReferentCfa, telephoneReferentCfa);
@@ -194,7 +194,7 @@ public class EntretienCollectifConsult extends Dialog {
 
     //entretien
     date.setReadOnly(true);
-    observations.setReadOnly(true);
+    observations_entretien_collectif.setReadOnly(true);
     formation.setReadOnly(true);
     referentCfa.setReadOnly(true);
     dateCreation.setReadOnly(true);

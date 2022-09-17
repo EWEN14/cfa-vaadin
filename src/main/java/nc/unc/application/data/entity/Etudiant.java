@@ -160,6 +160,9 @@ public class Etudiant implements Cloneable {
   @OneToMany(mappedBy = "etudiant", cascade = CascadeType.MERGE)
   private List<Contrat> contrats = new ArrayList<>();
 
+  @OneToMany(mappedBy = "etudiant", cascade = CascadeType.ALL)
+  private List<EntretienIndividuel> entretienIndividuels = new ArrayList<>();
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private LocalDateTime createdAt;
@@ -494,6 +497,14 @@ public class Etudiant implements Cloneable {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  public List<EntretienIndividuel> getEntretienIndividuels() {
+    return entretienIndividuels;
+  }
+
+  public void setEntretienIndividuels(List<EntretienIndividuel> entretienIndividuels) {
+    this.entretienIndividuels = entretienIndividuels;
   }
 
   // Autres méthodes

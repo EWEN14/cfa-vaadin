@@ -80,6 +80,9 @@ public class Formation implements Cloneable {
   @ManyToMany(mappedBy = "formations", cascade = CascadeType.MERGE)
   private Set<Evenement> evenements = new LinkedHashSet<>();
 
+  @OneToMany(mappedBy = "formation", cascade = CascadeType.ALL)
+  private List<EntretienCollectif> entretienCollectifs = new ArrayList<>();
+
   @PreRemove
   private void preRemove() {
     for (TuteurHabilitation th : tuteurHabilitations) {
@@ -244,6 +247,14 @@ public class Formation implements Cloneable {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  public List<EntretienCollectif> getEntretienCollectifs() {
+    return entretienCollectifs;
+  }
+
+  public void setEntretienCollectifs(List<EntretienCollectif> entretienCollectifs) {
+    this.entretienCollectifs = entretienCollectifs;
   }
 
   // Autres méthodes

@@ -21,4 +21,6 @@ public interface TuteurRepository extends JpaRepository<Tuteur, UUID> {
     List<Tuteur> findAllByOrderByNomTuteur();
 
     List<Tuteur> findAllByEntrepriseIdOrderByNomTuteur(Long id);
+
+    List<Tuteur> findAllByTuteurHabilitationsIsNullOrderByNomTuteur();
 }

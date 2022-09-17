@@ -48,7 +48,7 @@ public class EntretienIndividuelConsult extends Dialog {
 
   // form qui contient les informations générales de l'entretien individuel
   private final FormLayout formEntretien = new FormLayout();
-  private final TextArea observations = new TextArea("Observations");
+  private final TextArea observations_entretien_individuel = new TextArea("Observations");
   private final DatePicker date = new DatePicker();
   ComboBox<Etudiant> etudiant = new ComboBox<>("Etudiant concerné par l'entretien");
   ComboBox<ReferentCfa> referentCfa = new ComboBox<>("Référent CFA concerné par l'entretien");
@@ -159,7 +159,7 @@ public class EntretienIndividuelConsult extends Dialog {
 
 
     //Le formulaire concernant l'entretien
-    formEntretien.add(date, etudiant, referentCfa, observations);
+    formEntretien.add(date, etudiant, referentCfa, observations_entretien_individuel);
 
     //Le formulaire du référent CFA
     formReferentCFAInfos.add(nomReferentCfa, prenomReferentCfa, emailReferentCfa, civiliteReferentCfa, telephoneReferentCfa);
@@ -223,7 +223,7 @@ public class EntretienIndividuelConsult extends Dialog {
 
     //entretien
     date.setReadOnly(true);
-    observations.setReadOnly(true);
+    observations_entretien_individuel.setReadOnly(true);
     etudiant.setReadOnly(true);
     referentCfa.setReadOnly(true);
     dateCreation.setReadOnly(true);

@@ -25,7 +25,7 @@ public class EntretienCollectifNewOrEdit extends Dialog {
 
   // form qui contient les informations générales de l'entretien collectif
   private final FormLayout formEntretien = new FormLayout();
-  private final TextArea observations = new TextArea("Observations");
+  private final TextArea observations_entretien_collectif = new TextArea("Observations");
   private final DatePicker date = new DatePicker("Date");
   ComboBox<Formation> formation = new ComboBox<>("Formation concernée");
   ComboBox<ReferentCfa> referentCfa = new ComboBox<>("Référent CFA concerné");
@@ -59,7 +59,7 @@ public class EntretienCollectifNewOrEdit extends Dialog {
     referentCfa.setClearButtonVisible(true);
 
     // ajout des champs et des boutons d'action dans le formulaire
-    formEntretien.add(date, formation, referentCfa, observations, createButtonsLayout());
+    formEntretien.add(date, formation, referentCfa, observations_entretien_collectif, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(formEntretien);

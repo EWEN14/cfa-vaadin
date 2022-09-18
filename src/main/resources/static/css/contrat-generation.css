@@ -6,8 +6,10 @@ body {
 }
 .page{
     height: 271mm;
+    border: 1px solid transparent;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 .bg-blue{
     color: white;
@@ -30,6 +32,7 @@ h1{
     text-align: center;
     background: #4a5488;
     color: white;
+    padding: 2px 0;
 }
 table, td, th{
     border: 1px solid black;
@@ -62,11 +65,12 @@ td, th{
     flex-direction: row;
 }
 .signatures div:nth-child(1){
-    width: 50%;
+    width: 45%;
+    float: left;
     display: inline;
 }
 .signatures div:nth-child(2){
-    width: 50%;
+    width: 45%;
     float: right;
     display: inline;
 }
@@ -90,4 +94,24 @@ td, th{
     position: absolute;
     top: 0;
     left: 0;
+}
+.date-signature{
+    margin-left: 75px;
+}
+.relation-rep div{
+    display: inline;
+    margin: 0 15px;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+}
+.relation-rep div:nth-child(1){
+    margin-left: 50px;
+}
+.page-nb{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
 }

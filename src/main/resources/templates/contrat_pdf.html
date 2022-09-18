@@ -15,6 +15,8 @@
 
 <div class="page" data-th-object="${ contrat }">
 
+    <div class="page-nb">1 / 2</div>
+
     <div class="contrat-title">
         <h1 class="titre-big">CONTRAT UNIQUE <br/> D'ALTERNANCE</h1>
         <div class="subtitle"><em>régi par les articles Lp. 522-1 et suivants du code du travail de Nouvelle-Calédonie</em>
@@ -218,14 +220,23 @@
         </tr>
     </table>
 
-    <div>
+    <div class="relation-rep">
         <strong>RELATION AVEC LE(LA) SALARIE(E)</strong>
-        <span>Père </span>
-        <input type="checkbox" name="pere" th:checked="${ contrat?.relationAvecSalarie == 'Père' }"/>
-        <span>Mère </span>
-        <input type="checkbox" name="mere" th:checked="${ contrat?.relationAvecSalarie == 'Mère' }"/>
-        <span>Tuteur </span>
-        <input type="checkbox" name="tuteur" th:checked="${ contrat?.relationAvecSalarie == 'Tuteur' }"/>
+        <div>
+            <span>Père </span>
+            <input class="rep-legal-checkbox" type="checkbox" name="pere" th:checked="${ contrat?.relationAvecSalarie == 'Père' }"/>
+        </div>
+
+        <div>
+            <span>Mère </span>
+            <input class="rep-legal-checkbox" type="checkbox" name="mere" th:checked="${ contrat?.relationAvecSalarie == 'Mère' }"/>
+        </div>
+
+        <div>
+            <span>Tuteur </span>
+            <input class="rep-legal-checkbox" type="checkbox" name="tuteur" th:checked="${ contrat?.relationAvecSalarie == 'Tuteur' }"/>
+        </div>
+
     </div>
 
     <table>
@@ -248,15 +259,6 @@
         </tr>
     </table>
 
-    <table>
-        <tr>
-            <th>TEL</th>
-            <td data-th-text="*{ telephoneRepresentant }"></td>
-            <th>COURRIEL</th>
-            <td data-th-text="*{ emailRepresentant }"></td>
-        </tr>
-    </table>
-
     <table class="admin-cadre">
         <tr>
             <th class="bg-blue">CADRE RESERVE A L'ADMINISTRATION</th>
@@ -273,6 +275,8 @@
 
 
 <div class="page" data-th-object="${ contrat }">
+
+    <div class="page-nb">2 / 2</div>
 
     <p><strong>IL EST CONVENU CE QUI SUIT :</strong></p>
 
@@ -296,7 +300,7 @@
 
     <div class="cfa-sup">
         <p><strong>CFA SUP de l'Université de la Nouvelle-Calédonie</strong></p>
-        <p>(n° déclaration DFPC : 988/ 198/04U</p>
+        <p>(n° déclaration DFPC : 988/ 198/04U)</p>
     </div>
 
     <p>L'organisation du parcours de formation du (de la) salarié(e) se déroulera conformément aux dispositions de la
@@ -396,13 +400,20 @@
             Lp. 522-2 du code du travail de Nouvelle-Calédonie.</p>
     </div>
 
-    <p>Fait à                , le</p>
+    <p>Fait à <span class="date-signature">, le</span></p>
 
     <div class="signatures">
-        <div><strong>Le (la) salarié(e)</strong></div>
-        <div>
-            <strong>L'employeur</strong>
-            <em>Nom et qualité</em>
+        <div class="text-center">
+            <p>
+                <strong>Le (la) salarié(e)</strong>
+            </p>
+
+        </div>
+        <div class="text-center">
+            <p>
+                <strong>L'employeur</strong>
+                <em>Nom et qualité</em>
+            </p>
         </div>
     </div>
 

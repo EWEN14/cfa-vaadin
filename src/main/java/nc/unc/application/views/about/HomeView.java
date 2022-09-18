@@ -52,7 +52,7 @@ public class HomeView extends VerticalLayout {
   TuteurService tuteurService;
   LogEnregistrmentService logEnregistrmentService;
   H3 titreEtudiantSansEntreprise = new H3("Etudiants sans entreprise");
-  H3 titreTuteurSansHabilitation = new H3("Tuteurs non habilité");
+  H3 titreTuteurSansHabilitation = new H3("Tuteurs sans habilitations");
 
   public HomeView(EtudiantService etudiantService, TuteurService tuteurService, LogEnregistrmentService logEnregistrmentService, ContratService contratService) {
     this.etudiantService = etudiantService;

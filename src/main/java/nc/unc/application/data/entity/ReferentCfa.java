@@ -11,6 +11,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "referent_cfa")
@@ -53,6 +55,11 @@ public class ReferentCfa implements Cloneable{
   @Column(name = "updated_at")
   private LocalDateTime updated_at;
 
+  @OneToMany(mappedBy = "referentCfa", cascade = CascadeType.ALL)
+  private List<EntretienIndividuel> entretienIndividuels = new ArrayList<>();
+
+  @OneToMany(mappedBy = "referentCfa", cascade = CascadeType.ALL)
+  private List<EntretienCollectif> entretienCollectif = new ArrayList<>();
 
   public Long getId() {
     return id;
@@ -117,6 +124,22 @@ public class ReferentCfa implements Cloneable{
 
   public void setUpdated_at(LocalDateTime updated_at) {
     this.updated_at = updated_at;
+  }
+
+  public List<EntretienIndividuel> getEntretienIndividuels() {
+    return entretienIndividuels;
+  }
+
+  public void setEntretienIndividuels(List<EntretienIndividuel> entretienIndividuels) {
+    this.entretienIndividuels = entretienIndividuels;
+  }
+
+  public List<EntretienCollectif> getEntretienCollectif() {
+    return entretienCollectif;
+  }
+
+  public void setEntretienCollectif(List<EntretienCollectif> entretienCollectif) {
+    this.entretienCollectif = entretienCollectif;
   }
 
   // Autres méthodes

@@ -97,3 +97,9 @@ header{
     margin-bottom: 12px;
     padding-left: 8px;
 }
+.referentbutton-contrat{
+    cursor: pointer;
+    margin-top: auto;
+    margin-bottom: 12px;
+    padding-left: 8px;
+}

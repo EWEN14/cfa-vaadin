@@ -5,285 +5,262 @@
     <!-- utilisation d'une condition qui change le link pour récupérer la CSS, qui diffère selon qu'on
         télécharge le contrat ou si l'on regarde sa prévisualisation -->
     <link rel="stylesheet" type="text/css" href="css/contrat-generation.css" th:if="${ download }"/>
-    <link href="../static/css/contrat-generation.css" th:href="@{/css/contrat-generation.css}" rel="stylesheet" th:unless="${ download }"/>
+    <link href="../static/css/contrat-generation.css" th:href="@{/css/contrat-generation.css}" rel="stylesheet"
+          th:unless="${ download }"/>
 </head>
 
 <body>
-<h1 class="titre-big">CONTRAT UNIQUE <br/> D'ALTERNANCE</h1>
 
-<div class="subtitle"><em>régi par les articles Lp. 522-1 et suivants du code du travail de Nouvelle-Calédonie</em></div>
+<img class="gouvernement" src="images/gouvernementnc.png" alt=""/>
 
-<div data-th-object="${ contrat }" class="container-global">
-    <table>
-        <tbody>
-        <tr class="type-border">
-            <td class="type-title"><strong>TYPE DE CONTRAT</strong></td>
-            <td class="type-data" data-th-text="*{ typeContrat }"></td>
+<div class="page" data-th-object="${ contrat }">
+
+    <div class="contrat-title">
+        <h1 class="titre-big">CONTRAT UNIQUE <br/> D'ALTERNANCE</h1>
+        <div class="subtitle"><em>régi par les articles Lp. 522-1 et suivants du code du travail de Nouvelle-Calédonie</em>
+        </div>
+    </div>
+
+    <table class="type-contrat">
+        <tr>
+            <td>TYPE DE CONTRAT</td>
+            <td data-th-text="*{ typeContrat }"></td>
         </tr>
-        </tbody>
     </table>
-    <br/>
 
-    <div th:if="${ avenant }">Avenant N°<span data-th-text="*{ numeroAvenant }"></span>
-        pour <span data-th-text="*{ motifAvn }"></span></div>
+    <div class="avenant" th:if="${avenant}">Avenant N°<span data-th-text="*{numeroAvenant}"></span> pour <span
+            data-th-text="*{motifAvn}"></span></div>
 
-    <div class="blue-bg"><strong>ENTRE L'EMPLOYEUR, désigné ci-dessous</strong></div>
 
-    <div data-th-object="${ contrat?.entreprise }" class="container-entreprise">
+    <!-- SECTION EMPLOYEUR -->
+    <div class="section-title">
+        <strong>ENTRE L'EMPLOYEUR, désigné ci-dessous :</strong>
+    </div>
+
+    <div data-th-object="${ contrat?.entreprise }">
         <table>
-            <tbody>
             <tr>
-                <td class="type-title"><strong>N° RIDET</strong></td>
-                <td class="type-data" data-th-text="*{ numeroRidet }"></td>
-                <td class="type-title"><strong>N° CAFAT</strong></td>
-                <td class="type-data" data-th-text="*{ numeroCafatEntreprise }"></td>
+                <th>N° RIDET</th>
+                <td data-th-text="*{ numeroRidet }"></td>
+                <th>N°CAFAT</th>
+                <td data-th-text="*{ numeroCafatEntreprise }"></td>
             </tr>
-            </tbody>
-        </table>
-
-        <br/>
-
-        <table>
-            <tbody>
-            <tr>
-                <td class="type-title"><strong>CODE NAF</strong></td>
-                <td class="type-data" data-th-text="*{ codeNaf }"></td>
-                <td class="type-title"><strong>STATUT JURIDIQUE</strong></td>
-                <td class="type-data" data-th-text="*{ formeJuridique }"></td>
-                <td class="type-title"><strong>NOMBRE DE SALARIES</strong></td>
-                <td class="type-data" data-th-text="*{ nombreSalarie }"></td>
-            </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>ENSEIGNE ou SIGLE</strong></td>
+                <th>CODE NAF</th>
+                <td data-th-text="*{ codeNaf }"></td>
+                <th>STATUT JURIDIQUE</th>
+                <td data-th-text="*{ formeJuridique }"></td>
+                <th>NOMBRE DE SALARIES</th>
+                <td data-th-text="*{ nombreSalarie }"></td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th>ENSEIGNE ou SIGLE</th>
                 <td data-th-text="*{ enseigne }"></td>
             </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>NOM - PRENOM - FONCTION <br/>DU REPRESENTANT DE L'EMPLOYEUR</strong></td>
-                <td><span data-th-text="*{ nomRepresentantEmployeur }"></span> <span data-th-text="*{ prenomRepresentantEmployeur }"></span> - <span data-th-text="*{ fonctionRepresentantEmployeur }"></span></td>
+                <th>NOM - PRENOM - FONCTION <br/>DU REPRESENTANT DE L'EMPLOYEUR</th>
+                <td data-th-text="*{nomRepresentantEmployeur}"></td>
             </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>ADRESSE PHYSIQUE<br/><em>(Lieu d'exécution du contrat)</em></strong></td>
-                <td>RUE : <span data-th-text="*{ adressePhysiqueRue }"></span><br/>
+                <th>ADRESSE PHYSIQUE<br/>(Lieu d'exécution du contrat)</th>
+                <td><span data-th-text="*{ adressePhysiqueRue }"></span><br/>
                     CODE POSTAL : <span data-th-text="*{ adressePhysiqueCodePostal }"></span>
-                    COMMUNE : <span data-th-text="*{ adressePhysiqueCommune }"></span></td>
+                    COMMUNE : <span data-th-text="*{ adressePhysiqueCommune }"></span>
+                </td>
             </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>ADRESSE POSTALE</strong></td>
+                <th> ADRESSE POSTALE</th>
                 <td>RUE ou BP : <span data-th-text="*{ adressePostaleRueOuBp }"></span><br/>
                     CODE POSTAL : <span data-th-text="*{ adressePostaleCodePostal }"></span>
-                    COMMUNE : <span data-th-text="*{ adressePostaleCommune }"></span></td>
+                    COMMUNE : <span data-th-text="*{ adressePostaleCommune }"></span>
+                </td>
             </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>TEL</strong></td>
+                <th>TEL</th>
                 <td data-th-text="*{ telephoneEntreprise }"></td>
-                <td><strong>COURRIEL</strong></td>
+                <th>COURRIEL</th>
                 <td data-th-text="*{ emailEntreprise }"></td>
             </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>CONVENTION COLLECTIVE <br/>APPLICABLE DANS L'ENTREPRISE</strong></td>
+                <th>CONVIENTION COLLECTIVE<br/>APPLICABLE DANS L'ENTREPRISE</th>
                 <td data-th-text="*{ conventionCollective }"></td>
             </tr>
-            </tbody>
         </table>
     </div>
 
-    <div class="blue-bg"><strong>ET LE(LA) SALARIE(E),</strong></div>
+    <!-- SECTION EMPLOYE -->
+    <div class="section-title">
+        <strong>ET LE(LA) SALARIE(E),</strong>
+    </div>
 
-    <div data-th-object="${ contrat?.etudiant }" class="container-etudiant">
+    <div class="etudiant-container" data-th-object="${ contrat?.etudiant }">
         <table>
-            <tbody>
             <tr>
-                <td><strong>NOM</strong></td>
+                <th>NOM</th>
                 <td data-th-text="*{ nomEtudiant }"></td>
-                <td><strong>PRENOM(S)</strong></td>
+                <th>PRENOM(S)</th>
                 <td data-th-text="*{ prenomEtudiant }"></td>
             </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>CIVILITE</strong></td>
+                <th>CIVILITE</th>
                 <td data-th-text="*{ civiliteEtudiant }"></td>
-                <td><strong>NATIONALITE</strong></td>
+                <th>NATIONALITE</th>
                 <td data-th-text="*{ nationalite }"></td>
-                <td><strong>N°CAFAT</strong></td>
+                <th>N° CAFAT</th>
                 <td data-th-text="*{ numeroCafatEtudiant }"></td>
             </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>DATE DE NAISSANCE</strong></td>
+                <th>DATE DE<br/>NAISSANCE</th>
                 <td th:text="${#temporals.format(contrat?.etudiant?.dateNaissanceEtudiant, 'dd/MM/yyyy')}"></td>
-                <td><strong>AGE</strong></td>
+                <th>AGE</th>
                 <td data-th-text="${ age }"></td>
-                <td><strong>LIEU DE NAISSANCE</strong><br/>(ville, dépt, pays)</td>
+                <th>LIEU DE NAISSANCE<br/>(ville, dépt, pays)</th>
                 <td data-th-text="*{ lieuNaissance }"></td>
-                <td><strong>NATIONALITE</strong></td>
+                <th>NATIONALITE</th>
                 <td data-th-text="*{ lieuNaissance }"></td>
             </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>TEL</strong></td>
-                <td><span data-th-text="*{ telephoneEtudiant1 }"></span>  /  <span data-th-text="*{ telephoneEtudiant2 }"></span></td>
-                <td><strong>COURRIEL</strong></td>
+                <th>TEL</th>
+                <td><span data-th-text="*{ telephoneEtudiant1 }"></span> / <span
+                        data-th-text="*{ telephoneEtudiant2 }"></span></td>
+                <th>COURRIEL</th>
                 <td data-th-text="*{ emailEtudiant }"></td>
             </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>ADRESSE</strong></td>
-                <td>RUE : <span data-th-text="*{ adresseEtudiant }"></span><br/>
+                <th>Adresse</th>
+                <td>
+                    RUE : <span data-th-text="*{ adresseEtudiant }"></span><br/>
                     CODE POSTAL : <span data-th-text="*{ codePostalEtudiant }"></span>
-                    COMMUNE : <span data-th-text="*{ communeEtudiant }"></span></td>
+                    COMMUNE : <span data-th-text="*{ communeEtudiant }"></span>
+                </td>
             </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>DIPLOME LE PLUS ELEVE OBTENU</strong></td>
+                <th>DIPLOME LE PLUS ELEVE OBTENU</th>
                 <td data-th-text="*{ dernierDiplomeObtenuOuEnCours }"></td>
-                <td><strong>NIVEAU</strong></td>
+                <th>NIVEAU</th>
                 <td data-th-text="*{ niveauDernierDiplome }"></td>
             </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>SITUATION AVANT CONTRAT</strong></td>
+                <th>SITUATION AVANT CONTRAT</th>
                 <td data-th-text="*{ situationAnneePrecedente }"></td>
-                <td><strong>DERNIER EMPLOI OCCUPE</strong></td>
+                <th>DENIER EMPLOI OCCUPE</th>
                 <td data-th-text="*{ dernierEmploiOccupe }"></td>
             </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>TRAVAILLEUR HANDICAPE</strong></td>
-                <td><input type="checkbox" name="travailleurH" th:checked="*{ travailleurHandicape }" /></td>
+                <th>TRAVAILLEUR HANDICAPE</th>
+                <td><input type="checkbox" name="travailleurH" th:checked="*{ travailleurHandicape }"/></td>
             </tr>
-            </tbody>
         </table>
 
         <table>
-            <tbody>
             <tr>
-                <td><strong>DEROGATION D'AGE</strong></td>
-                <td><input type="checkbox" name="derogation" th:checked="${ contrat?.derogationAge }" /></td>
-                <td><strong>DATE DE DELIVRANCE DE LA DEROGATION</strong></td>
+                <td>DEROGATION D'AGE</td>
+                <td><input type="checkbox" name="derogation" th:checked="${ contrat?.derogationAge }"/></td>
+                <td>DATE DE DELIVRANCE DE LA DEROGATION</td>
                 <td th:text="${#temporals.format(contrat?.dateDelivranceDerogationAge, 'dd/MM/yyyy')}"></td>
             </tr>
-            </tbody>
         </table>
     </div>
 
-    <div class="blue-bg"><strong>ET LE(LA) REPRESENTANT(E) LEGAL(E) DU (DE LA) SALARIE(E),</strong></div>
+    <!-- SECTION REPRESENTANT LEGAL -->
+    <div class="section-title">
+        <strong>ET LE(LA) REPRESENTANT(E) LEGAL(E) DU (DE LA) SALARIE(E),</strong>
+    </div>
 
     <table>
-        <tbody>
         <tr>
-            <td><strong>NOM</strong></td>
+            <th>NOM</th>
             <td data-th-text="*{ nomRepresentantLegal }"></td>
-            <td><strong>PRENOM(S)</strong></td>
+            <th>PRENOM(S)</th>
             <td data-th-text="*{ prenomRepresentantLegal }"></td>
         </tr>
-        </tbody>
     </table>
 
-    <table>
-        <tbody>
-        <tr>
-            <td><strong>RELATION AVEC LE(LA) SALARIE(E)</strong>
+    <div>
+        <strong>RELATION AVEC LE(LA) SALARIE(E)</strong>
+        <span>Père </span>
+        <input type="checkbox" name="pere" th:checked="${ contrat?.relationAvecSalarie == 'Père' }"/>
+        <span>Mère </span>
+        <input type="checkbox" name="mere" th:checked="${ contrat?.relationAvecSalarie == 'Mère' }"/>
+        <span>Tuteur </span>
+        <input type="checkbox" name="tuteur" th:checked="${ contrat?.relationAvecSalarie == 'Tuteur' }"/>
+    </div>
 
-            </td>
+    <table>
+        <tr>
+            <th>Adresse</th>
             <td>
-                <span>Père </span>
-                <input type="checkbox" name="pere" th:checked="${ contrat?.relationAvecSalarie == 'Père' }" />
-                <span>Mère </span>
-                <input type="checkbox" name="mere" th:checked="${ contrat?.relationAvecSalarie == 'Mère' }" />
-                <span>Tuteur </span>
-                <input type="checkbox" name="tuteur" th:checked="${ contrat?.relationAvecSalarie == 'Tuteur' }" />
+                RUE : <span data-th-text="*{ adresseRepresentant }"></span><br/>
+                CODE POSTAL : <span data-th-text="*{ codePostalRepresentant }"></span>
+                COMMUNE : <span data-th-text="*{ communeRepresentant }"></span>
             </td>
         </tr>
-        </tbody>
     </table>
 
     <table>
-        <tbody>
         <tr>
-            <td><strong>ADRESSE</strong></td>
-            <td>RUE : <span data-th-text="*{ adresseRepresentant }"></span><br/>
-                CODE POSTAL : <span data-th-text="*{ codePostalRepresentant }"></span>
-                COMMUNE : <span data-th-text="*{ communeRepresentant }"></span></td>
-        </tr>
-        </tbody>
-    </table>
-
-    <table>
-        <tbody>
-        <tr>
-            <td><strong>TEL</strong></td>
+            <th>TEL</th>
             <td><span data-th-text="*{ telephoneRepresentant }"></span></td>
-            <td><strong>COURRIEL</strong></td>
+            <th>COURRIEL</th>
             <td data-th-text="*{ emailRepresentant }"></td>
         </tr>
-        </tbody>
     </table>
 
     <table>
-        <thead>
         <tr>
-            <th class="light-grey-bg">CADRE RESERVE A L'ADMNISTRATION</th>
+            <th>TEL</th>
+            <td data-th-text="*{ telephoneRepresentant }"></td>
+            <th>COURRIEL</th>
+            <td data-th-text="*{ emailRepresentant }"></td>
         </tr>
-        </thead>
-        <tbody>
+    </table>
+
+    <table class="admin-cadre">
+        <tr>
+            <th class="bg-blue">CADRE RESERVE A L'ADMINISTRATION</th>
+        </tr>
         <tr>
             <td>
                 N° d'enregistrement du contrat : <br/>
@@ -291,15 +268,16 @@
                 Reçu le :
             </td>
         </tr>
-        </tbody>
     </table>
+</div>
 
-    <div>1 / 2</div>
 
-    <div><strong>IL EST CONVENU CE QUI SUIT :</strong></div>
+<div class="page" data-th-object="${ contrat }">
 
-    <p>L'employeur engage le(la) salarié(e) à compter du <span data-th-text="*{ debutContrat }"></span> jusqu'au
-        <span data-th-text="*{ finContrat }"></span>.</p>
+    <p><strong>IL EST CONVENU CE QUI SUIT :</strong></p>
+
+    <p>L'employeur engage le(la) salarié(e) à compter du <span data-th-text="*{ debutContrat }"></span> jusqu'au<span
+            data-th-text="*{ finContrat }"></span>.</p>
 
     <p>La période d'essai a une durée de <span data-th-text="*{ dureePeriodeEssai }"></span> semaines.</p>
 
@@ -309,26 +287,30 @@
     <p>Durant la période du contrat, le(la) salrié(e) suivra par alternance une formation en vue d'acquérir la
         certification professionnelle suivante :</p>
 
-    <p><span data-th-text="${ contrat?.formation?.libelleFormation }"></span></p>
-    <p>(<span data-th-text="${ contrat?.formation?.niveauCertificationProfessionnelle }"></span> - Inscrit au RCP-NC)</p>
+    <p class="text-center"><span data-th-text="${ contrat?.formation?.libelleFormation }"></span></p>
+    <p class="text-center">(Niveau <span data-th-text="${ contrat?.formation?.niveauCertificationProfessionnelle }"></span> - Inscrit au RCP-NC)</p>
 
     <p>dont l'autorité certificatrice est : l'Université de la Nouvelle-Calédonie</p>
 
-    <p>La formation est assurée</p>
+    <p>La formation est assurée :</p>
 
-    <div class="border">
+    <div class="cfa-sup">
         <p><strong>CFA SUP de l'Université de la Nouvelle-Calédonie</strong></p>
         <p>(n° déclaration DFPC : 988/ 198/04U</p>
     </div>
 
     <p>L'organisation du parcours de formation du (de la) salarié(e) se déroulera conformément aux dispositions de la
-        convention de formation <span data-th-text="*{ numeroConventionFormation }"></span> et de ses éventuels avenants ultérieurs.</p>
+        convention de formation <span data-th-text="*{ numeroConventionFormation }"></span> et de ses éventuels avenants
+        ultérieurs.</p>
 
-    <p>Il comprend <span data-th-text="${ contrat?.formation?.semainesEntreprise }"></span> semaines en entreprise et <span data-th-text="${ contrat?.formation?.heuresFormation }"></span>
-        heures réparties sur <span data-th-text="${ contrat?.formation?.semainesEntreprise }"></span> semaines en centre de formation. Les périodes
+    <p>Il comprend <span data-th-text="${ contrat?.formation?.semainesEntreprise }"></span> semaines en entreprise et
+        <span data-th-text="${ contrat?.formation?.heuresFormation }"></span>
+        heures réparties sur <span data-th-text="${ contrat?.formation?.semainesEntreprise }"></span> semaines en centre
+        de formation. Les périodes
         de formation en centre se dérouleront à <span data-th-text="${ contrat?.formation?.lieuFormation }"></span></p>
 
-    <p>Durant les périodes en entreprise, le(la) salarié(e) est encadré(e) par un(e) tuteur(tutrice) désigné(e) ci-dessous :</p>
+    <p>Durant les périodes en entreprise, le(la) salarié(e) est encadré(e) par un(e) tuteur(tutrice) désigné(e)
+        ci-dessous :</p>
 
     <div data-th-object="${ contrat?.tuteur }" class="container-tuteur">
         <table>
@@ -372,7 +354,8 @@
         </table>
     </div>
 
-    <p>La durée hebdomadaire de travail est fixée à : <span data-th-text="${ contrat?.formation?.dureeHebdomadaireTravail }"></span></p>
+    <p>La durée hebdomadaire de travail est fixée à : <span
+            data-th-text="${ contrat?.formation?.dureeHebdomadaireTravail }"></span></p>
 
     <p>Le salaire brut mensuel est fixé à<sup>1</sup> :</p>
 
@@ -389,7 +372,7 @@
         </tr>
         <tr>
             <td>Pourcentage du SMG</td>
-            <td>  %</td>
+            <td> %</td>
             <td></td>
         </tr>
         </tbody>
@@ -397,13 +380,13 @@
 
     <p>Primes ou avantages en nature : </p>
 
-    <p>La visite médicale d'aptitude a été réalisée :   OUI □    NON □</p>
+    <p>La visite médicale d'aptitude a été réalisée : OUI <input type="checkbox"/> NON <input type="checkbox"/></p>
 
     <p>Le(la) salarié(e) pourra être amené(e) à :</p>
 
     <ul>
-        <li>travailler sur marchine(s) dangereuse(s) :   OUI □    NON □</li>
-        <li>être exposé à des risques particuliers :     OUI □    NON □ <br/>
+        <li>travailler sur marchine(s) dangereuse(s) : OUI <input type="checkbox"/> NON <input type="checkbox"/></li>
+        <li>être exposé à des risques particuliers : OUI <input type="checkbox"/> NON <input type="checkbox"/> <br/>
             <span>si oui, lesquels :</span></li>
     </ul>
 
@@ -413,7 +396,7 @@
             Lp. 522-2 du code du travail de Nouvelle-Calédonie.</p>
     </div>
 
-    <p>Fait à              , le</p>
+    <p>Fait à                , le</p>
 
     <div class="signatures">
         <div><strong>Le (la) salarié(e)</strong></div>
@@ -423,16 +406,19 @@
         </div>
     </div>
 
-    <hr/>
 
-    <p><em><sup>1</sup> Rappel : conformément aux dispositions de l'article Lp. 522-15 du code de travail de
-        Nouvelle-Calédonie, celui-ci ne peut pas être inférieur à un pourcentage du SMG fixé par un arrêté du
-        gouvernement de la Nouvelle-Calédonie.</em></p>
+    <div class="footer">
+        <hr/>
 
-    <p><em><sup>2</sup> Si celui-ci est supérieur au minimum légal ou conventionnel au titre de chaque année du contrat.</em></p>
+        <p><em><sup>1</sup> Rappel : conformément aux dispositions de l'article Lp. 522-15 du code de travail de
+            Nouvelle-Calédonie, celui-ci ne peut pas être inférieur à un pourcentage du SMG fixé par un arrêté du
+            gouvernement de la Nouvelle-Calédonie.</em></p>
 
-    <div>2 / 2</div>
+        <p><em><sup>2</sup> Si celui-ci est supérieur au minimum légal ou conventionnel au titre de chaque année du contrat.</em>
+        </p>
+    </div>
 </div>
+
 
 </body>
 </html>

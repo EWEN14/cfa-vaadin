@@ -15,9 +15,14 @@ li{
     margin: 0.8rem 0;
 }
 a{
-    color: white;
+    color: rgb(255,255,255,0.5);
     font-size: 1.2rem;
     padding-left: 0.5rem;
+}
+a:hover{
+    text-decoration: none;
+    color: white;
+    transition: all 0.5s;
 }
 .cfa-icon{
     width: 8rem;
@@ -102,4 +107,10 @@ header{
     margin-top: auto;
     margin-bottom: 12px;
     padding-left: 8px;
+}
+.menu-icon{
+    margin-right: 5px;
+}
+.active{
+    color: white;
 }

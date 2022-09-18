@@ -153,31 +153,31 @@ public class MainLayout extends AppLayout {
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
 
-                new MenuItemInfo("Accueil", "la la-file", HomeView.class),
+                new MenuItemInfo("Accueil", "la la-file menu-icon", HomeView.class),
 
-                new MenuItemInfo("Étudiants", "las la-user-graduate", EtudiantView.class),
+                new MenuItemInfo("Étudiants", "las la-user-graduate menu-icon", EtudiantView.class),
 
-                new MenuItemInfo("Référent Pédagogique", "las la-chalkboard-teacher", ReferentPedagogiqueView.class),
+                new MenuItemInfo("Référent Pédagogique", "las la-chalkboard-teacher menu-icon", ReferentPedagogiqueView.class),
 
-                new MenuItemInfo("Formations", "las la-award", FormationListView.class),
+                new MenuItemInfo("Formations", "las la-award menu-icon", FormationListView.class),
 
-                new MenuItemInfo("Evénements", "las la-history", EvenementView.class),
+                new MenuItemInfo("Evénements", "las la-history menu-icon", EvenementView.class),
 
-                new MenuItemInfo("Référent CFA", "las la-user", ReferentCfaView.class),
+                new MenuItemInfo("Référent CFA", "las la-user menu-icon", ReferentCfaView.class),
 
-                new MenuItemInfo("Entreprises", "las la-building", EntrepriseView.class),
+                new MenuItemInfo("Entreprises", "las la-building menu-icon", EntrepriseView.class),
 
-                new MenuItemInfo("Tuteurs", "las la-user-tie", TuteurView.class),
+                new MenuItemInfo("Tuteurs", "las la-user-tie menu-icon", TuteurView.class),
 
-                new MenuItemInfo("Entretien individuel", "las la-user", EntretienIndividuelView.class),
+                new MenuItemInfo("Entretien individuel", "las la-user menu-icon", EntretienIndividuelView.class),
 
-                new MenuItemInfo("Entretien Collectif", "las la-user", EntretienCollectifView.class),
+                new MenuItemInfo("Entretien Collectif", "las la-user menu-icon", EntretienCollectifView.class),
 
-                new MenuItemInfo("Contrats", "las la-file-contract", ContratView.class),
+                new MenuItemInfo("Contrats", "las la-file-contract menu-icon", ContratView.class),
 
-                new MenuItemInfo("Utilisateurs", "las la-user", UserView.class),
+                new MenuItemInfo("Utilisateurs", "las la-user menu-icon", UserView.class),
 
-                new MenuItemInfo("Logs", "las la-history", LogsView.class)
+                new MenuItemInfo("Logs", "las la-history menu-icon", LogsView.class)
         };
     }
 
@@ -194,7 +194,7 @@ public class MainLayout extends AppLayout {
 
             ContextMenu userMenu = new ContextMenu(name);
             userMenu.setOpenOnClick(true);
-            userMenu.addItem("Logout", e -> {
+            userMenu.addItem("Se déconnecter", e -> {
                 authenticatedUser.logout();
             });
 

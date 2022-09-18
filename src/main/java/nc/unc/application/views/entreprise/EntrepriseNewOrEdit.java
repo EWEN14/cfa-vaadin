@@ -81,8 +81,8 @@ public class EntrepriseNewOrEdit extends Dialog {
     adressePostaleCommune.setClearButtonVisible(true);
 
     // regex pour le ridet:
-    numeroRidet.setHelperText("ex: 000 000 000.000");
-    numeroRidet.setPattern("\\d{3}\\s\\d{3}\\s\\d{3}\\.\\d{3}$");
+    numeroRidet.setHelperText("ex: 0 000 000.000");
+    numeroRidet.setPattern("\\d\\s\\d{3}\\s\\d{3}\\.\\d{3}$");
 
     codeNaf.setHelperText("ex: 12.3 ou 12.34 ou 12.34Z");
 

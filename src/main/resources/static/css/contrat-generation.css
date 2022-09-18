@@ -1,71 +1,93 @@
 body {
     font-family: Calibri, sans-serif;
     margin: 0;
+    padding: 0;
+    font-size: 10px;
 }
-
-table, tr, td, th{
+.page{
+    height: 271mm;
+    display: flex;
+    flex-direction: column;
+}
+.bg-blue{
+    color: white;
+    background: #4a5488;;
+}
+.contrat-title{
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+}
+h1{
+    text-align: center;
+    font-family: 'Calibri Bold', sans-serif;
+    color: #4a5488;
+}
+.subtitle{
+    text-align: center;
+}
+.section-title{
+    text-align: center;
+    background: #4a5488;
+    color: white;
+}
+table, td, th{
     border: 1px solid black;
+    border-collapse: collapse;
+    min-width: 50px;
 }
 table{
+    margin: 10px 0;
     width: 100%;
 }
-.titre-big {
-    font-family: 'Calibri Bold', sans-serif;
-    font-weight: 800;
-    line-height: 1.4em;
-    color: #4a5488;
-    margin: 0;
-    display: block;
+td, th{
+    padding: 2px 0;
     text-align: center;
-    width: 100%;
 }
-
-.titre {
-    font-family: 'Calibri Bold', sans-serif;
-    font-weight: 500;
-    line-height: 1.4em;
-    color: #4a5488;
-    margin: 0;
-    display: block;
+.admin-cadre{
+    margin-top: 80px;
+}
+.admin-cadre td{
+    text-align: left;
+    padding: 0 5px;
+}
+.cfa-sup{
+    border: 1px solid black;
+}
+.cfa-sup p{
     text-align: center;
-    width: 100%;
 }
-
-.subtitle {
-    text-align: right;
-    font-size: small;
-    width: 97%;
-    margin-top: 2rem;
+.signatures{
+    display: flex;
+    flex-direction: row;
 }
-
-.blue-bg {
-    padding: 0.2rem;
-    margin: 0;
-    width: 100%;
+.signatures div:nth-child(1){
+    width: 50%;
+    display: inline;
+}
+.signatures div:nth-child(2){
+    width: 50%;
+    float: right;
+    display: inline;
+}
+.text-center{
     text-align: center;
-    color: white;
-    background-color: #4a5488;
 }
-
-.type-title {
-    border: 1px solid gray;
-    padding: 0.2rem 4rem;
-    text-align: center;
-    vertical-align: center;
+.avenant{
+    margin-bottom: 5px;
 }
-
-.type-data {
-    border: 1px solid gray;
-    padding: 0.2rem;
-    text-align: center;
-    vertical-align: center;
-    margin-bottom: 1rem;
+.footer{
+    margin-top: 120px;
 }
-
-.type-border {
-    vertical-align: center;
+.type-contrat{
+    width: auto;
 }
-
-table {
-    border-collapse: collapse;
+.type-contrat td{
+    padding: 0 5px;
+}
+.gouvernement{
+    width: 50px;
+    position: absolute;
+    top: 0;
+    left: 0;
 }

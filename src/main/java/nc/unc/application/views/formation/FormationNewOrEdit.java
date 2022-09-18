@@ -73,6 +73,8 @@ public class FormationNewOrEdit extends Dialog {
     HorizontalLayout layoutReferent = new HorizontalLayout();
     layoutReferent.setSpacing(false);
     layoutReferent.add(content,addReferentButton);
+
+    addReferentButton.addClassNames("referentbutton-contrat");
     layoutReferent.setAlignItems(FlexComponent.Alignment.CENTER);
 
     referentPedagogique.setItems(referentPedagogiqueList);

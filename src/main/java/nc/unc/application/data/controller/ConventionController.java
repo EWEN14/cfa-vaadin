@@ -46,7 +46,7 @@ public class ConventionController {
     @GetMapping("/download/{id}")
     public void downloadPDFRessoure(HttpServletResponse response,@PathVariable("id") long id){
       try{
-        Path file = Paths.get(pdfService.generatePdf(id).getAbsolutePath());
+        Path file = Paths.get(pdfService.generateConventionPdf(id).getAbsolutePath());
         if(Files.exists(file)){
           response.setContentType("application/pdf");
           response.addHeader("Content-Disposition",

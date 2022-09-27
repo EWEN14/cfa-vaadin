@@ -37,6 +37,12 @@ public class PdfService {
     return renderPdf(html, id);
   }
 
+  public File generateConventionPdf(Long id) throws IOException, DocumentException {
+    Context context = getContext(id);
+    String html = loadAndFillTemplateConvention(context);
+    return renderPdf(html, id);
+  }
+
   private File renderPdf(String html, Long id) throws IOException, DocumentException {
     Contrat contrat = contratService.findContratById(id);
     String annee = String.valueOf(Calendar.getInstance().get(Calendar.YEAR)).substring(2,4);
@@ -67,5 +73,9 @@ public class PdfService {
 
   private String loadAndFillTemplate(Context context) {
     return templateEngine.process("contrat_pdf", context);
+  }
+
+  private String loadAndFillTemplateConvention(Context context) {
+    return templateEngine.process("convention_pdf", context);
   }
 }

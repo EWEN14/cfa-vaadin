@@ -9,6 +9,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -82,6 +83,8 @@ public class LogsView extends VerticalLayout {
 
     public void deleteAncienLogs(){
         logEnregistrmentService.deleteAncienLogs();
+        updateList();
+        Notification.show("Les anciens logs ont été supprimés !");
     }
     // Création de l'interface des détails des items
     private ComponentRenderer<LogsDetailFormLayout, LogEnregistrement> createLogsDetailRenderer(){

@@ -1,0 +1,221 @@
+body {
+    font-family: Calibri, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.page-nb {
+    position: absolute;
+    right: 10mm;
+    bottom: 0;
+}
+
+.page {
+    height: 250mm;
+    border: 3px ridge lightgrey;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 10mm;
+}
+
+h1 {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 11mm;
+}
+
+h2 {
+    font-size: 13px;
+    margin: 20px 0;
+}
+
+h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+}
+
+.puce {
+    margin-right: 5mm;
+}
+.puce-niv-2{
+    margin-right: 3mm;
+}
+.objet{
+    margin-bottom: 0.9cm;
+}
+p {
+    font-size: 11px;
+}
+
+table {
+    width: 100%;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+table {
+    font-size: 11px;
+    line-height: 17px;
+    margin-bottom: 15px;
+}
+
+th {
+    text-align: center;
+    padding: 3px;
+}
+
+td {
+    padding: 3px 3px 10px 3px;
+    vertical-align: baseline;
+}
+.partie_table th{
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.partie_table{
+    margin: 20px 0;
+}
+.partie {
+    width: 50%;
+}
+
+li {
+    font-size: 11px;
+    list-style: none;
+    position: relative;
+    margin-bottom: 15px;
+}
+
+li::before {
+    content: '-';
+    position: absolute;
+    left: -20px;
+}
+
+.missions {
+    width: 100%;
+    height: 50mm;
+}
+
+.remuneration {
+    text-align: center;
+}
+
+.footer {
+    position: absolute;
+    width: 100%;
+    bottom: 10mm;
+    left: 10mm;
+    font-size: 11px;
+}
+
+.hidden {
+    display: none;
+}
+
+.no-border {
+    border: none !important;
+}
+
+.engagement li {
+    margin-bottom: 0 !important;
+}
+.signatures{
+    width: 100%;
+    text-align: center;
+    border: none;
+}
+.signatures h2{
+    text-align: center;
+}
+.signatures td{
+    border: none;
+    padding-bottom: 20px;
+}
+.signatures td{
+    width: 50%;
+    padding-bottom: 100px;
+}
+.signatures_date_lieu{
+    margin-bottom: 0 !important;
+    margin-top: 50px;
+}
+.signatures_date_lieu table{
+    margin-bottom: 0 !important;
+    padding: 0;
+    border: none;
+}
+.signatures_date_lieu td, .signatures_date_lieu th{
+    border: 1px solid white;
+    text-align: center;
+}
+.signatures_date_lieu td{
+    padding-bottom: 0 !important;
+}
+
+.signature_title{
+    text-align: center;
+}
+.calendrier table{
+    border: none;
+}
+.calendrier th{
+    border: 1px solid black;
+    padding: 0 !important;
+}
+.calendrier td{
+    padding: 0 2px !important;
+}
+.enseignement td, .enseignement th{
+    padding: 0 2px !important;
+}
+.enseignement th{
+    text-align: left;
+}
+.enseignement .total{
+    text-align: right;
+}
+.enseignement .total-value{
+    text-align: center;
+}
+.fiche_formation{
+    position: absolute;
+    top: 0;
+    right: 10mm;
+    text-align: center;
+}
+.fiche_formation_title{
+    font-size: 20px;
+}
+.titlep5{
+    margin-top: 80px;
+    font-weight: bold;
+}
+.volume-horaire{
+    text-align: center;
+}
+.table-header{
+    text-align: center !important;
+}
+.footer-formation{
+    position: absolute;
+    bottom: 5mm;
+    left: 40%;
+    font-size: 11px;
+    transform: translate(-50%,-50%);
+}
+.unccfa{
+    position: absolute;
+    left: 10mm;
+    top: 10mm;
+    width: 120px;
+}
+.bg-blue{
+    color: white;
+    background: #4a5488;;
+}

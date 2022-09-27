@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <title>Convention</title>
+    <!-- utilisation d'une condition qui change le link pour récupérer la CSS, qui diffère selon qu'on
+        télécharge le contrat ou si l'on regarde sa prévisualisation -->
+    <link rel="stylesheet" type="text/css" href="css/convention-generation.css" th:if="${ download }"/>
+    <link href="../static/css/convention-generation.css" th:href="@{/css/convention-generation.css}" rel="stylesheet"
+          th:unless="${ download }"/>
+</head>
+<body>
+<div class="page" data-th-object="${contrat}">
+    <img class="unccfa" src="images/unc-cfa.png" alt=""/>
+
+    <h1>CONVENTION N°CFA__-__<br/>RELATIVE<br/>A LA MISE EN ŒUVRE D'UN<br/>CONTRAT UNIQUE D'ALTERNANCE</h1>
+    <div class="objet">
+        <h2><span class="puce">I.</span>OBJET DE LA CONVENTION</h2>
+        <p>La présente convention conclue conformément aux dispositions de l'article LP.522-6 a pour objet de définir
+            les modalités de mise en oeuvre d'un contrat unique d'alternance et en particulier de préciser
+            l'organisation de la formation suivie par le salarié tant en centre de formation qu'en entreprise.</p>
+    </div>
+    <div>
+        <h2><span class="puce">II.</span>IDENTIFICATION DES PARTIES</h2>
+        <table class="partie_table">
+            <tr>
+                <th>EMPLOYEUR</th>
+                <th>SALARIE</th>
+            </tr>
+            <tr>
+                <td class="partie" data-th-object="${ contrat?.entreprise }">
+                    <b>RAISON SOCIALE : </b><span data-th-text="*{ raisonSociale }"></span><br/>
+                    <b>ENSEIGNE : </b><span data-th-text="*{ enseigne }"></span><br/>
+                    <b>N° RIDET : </b><span data-th-text="*{ numeroRidet }"></span><br/>
+                    <b>N° CAFAT : </b><span data-th-text="*{ numeroCafatEntreprise }"></span><br/>
+                    <b>CODE NAF : </b><span data-th-text="*{ codeNaf }"></span><br/>
+                    <br/>
+                    <b>ADRESSE PHYSIQUE DU LIEU D'ÉXÉCUTION DU<br/>CONTRAT : </b><span
+                        data-th-text="*{ adressePhysiqueRue }"></span><br/>
+                    <b>CODE POSTAL : </b><span data-th-text="*{ adressePhysiqueCodePostal }"></span><br/>
+                    <b>COMMUNE : </b><span data-th-text="*{ adressePhysiqueCommune }"></span><br/>
+                    <br/>
+                    <b>ADRESSE DU SIEGE </b>(Si différente du lieu<br/> d'exécution du contrat)<br/><b>RUE - BP
+                    : </b><span data-th-text="*{ adressePostaleRueOuBp }"></span><br/>
+                    <b>CODE POSTAL : </b><span data-th-text="*{ adressePostaleCodePostal }"></span><br/>
+                    <b>COMMUNE : </b><span data-th-text="*{ adressePostaleCommune }"></span><br/>
+                    <b>TEL : </b><span data-th-text="*{ telephoneEntreprise }"></span><br/>
+                    <b>COURRIEL : </b><span data-th-text="*{ emailEntreprise }"></span><br/>
+                    <br/>
+                    <b>CONVENTION COLLECTIVE APPLICABLE :</b><br/>
+                    <span data-th-text="*{ conventionCollective }"></span><br/>
+                    <b>STATUT JURIDIQUE : </b><span data-th-text="SARL"></span><br/>
+                    <b>NOMBRE DE SALARIES : </b><span data-th-text="*{ nombreSalarie }"></span>
+                </td>
+                <td class="partie" data-th-object="${ contrat?.etudiant }">
+                    <b>NOM D'USAGE : </b><span data-th-text="*{ nomEtudiant }"></span><br/>
+                    <b>NOM DE JEUNE FILLE : </b><span>__________</span><br/>
+                    <b>PRÉNOM : </b><span data-th-text="*{ prenomEtudiant }"></span><br/>
+                    <b>DATE DE NAISSANCE : </b><span
+                        data-th-text="${#temporals.format(contrat?.etudiant?.dateNaissanceEtudiant, 'dd/MM/yyyy')}"></span><br/>
+                    <b>LIEU DE NAISSANCE : </b><span data-th-text="*{ lieuNaissance }"></span><br/>
+                    <br/>
+                    <b>N° CAFAT : </b><span data-th-text="*{ numeroCafatEtudiant }"></span><br/>
+                    <br/>
+                    <b>ADRESSE : </b><span data-th-text="*{ adresseEtudiant }"></span><br/>
+                    <b>CODE POSTAL : </b><span data-th-text="*{ codePostalEtudiant }"></span><br/>
+                    <b>COMMUNE : </b><span data-th-text="*{ communeEtudiant }"></span><br/>
+                    <b>TEL : </b><span data-th-text="*{ telephoneEtudiant1 }"></span><br/>
+                    <b>COURRIEL : </b><span data-th-text="*{ emailEtudiant }"></span><br/>
+                    <br/>
+                    <b>DIPLOME LE PLUS ÉLEVÉ OBTENU : </b><span
+                        data-th-text="*{dernierDiplomeObtenuOuEnCours}"></span><br/>
+                    <b>ANNÉE : </b><span data-th-text="*{ anneeObtentionDernierDiplome }"></span><br/>
+                    <b>SITUATION AVANT LE CONTRAT : </b><span data-th-text="*{situationAnneePrecedente}"></span><br/>
+                    <br/>
+                    <b>TRAVAILLEUR HANDICAPÉ : </b><input type="checkbox"/>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th>TUTEUR</th>
+                <th>CENTRE DE FORMATION PAR ALTERNANCE</th>
+            </tr>
+            <tr>
+                <td class="partie" data-th-object="${contrat?.tuteur}">
+                    <b>NOM : </b><span data-th-text="*{nomTuteur}"></span><br/>
+                    <b>PRÉNOM : </b><span data-th-text="*{prenomTuteur}"></span><br/>
+                    <b>FONCTION OCCUPÉE : </b><span data-th-text="*{posteOccupe}"></span><br/>
+                    <b>DURÉE D'EXPÉRIENCE PROFESSIONNELLE : </b><span
+                        data-th-text="*{anneeExperienceProfessionnelle}"></span><br/>
+                    <b>NIVEAU DU DIPLOME LE PLUS ELEVÉ : </b><span data-th-text="*{niveauDiplome}"></span><br/>
+                    <b>TEL : </b><span data-th-text="*{telephoneTuteur1}"></span><br/>
+                </td>
+                <td class="partie">
+                    <b>RAISON SOCIALE : </b><br/>
+                    UNIVERSITE DE LA NOUVELLE-CALEDONIE<br/>
+                    <br/>
+                    <b>N° RIDET : </b>0 568 592.001<br/>
+                    <b>N° DFPC : </b>988/198/04U<br/>
+                    <br/>
+                    <b>ADRESSE DU LIEU DE FORMATION :</b><br/>
+                    145 avenue James Cook, 98 800 Nouméa
+                </td>
+            </tr>
+        </table>
+    </div>
+    <p class="page-nb">Page <b>1</b> sur <b>4</b></p>
+</div>
+
+<div class="page" data-th-object="${contrat}">
+    <h2><span class="puce">III.</span>PARCOURS DE FORMATION DU SALARIÉ</h2>
+    <ul>
+        <li data-th-object="${contrat?.formation}">
+            <b>Certification visée : </b><br/>
+            <span data-th-text="*{libelleFormation}"></span> - Niveau <span
+                data-th-text="*{niveauCertificationProfessionnelle}"></span>
+        </li>
+        <li>
+            <b>Dispositions générales</b><br/>
+            Cette formation se déroule sur 1 an et permet d'acquérir 60 ECTS<sup>1</sup>. Accessible en formation
+            initlae ou continue, elle repose sur l'alternance entre semaines de cours à l'université en présentiel et
+            semaines en entreprise.
+        </li>
+        <li>
+            <b>Durée et dates du contrat :</b><br/>
+            <u>Date de début</u> : <span data-th-text="${#temporals.format(contrat.debutContrat, 'dd/MM/yyyy')}"></span><br/>
+            <u>Date de fin</u> : <span data-th-text="${#temporals.format(contrat.finContrat, 'dd/MM/yyyy')}"></span>
+        </li>
+        <li data-th-object="${contrat?.formation}">
+            <b>Durée de formation : </b>
+            La formation de <span data-th-text="*{heuresFormation}"></span> heures, dont ___ heures de projet tuteuré,
+            répartie sur <span data-th-text="*{semainesFormation}"></span> semaines d'enseignements, est dispensée en
+            présentiel sous forme de cours, de travaux dirigés, de travaux pratiques et de travaux personnels.
+        </li>
+        <li>
+            <b>Contenu de la formation</b><br/>
+            Le calendrier prévisionnel, les titres des formateurs, les moyens pédagogiues et techniques mis en oeuvre
+            par le CFA Sup, les modalités d'évaluation ainsi que les modalité d'appui au tuteur par le CFA Sup sont
+            précisés sur la fiche de présentation de la formation jointe en <b>annexe 1</b> de la présente convention.
+        </li>
+        <li>
+            <b>Contrôle de l'assiduité pendant les heures de projets tuteurés : </b>
+            La formation prévoit des heures de projet tuteuré. Dans ce cadre, les étudiants sont amenés à se déplacer en
+            dehors de l'Université. L'étudiant s'engage à signaler au CFA Sup et à son employeur toutes absences dans
+            les plus brefs délais.
+        </li>
+    </ul>
+
+    <h2><span class="puce">IV.</span>LES MISSIONS CONFIEES AU SALARIÉ</h2>
+
+    <b>Les missions confiées au salarié en entreprise consisteront notamment à : </b>
+
+    <div class="missions"></div>
+
+    <h2><span class="puce">V.</span>REMUNERATION (Arrêté n°2018-3193/GNC du 26 décembre 2018)</h2>
+
+    <table class="no-border remuneration">
+        <tr>
+            <td class="no-border"></td>
+            <td colspan="3">Niveaux<br/>V et IV</td>
+            <td colspan="3">Niveaux<br/> III à I</td>
+        </tr>
+        <tr>
+            <td class="no-border"></td>
+            <td>1<sup>ère</sup><br/>année</td>
+            <td>2<sup>ème</sup><br/>année</td>
+            <td>3<sup>ème</sup> ou<br/>4<sup>ème</sup> année</td>
+
+            <td>1<sup>ère</sup><br/>année</td>
+            <td>2<sup>ème</sup><br/>année</td>
+            <td>3<sup>ème</sup> ou<br/>4<sup>ème</sup> année</td>
+        </tr>
+        <tr>
+            <td>Moins de 21 ans</td>
+
+            <td>50%</td>
+            <td>55%</td>
+            <td>60%</td>
+
+            <td>65%</td>
+            <td>70%</td>
+            <td>75%</td>
+        </tr>
+        <tr>
+            <td>21 ans et plus</td>
+
+            <td>60%</td>
+            <td>65%</td>
+            <td>70%</td>
+
+            <td>75%</td>
+            <td>80%</td>
+            <td>85%</td>
+        </tr>
+    </table>
+
+    <div class="footer">
+        <hr/>
+        <sup>1</sup> ECTS : Système européen de transfert et d'accumulation de crédits
+    </div>
+
+    <p class="page-nb">Page <b>2</b> sur <b>4</b></p>
+</div>
+
+<div class="page" data-th-object="${contrat}">
+    <h2><span class="puce">VI.</span>PRISE EN CHARGE DES FRAIS D'INSCRIPTION</h2>
+    <p>Les droits d'inscriptions<sup>2</sup> d'un montant de 20286 F (hors option sport loisirà sont à régler au plus
+        tard de l'inscription administrative de l'étudiant, soit :</p>
+    (Cochez la case correspondante)<br/><br/>
+
+    <input type="checkbox"/> Par l'employeur :
+
+    <p><i>L'employeur prend en charge les droits d'inscription pour le compte de l'alternant sur présentation d'une
+        facture adressée par l'UNC</i></p>
+
+    <p>ou</p>
+
+    <input type="checkbox"/> Par l'alternant :
+    <p><i>L'alternant prend en charge les droits d'inscription dans la formation, à verser lors de son inscription
+        administrative à l'UNC</i></p>
+
+    <h2><span class="puce">VII.</span>ENGAGEMENTS DES PARTIES</h2>
+
+    <h3><span class="puce-niv-2">A.</span>ENGAGEMENTS DE L'EMPLOYEUR</h3>
+
+    <ul class="engagement">
+        <li>Transmettre au CFA Sup une copie du contrat de travail et les avenants éventuels ;</li>
+        <li>Informer le CFA Sup en cas de rupture du contrat (date de motif) ;</li>
+        <li>Informer le CFA Sup des absences du salarié durant les périodes en entreprise ;</li>
+        <li>Informer le CFA Sup de tout changement intervenant dans la situation de l'alternant ou dans l'organisation
+            de la formation en entreprise ;
+        </li>
+        <li>Permettre au tuteur de suivre la formation de tuteur nécessaire à son habilitation et d'assister aux
+            réunions ou entretiens organisés par le CFA Sup ;
+        </li>
+        <li>Permettre à l'alternant de suivre l'intégralité de son parrcours de formation au CFA Sup ;</li>
+        <li>Donner au tuteur les moyens et le temps nécessaire à la fomration, au suivi et à l'évaluation de l'alternant
+            ;
+        </li>
+        <li>Se soumettre à tout audit ou contrôle diligenté par la Nouvelle-Calédonie ;</li>
+        <li>Prévenir le CFA Sup en cas de mise en place dune période de formation pratique dispensée dans une autre
+            entreprise ;
+        </li>
+        <li>Accueillir le conseiller CFA Sup et/ou le référent pédagogique lors des visites et leur accorder le temps
+            néccessaire au suivi de l'alternant.
+        </li>
+    </ul>
+
+    <h3><span class="puce-niv-2">B.</span>ENGAGMENTS DU TUTEUR</h3>
+    <ul class="engagement">
+        <li>Assurer la formation du salarié en situation hors poste de travail, et/ou au poste de travail en situation de formation ;</li>
+        <li>Veiller à ce que le document de liaison (Lé@) avec le CFA Sup soit régulièrement complété ;</li>
+        <li>Suivre le travail de l'alternant lorsqu'il est au CFA Sup ;</li>
+        <li>Signaler au CFA Sup les difficultés rencontrées par l'alternant ;</li>
+        <li>Participer aux réunions pédagogoiques organisées par le CFA Sup ;</li>
+        <li>Accueillir l'alternant et lui présenter l'entreprise, l'équipe et le règlement intérieur.</li>
+    </ul>
+
+    <h3><span class="puce-niv-2">C.</span>ENGAGEMENTS DU SALARIÉ</h3>
+    <ul class="engagement">
+        <li>Suivre l'ensemble des enseignements propsoés par le CFA Sup ;</li>
+        <li>Réaliser les travaux qui lui sont confiés sous le contrôle de son tuteur lors des périodes de formation en entreprise</li>
+        <li>Respecter le règlement intérieur du CFA et celui de l'entreprise ;</li>
+        <li>Porter une tenue adaptée au monde professionnel en entreprise et au CFA Sup ;</li>
+        <li>Compléter régulièrement le livrer électronique d'apprentissage « Lé@ ».</li>
+    </ul>
+
+    <h3><span class="puce-niv-2">D.</span>ENGAGEMENTS DU CFA SUP</h3>
+
+    <ul class="engagement">
+        <li>Dispenser à l'alternant un senseignement pendant les périodes de formation à l'Université ;</li>
+        <li>Former le tuteur si celui-ci n'est pas encore habilité ;</li>
+    </ul>
+
+    <div class="footer">
+        <hr/>
+        <u><sup>2</sup> Droits classiques</u> selon l'arrêté du 19 avril 2019 relatif aux droits d'inscription dans les
+        établissements publics d'enseignement supérieur relevant du ministre chargé de l'enseignement supérieur.
+    </div>
+
+    <p class="page-nb">Page <b>3</b> sur <b>4</b></p>
+</div>
+
+<div class="page" data-th-object="${contrat}">
+    <ul class="engagement">
+        <li>Communiquer à l'employeur et au tuteur les noms et coordonnées du ou des personnes référentes au sein du CFA
+            Sup ;
+        </li>
+        <li>Assurer un appui pédagogique auprès du tuteur et un suivi régulier de l'alternant en entreprise (au minimum
+            deux visites par an) ;
+        </li>
+        <li>Communiquer au tuteur les documents à caractère pédagogique nécessaires à sa bonne connaissance du parcours
+            de formation de l'alternant ;
+        </li>
+        <li>Informer l'entreprise de toute absence du salarié durant les périodes en centre ;</li>
+        <li>Informer l'employeur et letuteur de toute sanction disciplinaire apliquée au salarié ;</li>
+        <li>Informer le tuteur sur le déroulement des périodes de formation en centre (respect du calendrier, contenus,
+            résultats et comportement du slarié, etc...) au travers du document de liaison ;
+        </li>
+        <li>Associer le tuteur aux évaluations des acquis réalisés en cours de formation ;</li>
+        <li>Informer l'employeur et le tuteur des modalités d'organisation des examens.</li>
+    </ul>
+
+    <h2><span class="puce">VIII.</span>INTERRUPTION DU PARCOURS DE FORMATON</h2>
+
+    <h3><span class="puce-niv-2">A.</span>INTERRUPTION A L'INITIATIVE DU CFA SUP</h3>
+    <p>Le CFA Sup se réserve le droit de rompre à tout moment la présente convention en cas de force majeure.</p>
+
+    <h3><span class="puce-niv-2">B.</span>INTERRUPTION EN CAS DE NON-RESPECT DE SES ENGAGEMENTS PAR L'UNE DES PARTIES</h3>
+    <p>Chaque partie peut dénoncer par simple courrier aux trois autres parties la présente convention si elle estime
+        que l'un des engaments cités ci-dessus n'est pas respecté. Dans ce cas, les parties pourront décider, soit de
+        maintenir la convention après avoir fait cesser le manquement, soit d'y mettre un terme.<br/>La rupture de la
+        présente convention entraînera la caducité du contrat unique d'alternance.</p>
+
+    <h3><span class="puce-niv-2">C.</span>LA PRÉSENTE CONVENTION SERA RÉSILIÉE DE PLEIN DROIT EN CAS DE RUPTURE DU CONTRAT UNIQUE D'ALTERNANCE LIANT L'ÉTUDIANT A L'EMPLOYEUR.</h3>
+
+    <table class="signatures_date_lieu">
+        <tr>
+            <td><p>À .....................................</p></td>
+            <td><p>LE .....................................</p></td>
+        </tr>
+    </table>
+
+    <h2 class="signature_title">SIGNATURES</h2>
+
+    <table class="signatures">
+        <tr>
+            <td><h2>SALARIÉ</h2></td>
+            <td><h2>EMPLOYEUR<br/>représenté par</h2></td>
+        </tr>
+    </table>
+
+    <table class="signatures">
+        <tr>
+            <td><h2>CFA Sup<br/>représenté par</h2></td>
+            <td><h2>TUTEUR</h2></td>
+        </tr>
+    </table>
+
+    <p class="page-nb">Page <b>4</b> sur <b>4</b></p>
+</div>
+
+<div class="page" data-th-object="${contrat}">
+    <img class="unccfa" src="images/unc-cfa.png" alt=""/>
+    <div class="fiche_formation">
+        <p class="fiche_formation_title">FICHE FORMATION</p>
+        <p>Annexe 1 à la convention de formation</p>
+    </div>
+
+    <h1 class="titlep5">LICENCE PROFESSIONNELLE METIERS DE L'INFORMATIQUE : APPLICATIONS WEB</h1>
+
+    <h2><span class="puce">I.</span>Calendrier prévisionnel de la formation</h2>
+
+    <table class="calendrier">
+        <tr>
+            <td class="no-border"></td>
+            <th class="bg-blue" colspan="2">PERIODES EN ENTREPRISE</th>
+            <th class="bg-blue" colspan="2">PERIODES A L'UNC</th>
+        </tr>
+        <tr>
+            <td>PERIODE 1</td>
+
+            <td>De la date de contrat<sup>*</sup> au ...</td>
+            <td>... semaines</td>
+
+            <td>Du ... février au ... mars</td>
+            <td>... semaines</td>
+        </tr>
+        <tr>
+            <td>PERIODE 2</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+        </tr>
+        <tr>
+            <td>PERIODE 3</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+        </tr>
+        <tr>
+            <td>PERIODE 4</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+        </tr>
+        <tr>
+            <td>PERIODE 5</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+        </tr>
+        <tr>
+            <td>PERIODE 6</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+        </tr>
+        <tr>
+            <td>PERIODE 7</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+        </tr>
+        <tr>
+            <td>PERIODE 8</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+        </tr>
+        <tr>
+            <td>PERIODE 9</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+        </tr>
+        <tr>
+            <td>PERIODE 10</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+
+            <td>Du ... au ...</td>
+            <td>... semaines</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="no-border"></td>
+            <td><b>... semaines</b></td>
+
+            <td class="no-border"></td>
+            <td><b>... semaines</b></td>
+        </tr>
+    </table>
+
+    <h2><span class="puce">II.</span>Maquette pédagogique prévisionnelle</h2>
+
+    <table class="enseignement">
+        <tr>
+            <th class="table-header bg-blue" colspan="2">ENSEIGNEMENTS</th>
+            <th class="table-header bg-blue">VOLUME HORAIRE</th>
+        </tr>
+        <tr>
+            <th rowspan="4">UE 0<br/>Bases communes</th>
+            <td>BC1 : Algorithmique - Programmation Objet</td>
+            <td class="volume-horaire">24</td>
+        </tr>
+        <tr>
+            <td>BC2 : Base de données</td>
+            <td class="volume-horaire">14</td>
+        </tr>
+        <tr>
+            <td>BC3 : Initiation pages web</td>
+            <td class="volume-horaire">12</td>
+        </tr>
+        <tr>
+            <td>BC4 : Système et réseaux</td>
+            <td class="volume-horaire">10</td>
+        </tr>
+        <tr>
+            <th rowspan="5">UE1<br/>Environnement du web</th>
+            <td>Web-ENV1 : Anglais</td>
+            <td class="volume-horaire">24</td>
+        </tr>
+        <tr>
+            <td>Web-ENV2 : Expression - Communication Web</td>
+            <td class="volume-horaire">18</td>
+        </tr>
+        <tr>
+            <td>Web-ENV3 : Droit des données, de l'internet et de la sécurité</td>
+            <td class="volume-horaire">18</td>
+        </tr>
+        <tr>
+            <td>Web-ENV4 : Gestion de projet internet</td>
+            <td class="volume-horaire">30</td>
+        </tr>
+        <tr>
+            <td>Web-ENV5 : Séminaires Réalités d'Entreprise</td>
+            <td class="volume-horaire">12</td>
+        </tr>
+        <tr>
+            <th rowspan="6">UE 2<br/>Développement pour le<br/>web</th>
+            <td>Web-DEV1 : Développement Mobile 1</td>
+            <td class="volume-horaire">12</td>
+        </tr>
+        <tr>
+            <td>Web-DEV2 : Modélisation</td>
+            <td class="volume-horaire">12</td>
+        </tr>
+        <tr>
+            <td>Web-DEV3 : Pages Web Responsive</td>
+            <td class="volume-horaire">18</td>
+        </tr>
+        <tr>
+            <td>Web-DEV4 : Développement Web</td>
+            <td class="volume-horaire">62</td>
+        </tr>
+        <tr>
+            <td>Web-DEV5 : Architectures Distribuées, Web Services</td>
+            <td class="volume-horaire">28</td>
+        </tr>
+        <tr>
+            <td>Web-DEV6 : Application client riche 1</td>
+            <td class="volume-horaire">24</td>
+        </tr>
+        <tr>
+            <th rowspan="6">UE 3<br/>Développement avancé pour le web</th>
+            <td>Web-DAV1 : Développement Mobile 2</td>
+            <td class="volume-horaire">30</td>
+        </tr>
+        <tr>
+            <td>Web-DAV2 : Pages Web Dynamiques</td>
+            <td class="volume-horaire">18</td>
+        </tr>
+        <tr>
+            <td>Web-DAV3 : Recherche d'Information et référencement internet</td>
+            <td class="volume-horaire">24</td>
+        </tr>
+        <tr>
+            <td>Web-DAV4 : Visualisation sur le web</td>
+            <td class="volume-horaire">30</td>
+        </tr>
+        <tr>
+            <td>Web-DAV5 : Sécurité des Systèmes d'exploitation et des réseaux</td>
+            <td class="volume-horaire">48</td>
+        </tr>
+        <tr>
+            <td>Web-DAV6 : Application Client Riche 2</td>
+            <td class="volume-horaire">24</td>
+        </tr>
+        <tr>
+            <th>UE4 : Projet tuteuré</th>
+            <td></td>
+            <td class="volume-horaire">120</td>
+        </tr>
+        <tr>
+            <th class="total" colspan="2">TOTAL</th>
+            <th class="total-value">630</th>
+        </tr>
+    </table>
+
+    <p class="footer-formation">CFA Sup - Université de la Nouvelle-Calédonie</p>
+</div>
+
+<div data-th-object="${contrat}" class="page">
+    <h2><span class="puce">III.</span>Moyens pédagogiques mis en oeuvre au sein du CFA Sup</h2>
+    <p>L'animation et les responsabilités pédagogiques sont exercées par les équipes pédagogiques constituées au sein de l'Institut universitaire de technologie qui assure les différentes missions de sélection des candidats, de coordination, d'enseignement et d'évaluation des alternants</p>
+    <p>Le livret électronique d'apprentisage « LEA » a pour but de suivre, d'informer et d'évaluer l'alternant via un accès internet sécurisé par un identifiant et un mot de passe, tout en conservant le trinôme Tuteur / Alternant / référent pédagogique. C'est également un espace de discussion, d'échange de documents, d'évaluation de la satisfaction et de suivi de l'assiduité.</p>
+
+    <h2><span class="puce">IV.</span>Modalités de contrôle des connaissances</h2>
+    <ul class="engagement">
+        <li>Contrôle contnu : le contrôle continu repose sur des devoirs sur table avec ou sans documents, d'interrogations écrites ou orales, d'exercices de travaux pratiques, de comptes rendus, exposés, rapports écrits, dossiers, et toute autre activité pédagogique notée par l'enseignant</li>
+        <li>Projet tuteuré</li>
+        <li>Intégration en milieu professionnel</li>
+        <li>Rapport et soutenance</li>
+    </ul>
+
+    <h2><span class="puce">V.</span>Titres et qualités des formateurs</h2>
+    <p>L'équipe pédagogique est composée de professionnels de l'enseignement supérieur, universitaire : des enseignants chercheurs (professeurs des universités et maîtres de conférence) titulaires d'un doctorat, professeurs agrégés, chargés d'enseignement (vacataires) sélectionnés par comission ad hoc en raison de leurs compétences dans le métier.</p>
+
+    <h2><span class="puce">VI.</span>Responsable pédagogique de la formation</h2>
+    <p data-th-object="${contrat?.formation?.referentPedagogique}"><span data-th-text="*{civiliteReferentPedago}"></span> <span data-th-text="*{nomReferentPedago}"></span> <span data-th-text="*{prenomReferentPedago}"></span></p>
+
+    <h2><span class="puce">VII.</span>Modalités d'appui au tuteur par le CFA Sup</h2>
+
+    <ul>
+        <li>Formation du tuteur<br/>Le CFA Sup invitera le tuteur à participer à une session de formtion d'une durée de 4h00 dans les deux mois suivant la date de début du contrat unique d'alternance.</li>
+        <li>Le conseil de perfectionnement<br/>Dans le cadre de la politique de l'université, des dispositifs d'évaluation sont mis en place pour chaque formation ou pour un groupe de formations, notamment à travers la constitution de conseils de perfectionnement réunissant des enseignants, référents pédagogiques, tuteurs, représentants du CFA Sup et des alternants. Ces conseils s'inscrivent dans une démarche d'amélioration continue des formations.</li>
+        <li>Les conseils pédagogiques<br/>Le CFA Sup dispose d'un conseil pédagogique tel que prévu à l'article Lp.553-6 du code du travail. Il se réunit au minimum 2 fois par an.</li>
+        <li>Les visites périodiques en entreprise<br/>Les visites du conseiller CFA Sup et/ou référent pédagogique constituent un temps d'échange privilégié.</li>
+        <li>Le secrétariat du CFA Sup<br/>Le secrétariat du CFA Sup accueille les alternants et répond aux demandes des entreprises/organisations du lundi au vendredi de 7h30 à 12h00 et de 13h00 à 16h30.</li>
+        <li>La conseillère CFA Sup<br/>La conseillère du CFA Sup se rend disponible sur rdv pour assurer auprès du tuteur et de l'alternant un accompagnement personnalisé (aide au Lé@, conduite d'action de médiation, évaluation et suivi psycho social de l'alternant...)</li>
+    </ul>
+
+    <div class="footer-formation">CFA Sup - Université de la Nouvelle-Calédonie</div>
+</div>
+
+</body>
+</html>

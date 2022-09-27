@@ -1,5 +1,6 @@
 package nc.unc.application.data.service;
 
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.server.VaadinSession;
 import nc.unc.application.data.entity.LogEnregistrement;
 import nc.unc.application.data.entity.User;
@@ -8,8 +9,7 @@ import nc.unc.application.data.repository.LogEnregistrementRepository;
 import org.springframework.stereotype.Service;
 import nc.unc.application.security.AuthenticatedUser;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class LogEnregistrmentService {
@@ -103,4 +103,36 @@ public class LogEnregistrmentService {
       logEnregistrement.setExecutant(user.getNom() + " " + user.getPrenom());
     }
   }
+
+  public void deleteAll(List<LogEnregistrement> logs){
+    logEnregistrementRepository.deleteAll(logs);
+  }
+
+  /**
+   * Suppression des anciens logs
+   */
+  public void deleteAncienLogs(){
+
+      //Récupérer le mois actuel
+      Calendar cal = new GregorianCalendar();
+      cal.setTime(new Date());
+      int moisactuel = cal.get(Calendar.MONTH);
+
+      //Récupérer les logs dont le mois de la date de création est inférieur au mois actuel
+      List<LogEnregistrement> logs = findAllLogs(null);
+      List<LogEnregistrement> logsASupprimer = new ArrayList<>();
+      if(logs.size() > 0){
+        for(LogEnregistrement log : logs){
+          int mois = log.getCreatedAt().getMonthValue();
+          if(mois < moisactuel){
+            logsASupprimer.add(log);
+          }
+        }
+      }
+      //Suppresion de la liste des logs
+      if(logsASupprimer.size() > 0){
+        deleteAll(logsASupprimer);
+      }
+    }
+
 }

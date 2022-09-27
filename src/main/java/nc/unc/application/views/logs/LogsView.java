@@ -3,6 +3,7 @@ package nc.unc.application.views.logs;
 
 import com.vaadin.flow.component.AbstractSinglePropertyField;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -36,6 +37,7 @@ public class LogsView extends VerticalLayout {
     Grid<LogEnregistrement> grid = new Grid<>(LogEnregistrement.class);
     LogEnregistrmentService logEnregistrmentService;
     TextField filtertext = new TextField();
+    Button deleteAncienLogs;
 
     private HorizontalLayout getToolbar(){
         filtertext.setHelperText("Recherche par description...");
@@ -44,7 +46,10 @@ public class LogsView extends VerticalLayout {
         filtertext.setValueChangeMode(ValueChangeMode.LAZY);
         filtertext.addValueChangeListener(e -> updateList());
 
-        HorizontalLayout toolbar = new HorizontalLayout(filtertext);
+        deleteAncienLogs = new Button("Supprimer les anciens logs");
+        deleteAncienLogs.addClickListener(click -> deleteAncienLogs());
+
+        HorizontalLayout toolbar = new HorizontalLayout(filtertext, deleteAncienLogs);
         toolbar.addClassName("toolbar");
         return toolbar;
     }
@@ -75,6 +80,9 @@ public class LogsView extends VerticalLayout {
         grid.setItems(logEnregistrmentService.findAllLogs(filtertext.getValue()));
     }
 
+    public void deleteAncienLogs(){
+        logEnregistrmentService.deleteAncienLogs();
+    }
     // Création de l'interface des détails des items
     private ComponentRenderer<LogsDetailFormLayout, LogEnregistrement> createLogsDetailRenderer(){
         return new ComponentRenderer<>(LogsDetailFormLayout::new, LogsDetailFormLayout::setLogs);

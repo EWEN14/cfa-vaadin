@@ -17,4 +17,10 @@ public interface EntrepriseRepository extends JpaRepository<Entreprise, Long> {
   List<Entreprise> search(@Param("searchTerm") String searchTerm);
 
   List<Entreprise> findAllByOrderByEnseigneAsc();
+
+  @Query("select count(e) from Entreprise e " +
+          "where e.statutActifEntreprise = :statut")
+  Integer CountBystatutActifEntreprise(@Param("statut") String statut);
+
+  Entreprise findByNumeroRidet(String numeroRidet);
 }

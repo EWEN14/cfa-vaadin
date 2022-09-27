@@ -42,8 +42,8 @@ public class FormationService {
   }
 
   //Retourne le nombre de formations
-  public void countFormations(){
-    formationRepository.count();
+  public long countFormations(){
+    return formationRepository.count();
   }
 
   // retourne les formation pour lequel le tuteur n'est pas habilité

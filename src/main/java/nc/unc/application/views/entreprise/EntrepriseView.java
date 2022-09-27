@@ -125,16 +125,17 @@ public class EntrepriseView extends VerticalLayout {
     // on met les noms de famille en majuscule
     setNameToUppercase(entreprise);
 
-    // sauvegarde du contrat
-    entrepriseService.saveEntreprise(entreprise);
-
+    // sauvegarde de l'entreprise
+    boolean isSave = entrepriseService.saveEntreprise(entreprise);
+    if(!isSave){
+      Notification.show("Une entreprise contient déja ce numéro de ridet. Ajout annulé!");
+    }
     // ajout du log d'ajout
     logEnregistrmentService.saveLogAjoutString(entreprise.toString());
 
     // mise à jour de la grid, fermeture du formulaire et notification
     updateList();
     closeNewOrEditModal();
-    Notification.show("Entreprise créée.");
   }
 
   // sauvegarde de l'entreprise modifiée en utilisant EntrepriseService

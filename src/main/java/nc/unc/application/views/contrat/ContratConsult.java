@@ -46,6 +46,8 @@ public class ContratConsult extends Dialog {
   private HorizontalLayout lienContainer = new HorizontalLayout();
   private Anchor lienPreview = new Anchor("unc.nc", "Consulter le contrat");
   private Anchor lienDownloadPdf = new Anchor("unc.nc", "Télécharger le contrat");
+  private Anchor lienConsultConvention = new Anchor("unc.nc", "Consulter la convention");
+  private Anchor lienDownloadConvention = new Anchor("unc.nc", "Télécharger la convention");
 
   // form qui contiendra les informations générales relatives au contrat
   private final FormLayout form = new FormLayout();
@@ -202,13 +204,17 @@ public class ContratConsult extends Dialog {
     // on ouvre la page du contrat à générer dans un pdf dans un nouvel onglet
     lienPreview.setTarget("_blank");
     lienDownloadPdf.setTarget("_blank");
+    lienDownloadConvention.setTarget("_blank");
+    lienConsultConvention.setTarget("_blank");
 
     // ajout des classes sur les liens
     lienPreview.addClassNames("contrat-link");
     lienDownloadPdf.addClassNames("contrat-link");
+    lienDownloadConvention.addClassNames("contrat-link");
+    lienConsultConvention.addClassNames("contrat-link");
 
     // on met les liens dans des Div, qu'on met ensuite dans notre HorizontalLayout
-    lienContainer.add(new Div(lienPreview), new Div(lienDownloadPdf));
+    lienContainer.add(new Div(lienPreview), new Div(lienDownloadPdf), new Div(lienConsultConvention), new Div(lienDownloadConvention));
 
     // configuration de la grille des avenants
     configureGrid();
@@ -251,9 +257,11 @@ public class ContratConsult extends Dialog {
       //Transforme les dates en LocalDate et remplies les champs de dates
       dateCreation.setValue(contrat.getCreatedAt().toLocalDate());
       dateMiseAJour.setValue(contrat.getUpdatedAt().toLocalDate());
-      // on passe l'id du contrat pour la page de generation pdf du contrat
+      // on passe l'id du contrat pour la page de generation pdf du contrat et de la convention
       lienPreview.setHref("/contrat-generation/"+contrat.getId());
       lienDownloadPdf.setHref("/contrat-generation/download/"+contrat.getId());
+      lienConsultConvention.setHref("/convention-generation/"+contrat.getId());
+      lienDownloadConvention.setHref("/convention-generation/download/"+contrat.getId());
 
       // on affiche le layout avec les liens pour les contrats que si celui-ci contient étudiant, formation, entreprise et tuteur
       lienContainer.setVisible(contrat.getEtudiant() != null && contrat.getFormation() != null && contrat.getEntreprise() != null && contrat.getTuteur() != null);

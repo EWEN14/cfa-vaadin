@@ -1,33 +1,34 @@
 package nc.unc.application.views.about;
 
+import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Etudiant;
+import nc.unc.application.data.entity.Formation;
 import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.enums.Sexe;
-import nc.unc.application.data.enums.SituationEntreprise;
+import nc.unc.application.data.enums.StatutActifEntreprise;
 import nc.unc.application.data.service.*;
 import nc.unc.application.views.ConfirmDelete;
 import nc.unc.application.views.MainLayout;
 import nc.unc.application.views.etudiant.EtudiantConsult;
-import nc.unc.application.views.etudiant.EtudiantNewOrEdit;
 import nc.unc.application.views.tuteur.TuteurConsult;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
+import java.util.*;
 
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests
@@ -49,15 +50,20 @@ public class HomeView extends VerticalLayout {
 
   EtudiantService etudiantService;
   ContratService contratService;
+  EntrepriseService entrepriseService;
   TuteurService tuteurService;
+  FormationService formationService;
   LogEnregistrmentService logEnregistrmentService;
+  H3 titreChiffres = new H3("Chiffres importants");
   H3 titreEtudiantSansEntreprise = new H3("Etudiants sans entreprise");
   H3 titreTuteurSansHabilitation = new H3("Tuteurs sans habilitations");
 
-  public HomeView(EtudiantService etudiantService, TuteurService tuteurService, LogEnregistrmentService logEnregistrmentService, ContratService contratService) {
+  public HomeView(FormationService formationService, EntrepriseService entrepriseService, EtudiantService etudiantService, TuteurService tuteurService, LogEnregistrmentService logEnregistrmentService, ContratService contratService) {
+    this.formationService = formationService;
     this.etudiantService = etudiantService;
     this.contratService = contratService;
     this.tuteurService = tuteurService;
+    this.entrepriseService = entrepriseService;
     this.logEnregistrmentService = logEnregistrmentService;
 
     addClassName("list-view");
@@ -95,9 +101,45 @@ public class HomeView extends VerticalLayout {
     content1.addClassNames("content", "gap-m");
     content1.setSizeFull();
 
-    add(titreEtudiantSansEntreprise, content, modalConsult, titreTuteurSansHabilitation, content1, tuteurConsult);
+    Span entreprises_actives = new Span(createIcon(VaadinIcon.WORKPLACE), new Span("Entreprises actives : " + entrepriseService.CountBystatutActifEntreprise(StatutActifEntreprise.ENTREPRISE_ACTIVE.getEnumStringify())));
+    entreprises_actives.getElement().getThemeList().add("badge");
+
+    HorizontalLayout layout1 = new HorizontalLayout();
+
+    //Récupérer l'année actuel afin de récupérer les étudiants inscrits pour cette année
+    //Et ne pas à récupérer les anciens étudiants par exemple
+    Calendar calendar =new GregorianCalendar();
+    calendar.setTime(new Date());
+    int annee =calendar.get(Calendar.YEAR);
+    H5 titreEtudiantsFormation = new H5("Etudiants inscrits par formation en " + annee + " :");
+
+    List<Formation> formations = formationService.findAllFormations(null);
+    for(Formation f: formations){
+      List<Etudiant> etudiantsAnneeActuel = new ArrayList<>();
+      for(Etudiant e: f.getEtudiants()){
+        if(e.getAnneePromotion() != null){
+          if(e.getAnneePromotion() == annee){
+            etudiantsAnneeActuel.add(e);
+          }
+        }
+      }
+      Span formation  = new Span(createIcon(VaadinIcon.ACADEMY_CAP), new Span(f.getLibelleFormation() + " : " + etudiantsAnneeActuel.size()));
+      formation.getElement().getThemeList().add("badge success");
+      layout1.add(formation);
+    }
+
+    HorizontalLayout layout = new HorizontalLayout(entreprises_actives);
+
+
+    add(titreChiffres, layout, titreEtudiantsFormation, layout1, titreEtudiantSansEntreprise, content, modalConsult, titreTuteurSansHabilitation, content1, tuteurConsult);
     // initialisation des données de la grille à l'ouverture de la vue
     updateList();
+  }
+
+  private Icon createIcon(VaadinIcon vaadinIcon) {
+    Icon icon = vaadinIcon.create();
+    icon.getStyle().set("padding", "var(--lumo-space-xs");
+    return icon;
   }
 
   private void configureGrid() {

@@ -23,12 +23,15 @@ public class EntrepriseService {
     entrepriseRepository.delete(entreprise);
   }
 
-  public void saveEntreprise(Entreprise entreprise) {
-    if (entreprise == null) {
-      System.err.println("L'entreprise est nulle, le formulaire est-il bien connecté à l'application ?");
-      return;
+  public boolean saveEntreprise(Entreprise entreprise) {
+    Entreprise entreprise1 = entrepriseRepository.findByNumeroRidet(entreprise.getNumeroRidet());
+    if(entreprise1 == null){
+      entrepriseRepository.save(entreprise);
+      return true;
     }
-    entrepriseRepository.save(entreprise);
+    else{
+      return false;
+    }
   }
 
   // Récupérer toutes les entreprises
@@ -38,5 +41,10 @@ public class EntrepriseService {
     } else {
       return entrepriseRepository.search(filtertext);
     }
+  }
+
+  //Nombre d'entreprises actives
+  public Integer CountBystatutActifEntreprise(String statut){
+    return  entrepriseRepository.CountBystatutActifEntreprise(statut);
   }
 }

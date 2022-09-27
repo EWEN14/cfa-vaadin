@@ -84,7 +84,6 @@ public class LogsView extends VerticalLayout {
     public void deleteAncienLogs(){
         logEnregistrmentService.deleteAncienLogs();
         updateList();
-        Notification.show("Les anciens logs ont été supprimés !");
     }
     // Création de l'interface des détails des items
     private ComponentRenderer<LogsDetailFormLayout, LogEnregistrement> createLogsDetailRenderer(){

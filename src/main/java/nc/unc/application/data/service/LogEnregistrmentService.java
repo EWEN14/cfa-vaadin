@@ -1,6 +1,7 @@
 package nc.unc.application.data.service;
 
 import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.server.VaadinSession;
 import nc.unc.application.data.entity.LogEnregistrement;
 import nc.unc.application.data.entity.User;
@@ -132,6 +133,9 @@ public class LogEnregistrmentService {
       //Suppresion de la liste des logs
       if(logsASupprimer.size() > 0){
         deleteAll(logsASupprimer);
+        Notification.show("Les anciens logs ont été supprimés !");
+      }else{
+        Notification.show("Aucun log à supprimer!");
       }
     }
 

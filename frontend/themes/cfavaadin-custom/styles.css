@@ -52,6 +52,7 @@ th{
 }
 h1, :host{
     margin-left: 1rem;
+    display: inline;
 }
 header{
     width: 100%;

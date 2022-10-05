@@ -17,6 +17,7 @@ import nc.unc.application.data.enums.Sexe;
 import nc.unc.application.data.service.*;
 import nc.unc.application.views.ConfirmDelete;
 import nc.unc.application.views.MainLayout;
+import nc.unc.application.views.about.HomeView;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,8 @@ import javax.annotation.security.PermitAll;
 @PageTitle("Étudiants | CFA") // title de la page
 @PermitAll // tous les utilisateurs connectés peuvent aller sur cette page
 public class EtudiantView extends VerticalLayout {
+
+  HomeView homeView;
 
   Grid<Etudiant> grid = new Grid<>(Etudiant.class, false);
 
@@ -47,8 +50,11 @@ public class EtudiantView extends VerticalLayout {
   ReferentPedagogiqueService referentPedagogiqueService;
   LogEnregistrmentService logEnregistrmentService;
 
-  public EtudiantView(EtudiantService etudiantService, EntrepriseService entrepriseService, TuteurService tuteurService, FormationService formationService,
+  public EtudiantView(HomeView homeView, EtudiantService etudiantService, EntrepriseService entrepriseService, TuteurService tuteurService, FormationService formationService,
                       ReferentPedagogiqueService referentPedagogiqueService, ContratService contratService, LogEnregistrmentService logEnregistrmentService) {
+
+    this.homeView = homeView;
+
     this.etudiantService = etudiantService;
     this.entrepriseService = entrepriseService;
     this.tuteurService = tuteurService;
@@ -154,6 +160,9 @@ public class EtudiantView extends VerticalLayout {
     updateList();
     closeNewOrEditModal();
     Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " créé(e).");
+
+    //Rafraichir la page d'accueil
+    this.homeView.afficherChiffresFormation();
   }
 
   // sauvegarde de l'étudiant modifié en utilisant EtudiantService
@@ -174,6 +183,9 @@ public class EtudiantView extends VerticalLayout {
     updateList();
     closeNewOrEditModal();
     Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " modifié(e)");
+
+    //Rafraichir la page d'accueil
+    this.homeView.afficherChiffresFormation();
   }
 
   private void transfertEtudiantFromEventToDelete(EtudiantConsult.DeleteEvent event) {
@@ -186,12 +198,17 @@ public class EtudiantView extends VerticalLayout {
     if (etudiantToDelete != null) {
       etudiantService.deleteEtudiant(etudiantToDelete);
 
+      //Rafraichir la page d'accueil
+      this.homeView.afficherChiffresFormation();
+
       // ajout du log de suppression
       logEnregistrmentService.saveLogDeleteString(etudiantToDelete.toString());
 
       updateList();
       closeConsultModal();
       Notification.show(etudiantToDelete.getPrenomEtudiant() + " " + etudiantToDelete.getNomEtudiant() + " retiré(e)");
+
+
     }
   }
 

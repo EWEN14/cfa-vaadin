@@ -104,19 +104,33 @@ public class HomeView extends VerticalLayout {
     Span entreprises_actives = new Span(createIcon(VaadinIcon.WORKPLACE), new Span("Entreprises actives : " + entrepriseService.CountBystatutActifEntreprise(StatutActifEntreprise.ENTREPRISE_ACTIVE.getEnumStringify())));
     entreprises_actives.getElement().getThemeList().add("badge");
 
-    HorizontalLayout layout1 = new HorizontalLayout();
-
-    //Récupérer l'année actuel afin de récupérer les étudiants inscrits pour cette année
     //Et ne pas à récupérer les anciens étudiants par exemple
     Calendar calendar =new GregorianCalendar();
     calendar.setTime(new Date());
     int annee =calendar.get(Calendar.YEAR);
     H5 titreEtudiantsFormation = new H5("Etudiants inscrits par formation en " + annee + " :");
 
+    HorizontalLayout layout = new HorizontalLayout(entreprises_actives);
+
+    add(titreChiffres, layout, titreEtudiantsFormation);
+    afficherChiffresFormation();
+
+
+
+    add(titreEtudiantSansEntreprise, content, modalConsult, titreTuteurSansHabilitation, content1, tuteurConsult);
+    // initialisation des données de la grille à l'ouverture de la vue
+    updateList();
+  }
+
+  public void afficherChiffresFormation(){
+    Calendar calendar =new GregorianCalendar();
+    calendar.setTime(new Date());
+    int annee =calendar.get(Calendar.YEAR);
     List<Formation> formations = formationService.findAllFormations(null);
     for(Formation f: formations){
       List<Etudiant> etudiantsAnneeActuel = new ArrayList<>();
       for(Etudiant e: f.getEtudiants()){
+        System.out.println(f.getEtudiants().size());
         if(e.getAnneePromotion() != null){
           if(e.getAnneePromotion() == annee){
             etudiantsAnneeActuel.add(e);
@@ -125,17 +139,11 @@ public class HomeView extends VerticalLayout {
       }
       Span formation  = new Span(createIcon(VaadinIcon.ACADEMY_CAP), new Span(f.getLibelleFormation() + " : " + etudiantsAnneeActuel.size()));
       formation.getElement().getThemeList().add("badge success");
+      HorizontalLayout layout1 = new HorizontalLayout();    //Récupérer l'année actuel afin de récupérer les étudiants inscrits pour cette année
       layout1.add(formation);
+      add(layout1);
     }
-
-    HorizontalLayout layout = new HorizontalLayout(entreprises_actives);
-
-
-    add(titreChiffres, layout, titreEtudiantsFormation, layout1, titreEtudiantSansEntreprise, content, modalConsult, titreTuteurSansHabilitation, content1, tuteurConsult);
-    // initialisation des données de la grille à l'ouverture de la vue
-    updateList();
   }
-
   private Icon createIcon(VaadinIcon vaadinIcon) {
     Icon icon = vaadinIcon.create();
     icon.getStyle().set("padding", "var(--lumo-space-xs");

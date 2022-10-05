@@ -47,7 +47,7 @@ public class LogsView extends VerticalLayout {
         filtertext.setValueChangeMode(ValueChangeMode.LAZY);
         filtertext.addValueChangeListener(e -> updateList());
 
-        deleteAncienLogs = new Button("Supprimer les anciens logs");
+        deleteAncienLogs = new Button("Supprimer les anciens logs(sauf les logs du mois courant)");
         deleteAncienLogs.addClickListener(click -> deleteAncienLogs());
 
         HorizontalLayout toolbar = new HorizontalLayout(filtertext, deleteAncienLogs);

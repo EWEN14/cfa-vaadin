@@ -114,10 +114,9 @@ public class LogEnregistrmentService {
    */
   public void deleteAncienLogs(){
 
-      //Récupérer le mois actuel
-      Calendar cal = new GregorianCalendar();
-      cal.setTime(new Date());
-      int moisactuel = cal.get(Calendar.MONTH);
+    //Récupérer le mois actuel(a noter un petit problème, j'ai ajouter un +1 car récupère pas vraiment la valeur du mois courant)
+      Date date=new Date();
+      int moisactuel = date.getMonth() + 1;
 
       //Récupérer les logs dont le mois de la date de création est inférieur au mois actuel
       List<LogEnregistrement> logs = findAllLogs(null);

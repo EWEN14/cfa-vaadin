@@ -130,7 +130,7 @@ public class HomeView extends VerticalLayout {
     for(Formation f: formations){
       List<Etudiant> etudiantsAnneeActuel = new ArrayList<>();
       for(Etudiant e: f.getEtudiants()){
-        System.out.println(f.getEtudiants().size());
+        // System.out.println(f.getEtudiants().size());
         if(e.getAnneePromotion() != null){
           if(e.getAnneePromotion() == annee){
             etudiantsAnneeActuel.add(e);

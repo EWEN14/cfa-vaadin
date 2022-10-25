@@ -64,7 +64,7 @@ public class FormationListView extends VerticalLayout {
       nbSemaineFormation.add("Nombre de semaine de formation : " + formation.getSemainesFormation() + " semaines");
     }
     if(formation.getSemainesEntreprise() != null){
-      nbSemaineEntreprise.add("Nombre de semaine d'entreprise : " + formation.getSemainesEntreprise() + "semaines");
+      nbSemaineEntreprise.add("Nombre de semaine d'entreprise : " + formation.getSemainesEntreprise() + " semaines");
     }
 
     String prenomNomDirecteurFormation = formation.getReferentPedagogique() != null ? formation.getReferentPedagogique().getPrenomReferentPedago()

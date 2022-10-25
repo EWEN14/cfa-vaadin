@@ -53,7 +53,7 @@
                 </td>
                 <td class="partie" data-th-object="${ contrat?.etudiant }">
                     <b>NOM D'USAGE : </b><span data-th-text="*{ nomEtudiant }"></span><br/>
-                    <b>NOM DE JEUNE FILLE : </b><span>__________</span><br/>
+                    <b>NOM DE JEUNE FILLE : </b><span></span><br/>
                     <b>PRÉNOM : </b><span data-th-text="*{ prenomEtudiant }"></span><br/>
                     <b>DATE DE NAISSANCE : </b><span
                         data-th-text="${#temporals.format(contrat?.etudiant?.dateNaissanceEtudiant, 'dd/MM/yyyy')}"></span><br/>
@@ -128,20 +128,22 @@
         </li>
         <li data-th-object="${contrat?.formation}">
             <b>Durée de formation : </b>
-            La formation de <span data-th-text="*{heuresFormation}"></span> heures, dont ___ heures de projet tuteuré,
+            La formation de <span data-th-text="*{heuresFormation}"></span> heures, comprenant un total de <span data-th-text="*{heuresProjetUniversitaire}"></span>
+            heures dédiées au(x) projet(s) universitaires (projets tuteurés, applicatifs...),
             répartie sur <span data-th-text="*{semainesFormation}"></span> semaines d'enseignements, est dispensée en
             présentiel sous forme de cours, de travaux dirigés, de travaux pratiques et de travaux personnels.
         </li>
         <li>
             <b>Contenu de la formation</b><br/>
-            Le calendrier prévisionnel, les titres des formateurs, les moyens pédagogiues et techniques mis en oeuvre
-            par le CFA Sup, les modalités d'évaluation ainsi que les modalité d'appui au tuteur par le CFA Sup sont
+            Le calendrier prévisionnel, les titres des formateurs, les moyens pédagogiques et techniques mis en œuvre
+            par le CFA Sup, les modalités d'évaluation ainsi que les modalités d'appui au tuteur par le CFA Sup sont
             précisés sur la fiche de présentation de la formation jointe en <b>annexe 1</b> de la présente convention.
         </li>
         <li>
-            <b>Contrôle de l'assiduité pendant les heures de projets tuteurés : </b>
-            La formation prévoit des heures de projet tuteuré. Dans ce cadre, les étudiants sont amenés à se déplacer en
-            dehors de l'Université. L'étudiant s'engage à signaler au CFA Sup et à son employeur toutes absences dans
+            <b>Contrôle de l'assiduité pendant les heures de projets universitaire : </b>
+            La formation prévoit des heures de projet universitaire (projet tuteuré, applicatif...).
+            Dans ce cadre, les étudiants sont amenés à se déplacer en dehors de l'Université.
+            L'étudiant s'engage à signaler au CFA Sup et à son employeur toutes absences dans
             les plus brefs délais.
         </li>
     </ul>

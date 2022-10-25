@@ -1,5 +1,7 @@
 package nc.unc.application.data.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Range;
@@ -11,6 +13,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "formation")
 public class Formation implements Cloneable {
   @Id
@@ -47,11 +51,14 @@ public class Formation implements Cloneable {
   @Column(name = "heures_formation")
   private Integer heuresFormation;
 
+  @Column(name = "heures_projet_universitaire")
+  private Integer heuresProjetUniversitaire;
+
   @Column(name = "semaines_formation")
   private Integer semainesFormation;
 
   @Column(name = "lieu_formation")
-    private String lieuFormation;
+  private String lieuFormation;
 
   @Column(name = "observations", length = 15000)
   private String observations;
@@ -94,167 +101,6 @@ public class Formation implements Cloneable {
     for (Contrat c : contrats) {
       c.setFormation(null);
     }
-  }
-
-  // Getters et Setters
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getLibelleFormation() {
-    return libelleFormation;
-  }
-
-  public void setLibelleFormation(String libelleFormation) {
-    this.libelleFormation = libelleFormation;
-  }
-
-  public String getCodeFormation() {
-    return codeFormation;
-  }
-
-  public void setCodeFormation(String codeFormation) {
-    this.codeFormation = codeFormation;
-  }
-
-  public String getCodeRome() {
-    return codeRome;
-  }
-
-  public void setCodeRome(String codeRome) {
-    this.codeRome = codeRome;
-  }
-
-  public Integer getNiveauCertificationProfessionnelle() {
-    return niveauCertificationProfessionnelle;
-  }
-
-  public void setNiveauCertificationProfessionnelle(Integer niveauCertificationProfessionnelle) {
-    this.niveauCertificationProfessionnelle = niveauCertificationProfessionnelle;
-  }
-
-  public String getTypeEmploiExerce() {
-    return typeEmploiExerce;
-  }
-
-  public void setTypeEmploiExerce(String typeEmploiExerce) {
-    this.typeEmploiExerce = typeEmploiExerce;
-  }
-
-  public Integer getSemainesEntreprise() {
-    return semainesEntreprise;
-  }
-
-  public void setSemainesEntreprise(Integer semainesEntreprise) {
-    this.semainesEntreprise = semainesEntreprise;
-  }
-
-  public Integer getDureeHebdomadaireTravail() {
-    return dureeHebdomadaireTravail;
-  }
-
-  public void setDureeHebdomadaireTravail(Integer dureeHebdomadaireTravail) {
-    this.dureeHebdomadaireTravail = dureeHebdomadaireTravail;
-  }
-
-  public Integer getHeuresFormation() {
-    return heuresFormation;
-  }
-
-  public void setHeuresFormation(Integer heuresFormation) {
-    this.heuresFormation = heuresFormation;
-  }
-
-  public Integer getSemainesFormation() {
-    return semainesFormation;
-  }
-
-  public void setSemainesFormation(Integer semainesFormation) {
-    this.semainesFormation = semainesFormation;
-  }
-
-  public String getLieuFormation() {
-    return lieuFormation;
-  }
-
-  public void setLieuFormation(String lieuFormation) {
-    this.lieuFormation = lieuFormation;
-  }
-
-  public String getObservations() {
-    return observations;
-  }
-
-  public void setObservations(String observations) {
-    this.observations = observations;
-  }
-
-  public ReferentPedagogique getReferentPedagogique() {
-    return referentPedagogique;
-  }
-
-  public void setReferentPedagogique(ReferentPedagogique referentPedagogique) {
-    this.referentPedagogique = referentPedagogique;
-  }
-
-  public List<TuteurHabilitation> getTuteurHabilitations() {
-    return tuteurHabilitations;
-  }
-
-  public void setTuteurHabilitations(List<TuteurHabilitation> tuteurHabilitations) {
-    this.tuteurHabilitations = tuteurHabilitations;
-  }
-
-  public List<Contrat> getContrats() {
-    return contrats;
-  }
-
-  public void setContrats(List<Contrat> contrats) {
-    this.contrats = contrats;
-  }
-
-  public List<Etudiant> getEtudiants() {
-    return etudiants;
-  }
-
-  public void setEtudiants(List<Etudiant> etudiants) {
-    this.etudiants = etudiants;
-  }
-
-  public Set<Evenement> getEvenements() {
-    return evenements;
-  }
-
-  public void setEvenements(Set<Evenement> evenements) {
-    this.evenements = evenements;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public LocalDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(LocalDateTime updatedAt) {
-    this.updatedAt = updatedAt;
-  }
-
-  public List<EntretienCollectif> getEntretienCollectifs() {
-    return entretienCollectifs;
-  }
-
-  public void setEntretienCollectifs(List<EntretienCollectif> entretienCollectifs) {
-    this.entretienCollectifs = entretienCollectifs;
   }
 
   // Autres méthodes

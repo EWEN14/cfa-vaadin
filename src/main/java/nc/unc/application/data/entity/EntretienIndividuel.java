@@ -1,15 +1,18 @@
 package nc.unc.application.data.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "entretien_individuelle")
 public class EntretienIndividuel implements Cloneable{
   @Id
@@ -42,65 +45,7 @@ public class EntretienIndividuel implements Cloneable{
   @JoinColumn(name = "id_referent_cfa")
   private ReferentCfa referentCfa;
 
-  public EntretienIndividuel(){
-
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public LocalDate getDate() {
-    return date;
-  }
-
-  public void setDate(LocalDate date) {
-    this.date = date;
-  }
-
-  public String getObservations_entretien_individuel() {
-    return observations_entretien_individuel;
-  }
-
-  public void setObservations_entretien_individuel(String observations_entretien_individuel) {
-    this.observations_entretien_individuel = observations_entretien_individuel;
-  }
-
-  public LocalDateTime getCreated_at() {
-    return created_at;
-  }
-
-  public void setCreated_at(LocalDateTime created_at) {
-    this.created_at = created_at;
-  }
-
-  public LocalDateTime getUpdated_at() {
-    return updated_at;
-  }
-
-  public void setUpdated_at(LocalDateTime updated_at) {
-    this.updated_at = updated_at;
-  }
-
-  public Etudiant getEtudiant() {
-    return etudiant;
-  }
-
-  public void setEtudiant(Etudiant etudiant) {
-    this.etudiant = etudiant;
-  }
-
-  public ReferentCfa getReferentCfa() {
-    return referentCfa;
-  }
-
-  public void setReferentCfa(ReferentCfa referentCfa) {
-    this.referentCfa = referentCfa;
-  }
+  public EntretienIndividuel() {}
 
   public Object clone() throws CloneNotSupportedException {
     return super.clone();

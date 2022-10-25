@@ -1,5 +1,7 @@
 package nc.unc.application.data.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Range;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "entreprise")
 public class Entreprise implements Cloneable {
   @Id
@@ -134,6 +138,10 @@ public class Entreprise implements Cloneable {
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
 
+  /**
+   * Avant la suppression d'une entreprise, on enlève ses références
+   * dans les étudiants, tuteurs et contrats
+   */
   @PreRemove
   private void preRemove() {
     for (Etudiant e : etudiants) {
@@ -145,271 +153,6 @@ public class Entreprise implements Cloneable {
     for (Contrat c: contrats) {
       c.setEntreprise(null);
     }
-  }
-
-  // Getters et Setters
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getEnseigne() {
-    return enseigne;
-  }
-
-  public void setEnseigne(String enseigne) {
-    this.enseigne = enseigne;
-  }
-
-  public String getStatutActifEntreprise() {
-    return statutActifEntreprise;
-  }
-
-  public void setStatutActifEntreprise(String statutActifEntreprise) {
-    this.statutActifEntreprise = statutActifEntreprise;
-  }
-
-  public String getRaisonSociale() {
-    return raisonSociale;
-  }
-
-  public void setRaisonSociale(String raisonSociale) {
-    this.raisonSociale = raisonSociale;
-  }
-
-  public String getNumeroRidet() {
-    return numeroRidet;
-  }
-
-  public void setNumeroRidet(String numeroRidet) {
-    this.numeroRidet = numeroRidet;
-  }
-
-  public String getFormeJuridique() {
-    return formeJuridique;
-  }
-
-  public void setFormeJuridique(String formeJuridique) {
-    this.formeJuridique = formeJuridique;
-  }
-
-  public Integer getNumeroCafatEntreprise() {
-    return numeroCafatEntreprise;
-  }
-
-  public void setNumeroCafatEntreprise(Integer numeroCafat) {
-    this.numeroCafatEntreprise = numeroCafat;
-  }
-
-  public Integer getNombreSalarie() {
-    return nombreSalarie;
-  }
-
-  public void setNombreSalarie(Integer nombreSalarie) {
-    this.nombreSalarie = nombreSalarie;
-  }
-
-  public String getCodeNaf() {
-    return codeNaf;
-  }
-
-  public void setCodeNaf(String codeNaf) {
-    this.codeNaf = codeNaf;
-  }
-
-  public String getActiviteEntreprise() {
-    return activiteEntreprise;
-  }
-
-  public void setActiviteEntreprise(String activiteEntreprise) {
-    this.activiteEntreprise = activiteEntreprise;
-  }
-
-  public String getConventionCollective() {
-    return conventionCollective;
-  }
-
-  public void setConventionCollective(String conventionCollective) {
-    this.conventionCollective = conventionCollective;
-  }
-
-  public String getNomRepresentantEmployeur() {
-    return nomRepresentantEmployeur;
-  }
-
-  public void setNomRepresentantEmployeur(String nomRepresentantEmployeur) {
-    this.nomRepresentantEmployeur = nomRepresentantEmployeur;
-  }
-
-  public String getPrenomRepresentantEmployeur() {
-    return prenomRepresentantEmployeur;
-  }
-
-  public void setPrenomRepresentantEmployeur(String prenomRepresentantEmployeur) {
-    this.prenomRepresentantEmployeur = prenomRepresentantEmployeur;
-  }
-
-  public String getFonctionRepresentantEmployeur() {
-    return fonctionRepresentantEmployeur;
-  }
-
-  public void setFonctionRepresentantEmployeur(String fonctionRepresentantEmployeur) {
-    this.fonctionRepresentantEmployeur = fonctionRepresentantEmployeur;
-  }
-
-  public Integer getTelephoneEntreprise() {
-    return telephoneEntreprise;
-  }
-
-  public void setTelephoneEntreprise(Integer telephoneEntreprise) {
-    this.telephoneEntreprise = telephoneEntreprise;
-  }
-
-  public String getEmailEntreprise() {
-    return emailEntreprise;
-  }
-
-  public void setEmailEntreprise(String emailEntreprise) {
-    this.emailEntreprise = emailEntreprise;
-  }
-
-  public String getPrenomContactCfa() {
-    return prenomContactCfa;
-  }
-
-  public void setPrenomContactCfa(String prenom_contact_cfa) {
-    this.prenomContactCfa = prenom_contact_cfa;
-  }
-
-  public String getNomContactCfa() {
-    return nomContactCfa;
-  }
-
-  public void setNomContactCfa(String nom_contact_cfa) {
-    this.nomContactCfa = nom_contact_cfa;
-  }
-
-  public String getFonctionContactCfa() {
-    return fonctionContactCfa;
-  }
-
-  public void setFonctionContactCfa(String fonction_contact_cfa) {
-    this.fonctionContactCfa = fonction_contact_cfa;
-  }
-
-  public @Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999) Integer getTelephoneContactCfa() {
-    return telephoneContactCfa;
-  }
-
-  public void setTelephoneContactCfa(@Range(message = "Le numéro de téléphone doit comporter 6 chiffres", min = 100000, max = 999999) Integer telephone_contact_cfa) {
-    this.telephoneContactCfa = telephone_contact_cfa;
-  }
-
-  public String getEmailContactCfa() {
-    return emailContactCfa;
-  }
-
-  public void setEmailContactCfa(String email_contact_cfa) {
-    this.emailContactCfa = email_contact_cfa;
-  }
-
-  public String getAdressePhysiqueCommune() {
-    return adressePhysiqueCommune;
-  }
-
-  public void setAdressePhysiqueCommune(String adressePhysiqueCommune) {
-    this.adressePhysiqueCommune = adressePhysiqueCommune;
-  }
-
-  public Integer getAdressePhysiqueCodePostal() {
-    return adressePhysiqueCodePostal;
-  }
-
-  public void setAdressePhysiqueCodePostal(Integer adressePhysiqueCodePostal) {
-    this.adressePhysiqueCodePostal = adressePhysiqueCodePostal;
-  }
-
-  public String getAdressePhysiqueRue() {
-    return adressePhysiqueRue;
-  }
-
-  public void setAdressePhysiqueRue(String adressePhysiqueRue) {
-    this.adressePhysiqueRue = adressePhysiqueRue;
-  }
-
-  public String getAdressePostaleCommune() {
-    return adressePostaleCommune;
-  }
-
-  public void setAdressePostaleCommune(String adressePostaleCommune) {
-    this.adressePostaleCommune = adressePostaleCommune;
-  }
-
-  public Integer getAdressePostaleCodePostal() {
-    return adressePostaleCodePostal;
-  }
-
-  public void setAdressePostaleCodePostal(Integer adressePostaleCodePostal) {
-    this.adressePostaleCodePostal = adressePostaleCodePostal;
-  }
-
-  public String getAdressePostaleRueOuBp() {
-    return adressePostaleRueOuBp;
-  }
-
-  public void setAdressePostaleRueOuBp(String adressePostaleRueOuBp) {
-    this.adressePostaleRueOuBp = adressePostaleRueOuBp;
-  }
-
-  public String getObservations() {
-    return observations;
-  }
-
-  public void setObservations(String observations) {
-    this.observations = observations;
-  }
-
-  public List<Etudiant> getEtudiants() {
-    return etudiants;
-  }
-
-  public void setEtudiants(List<Etudiant> etudiants) {
-    this.etudiants = etudiants;
-  }
-
-  public List<Tuteur> getTuteurs() {
-    return tuteurs;
-  }
-
-  public void setTuteurs(List<Tuteur> tuteurs) {
-    this.tuteurs = tuteurs;
-  }
-
-  public List<Contrat> getContrats() {
-    return contrats;
-  }
-
-  public void setContrats(List<Contrat> contrats) {
-    this.contrats = contrats;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public LocalDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(LocalDateTime updatedAt) {
-    this.updatedAt = updatedAt;
   }
 
   // Autres méthodes

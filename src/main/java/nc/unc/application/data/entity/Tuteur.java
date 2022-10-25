@@ -1,6 +1,8 @@
 package nc.unc.application.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.Setter;
 import nc.unc.application.data.enums.Civilite;
 import nc.unc.application.data.enums.Sexe;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "tuteur")
 public class Tuteur implements Cloneable {
 
@@ -125,6 +129,11 @@ public class Tuteur implements Cloneable {
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
 
+  /**
+   * TODO : supprimer les Habilitations plutôt que juste mettre tuteur à null
+   * Retrait des références d'un tuteur dans les habilitations tuteur,
+   * dans les étudiants et dans les contrats
+   */
   @PreRemove
   private void preRemove() {
     for (TuteurHabilitation th : tuteurHabilitations) {
@@ -136,199 +145,6 @@ public class Tuteur implements Cloneable {
     for (Contrat c : contrats) {
       c.setTuteur(null);
     }
-  }
-
-  // Getters et Setters
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getNomTuteur() {
-    return nomTuteur;
-  }
-
-  public void setNomTuteur(String nom) {
-    this.nomTuteur = nom;
-  }
-
-  public String getPrenomTuteur() {
-    return prenomTuteur;
-  }
-
-  public void setPrenomTuteur(String prenom) {
-    this.prenomTuteur = prenom;
-  }
-
-  public LocalDate getDateNaissanceTuteur() {
-    return dateNaissanceTuteur;
-  }
-
-  public void setDateNaissanceTuteur(LocalDate dateNaissance) {
-    this.dateNaissanceTuteur = dateNaissance;
-  }
-
-  public String getEmailTuteur() {
-    return emailTuteur;
-  }
-
-  public void setEmailTuteur(String email) {
-    this.emailTuteur = email;
-  }
-
-  public Integer getTelephoneTuteur1() {
-    return telephoneTuteur1;
-  }
-
-  public void setTelephoneTuteur1(Integer telephone1) {
-    this.telephoneTuteur1 = telephone1;
-  }
-
-  public Integer getTelephoneTuteur2() {
-    return telephoneTuteur2;
-  }
-
-  public void setTelephoneTuteur2(Integer telephone2) {
-    this.telephoneTuteur2 = telephone2;
-  }
-
-  public Civilite getCiviliteTuteur() {
-    return civiliteTuteur;
-  }
-
-  public void setCiviliteTuteur(Civilite civilite) {
-    this.civiliteTuteur = civilite;
-  }
-
-  public Sexe getSexe() {
-    return sexe;
-  }
-
-  public void setSexe(Sexe sexe) {
-    this.sexe = sexe;
-  }
-
-  public String getDiplomeEleveObtenu() {
-    return diplomeEleveObtenu;
-  }
-
-  public void setDiplomeEleveObtenu(String diplomeEleveObtenu) {
-    this.diplomeEleveObtenu = diplomeEleveObtenu;
-  }
-
-  public Integer getNiveauDiplome() {
-    return niveauDiplome;
-  }
-
-  public void setNiveauDiplome(Integer niveauDiplome) {
-    this.niveauDiplome = niveauDiplome;
-  }
-
-  public String getPosteOccupe() {
-    return posteOccupe;
-  }
-
-  public void setPosteOccupe(String posteOccupe) {
-    this.posteOccupe = posteOccupe;
-  }
-
-  public String getAnneeExperienceProfessionnelle() {
-    return anneeExperienceProfessionnelle;
-  }
-
-  public void setAnneeExperienceProfessionnelle(String anneeExperienceProfessionnelle) {
-    this.anneeExperienceProfessionnelle = anneeExperienceProfessionnelle;
-  }
-
-  public Entreprise getEntreprise() {
-    return entreprise;
-  }
-
-  public void setEntreprise(Entreprise entreprise) {
-    this.entreprise = entreprise;
-  }
-
-  public Boolean getCasierJudiciaireFourni() {
-    return casierJudiciaireFourni;
-  }
-
-  public void setCasierJudiciaireFourni(Boolean casierJudiciaireFourni) {
-    this.casierJudiciaireFourni = casierJudiciaireFourni;
-  }
-
-  public Boolean getDiplomeFourni() {
-    return diplomeFourni;
-  }
-
-  public void setDiplomeFourni(Boolean diplomeFourni) {
-    this.diplomeFourni = diplomeFourni;
-  }
-
-  public Boolean getCertificatTravailFourni() {
-    return certificatTravailFourni;
-  }
-
-  public void setCertificatTravailFourni(Boolean certificatTravailFourni) {
-    this.certificatTravailFourni = certificatTravailFourni;
-  }
-
-  public Boolean getCvFourni() {
-    return cvFourni;
-  }
-
-  public void setCvFourni(Boolean cvFourni) {
-    this.cvFourni = cvFourni;
-  }
-
-  public String getObservationsTuteur() {
-    return observationsTuteur;
-  }
-
-  public void setObservationsTuteur(String observations) {
-    this.observationsTuteur = observations;
-  }
-
-  public List<TuteurHabilitation> getTuteurHabilitations() {
-    return tuteurHabilitations;
-  }
-
-  public void setTuteurHabilitations(List<TuteurHabilitation> tuteurHabilitations) {
-    this.tuteurHabilitations = tuteurHabilitations;
-  }
-
-  public List<Contrat> getContrats() {
-    return contrats;
-  }
-
-  public void setContrats(List<Contrat> contrats) {
-    this.contrats = contrats;
-  }
-
-  public List<Etudiant> getEtudiants() {
-    return etudiants;
-  }
-
-  public void setEtudiants(List<Etudiant> etudiants) {
-    this.etudiants = etudiants;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public LocalDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(LocalDateTime updatedAt) {
-    this.updatedAt = updatedAt;
   }
 
   // autres fonctions

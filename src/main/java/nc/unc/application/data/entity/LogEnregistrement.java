@@ -1,5 +1,7 @@
 package nc.unc.application.data.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import nc.unc.application.data.enums.TypeCrud;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -7,6 +9,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "log_enregistrement")
 public class LogEnregistrement {
   @Id
@@ -27,45 +31,4 @@ public class LogEnregistrement {
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private LocalDateTime createdAt;
-
-  // Getters et Setters
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getDescription_log() {
-    return description_log;
-  }
-
-  public void setDescription_log(String description_log) {
-    this.description_log = description_log;
-  }
-
-  public TypeCrud getTypeCrud() {
-    return typeCrud;
-  }
-
-  public void setTypeCrud(TypeCrud typeCrud) {
-    this.typeCrud = typeCrud;
-  }
-
-  public String getExecutant() {
-    return executant;
-  }
-
-  public void setExecutant(String executant) {
-    this.executant = executant;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
 }

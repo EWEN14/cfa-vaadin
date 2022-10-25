@@ -1,5 +1,7 @@
 package nc.unc.application.data.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +12,9 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
+@Table(name = "entretien_collectif")
 public class EntretienCollectif implements Cloneable{
 
   @Id
@@ -42,65 +47,7 @@ public class EntretienCollectif implements Cloneable{
   @JoinColumn(name = "id_referent_cfa")
   private ReferentCfa referentCfa;
 
-  public EntretienCollectif(){
-
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public LocalDate getDate() {
-    return date;
-  }
-
-  public void setDate(LocalDate date) {
-    this.date = date;
-  }
-
-  public String getObservations_entretien_collectif() {
-    return observations_entretien_collectif;
-  }
-
-  public void setObservations_entretien_collectif(String observations_entretien_collectif) {
-    this.observations_entretien_collectif = observations_entretien_collectif;
-  }
-
-  public LocalDateTime getCreated_at() {
-    return created_at;
-  }
-
-  public void setCreated_at(LocalDateTime created_at) {
-    this.created_at = created_at;
-  }
-
-  public LocalDateTime getUpdated_at() {
-    return updated_at;
-  }
-
-  public void setUpdated_at(LocalDateTime updated_at) {
-    this.updated_at = updated_at;
-  }
-
-  public Formation getFormation() {
-    return formation;
-  }
-
-  public void setFormation(Formation formation) {
-    this.formation = formation;
-  }
-
-  public ReferentCfa getReferentCfa() {
-    return referentCfa;
-  }
-
-  public void setReferentCfa(ReferentCfa referentCfa) {
-    this.referentCfa = referentCfa;
-  }
+  public EntretienCollectif() {}
 
   public Object clone() throws CloneNotSupportedException {
     return super.clone();

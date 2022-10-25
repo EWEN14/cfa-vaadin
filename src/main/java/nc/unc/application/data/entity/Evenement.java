@@ -1,5 +1,7 @@
 package nc.unc.application.data.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,6 +13,8 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "evenement")
 public class Evenement implements Cloneable {
   @Id
@@ -47,71 +51,6 @@ public class Evenement implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at")
   private LocalDateTime updated_at;
-
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getLibelle() {
-    return libelle;
-  }
-
-  public void setLibelle(String libelle) {
-    this.libelle = libelle;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public LocalDate getDateDebut() {
-    return dateDebut;
-  }
-
-  public void setDateDebut(LocalDate dateDebut) {
-    this.dateDebut = dateDebut;
-  }
-
-  public LocalDate getDateFin() {
-    return dateFin;
-  }
-
-  public void setDateFin(LocalDate dateFin) {
-    this.dateFin = dateFin;
-  }
-
-  public Set<Formation> getFormations() {
-    return formations;
-  }
-
-  public void setFormations(Set<Formation> formations) {
-    this.formations = formations;
-  }
-
-  public LocalDateTime getCreated_at() {
-    return created_at;
-  }
-
-  public void setCreated_at(LocalDateTime created_at) {
-    this.created_at = created_at;
-  }
-
-  public LocalDateTime getUpdated_at() {
-    return updated_at;
-  }
-
-  public void setUpdated_at(LocalDateTime updated_at) {
-    this.updated_at = updated_at;
-  }
 
   // Autres méthodes
   public Object clone() throws CloneNotSupportedException {

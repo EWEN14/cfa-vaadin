@@ -67,7 +67,7 @@ public class ContratView extends VerticalLayout {
     configureGrid(); // configuration de la grille (colonnes, données...)
 
     // ajout de la modale de consultation du contrat dans la vue
-    modalConsult = new ContratConsult(contratService, this);
+    modalConsult = new ContratConsult(contratService);
     // On définit que les différents events vont déclencher une fonction
     // contenant l'objet etudiant (dans le cas du delete dans la modalConsult ou du save dans modalNewOrdEdit).
     modalConsult.addListener(ContratConsult.DeleteEventConsult.class, this::transfertContractFromEventToDelete);

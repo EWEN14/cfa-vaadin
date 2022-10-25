@@ -2,9 +2,9 @@
 
 Application de gestion des alternants pour le CFA de l'UNC
 
-## Modification du application.properties
+## Création et modification du fichier application.properties
 
-Vous devez mettre les éléments suivants dans le fichier application.properties (_src/main/resources/application.properties_) 
+Vous devez créer et mettre les éléments suivants dans le fichier application.properties (_src/main/resources/application.properties_) 
 pour connecter l'application avec votre base de données, préalablement créée et nommée cfa_sb, sans table ni contenu :
 
 ```

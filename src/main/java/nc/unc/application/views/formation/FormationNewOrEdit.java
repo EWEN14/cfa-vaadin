@@ -41,6 +41,7 @@ public class FormationNewOrEdit extends Dialog {
   TextField typeEmploiExerce = new TextField("Type d'emploi occupé");
   IntegerField semainesEntreprise = new IntegerField("Nombre de semaines en entreprise");
   IntegerField heuresFormation = new IntegerField("Nombre d'heures en formation");
+  IntegerField heuresProjetUniversitaire = new IntegerField("Nombre d'heures dédiées au(x) projet(s) universitaires");
   IntegerField semainesFormation = new IntegerField("Nombre de semaines en formation");
   ComboBox<String> lieuFormation = new ComboBox<>("Lieu de la formation");
   IntegerField dureeHebdomadaireTravail = new IntegerField("Durée hebdomadaire de travail");
@@ -82,7 +83,7 @@ public class FormationNewOrEdit extends Dialog {
     referentPedagogique.setClearButtonVisible(true);
 
     form.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle,
-            typeEmploiExerce, semainesEntreprise, heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail,
+            typeEmploiExerce, semainesEntreprise, heuresFormation, heuresProjetUniversitaire, semainesFormation, lieuFormation, dureeHebdomadaireTravail,
             layoutReferent, observations, createButtonsLayout());
 
     // ajout du formulaire dans la modale

@@ -27,6 +27,7 @@ public class FormationConsult extends Dialog {
   private final TextField typeEmploiExerce = new TextField("Type d'emploi occupé");
   private final IntegerField semainesEntreprise = new IntegerField("Nombre de semaines en entreprise");
   private final IntegerField heuresFormation = new IntegerField("Nombre d'heures en formation");
+  private final IntegerField heuresProjetUniversitaire = new IntegerField("Nombre d'heures dédiées au(x) projet(s) universitaires");
   private final IntegerField semainesFormation = new IntegerField("Nombre de semaines en formation");
   private final TextField lieuFormation = new TextField("Lieu de la formation");
   private final IntegerField dureeHebdomadaireTravail = new IntegerField("Durée hebdomadaire de travail");
@@ -55,7 +56,7 @@ public class FormationConsult extends Dialog {
 
     // ajout des champs dans le formulaire
     form.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle, typeEmploiExerce,
-            semainesEntreprise, heuresFormation, semainesFormation, lieuFormation, dureeHebdomadaireTravail,
+            semainesEntreprise, heuresFormation, heuresProjetUniversitaire, semainesFormation, lieuFormation, dureeHebdomadaireTravail,
             responsableDeFormation, observations);
 
     // ajout du formulaire dans la vue
@@ -95,6 +96,7 @@ public class FormationConsult extends Dialog {
     typeEmploiExerce.setReadOnly(true);
     semainesEntreprise.setReadOnly(true);
     heuresFormation.setReadOnly(true);
+    heuresProjetUniversitaire.setReadOnly(true);
     semainesFormation.setReadOnly(true);
     lieuFormation.setReadOnly(true);
     dureeHebdomadaireTravail.setReadOnly(true);

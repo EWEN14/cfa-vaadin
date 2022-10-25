@@ -11,7 +11,7 @@
 
 <body>
 
-<img class="gouvernement" src="images/gouvernementnc.png" alt=""/>
+<img class="gouvernement" src="images/gouvernementnc.png" alt="logo gouvernement"/>
 
 <div class="page" data-th-object="${ contrat }">
 
@@ -70,7 +70,11 @@
         <table>
             <tr>
                 <th>NOM - PRENOM - FONCTION <br/>DU REPRESENTANT DE L'EMPLOYEUR</th>
-                <td data-th-text="*{nomRepresentantEmployeur}"></td>
+                <td>
+                    <span data-th-text="*{nomRepresentantEmployeur}"></span>&nbsp;
+                    <span data-th-text="*{prenomRepresentantEmployeur}"></span>,&nbsp;
+                    <span data-th-text="*{fonctionRepresentantEmployeur}"></span>
+                </td>
             </tr>
         </table>
 

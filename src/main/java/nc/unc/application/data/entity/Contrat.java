@@ -186,18 +186,6 @@ public class Contrat implements Cloneable {
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
-  // si après la mise à jour d'un contrat initial, ses informations de rupture de contrat ne sont pas nulles,
-  // on définit alors la date de rupture sur ses avenants comme étant la même
-  /*@PostUpdate
-  private void postUpdate() {
-    for (Contrat avenant : this.getAvenants()) {
-      if (this.getMotifRupture() != null && this.getDateRupture() != null && this.getCodeContrat() == CodeContrat.CONTRAT) {
-        avenant.setDateRupture(this.getDateRupture());
-        avenant.setMotifRupture(this.getMotifRupture());
-      }
-    }
-  }*/
-
   // getters et setters
   public Long getId() {
     return id;

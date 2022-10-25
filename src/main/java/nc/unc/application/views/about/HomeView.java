@@ -1,6 +1,5 @@
 package nc.unc.application.views.about;
 
-import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
@@ -17,7 +16,6 @@ import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.entity.Formation;
 import nc.unc.application.data.entity.Tuteur;
-import nc.unc.application.data.enums.Sexe;
 import nc.unc.application.data.enums.StatutActifEntreprise;
 import nc.unc.application.data.service.*;
 import nc.unc.application.views.ConfirmDelete;
@@ -37,7 +35,7 @@ import java.util.*;
 @PermitAll // tous les utilisateurs connectés peuvent aller sur cette page
 public class HomeView extends VerticalLayout {
 
-  Grid<Etudiant> grid = new Grid<>(Etudiant.class, false);
+  Grid<Etudiant> gridEtudiantSansFormation = new Grid<>(Etudiant.class, false);
   Grid<Tuteur> gridTuteurSansHabilitation = new Grid<>(Tuteur.class, false);
 
   TuteurConsult tuteurConsult;
@@ -89,8 +87,8 @@ public class HomeView extends VerticalLayout {
     tuteurConfirmDelete.addListener(ConfirmDelete.DeleteEventGrid.class, this::deleteFromConfirmDeleteTuteur);
 
     // ajout d'un FlexLayout dans lequel on place la grille
-    FlexLayout content = new FlexLayout(grid);
-    content.setFlexGrow(2, grid);
+    FlexLayout content = new FlexLayout(gridEtudiantSansFormation);
+    content.setFlexGrow(2, gridEtudiantSansFormation);
     content.addClassNames("content", "gap-m");
     content.setSizeFull();
 
@@ -104,18 +102,16 @@ public class HomeView extends VerticalLayout {
     Span entreprises_actives = new Span(createIcon(VaadinIcon.WORKPLACE), new Span("Entreprises actives : " + entrepriseService.CountBystatutActifEntreprise(StatutActifEntreprise.ENTREPRISE_ACTIVE.getEnumStringify())));
     entreprises_actives.getElement().getThemeList().add("badge");
 
-    //Et ne pas à récupérer les anciens étudiants par exemple
-    Calendar calendar =new GregorianCalendar();
+    // Et ne pas à récupérer les anciens étudiants par exemple
+    Calendar calendar = new GregorianCalendar();
     calendar.setTime(new Date());
-    int annee =calendar.get(Calendar.YEAR);
+    int annee = calendar.get(Calendar.YEAR);
     H5 titreEtudiantsFormation = new H5("Etudiants inscrits par formation en " + annee + " :");
 
     HorizontalLayout layout = new HorizontalLayout(entreprises_actives);
 
     add(titreChiffres, layout, titreEtudiantsFormation);
     afficherChiffresFormation();
-
-
 
     add(titreEtudiantSansEntreprise, content, modalConsult, titreTuteurSansHabilitation, content1, tuteurConsult);
     // initialisation des données de la grille à l'ouverture de la vue
@@ -137,9 +133,9 @@ public class HomeView extends VerticalLayout {
           }
         }
       }
-      Span formation  = new Span(createIcon(VaadinIcon.ACADEMY_CAP), new Span(f.getLibelleFormation() + " : " + etudiantsAnneeActuel.size()));
+      Span formation  = new Span(createIcon(VaadinIcon.ACADEMY_CAP), new Span(f.getCodeFormation() + " : " + etudiantsAnneeActuel.size()));
       formation.getElement().getThemeList().add("badge success");
-      HorizontalLayout layout1 = new HorizontalLayout();    //Récupérer l'année actuel afin de récupérer les étudiants inscrits pour cette année
+      HorizontalLayout layout1 = new HorizontalLayout();
       layout1.add(formation);
       add(layout1);
     }
@@ -151,23 +147,19 @@ public class HomeView extends VerticalLayout {
   }
 
   private void configureGrid() {
-    grid.addClassNames("etudiant-grid");
-    grid.setSizeFull();
+    gridEtudiantSansFormation.addClassNames("etudiant-grid");
+    gridEtudiantSansFormation.setSizeFull();
     // ajout des colonnes
-    grid.addColumn(etudiant -> etudiant.getNomEtudiant() + " " + etudiant.getPrenomEtudiant()).setHeader("NOM Prénom").setSortable(true);
-    grid.addColumn(Etudiant::getAnneePromotion).setHeader("Année de promotion").setSortable(true);
-    grid.addColumn(Etudiant::getTelephoneEtudiant1).setHeader("Téléphone");
-    grid.addColumn(Etudiant::getSituationUnc).setHeader("Situation à l'UNC").setSortable(true);
+    gridEtudiantSansFormation.addColumn(etudiant -> etudiant.getNomEtudiant() + " " + etudiant.getPrenomEtudiant()).setHeader("NOM Prénom").setSortable(true);
+    gridEtudiantSansFormation.addColumn(Etudiant::getAnneePromotion).setHeader("Année de promotion").setSortable(true);
+    gridEtudiantSansFormation.addColumn(Etudiant::getTelephoneEtudiant1).setHeader("Téléphone");
+    gridEtudiantSansFormation.addColumn(Etudiant::getSituationUnc).setHeader("Situation à l'UNC").setSortable(true);
     // ajout du bouton de consultation d'un étudiant
-    grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
+    gridEtudiantSansFormation.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultEtudiant(etudiant);
     })).setHeader("Consulter");
-    // bouton de suppression
-    grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.TRASH), click -> {
-      prepareToDelete(etudiant);
-    })).setHeader("Supprimer");
     // on définit que chaque colonne à une largeur autodéterminée
-    grid.getColumns().forEach(col -> col.setAutoWidth(true));
+    gridEtudiantSansFormation.getColumns().forEach(col -> col.setAutoWidth(true));
 
     gridTuteurSansHabilitation.addClassNames("tuteur-grid");
     gridTuteurSansHabilitation.setSizeFull();
@@ -178,10 +170,6 @@ public class HomeView extends VerticalLayout {
     gridTuteurSansHabilitation.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultTuteur(tuteur);
     })).setHeader("Consulter");
-    // bouton suppression tuteur
-    gridTuteurSansHabilitation.addComponentColumn(tuteur -> new Button(new Icon(VaadinIcon.TRASH), click -> {
-      prepareToDeleteTuteur(tuteur);
-    })).setHeader("Supprimer");
     gridTuteurSansHabilitation.getColumns().forEach(col -> col.setAutoWidth(true));
   }
 
@@ -222,11 +210,6 @@ public class HomeView extends VerticalLayout {
     closeConfirmDeleteTuteur();
   }
 
-  private void prepareToDelete(Etudiant etudiant) {
-    etudiantToMaybeDelete = etudiant;
-    openConfirmDelete();
-  }
-
   private void transfertTuteurFromEventToDelete(TuteurConsult.DeleteEvent event){
     Tuteur tuteur = event.getTuteur();
     deleteTuteur(tuteur);
@@ -246,11 +229,6 @@ public class HomeView extends VerticalLayout {
     }
   }
 
-  public void prepareToDeleteTuteur(Tuteur tuteur){
-    tuteurToMaybeDelete = tuteur;
-    openConfirmDeleteTuteur();
-  }
-
   public void consultTuteur(Tuteur tuteur) {
     tuteurConsult.setTuteur(tuteur);
     tuteurConsult.open();
@@ -259,7 +237,7 @@ public class HomeView extends VerticalLayout {
   private void closeTuteurModal() {
     tuteurConsult.setTuteur(null);
     tuteurConsult.close();
-    grid.asSingleSelect().clear();
+    gridEtudiantSansFormation.asSingleSelect().clear();
   }
 
   // ouverture de modale de consultation d'un étudiant
@@ -271,66 +249,26 @@ public class HomeView extends VerticalLayout {
   private void closeConsultModal() {
     modalConsult.setEtudiant(null);
     modalConsult.close();
-    grid.asSingleSelect().clear();
+    gridEtudiantSansFormation.asSingleSelect().clear();
   }
 
   private void openConfirmDelete() {
     modalConfirmDelete.open();
   }
 
-  private void openConfirmDeleteTuteur() {
-    tuteurConfirmDelete.open();
-  }
-
   private void closeConfirmDelete() {
     modalConfirmDelete.close();
-    grid.asSingleSelect().clear();
+    gridEtudiantSansFormation.asSingleSelect().clear();
   }
 
   private void closeConfirmDeleteTuteur() {
     tuteurConfirmDelete.close();
-    grid.asSingleSelect().clear();
+    gridEtudiantSansFormation.asSingleSelect().clear();
   }
 
   // fonction qui récupère la liste des étudiants sans entrepise pour les afficher dans la grille (avec les valeurs de recherche)
   private void updateList() {
-    grid.setItems(etudiantService.findAllEtudiantsSansEntreprise());
+    gridEtudiantSansFormation.setItems(etudiantService.findAllEtudiantsSansEntreprise());
     gridTuteurSansHabilitation.setItems(tuteurService.findAllTuteursSansHabilitations());
-    System.out.println(tuteurService.findAllTuteursSansHabilitations().size());
   }
-
-  // fonction qui met le nom de l'étudiant en majuscule, défini son sexe en fonction de sa civilté
-  // et son âge selon sa date de naissance
-  private void setNameSexeEtudiant(Etudiant etudiant) {
-    etudiant.setNomEtudiant(etudiant.getNomEtudiant().toUpperCase());
-    switch (etudiant.getCiviliteEtudiant()) {
-      case MONSIEUR:
-        etudiant.setSexeEtudiant(Sexe.M);
-        break;
-      case MADAME:
-        etudiant.setSexeEtudiant(Sexe.F);
-        break;
-      case NON_BINAIRE:
-        etudiant.setSexeEtudiant(Sexe.NB);
-    }
-  }
-
-  // fonction qui met le nom du tuteur en majuscule et défini son sexe en fonction de sa civilté
-  private void setSexeTuteur(Tuteur tuteur) {
-    tuteur.setNomTuteur(tuteur.getNomTuteur().toUpperCase());
-    // définition du sexe que si le champ civilité est rempli
-    if (tuteur.getCiviliteTuteur() != null) {
-      switch (tuteur.getCiviliteTuteur()) {
-        case MONSIEUR:
-          tuteur.setSexe(Sexe.M);
-          break;
-        case MADAME:
-          tuteur.setSexe(Sexe.F);
-          break;
-        case NON_BINAIRE:
-          tuteur.setSexe(Sexe.NB);
-      }
-    }
-  }
-
 }

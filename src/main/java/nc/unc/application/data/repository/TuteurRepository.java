@@ -2,6 +2,7 @@ package nc.unc.application.data.repository;
 
 import nc.unc.application.data.entity.Tuteur;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -23,4 +24,11 @@ public interface TuteurRepository extends JpaRepository<Tuteur, UUID> {
     List<Tuteur> findAllByEntrepriseIdOrderByNomTuteur(Long id);
 
     List<Tuteur> findAllByTuteurHabilitationsIsNullOrderByNomTuteur();
+
+    @Modifying(clearAutomatically = true)
+    @Query("update Tuteur t set t.status = :actif where t.id_tuteur = :id")
+    void updateStatusOfTuteur(Long id, String actif);
+
+    @Query("select t from Tuteur t inner join contrat c on c.id_tuteur = t.id_tuteur inner join etudiant e on e.id_etudiant = c.id_etudiant where t.id_tuteur = :id")
+    List<Tuteur> findAllByEtudiantId(Long id);
 }

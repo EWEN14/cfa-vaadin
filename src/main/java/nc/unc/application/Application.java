@@ -4,9 +4,11 @@ import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
+import nc.unc.application.data.service.cron.InactiveContractCronTask;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * The entry point of the Spring Boot application.
@@ -15,6 +17,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * and some desktop browsers.
  *
  */
+@EnableScheduling
 @SpringBootApplication
 @Theme(value = "cfavaadin-custom")
 @PWA(name = "cfa_vaadin", shortName = "cfa_vaadin", offlineResources = {"images/logo.png"})
@@ -23,6 +26,7 @@ public class Application extends SpringBootServletInitializer implements AppShel
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+        SpringApplication.run(InactiveContractCronTask.class);
     }
 
 }

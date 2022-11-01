@@ -3,7 +3,6 @@ package nc.unc.application.views;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -16,7 +15,7 @@ import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import java.util.Optional;
 import nc.unc.application.data.entity.User;
 import nc.unc.application.security.AuthenticatedUser;
-import nc.unc.application.views.about.HomeView;
+import nc.unc.application.views.accueil.HomeView;
 import nc.unc.application.views.contrat.ContratView;
 import nc.unc.application.views.entreprise.EntrepriseView;
 import nc.unc.application.views.entretienCollectif.EntretienCollectifView;
@@ -24,7 +23,6 @@ import nc.unc.application.views.entretienIndividuelle.EntretienIndividuelView;
 import nc.unc.application.views.etudiant.EtudiantView;
 import nc.unc.application.views.evenement.EvenementView;
 import nc.unc.application.views.formation.FormationListView;
-import nc.unc.application.views.helloworld.HelloWorldView;
 import nc.unc.application.views.logs.LogsView;
 import nc.unc.application.views.referentCfa.ReferentCfaView;
 import nc.unc.application.views.referentPedagogique.ReferentPedagogiqueView;
@@ -151,11 +149,17 @@ public class MainLayout extends AppLayout {
     }
 
     private MenuItemInfo[] createMenuItems() {
-        return new MenuItemInfo[]{ //
+        return new MenuItemInfo[]{ // navbar
 
                 new MenuItemInfo("Accueil", "la la-file menu-icon", HomeView.class),
 
                 new MenuItemInfo("Étudiants", "las la-user-graduate menu-icon", EtudiantView.class),
+
+                new MenuItemInfo("Tuteurs", "las la-user-tie menu-icon", TuteurView.class),
+
+                new MenuItemInfo("Entreprises", "las la-building menu-icon", EntrepriseView.class),
+
+                new MenuItemInfo("Contrats", "las la-file-contract menu-icon", ContratView.class),
 
                 new MenuItemInfo("Référent Pédagogique", "las la-chalkboard-teacher menu-icon", ReferentPedagogiqueView.class),
 
@@ -163,17 +167,11 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Evénements", "las la-history menu-icon", EvenementView.class),
 
-                new MenuItemInfo("Référent CFA", "las la-user menu-icon", ReferentCfaView.class),
+                new MenuItemInfo("Référents CFA", "las la-user menu-icon", ReferentCfaView.class),
 
-                new MenuItemInfo("Entreprises", "las la-building menu-icon", EntrepriseView.class),
+                new MenuItemInfo("Entretiens individuels", "las la-user menu-icon", EntretienIndividuelView.class),
 
-                new MenuItemInfo("Tuteurs", "las la-user-tie menu-icon", TuteurView.class),
-
-                new MenuItemInfo("Entretien individuel", "las la-user menu-icon", EntretienIndividuelView.class),
-
-                new MenuItemInfo("Entretien Collectif", "las la-user menu-icon", EntretienCollectifView.class),
-
-                new MenuItemInfo("Contrats", "las la-file-contract menu-icon", ContratView.class),
+                new MenuItemInfo("Entretiens Collectifs", "las la-user menu-icon", EntretienCollectifView.class),
 
                 new MenuItemInfo("Utilisateurs", "las la-user menu-icon", UserView.class),
 

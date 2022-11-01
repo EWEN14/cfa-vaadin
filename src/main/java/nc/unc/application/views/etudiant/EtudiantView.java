@@ -17,7 +17,7 @@ import nc.unc.application.data.enums.Sexe;
 import nc.unc.application.data.service.*;
 import nc.unc.application.views.ConfirmDelete;
 import nc.unc.application.views.MainLayout;
-import nc.unc.application.views.about.HomeView;
+import nc.unc.application.views.accueil.HomeView;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

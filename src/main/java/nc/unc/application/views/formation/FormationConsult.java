@@ -7,6 +7,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -17,6 +18,8 @@ import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.Formation;
 
 public class FormationConsult extends Dialog {
+
+  private final H3 titre = new H3("Consultation d'une formation");
 
   // form qui contiendra les informations relatives à la formation
   private final FormLayout form = new FormLayout();
@@ -59,8 +62,8 @@ public class FormationConsult extends Dialog {
             semainesEntreprise, heuresFormation, heuresProjetUniversitaire, semainesFormation, lieuFormation, dureeHebdomadaireTravail,
             responsableDeFormation, observations);
 
-    // ajout du formulaire dans la vue
-    add(form, createButtonsLayout());
+    // ajout du formulaire dans la modale
+    add(titre, form, createButtonsLayout());
   }
 
   public void setFormation(Formation formation) {

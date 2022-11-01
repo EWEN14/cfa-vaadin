@@ -7,6 +7,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -28,6 +29,8 @@ public class ReferentPedagogiqueConsult extends Dialog{
 
   private final VerticalLayout content = new VerticalLayout();
 
+  private final H3 titre = new H3("Consultation d'un référent pédagogique");
+
   private final FormLayout formReferentPedagogiqueInfos = new FormLayout();
   private final TextField nomReferentPedago = new TextField("NOM");
   private final TextField prenomReferentPedago = new TextField("Prénom");
@@ -41,8 +44,6 @@ public class ReferentPedagogiqueConsult extends Dialog{
 
   private final Button close = new Button("Fermer");
   private final Button delete = new Button("Supprimer le référent pédagogique");
-
-
 
   public ReferentPedagogiqueConsult(){
     this.setModal(true);
@@ -69,7 +70,7 @@ public class ReferentPedagogiqueConsult extends Dialog{
     content.setSpacing(false);
     setContent(referentPedagogiqueInfosTab);
 
-    add(tabsReferentPedagogique, content, createButtonsLayout());
+    add(tabsReferentPedagogique, titre, content, createButtonsLayout());
   }
 
   public void setReferentPedagogique(ReferentPedagogique referentPedagogique){
@@ -95,12 +96,12 @@ public class ReferentPedagogiqueConsult extends Dialog{
   private void setContent(Tab tab){
     content.removeAll();
 
-    if(tab.equals(referentPedagogiqueInfosTab)){
+    if (tab.equals(referentPedagogiqueInfosTab)) {
       content.add(formReferentPedagogiqueInfos);
     }
   }
 
-  private void setAllFieldsToReadOnly(){
+  private void setAllFieldsToReadOnly() {
     nomReferentPedago.setReadOnly(true);
     prenomReferentPedago.setReadOnly(true);
     telephoneReferentPedago.setReadOnly(true);
@@ -108,8 +109,9 @@ public class ReferentPedagogiqueConsult extends Dialog{
     civiliteReferentPedago.setReadOnly(true);
   }
 
-  public void hideDeleteButton(){ delete.setVisible(false); }
-
+  public void hideDeleteButton() {
+    delete.setVisible(false);
+  }
 
   public static abstract class ReferentPedagogiqueConsultFormEvent extends ComponentEvent<ReferentPedagogiqueConsult>{
     private final ReferentPedagogique referentPedagogique;

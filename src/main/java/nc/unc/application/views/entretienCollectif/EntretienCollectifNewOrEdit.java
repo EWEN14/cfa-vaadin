@@ -8,6 +8,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -22,6 +23,8 @@ public class EntretienCollectifNewOrEdit extends Dialog {
 
   private EntretienCollectif entretienCollectif;
   private EntretienCollectif cloneEntretienCollectif;
+
+  H3 titre = new H3();
 
   // form qui contient les informations générales de l'entretien collectif
   private final FormLayout formEntretien = new FormLayout();
@@ -62,7 +65,7 @@ public class EntretienCollectifNewOrEdit extends Dialog {
     formEntretien.add(date, formation, referentCfa, observations_entretien_collectif, createButtonsLayout());
 
     // ajout du formulaire dans la modale
-    add(formEntretien);
+    add(titre, formEntretien);
   }
 
   private HorizontalLayout createButtonsLayout() {
@@ -81,16 +84,20 @@ public class EntretienCollectifNewOrEdit extends Dialog {
 
   // fonction qui va alimenter le binder d'un entretien
   public void setEntretienCollectif(EntretienCollectif entretienCollectif) {
+    titre.removeAll();
     this.entretienCollectif = entretienCollectif;
     // on doit remettre le cloneEntretien à null (sinon garde ancienne valeur de l'edit)
     this.cloneEntretienCollectif = null;
     // copie de l'entretien si c'est un edit (pour garder les anciennes valeurs qu'on mettra dans le log)
     if (this.entretienCollectif != null && this.entretienCollectif.getId() != null) {
+      titre.add("Modification d'un entretien collectif");
       try {
         this.cloneEntretienCollectif = (EntretienCollectif) this.entretienCollectif.clone();
       } catch (CloneNotSupportedException e) {
         e.printStackTrace();
       }
+    } else {
+      titre.add("Création d'un entretien collectif");
     }
     // alimentation du binder
     binder.readBean(entretienCollectif);

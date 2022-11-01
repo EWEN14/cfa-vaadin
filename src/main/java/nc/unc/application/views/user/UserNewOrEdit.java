@@ -8,6 +8,7 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -24,6 +25,8 @@ public class UserNewOrEdit extends Dialog {
   // Objets users
   private User user;
   private User cloneUser;
+
+  H3 titre = new H3();
 
   FormLayout form = new FormLayout();
   TextField username = new TextField("Identifiant utilisateur");

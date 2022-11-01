@@ -72,7 +72,7 @@ public class EntrepriseView extends VerticalLayout {
     confirmDelete.addListener(ConfirmDelete.DeleteEventGrid.class, this::deleteFromConfirmDelete);
 
     // ajout de la toolbar (recherche + nouveau contrat) et la grid
-    // et des modales de consultation et de création/modification TODO
+    // et des modales de consultation et de création/modification
     add(getToolbar(), grid);
     // initialisation des données de la grille à l'ouverture de la vue
     updateList();

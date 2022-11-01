@@ -9,7 +9,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -24,14 +24,13 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
-import nc.unc.application.data.entity.*;
+import nc.unc.application.data.entity.EntretienIndividuel;
+import nc.unc.application.data.entity.Etudiant;
+import nc.unc.application.data.entity.ReferentCfa;
 import nc.unc.application.data.enums.Civilite;
-import nc.unc.application.data.service.ContratService;
 import nc.unc.application.data.service.EntretienIndividuelService;
 import nc.unc.application.data.service.EtudiantService;
 import nc.unc.application.data.service.ReferentCfaService;
-
-import static nc.unc.application.utils.Utils.frenchDateFormater;
 
 /**
  * Modale (Dialog) qui s'ouvre lorsque l'on clique sur le bouton de détail d'un entretien individuel
@@ -45,6 +44,8 @@ public class EntretienIndividuelConsult extends Dialog {
 
   // Layout qui contiendra le contenu en dessous des tabs
   private final VerticalLayout content = new VerticalLayout();
+
+  H3 titre = new H3("Consultation d'un entretien individuel");
 
   // form qui contient les informations générales de l'entretien individuel
   private final FormLayout formEntretien = new FormLayout();
@@ -177,7 +178,7 @@ public class EntretienIndividuelConsult extends Dialog {
     setContent(tabsEntretien.getSelectedTab());
 
     // on ajoute la tabs, le contenu et les boutons du bas dans la Modale/Dialog
-    add(tabsEntretien, content, createButtonsLayout());
+    add(tabsEntretien, titre, content, createButtonsLayout());
   }
 
   // Méthode appelée à l'ouverture de la vue pour alimenter les champs du formulaire.

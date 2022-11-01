@@ -4,9 +4,9 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -16,14 +16,14 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
-import nc.unc.application.data.entity.*;
-import nc.unc.application.data.enums.*;
-
-import java.util.List;
+import nc.unc.application.data.entity.ReferentPedagogique;
+import nc.unc.application.data.enums.Civilite;
 
 public class ReferentPedagogiqueNewOrEdit extends Dialog {
   private ReferentPedagogique referentPedagogique;
   private ReferentPedagogique cloneReferentPedagogique;
+
+  H3 titre = new H3();
 
   FormLayout formReferentPedagogiqueInfos = new FormLayout();
   TextField nomReferentPedago = new TextField("NOM");
@@ -45,7 +45,7 @@ public class ReferentPedagogiqueNewOrEdit extends Dialog {
 
     formReferentPedagogiqueInfos.add(nomReferentPedago, prenomReferentPedago, civiliteReferentPedago, telephoneReferentPedago, emailReferentPedago, createButtonsLayout());
 
-    add(formReferentPedagogiqueInfos);
+    add(titre, formReferentPedagogiqueInfos);
   }
 
   private HorizontalLayout createButtonsLayout() {
@@ -61,16 +61,19 @@ public class ReferentPedagogiqueNewOrEdit extends Dialog {
   }
 
   public void setReferentPedagogique(ReferentPedagogique referentPedagogique) {
+    titre.removeAll();
     this.referentPedagogique = referentPedagogique;
+    // on doit remettre le cloneReferentPedagogique à null (sinon garde ancienne valeur de l'edit)
     this.cloneReferentPedagogique = null;
-
     if (referentPedagogique != null && referentPedagogique.getId() != null) {
+      titre.add("Modification d'un référent pédégogique");
       try {
         this.cloneReferentPedagogique = (ReferentPedagogique) referentPedagogique.clone();
-
       } catch (CloneNotSupportedException e) {
         e.printStackTrace();
       }
+    } else {
+      titre.add("Création d'un référent pédagogique");
     }
 
     binder.readBean(referentPedagogique);

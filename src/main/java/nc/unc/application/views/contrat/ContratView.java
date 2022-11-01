@@ -90,7 +90,7 @@ public class ContratView extends VerticalLayout {
     tuteurModal.addListener(TuteurNewOrEdit.CloseEvent.class, e -> closeNewOrEditModalTuteur());
 
     // ajout de la toolbar (recherche + nouveau contrat) et la grid
-    // et des modales de consultation et de création/modification TODO
+    // et des modales de consultation et de création/modification
     add(getToolbar(), grid, modalConsult, modalNewOrEdit);
     // initialisation des données de la grille à l'ouverture de la vue
     updateList();
@@ -106,7 +106,7 @@ public class ContratView extends VerticalLayout {
     grid.addColumn(contrat -> contrat.getEntreprise() != null ? contrat.getEntreprise().getEnseigne() : "").setHeader("Entreprise").setSortable(true);
     grid.addColumn(contrat -> contrat.getFormation() != null ? contrat.getFormation().getCodeFormation() : "").setHeader("Formation").setSortable(true);
     grid.addColumn(Contrat::getCodeContrat).setHeader("Contrat/Avenant").setSortable(true);
-    grid.addColumn(Contrat::getNumeroAvenant).setHeader("Numéro Avenant").setSortable(true);
+    grid.addColumn(Contrat::getNumeroAvenant).setHeader("N° Avenant").setSortable(true);
     grid.addColumn(contrat -> contrat.getCreatedAt() != null ? frenchDateFormater(contrat.getCreatedAt().toLocalDate()) : "").setHeader("Date Création").setSortable(true);
 
     // ajout du bouton de consultation d'un contrat

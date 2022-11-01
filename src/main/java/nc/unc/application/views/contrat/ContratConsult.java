@@ -284,7 +284,7 @@ public class ContratConsult extends Dialog {
     // ajout des colonnes
     gridAvenants.addColumn(contrat -> contrat.getTuteur() != null ? contrat.getTuteur().getPrenomTuteur() + " " + contrat.getTuteur().getNomTuteur() : "").setHeader("Tuteur").setSortable(true);
     gridAvenants.addColumn(Contrat::getCodeContrat).setHeader("Contrat/Avenant").setSortable(true);
-    gridAvenants.addColumn(Contrat::getNumeroAvenant).setHeader("Numéro Avenant").setSortable(true);
+    gridAvenants.addColumn(Contrat::getNumeroAvenant).setHeader("N° Avenant").setSortable(true);
     gridAvenants.addColumn(contrat -> contrat.getCreatedAt() != null ? frenchDateFormater(contrat.getCreatedAt().toLocalDate()) : "").setHeader("Date Création").setSortable(true);
 
     // on définit que chaque colonne à une largeur autodéterminée

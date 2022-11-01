@@ -9,6 +9,7 @@ import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -24,6 +25,8 @@ import java.util.List;
 public class EvenementConsult extends Dialog {
 
   private Evenement evenement;
+
+  private final H3 titre = new H3("Consultation d'un événement");
 
   // form qui contiendra les informations générales relatives à l'évenement
   private final FormLayout form = new FormLayout();
@@ -62,8 +65,8 @@ public class EvenementConsult extends Dialog {
     // ajout des champs et des boutons d'action dans le formulaire
     form.add(libelle, description, dateDebut, dateFin, formations, createButtonsLayout());
 
-    // ajout du formulaire dans la modale
-    add(form);
+    // ajout du titre et du formulaire dans la modale
+    add(titre, form);
   }
 
   // méthode appelée à l'ouverture de la vue pour alimenter les champs du formulaire.

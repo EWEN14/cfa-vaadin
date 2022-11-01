@@ -32,7 +32,6 @@ import nc.unc.application.views.user.UserView;
 /**
  * The main view is a top-level placeholder for other views.
  */
-@CssImport("./styles/evenement.css")
 public class MainLayout extends AppLayout {
 
     /**

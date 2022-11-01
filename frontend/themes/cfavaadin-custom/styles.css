@@ -119,3 +119,8 @@ header{
 .active{
     color: white;
 }
+[part="required-indicator"]::after {
+    font-size: 2rem!important;
+    position: absolute!important;
+    right: -10px!important;
+}

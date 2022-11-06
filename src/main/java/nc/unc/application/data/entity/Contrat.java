@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -163,6 +164,16 @@ public class Contrat implements Cloneable {
   @Column(name = "formation_lea")
   private LocalDate formationLea;
 
+  @Column(name = "statut_actif", length = 40)
+  private String statutActif;
+
+  @Positive(message = "Le salaire négocié doit être positif")
+  @Column(name = "salaire_negocie")
+  private Integer salaireNegocie;
+
+  @Column(name = "missions_alternant", length = 15000)
+  private String missionsAlternant;
+
   @Column(name = "observations", length = 15000)
   private String observations;
 
@@ -237,6 +248,9 @@ public class Contrat implements Cloneable {
             "\n convAvenantRemisTuteur=" + convAvenantRemisTuteur +
             "\n convAvenantRemisEmployeur=" + convAvenantRemisEmployeur +
             "\n formationLea=" + formationLea +
+            "\n statutActif='" + statutActif + '\'' +
+            "\n salaireNegocie=" + salaireNegocie +
+            "\n missionsAlternant='" + missionsAlternant + '\'' +
             "\n observations='" + observations + '\'' +
             "\n entreprise=" + (entreprise != null ? entreprise.getEnseigne() : "") +
             "\n etudiant=" + (etudiant != null ? etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() : "") +

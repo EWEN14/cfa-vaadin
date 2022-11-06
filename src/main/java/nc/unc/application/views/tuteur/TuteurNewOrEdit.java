@@ -340,7 +340,7 @@ public class TuteurNewOrEdit extends Dialog {
   // On définit que les formations qui doivent apparaître dans le select pour ajouter
   // une habilitation doivent être celles pour lesquelles le tuteur n'est pas encore habilité
   private void selectFormationNonHabilite(List<TuteurHabilitation> tuteurHabilitationListe) {
-    List<Long> idFormationsHabilites = new ArrayList<Long>();
+    List<Long> idFormationsHabilites = new ArrayList<>();
     if (!tuteurHabilitationListe.isEmpty()) {
       for (TuteurHabilitation tuteurHabilitation : tuteurHabilitationListe) {
         idFormationsHabilites.add(tuteurHabilitation.getFormation().getId());

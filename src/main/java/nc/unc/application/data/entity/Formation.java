@@ -60,6 +60,9 @@ public class Formation implements Cloneable {
   @Column(name = "lieu_formation")
   private String lieuFormation;
 
+  @Column(name = "statut_actif", length = 40)
+  private String statutActif;
+
   @Column(name = "observations", length = 15000)
   private String observations;
 
@@ -125,18 +128,19 @@ public class Formation implements Cloneable {
   public String toString() {
     return "Formation{" +
             "\n id=" + id +
-            "\n , libelleFormation='" + libelleFormation + '\'' +
-            "\n , codeFormation='" + codeFormation + '\'' +
-            "\n , codeRome='" + codeRome + '\'' +
-            "\n , niveauCertificationProfessionnelle=" + niveauCertificationProfessionnelle +
-            "\n , typeEmploiExerce='" + typeEmploiExerce + '\'' +
-            "\n , semainesEntreprise=" + semainesEntreprise +
-            "\n , dureeHebdomadaireTravail=" + dureeHebdomadaireTravail +
-            "\n , heuresFormation=" + heuresFormation +
-            "\n , semainesFormation=" + semainesFormation +
-            "\n , lieuFormation='" + lieuFormation + '\'' +
-            "\n , observations='" + observations + '\'' +
-            "\n , referentPedagogique=" +
+            "\n libelleFormation='" + libelleFormation + '\'' +
+            "\n codeFormation='" + codeFormation + '\'' +
+            "\n codeRome='" + codeRome + '\'' +
+            "\n niveauCertificationProfessionnelle=" + niveauCertificationProfessionnelle +
+            "\n typeEmploiExerce='" + typeEmploiExerce + '\'' +
+            "\n semainesEntreprise=" + semainesEntreprise +
+            "\n dureeHebdomadaireTravail=" + dureeHebdomadaireTravail +
+            "\n heuresFormation=" + heuresFormation +
+            "\n semainesFormation=" + semainesFormation +
+            "\n lieuFormation='" + lieuFormation + '\'' +
+            "\n statutActif='" + statutActif + '\'' +
+            "\n observations='" + observations + '\'' +
+            "\n referentPedagogique=" +
             (referentPedagogique != null ? referentPedagogique.getPrenomReferentPedago() + " " + referentPedagogique.getNomReferentPedago() : "") +
             '}';
   }

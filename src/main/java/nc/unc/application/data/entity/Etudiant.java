@@ -34,6 +34,9 @@ public class Etudiant implements Cloneable {
   @Column(name = "nom", nullable = false)
   private String nomEtudiant;
 
+  @Column(name = "nom_jeune_fille")
+  private String nomJeuneFille;
+
   @NotEmpty(message = "Le prénom doit être renseigné")
   @NotNull(message = "Le prénom ne peut pas être nul")
   @Column(name = "prenom", nullable = false)
@@ -140,6 +143,12 @@ public class Etudiant implements Cloneable {
   @Column(name = "annee_promotion")
   private Integer anneePromotion;
 
+  @Column(name = "statut_actif", length = 40)
+  private String statutActif;
+
+  @Column(name = "suivre_etudiant", nullable = false)
+  private Boolean suivreEtudiant;
+
   @Column(name = "observations", length = 15000)
   private String observationsEtudiant;
 
@@ -208,6 +217,7 @@ public class Etudiant implements Cloneable {
     return "Étudiant { " +
             "\n id=" + id +
             "\n nomEtudiant='" + nomEtudiant + '\'' +
+            "\n nomJeuneFille='" + nomJeuneFille + '\'' +
             "\n prenomEtudiant='" + prenomEtudiant + '\'' +
             "\n numeroEtudiant=" + numeroEtudiant +
             "\n civiliteEtudiant=" + civiliteEtudiant +
@@ -238,6 +248,8 @@ public class Etudiant implements Cloneable {
             "\n priseEnChargeFraisInscription='" + priseEnChargeFraisInscription + '\'' +
             "\n obtentionDiplomeMention='" + obtentionDiplomeMention + '\'' +
             "\n anneePromotion='" + anneePromotion + '\'' +
+            "\n statutActif='" + statutActif + '\'' +
+            "\n suivreEtudiant=" + suivreEtudiant +
             "\n observationsEtudiant='" + observationsEtudiant + '\'' +
             "\n entreprise=" + (entreprise != null ? entreprise.getEnseigne() : "") +
             "\n tuteur=" + (tuteur != null ? tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() : "") +

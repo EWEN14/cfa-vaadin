@@ -1,13 +1,12 @@
 package nc.unc.application.data.enums;
 
-public enum StatutActifEntreprise {
-  DEMARCHEE("DÉMARCHÉE"),
-  ENTREPRISE_ACTIVE("ENTREPRISE ACTIVE"),
-  ANCIENNE_ENTREPRISE("ANCIENNE ENTREPRISE");
+public enum StatutActifAutres {
+  ACTIF("ACTIF"),
+  INACTIF("INACTIF");
 
   private String enumStringify;
 
-  StatutActifEntreprise(String enumStringify) {
+  StatutActifAutres(String enumStringify) {
     this.enumStringify = enumStringify;
   }
 
@@ -19,9 +18,9 @@ public enum StatutActifEntreprise {
    * Tableau renvoyant les différents status sous forme de String.
    * @return tableau de chaînes de caractères qui sont les versions String de chaque Enum
    */
-  public static String[] getStatutActifEntrepriseStr() {
-    StatutActifEntreprise[] enums = StatutActifEntreprise.values();
-    String[] strings = new String[StatutActifEntreprise.values().length];
+  public static String[] getStatutActifAutresStr() {
+    StatutActifAutres[] enums = StatutActifAutres.values();
+    String[] strings = new String[StatutActifAutres.values().length];
     for (int i = 0; i < strings.length; i++) {
       strings[i] = enums[i].getEnumStringify();
     }

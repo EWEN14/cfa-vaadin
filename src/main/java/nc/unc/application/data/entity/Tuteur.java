@@ -101,6 +101,9 @@ public class Tuteur implements Cloneable {
   @Column(name = "cv_fourni")
   private Boolean cvFourni;
 
+  @Column(name = "statut_actif", length = 40)
+  private String statutActif;
+
   @Column(name = "observations", length = 15000)
   private String observationsTuteur;
 
@@ -173,6 +176,7 @@ public class Tuteur implements Cloneable {
             "\n diplomeFourni=" + diplomeFourni +
             "\n certificatTravailFourni=" + certificatTravailFourni +
             "\n cvFourni=" + cvFourni +
+            "\n statutActif='" + statutActif + '\'' +
             "\n observationsTuteur='" + observationsTuteur + '\'' +
             " }";
   }

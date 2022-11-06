@@ -31,6 +31,7 @@ public class InactiveContractCronTask {
 
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
+
         String choix = SituationContrat.NON_ACTIF;
         List<Contrat> contrats = contratRepository.findAll();
 
@@ -47,6 +48,6 @@ public class InactiveContractCronTask {
         });
 
         tuteurs.forEach(tuteur -> tuteurRepository.updateStatusOfTuteur(tuteur.getId(), choix));
-        log.info("The time is now {}", LocalDate.now());
+        //log.info("The time is now {}", LocalDate.now());
     }
 }

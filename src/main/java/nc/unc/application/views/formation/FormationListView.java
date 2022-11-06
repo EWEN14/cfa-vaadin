@@ -3,7 +3,6 @@ package nc.unc.application.views.formation;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -15,7 +14,6 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteParameters;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.Formation;
 import nc.unc.application.data.entity.ReferentPedagogique;
 import nc.unc.application.data.service.FormationService;
@@ -27,6 +25,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
+import java.util.Objects;
 
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests
@@ -47,6 +46,8 @@ public class FormationListView extends VerticalLayout {
 
   VirtualList<Formation> cardsFormations = new VirtualList<>();
   Button addFormationButton = new Button("Nouvelle Formation");
+
+  Formation formationEnEdition = new Formation();
 
   // Composant qui définit l'aspect de chaque "carte" qui présente une formation
   private final ComponentRenderer<com.vaadin.flow.component.Component, Formation> formationCardRenderer = new ComponentRenderer<>(formation -> {
@@ -214,12 +215,13 @@ public class FormationListView extends VerticalLayout {
     cardsFormations.setItems(formationService.findAllFormations(""));
   }
 
-  public void addReferent(){
+  public void addReferent(Formation formation){
+    this.formationEnEdition = formation;
     closeNewOrEditModal();
     editReferentModal(new ReferentPedagogique());
   }
 
-  //Sauvegarder un référent pédagogique
+  // Sauvegarde d'un référent pédagogique créé "à la volée"
   private void saveReferentPedagogique(ReferentPedagogiqueNewOrEdit.SaveEvent event) {
     ReferentPedagogique referentPedagogique = event.getReferentPedagogique();
 
@@ -229,9 +231,11 @@ public class FormationListView extends VerticalLayout {
 
     logEnregistrmentService.saveLogAjoutString(referentPedagogique.toString());
 
+    // On met à jour la liste des référents pédagogiques dans la combobox dédiée pour la création/édition d'une formation
+    modalNewOrEdit.modifyReferents(referentPedagogiqueService.findAllReferentPedagogique(null));
+
     closeNewOrEditModalReferent();
 
-    modalNewOrEdit.modifyReferents(referentPedagogiqueService.findAllReferentPedagogique(null));
     Notification.show(referentPedagogique.getPrenomReferentPedago() + " " + referentPedagogique.getNomReferentPedago() + " créé(e).");
   }
 
@@ -239,6 +243,10 @@ public class FormationListView extends VerticalLayout {
   private void closeNewOrEditModalReferent() {
     referentNewOrEdit.setReferentPedagogique(null);
     referentNewOrEdit.close();
+
+    // Si la formation à partir de laquelle on a créé le référent pédagoqique est déjà existante (édition),
+    // on la passe en paramètre, sinon on repart d'une nouvelle formation.
+    editFormationModal(Objects.requireNonNullElseGet(this.formationEnEdition, Formation::new));
   }
 
 }

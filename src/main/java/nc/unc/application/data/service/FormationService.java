@@ -1,6 +1,7 @@
 package nc.unc.application.data.service;
 
 import nc.unc.application.data.entity.Formation;
+import nc.unc.application.data.enums.StatutActifAutres;
 import nc.unc.application.data.repository.FormationRepository;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,9 @@ public class FormationService {
     if (formation == null) {
       System.err.println("La formation est nulle, le formulaire est-il bien connecté à l'application ?");
       return;
+    }
+    if (formation.getStatutActif() == null) {
+      formation.setStatutActif(StatutActifAutres.ACTIF.getEnumStringify());
     }
     formationRepository.save(formation);
   }

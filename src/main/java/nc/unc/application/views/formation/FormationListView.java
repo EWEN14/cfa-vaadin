@@ -114,6 +114,7 @@ public class FormationListView extends VerticalLayout {
     modalNewOrEdit = new FormationNewOrEdit(referentPedagogiqueService.findAllReferentPedagogique(""), this);
     modalNewOrEdit.addListener(FormationNewOrEdit.SaveEvent.class, this::saveFormation);
     modalNewOrEdit.addListener(FormationNewOrEdit.SaveEditedEvent.class, this::saveEditedFormation);
+    modalNewOrEdit.addListener(FormationNewOrEdit.GetFormationInEditionEvent.class, this::addReferent);
     modalNewOrEdit.addListener(FormationNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
 
     referentNewOrEdit = new ReferentPedagogiqueNewOrEdit();
@@ -215,9 +216,12 @@ public class FormationListView extends VerticalLayout {
     cardsFormations.setItems(formationService.findAllFormations(""));
   }
 
-  public void addReferent(Formation formation){
-    this.formationEnEdition = formation;
+  public void addReferent(FormationNewOrEdit.GetFormationInEditionEvent event){
+    // on récupère les informations qui avaient été remplis dans le formulaire de formation
+    this.formationEnEdition = event.getFormation();
+    // on ferme la modale de création/édition d'une formation
     closeNewOrEditModal();
+    // on ouvre la modale de création d'un référent pédagogique
     editReferentModal(new ReferentPedagogique());
   }
 

@@ -2,6 +2,7 @@ package nc.unc.application.data.service;
 
 import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Etudiant;
+import nc.unc.application.data.enums.StatutActifAutres;
 import nc.unc.application.data.repository.EtudiantRepository;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,9 @@ public class EtudiantService {
     if (etudiant == null) {
       System.err.println("L'étudiant est nul, le formulaire est-il bien connecté à l'application ?");
       return;
+    }
+    if (etudiant.getStatutActif() == null) {
+      etudiant.setStatutActif(StatutActifAutres.ACTIF.getEnumStringify());
     }
     etudiantRepository.save(etudiant);
   }

@@ -101,8 +101,14 @@ public class FormationNewOrEdit extends Dialog {
     save.addClickListener(event -> validateAndSave());
     close.addClickListener(event -> fireEvent(new FormationNewOrEdit.CloseEvent(this)));
 
-    //Evènement sur le click sur le bouton ajouter un tuteur
-    addReferentButton.addClickListener(click -> formationListView.addReferent(formation));
+    // Évènement sur le click sur le bouton ajouter un référent pédagogique
+    addReferentButton.addClickListener(click -> {
+      // on fait un draft (brouillon) qui nous permettra de pré-remplir les champs
+      // déjà remplis au retour sur la modale de création de la formation
+      binder.writeBeanAsDraft(formation);
+      // On lance l'événement qui va ouvrir la modale de création d'un référent pédagogique
+      fireEvent(new FormationNewOrEdit.GetFormationInEditionEvent(this, formation));
+    });
 
     // met le bouton de sauvegarde actif que si le binder est valide
     binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
@@ -185,6 +191,12 @@ public class FormationNewOrEdit extends Dialog {
   public static class CloseEvent extends FormationNewOrEdit.FormationFormEvent {
     CloseEvent(FormationNewOrEdit source) {
       super(source, null, null);
+    }
+  }
+
+  public static class GetFormationInEditionEvent extends FormationNewOrEdit.FormationFormEvent {
+    GetFormationInEditionEvent(FormationNewOrEdit source, Formation formation) {
+      super(source, formation, null);
     }
   }
 

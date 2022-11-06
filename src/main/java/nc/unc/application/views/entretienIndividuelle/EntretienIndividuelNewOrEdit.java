@@ -4,23 +4,20 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.textfield.EmailField;
-import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
-import nc.unc.application.data.entity.*;
-import nc.unc.application.data.enums.*;
+import nc.unc.application.data.entity.EntretienIndividuel;
+import nc.unc.application.data.entity.Etudiant;
+import nc.unc.application.data.entity.ReferentCfa;
 
 import java.util.List;
 
@@ -28,6 +25,8 @@ public class EntretienIndividuelNewOrEdit extends Dialog {
 
   private EntretienIndividuel entretienIndividuel;
   private EntretienIndividuel cloneEntretienIndividuel;
+
+  H3 titre = new H3();
 
   // form qui contient les informations générales de l'entretien individuel
   private final FormLayout formEntretien = new FormLayout();
@@ -68,7 +67,7 @@ public class EntretienIndividuelNewOrEdit extends Dialog {
     formEntretien.add(date, etudiant, referentCfa, observations_entretien_individuel, createButtonsLayout());
 
     // ajout du formulaire dans la modale
-    add(formEntretien);
+    add(titre, formEntretien);
   }
 
   private HorizontalLayout createButtonsLayout() {
@@ -87,16 +86,20 @@ public class EntretienIndividuelNewOrEdit extends Dialog {
 
   // fonction qui va alimenter le binder d'un entretien
   public void setEntretienIndividuel(EntretienIndividuel entretienIndividuel) {
+    this.titre.removeAll();
     this.entretienIndividuel = entretienIndividuel;
     // on doit remettre le cloneEntretien à null (sinon garde ancienne valeur de l'edit)
     this.cloneEntretienIndividuel = null;
     // copie de l'entretien si c'est un edit (pour garder les anciennes valeurs qu'on mettra dans le log)
     if (this.entretienIndividuel != null && this.entretienIndividuel.getId() != null) {
+      titre.add("Modification d'un entretien individuel");
       try {
         this.cloneEntretienIndividuel = (EntretienIndividuel) this.entretienIndividuel.clone();
       } catch (CloneNotSupportedException e) {
         e.printStackTrace();
       }
+    } else {
+      titre.add("Création d'un entretien individuel");
     }
     // alimentation du binder
     binder.readBean(entretienIndividuel);

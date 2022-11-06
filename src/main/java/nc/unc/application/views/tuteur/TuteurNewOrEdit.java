@@ -9,6 +9,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -68,6 +69,8 @@ public class TuteurNewOrEdit extends Dialog {
   // Layout qui contiendra le contenu en dessous des tabs
   private final VerticalLayout content;
 
+  H3 titre = new H3();
+
   // Champs de notre formulaire
   FormLayout form = new FormLayout();
   TextField nomTuteur = new TextField("NOM");
@@ -88,7 +91,9 @@ public class TuteurNewOrEdit extends Dialog {
   Checkbox certificatTravailFourni = new Checkbox("Certificat de Travail fourni");
   Checkbox cvFourni = new Checkbox("CV fourni");
 
-  // éléments associés aux habilitations du tuteur
+  /**
+   * éléments associés aux habilitations du tuteur
+   */
   // grid qui contient la liste des habilitations du tuteur
   Grid<TuteurHabilitation> tuteurHabilitations = new Grid<>(TuteurHabilitation.class, false);
   // formulaire et éléments du formulaire pour l'ajout et l'édition d'habilitations
@@ -203,7 +208,7 @@ public class TuteurNewOrEdit extends Dialog {
     // à l'ouverture, on ouvre les informations générales du tuteur
     setContent(tuteursInfosTab);
 
-    add(tabsTuteurs, content);
+    add(tabsTuteurs, titre, content);
   }
 
   // Configuration des boutons de sauvegarde et de fermeture de la modale du tuteur
@@ -238,10 +243,12 @@ public class TuteurNewOrEdit extends Dialog {
 
   // fonction qui va alimenter le binder d'un tuteur
   public void setTuteur(Tuteur tuteur) {
+    titre.removeAll();
     this.tuteur = tuteur;
     this.cloneTuteur = null;
     // copie du tuteur si c'est un edit (pour garder les anciennes valeurs qu'on mettra dans le log)
     if (tuteur != null && tuteur.getId() != null) {
+      titre.add("Modification d'un tuteur");
       try {
         this.cloneTuteur = (Tuteur) tuteur.clone();
         // on récupère la liste des habilitations du tuteur
@@ -258,6 +265,7 @@ public class TuteurNewOrEdit extends Dialog {
         e.printStackTrace();
       }
     } else {
+      titre.add("Création d'un tuteur");
       // si nouveau tuteur, on cache l'onglet des habilitations et on passe sur l'onglet des infos tuteur
       tuteursHabilitationsTab.setVisible(false);
       tuteursInfosTab.setSelected(true);
@@ -332,7 +340,7 @@ public class TuteurNewOrEdit extends Dialog {
   // On définit que les formations qui doivent apparaître dans le select pour ajouter
   // une habilitation doivent être celles pour lesquelles le tuteur n'est pas encore habilité
   private void selectFormationNonHabilite(List<TuteurHabilitation> tuteurHabilitationListe) {
-    List<Long> idFormationsHabilites = new ArrayList<Long>();
+    List<Long> idFormationsHabilites = new ArrayList<>();
     if (!tuteurHabilitationListe.isEmpty()) {
       for (TuteurHabilitation tuteurHabilitation : tuteurHabilitationListe) {
         idFormationsHabilites.add(tuteurHabilitation.getFormation().getId());

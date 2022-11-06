@@ -9,6 +9,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -43,6 +44,8 @@ public class EtudiantConsult extends Dialog {
 
   // Layout qui contiendra le contenu en dessous des tabs
   private final VerticalLayout content = new VerticalLayout();
+
+  private final H3 titre = new H3("Consultation d'un étudiant");
 
   // form qui contiendra les informations générales relatives à l'étudiants
   private final FormLayout formEtudiantInfos = new FormLayout();
@@ -204,7 +207,7 @@ public class EtudiantConsult extends Dialog {
     setContent(etudiantInfosTab);
 
     // on ajoute la tabs, le contenu et les boutons du bas dans la Modale/Dialog
-    add(tabsEtudiant, content, createButtonsLayout());
+    add(tabsEtudiant, titre, content, createButtonsLayout());
   }
 
   // méthode appelée à l'ouverture de la vue pour alimenter les champs du formulaire.

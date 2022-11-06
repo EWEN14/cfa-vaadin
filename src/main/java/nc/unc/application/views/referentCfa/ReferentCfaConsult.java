@@ -7,13 +7,9 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -21,13 +17,12 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.ReferentCfa;
-import nc.unc.application.data.entity.ReferentPedagogique;
 import nc.unc.application.data.enums.Civilite;
 
 public class ReferentCfaConsult extends Dialog{
   private ReferentCfa referentCfa;
 
-  private final VerticalLayout content = new VerticalLayout();
+  private final H3 titre = new H3("Consultation d'un Référent CFA");
 
   private final FormLayout formReferentCfaInfos = new FormLayout();
   private final TextField nomReferentCfa = new TextField("NOM");
@@ -41,8 +36,6 @@ public class ReferentCfaConsult extends Dialog{
 
   private final Button close = new Button("Fermer");
   private final Button delete = new Button("Supprimer le référent CFA");
-
-
 
   public ReferentCfaConsult(){
     this.setModal(true);
@@ -61,7 +54,8 @@ public class ReferentCfaConsult extends Dialog{
     dateMiseAJour.setLabel("Date de mise à jour");
 
     formReferentCfaInfos.add(nomReferentCfa, prenomReferentCfa, telephoneReferentCfa, emailReferentCfa, civiliteReferentCfa);
-    add(formReferentCfaInfos, createButtonsLayout());
+
+    add(titre, formReferentCfaInfos, createButtonsLayout());
   }
 
   public void setReferentCfa(ReferentCfa referentCfa){

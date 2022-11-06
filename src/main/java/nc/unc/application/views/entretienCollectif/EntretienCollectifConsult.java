@@ -4,11 +4,11 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -23,9 +23,13 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
-import nc.unc.application.data.entity.*;
+import nc.unc.application.data.entity.EntretienCollectif;
+import nc.unc.application.data.entity.Formation;
+import nc.unc.application.data.entity.ReferentCfa;
 import nc.unc.application.data.enums.Civilite;
-import nc.unc.application.data.service.*;
+import nc.unc.application.data.service.EntretienCollectifService;
+import nc.unc.application.data.service.FormationService;
+import nc.unc.application.data.service.ReferentCfaService;
 
 /**
  * Modale (Dialog) qui s'ouvre lorsque l'on clique sur le bouton de détail d'un entretien collectif
@@ -36,6 +40,8 @@ public class EntretienCollectifConsult extends Dialog {
   private FormationService formationService;
   private ReferentCfaService referentCfaService;
   private EntretienCollectif entretienCollectif;
+
+  H3 titre = new H3("Consultation d'un entretien collectif");
 
   // Layout qui contiendra le contenu en dessous des tabs
   private final VerticalLayout content = new VerticalLayout();
@@ -148,7 +154,7 @@ public class EntretienCollectifConsult extends Dialog {
     setContent(tabsEntretien.getSelectedTab());
 
     // on ajoute la tabs, le contenu et les boutons du bas dans la Modale/Dialog
-    add(tabsEntretien, content, createButtonsLayout());
+    add(tabsEntretien, titre, content, createButtonsLayout());
   }
 
   // Méthode appelée à l'ouverture de la vue pour alimenter les champs du formulaire.

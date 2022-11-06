@@ -1,5 +1,7 @@
 package nc.unc.application.data.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "tuteur_habilitation")
 public class TuteurHabilitation implements Cloneable {
   @Id
@@ -50,90 +54,7 @@ public class TuteurHabilitation implements Cloneable {
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
 
-  // Getters et Setters
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getStatutFormation() {
-    return statutFormation;
-  }
-
-  public void setStatutFormation(String statutFormation) {
-    this.statutFormation = statutFormation;
-  }
-
-  public LocalDate getDateFormation() {
-    return dateFormation;
-  }
-
-  public void setDateFormation(LocalDate dateFormation) {
-    this.dateFormation = dateFormation;
-  }
-
-  public String getModaliteFormation() {
-    return modaliteFormation;
-  }
-
-  public void setModaliteFormation(String modaliteFormation) {
-    this.modaliteFormation = modaliteFormation;
-  }
-
-  public LocalDate getDateHabilitation() {
-    return dateHabilitation;
-  }
-
-  public void setDateHabilitation(LocalDate dateHabilitation) {
-    this.dateHabilitation = dateHabilitation;
-  }
-
-  public String getObservations() {
-    return observations;
-  }
-
-  public void setObservations(String observations) {
-    this.observations = observations;
-  }
-
-  public Tuteur getTuteur() {
-    return tuteur;
-  }
-
-  public void setTuteur(Tuteur tuteur) {
-    this.tuteur = tuteur;
-  }
-
-  public Formation getFormation() {
-    return formation;
-  }
-
-  public void setFormation(Formation formation) {
-    this.formation = formation;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public LocalDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(LocalDateTime updatedAt) {
-    this.updatedAt = updatedAt;
-  }
-
   // autres méthodes
-
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

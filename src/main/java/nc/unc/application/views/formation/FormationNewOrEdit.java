@@ -7,6 +7,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -32,6 +33,8 @@ public class FormationNewOrEdit extends Dialog {
   private Formation cloneFormation;
 
   private FormationListView formationListView;
+
+  H3 titre = new H3();
 
   FormLayout form = new FormLayout();
   TextField libelleFormation = new TextField("Libellé de la formation");
@@ -87,7 +90,7 @@ public class FormationNewOrEdit extends Dialog {
             layoutReferent, observations, createButtonsLayout());
 
     // ajout du formulaire dans la modale
-    add(form);
+    add(titre, form);
   }
 
   private HorizontalLayout createButtonsLayout() {
@@ -108,16 +111,20 @@ public class FormationNewOrEdit extends Dialog {
   }
 
   public void setFormation(Formation formation) {
+    titre.removeAll();
     this.formation = formation;
     // on doit remettre le cloneFormation à null (sinon garde ancienne valeur de l'edit)
     this.cloneFormation = null;
     // copie de la formation si c'est un edit (pour garder les anciennes valeurs qu'on mettra dans le log)
     if (formation != null && formation.getId() != null) {
+      titre.add("Modification d'une formation");
       try {
         this.cloneFormation = (Formation) formation.clone();
       } catch (CloneNotSupportedException e) {
         e.printStackTrace();
       }
+    } else {
+      titre.add("Création d'une formation");
     }
     // alimentation du binder
     binder.readBean(formation);

@@ -9,6 +9,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -28,6 +29,8 @@ public class EtudiantNewOrEdit extends Dialog {
 
   private Etudiant etudiant;
   private Etudiant cloneEtudiant;
+
+  H3 titre = new H3();
 
   FormLayout form = new FormLayout();
   TextField nomEtudiant = new TextField("NOM");
@@ -157,7 +160,7 @@ public class EtudiantNewOrEdit extends Dialog {
             tuteur, formation, anneePromotion, referentPedagogique, observationsEtudiant, createButtonsLayout());
 
     // ajout du formulaire dans la modale
-    add(form);
+    add(titre, form);
   }
 
   private HorizontalLayout createButtonsLayout() {
@@ -176,16 +179,20 @@ public class EtudiantNewOrEdit extends Dialog {
 
   // fonction qui va alimenter le binder d'un étudiant
   public void setEtudiant(Etudiant etudiant) {
+    titre.removeAll();
     this.etudiant = etudiant;
     // on doit remettre le cloneEtudiant à null (sinon garde ancienne valeur de l'edit)
     this.cloneEtudiant = null;
     // copie de l'étudiant si c'est un edit (pour garder les anciennes valeurs qu'on mettra dans le log)
     if (etudiant != null && etudiant.getId() != null) {
+      titre.add("Modification d'un étudiant");
       try {
         this.cloneEtudiant = (Etudiant) etudiant.clone();
       } catch (CloneNotSupportedException e) {
         e.printStackTrace();
       }
+    } else {
+      titre.add("Création d'un étudiant");
     }
     // alimentation du binder
     binder.readBean(etudiant);

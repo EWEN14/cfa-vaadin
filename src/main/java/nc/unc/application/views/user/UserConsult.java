@@ -10,6 +10,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -21,8 +22,10 @@ import nc.unc.application.data.enums.Role;
 
 public class UserConsult extends Dialog {
 
-  // Objets users
+  // Objet user
   private User user;
+
+  private final H3 titre = new H3("Consultation d'un utilisateur");
 
   FormLayout form = new FormLayout();
   TextField username = new TextField("Identifiant utilisateur");
@@ -43,7 +46,6 @@ public class UserConsult extends Dialog {
     // tant que la modale n'est pas fermée
     this.setModal(true);
     this.setWidth("85vw");
-    this.setHeight("50vh");
 
     //Liste des rôles
     roles.setLabel("Rôles");
@@ -62,7 +64,7 @@ public class UserConsult extends Dialog {
     form.add(username, hashedPassword, nom, prenom, roles, new Div(), dateCreation, dateMiseAJour, createButtonsLayout());
 
     // ajout du formulaire dans la modale
-    add(form);
+    add(titre, form);
   }
 
   // Méthode appelée à l'ouverture de la vue pour alimenter les champs du formulaire.

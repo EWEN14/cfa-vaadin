@@ -6,6 +6,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -22,6 +23,8 @@ import nc.unc.application.data.enums.Civilite;
 public class ReferentCfaNewOrEdit extends Dialog {
   private ReferentCfa referentCfa;
   private ReferentCfa cloneReferentCfa;
+
+  H3 titre = new H3();
 
   FormLayout formReferentCfaInfos = new FormLayout();
   TextField nomReferentCfa = new TextField("NOM");
@@ -42,7 +45,7 @@ public class ReferentCfaNewOrEdit extends Dialog {
 
     formReferentCfaInfos.add(nomReferentCfa, prenomReferentCfa, civiliteReferentCfa, telephoneReferentCfa, emailReferentCfa, createButtonsLayout());
 
-    add(formReferentCfaInfos);
+    add(titre, formReferentCfaInfos);
   }
 
   private HorizontalLayout createButtonsLayout() {
@@ -58,16 +61,20 @@ public class ReferentCfaNewOrEdit extends Dialog {
   }
 
   public void setReferentCfa(ReferentCfa referentCfa) {
+    titre.removeAll();
     this.referentCfa = referentCfa;
     this.cloneReferentCfa = null;
 
     if (referentCfa != null && referentCfa.getId() != null) {
+      titre.add("Modification d'un référent CFA");
       try {
         this.cloneReferentCfa = (ReferentCfa) referentCfa.clone();
 
       } catch (CloneNotSupportedException e) {
         e.printStackTrace();
       }
+    } else {
+      titre.add("Création d'un référent CFA");
     }
 
     binder.readBean(referentCfa);

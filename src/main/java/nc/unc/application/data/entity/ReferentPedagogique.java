@@ -1,5 +1,7 @@
 package nc.unc.application.data.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import nc.unc.application.data.enums.Civilite;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "referent_pedagogique")
 public class ReferentPedagogique implements Cloneable{
     @Id
@@ -55,84 +59,14 @@ public class ReferentPedagogique implements Cloneable{
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    /**
+     * Retrait du référent pédagogique dans les formations avant suppression
+     */
     @PreRemove
     private void preRemove() {
         for (Formation f : formations) {
             f.setReferentPedagogique(null);
         }
-    }
-
-    // Getters et Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNomReferentPedago() {
-        return nomReferentPedago;
-    }
-
-    public void setNomReferentPedago(String nom) {
-        this.nomReferentPedago = nom;
-    }
-
-    public String getPrenomReferentPedago() {
-        return prenomReferentPedago;
-    }
-
-    public void setPrenomReferentPedago(String prenom) {
-        this.prenomReferentPedago = prenom;
-    }
-
-    public Civilite getCiviliteReferentPedago() {
-        return civiliteReferentPedago;
-    }
-
-    public void setCiviliteReferentPedago(Civilite civilite) {
-        this.civiliteReferentPedago = civilite;
-    }
-
-    public String getEmailReferentPedago() {
-        return emailReferentPedago;
-    }
-
-    public void setEmailReferentPedago(String email) {
-        this.emailReferentPedago = email;
-    }
-
-    public Integer getTelephoneReferentPedago() {
-        return telephoneReferentPedago;
-    }
-
-    public void setTelephoneReferentPedago(Integer telephone) {
-        this.telephoneReferentPedago = telephone;
-    }
-
-    public List<Formation> getFormations() {
-        return formations;
-    }
-
-    public void setFormations(List<Formation> formations) {
-        this.formations = formations;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     // Autres méthodes

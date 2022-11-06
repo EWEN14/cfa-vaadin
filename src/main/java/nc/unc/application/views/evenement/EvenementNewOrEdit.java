@@ -9,6 +9,7 @@ import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -27,6 +28,8 @@ public class EvenementNewOrEdit extends Dialog {
 
   private Evenement evenement;
   private Evenement cloneEvenement;
+
+  H3 titre = new H3();
 
   // form qui contiendra les informations générales relatives à l'évenement
   private final FormLayout form = new FormLayout();
@@ -78,7 +81,7 @@ public class EvenementNewOrEdit extends Dialog {
     form.add(libelle, description, dateDebut, dateFin, formations, createButtonsLayout());
 
     // ajout du formulaire dans la modale
-    add(form);
+    add(titre, form);
   }
 
   private HorizontalLayout createButtonsLayout() {
@@ -112,16 +115,20 @@ public class EvenementNewOrEdit extends Dialog {
 
   // fonction qui va alimenter le binder d'un évenement
   public void setEvenement(Evenement evenement) {
+    titre.removeAll();
     this.evenement = evenement;
     // on doit remettre le cloneEvenement à null (sinon garde ancienne valeur de l'edit)
     this.cloneEvenement = null;
     // copie de l'évenement si c'est un edit (pour garder les anciennes valeurs qu'on mettra dans le log)
     if (evenement != null && evenement.getId() != null) {
+      titre.add("Modification d'un événement");
       try {
         this.cloneEvenement = (Evenement) evenement.clone();
       } catch (CloneNotSupportedException e) {
         e.printStackTrace();
       }
+    } else {
+      titre.add("Création d'un événement");
     }
     // alimentation du binder
     evenementBinder.readBean(this.evenement);

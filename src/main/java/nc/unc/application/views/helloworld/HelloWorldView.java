@@ -12,7 +12,6 @@ import nc.unc.application.views.MainLayout;
 
 @PageTitle("Hello World")
 @Route(value = "hello", layout = MainLayout.class)
-@RouteAlias(value = "", layout = MainLayout.class)
 @PermitAll
 public class HelloWorldView extends HorizontalLayout {
 

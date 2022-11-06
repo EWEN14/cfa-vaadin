@@ -1,4 +1,4 @@
-package nc.unc.application.views.about;
+package nc.unc.application.views.accueil;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -13,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.entity.Formation;
 import nc.unc.application.data.entity.Tuteur;
@@ -31,6 +32,7 @@ import java.util.*;
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests
 @Route(value = "accueil", layout = MainLayout.class) // inclusion du MainLayout (header + nav)
+@RouteAlias(value = "", layout = MainLayout.class)
 @PageTitle("Accueil | CFA") // title de la page
 @PermitAll // tous les utilisateurs connectés peuvent aller sur cette page
 public class HomeView extends VerticalLayout {

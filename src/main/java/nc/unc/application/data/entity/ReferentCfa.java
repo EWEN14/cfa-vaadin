@@ -1,5 +1,7 @@
 package nc.unc.application.data.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import nc.unc.application.data.enums.Civilite;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -9,12 +11,13 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "referent_cfa")
 public class ReferentCfa implements Cloneable{
   @Id
@@ -61,87 +64,6 @@ public class ReferentCfa implements Cloneable{
   @OneToMany(mappedBy = "referentCfa", cascade = CascadeType.ALL)
   private List<EntretienCollectif> entretienCollectif = new ArrayList<>();
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-
-  public String getPrenomReferentCfa() {
-    return prenomReferentCfa;
-  }
-
-  public void setPrenomReferentCfa(String prenom) {
-    this.prenomReferentCfa = prenom;
-  }
-
-  public String getNomReferentCfa() {
-    return nomReferentCfa;
-  }
-
-  public void setNomReferentCfa(String nom) {
-    this.nomReferentCfa = nom;
-  }
-
-  public String getEmailReferentCfa() {
-    return emailReferentCfa;
-  }
-
-  public void setEmailReferentCfa(String email) {
-    this.emailReferentCfa = email;
-  }
-
-  public Civilite getCiviliteReferentCfa() {
-    return civiliteReferentCfa;
-  }
-
-  public void setCiviliteReferentCfa(Civilite civilite) {
-    this.civiliteReferentCfa = civilite;
-  }
-
-  public Integer getTelephoneReferentCfa() {
-    return telephoneReferentCfa;
-  }
-
-  public void setTelephoneReferentCfa(Integer telephone) {
-    this.telephoneReferentCfa = telephone;
-  }
-
-  public LocalDateTime getCreated_at() {
-    return created_at;
-  }
-
-  public void setCreated_at(LocalDateTime created_at) {
-    this.created_at = created_at;
-  }
-
-  public LocalDateTime getUpdated_at() {
-    return updated_at;
-  }
-
-  public void setUpdated_at(LocalDateTime updated_at) {
-    this.updated_at = updated_at;
-  }
-
-  public List<EntretienIndividuel> getEntretienIndividuels() {
-    return entretienIndividuels;
-  }
-
-  public void setEntretienIndividuels(List<EntretienIndividuel> entretienIndividuels) {
-    this.entretienIndividuels = entretienIndividuels;
-  }
-
-  public List<EntretienCollectif> getEntretienCollectif() {
-    return entretienCollectif;
-  }
-
-  public void setEntretienCollectif(List<EntretienCollectif> entretienCollectif) {
-    this.entretienCollectif = entretienCollectif;
-  }
-
   // Autres méthodes
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
@@ -158,5 +80,4 @@ public class ReferentCfa implements Cloneable{
             "\n civilite=" + civiliteReferentCfa +
             " }";
   }
-
 }

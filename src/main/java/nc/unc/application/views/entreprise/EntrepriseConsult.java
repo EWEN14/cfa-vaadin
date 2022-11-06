@@ -8,6 +8,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -37,6 +38,8 @@ public class EntrepriseConsult extends Dialog {
   private final EtudiantService etudiantService;
   private final TuteurService tuteurService;
   private final ContratService contratService;
+
+  H3 titre = new H3("Consultation d'une entreprise");
 
   // Layout qui contiendra le contenu en dessous des tabs
   private VerticalLayout content = new VerticalLayout();
@@ -150,7 +153,7 @@ public class EntrepriseConsult extends Dialog {
     // à l'ouverture, on ouvre la tab d'infos générales sur l'entreprise
     setContent(entrepriseInfosTab);
 
-    add(tabsEntreprise, content, createButtonsLayout());
+    add(tabsEntreprise, titre, content, createButtonsLayout());
   }
 
   // Méthode appelée à l'ouverture de la vue pour alimenter les champs du formulaire.

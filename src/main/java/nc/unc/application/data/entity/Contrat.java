@@ -1,6 +1,8 @@
 package nc.unc.application.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 import nc.unc.application.data.enums.CodeContrat;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -10,11 +12,14 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "contrat")
 public class Contrat implements Cloneable {
 
@@ -159,6 +164,16 @@ public class Contrat implements Cloneable {
   @Column(name = "formation_lea")
   private LocalDate formationLea;
 
+  @Column(name = "statut_actif", length = 40)
+  private String statutActif;
+
+  @Positive(message = "Le salaire négocié doit être positif")
+  @Column(name = "salaire_negocie")
+  private Integer salaireNegocie;
+
+  @Column(name = "missions_alternant", length = 15000)
+  private String missionsAlternant;
+
   @Column(name = "observations", length = 15000)
   private String observations;
 
@@ -185,399 +200,6 @@ public class Contrat implements Cloneable {
   @UpdateTimestamp
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
-
-  // getters et setters
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Contrat getContratParent() {
-    return contratParent;
-  }
-
-  public void setContratParent(Contrat contrat) {
-    this.contratParent = contrat;
-  }
-
-  public List<Contrat> getAvenants() {
-    return avenants;
-  }
-
-  public void setAvenants(List<Contrat> contrats) {
-    this.avenants = contrats;
-  }
-
-  public CodeContrat getCodeContrat() {
-    return codeContrat;
-  }
-
-  public void setCodeContrat(CodeContrat codeContrat) {
-    this.codeContrat = codeContrat;
-  }
-
-  public String getTypeContrat() {
-    return typeContrat;
-  }
-
-  public void setTypeContrat(String typeContrat) {
-    this.typeContrat = typeContrat;
-  }
-
-  public Boolean getDerogationAge() {
-    return derogationAge;
-  }
-
-  public void setDerogationAge(Boolean derogationAge) {
-    this.derogationAge = derogationAge;
-  }
-
-  public LocalDate getDateDelivranceDerogationAge() {
-    return dateDelivranceDerogationAge;
-  }
-
-  public void setDateDelivranceDerogationAge(LocalDate dateDelivranceDerogationAge) {
-    this.dateDelivranceDerogationAge = dateDelivranceDerogationAge;
-  }
-
-  public String getNomRepresentantLegal() {
-    return nomRepresentantLegal;
-  }
-
-  public void setNomRepresentantLegal(String nomRepresentantLegal) {
-    this.nomRepresentantLegal = nomRepresentantLegal;
-  }
-
-  public String getPrenomRepresentantLegal() {
-    return prenomRepresentantLegal;
-  }
-
-  public void setPrenomRepresentantLegal(String prenomRepresentantLegal) {
-    this.prenomRepresentantLegal = prenomRepresentantLegal;
-  }
-
-  public String getRelationAvecSalarie() {
-    return relationAvecSalarie;
-  }
-
-  public void setRelationAvecSalarie(String relationAvecSalarie) {
-    this.relationAvecSalarie = relationAvecSalarie;
-  }
-
-  public String getAdresseRepresentant() {
-    return adresseRepresentant;
-  }
-
-  public void setAdresseRepresentant(String adresseRepresentant) {
-    this.adresseRepresentant = adresseRepresentant;
-  }
-
-  public Integer getCodePostalRepresentant() {
-    return codePostalRepresentant;
-  }
-
-  public void setCodePostalRepresentant(Integer codePostalRepresentant) {
-    this.codePostalRepresentant = codePostalRepresentant;
-  }
-
-  public String getCommuneRepresentant() {
-    return communeRepresentant;
-  }
-
-  public void setCommuneRepresentant(String communeRepresentant) {
-    this.communeRepresentant = communeRepresentant;
-  }
-
-  public Integer getTelephoneRepresentant() {
-    return telephoneRepresentant;
-  }
-
-  public void setTelephoneRepresentant(Integer telephoneRepresentant) {
-    this.telephoneRepresentant = telephoneRepresentant;
-  }
-
-  public String getEmailRepresentant() {
-    return emailRepresentant;
-  }
-
-  public void setEmailRepresentant(String emailRepresentant) {
-    this.emailRepresentant = emailRepresentant;
-  }
-
-  public LocalDate getDebutContrat() {
-    return debutContrat;
-  }
-
-  public void setDebutContrat(LocalDate debutContrat) {
-    this.debutContrat = debutContrat;
-  }
-
-  public LocalDate getFinContrat() {
-    return finContrat;
-  }
-
-  public void setFinContrat(LocalDate finContrat) {
-    this.finContrat = finContrat;
-  }
-
-  public Integer getDureePeriodeEssai() {
-    return dureePeriodeEssai;
-  }
-
-  public void setDureePeriodeEssai(Integer dureePeriodeEssai) {
-    this.dureePeriodeEssai = dureePeriodeEssai;
-  }
-
-  public String getNumeroConventionFormation() {
-    return numeroConventionFormation;
-  }
-
-  public void setNumeroConventionFormation(String numeroConventionTripartie) {
-    this.numeroConventionFormation = numeroConventionTripartie;
-  }
-
-  public LocalDate getDateConventionFormation() {
-    return dateConventionFormation;
-  }
-
-  public void setDateConventionFormation(LocalDate dateConventionFormation) {
-    this.dateConventionFormation = dateConventionFormation;
-  }
-
-  public String getPrimeAvantageNature() {
-    return primeAvantageNature;
-  }
-
-  public void setPrimeAvantageNature(String primeAvantageNature) {
-    this.primeAvantageNature = primeAvantageNature;
-  }
-
-  public LocalDate getDateRupture() {
-    return dateRupture;
-  }
-
-  public void setDateRupture(LocalDate dateRupture) {
-    this.dateRupture = dateRupture;
-  }
-
-  public String getMotifRupture() {
-    return motifRupture;
-  }
-
-  public void setMotifRupture(String motifRupture) {
-    this.motifRupture = motifRupture;
-  }
-
-  public LocalDate getDateReceptionDecua() {
-    return dateReceptionDecua;
-  }
-
-  public void setDateReceptionDecua(LocalDate dateReceptionDecua) {
-    this.dateReceptionDecua = dateReceptionDecua;
-  }
-
-  public LocalDate getDateEnvoiRpDecua() {
-    return dateEnvoiRpDecua;
-  }
-
-  public void setDateEnvoiRpDecua(LocalDate dateEnvoiRpDecua) {
-    this.dateEnvoiRpDecua = dateEnvoiRpDecua;
-  }
-
-  public LocalDate getDateRetourRpDecua() {
-    return dateRetourRpDecua;
-  }
-
-  public void setDateRetourRpDecua(LocalDate dateRetourRpDecua) {
-    this.dateRetourRpDecua = dateRetourRpDecua;
-  }
-
-  public LocalDate getDateEnvoiEmailCuaConvention() {
-    return dateEnvoiEmailCuaConvention;
-  }
-
-  public void setDateEnvoiEmailCuaConvention(LocalDate dateEnvoiEmailCuaConvention) {
-    this.dateEnvoiEmailCuaConvention = dateEnvoiEmailCuaConvention;
-  }
-
-  public LocalDate getDateDepotAlfrescoCuaConvSigne() {
-    return dateDepotAlfrescoCuaConvSigne;
-  }
-
-  public void setDateDepotAlfrescoCuaConvSigne(LocalDate dateDepotAlfrescoCuaConvSigne) {
-    this.dateDepotAlfrescoCuaConvSigne = dateDepotAlfrescoCuaConvSigne;
-  }
-
-  public LocalDate getDateReceptionOriginauxConvention() {
-    return dateReceptionOriginauxConvention;
-  }
-
-  public void setDateReceptionOriginauxConvention(LocalDate dateReceptionOriginauxConvention) {
-    this.dateReceptionOriginauxConvention = dateReceptionOriginauxConvention;
-  }
-
-  public Boolean getConvOriginaleRemisEtudiant() {
-    return convOriginaleRemisEtudiant;
-  }
-
-  public void setConvOriginaleRemisEtudiant(Boolean convOriginaleRemisEtudiant) {
-    this.convOriginaleRemisEtudiant = convOriginaleRemisEtudiant;
-  }
-
-  public Boolean getConvOriginaleRemisTuteur() {
-    return convOriginaleRemisTuteur;
-  }
-
-  public void setConvOriginaleRemisTuteur(Boolean convOriginaleRemisTuteur) {
-    this.convOriginaleRemisTuteur = convOriginaleRemisTuteur;
-  }
-
-  public Boolean getConvOriginaleRemisEmployeur() {
-    return convOriginaleRemisEmployeur;
-  }
-
-  public void setConvOriginaleRemisEmployeur(Boolean convOriginaleRemisEmployeur) {
-    this.convOriginaleRemisEmployeur = convOriginaleRemisEmployeur;
-  }
-
-  public Integer getNumeroAvenant() {
-    return numeroAvenant;
-  }
-
-  public void setNumeroAvenant(Integer numeroAvenant) {
-    this.numeroAvenant = numeroAvenant;
-  }
-
-  public String getMotifAvn() {
-    return motifAvn;
-  }
-
-  public void setMotifAvn(String motifAvn1) {
-    this.motifAvn = motifAvn1;
-  }
-
-  public LocalDate getDateMailOuRdvSignatureCuaAvn() {
-    return dateMailOuRdvSignatureCuaAvn;
-  }
-
-  public void setDateMailOuRdvSignatureCuaAvn(LocalDate dateMailOuRdvSignatureCuaAvn1) {
-    this.dateMailOuRdvSignatureCuaAvn = dateMailOuRdvSignatureCuaAvn1;
-  }
-
-  public LocalDate getDateDepotAlfrescoCuaAvn() {
-    return dateDepotAlfrescoCuaAvn;
-  }
-
-  public void setDateDepotAlfrescoCuaAvn(LocalDate dateDepotAlfrescoCuaAvn1) {
-    this.dateDepotAlfrescoCuaAvn = dateDepotAlfrescoCuaAvn1;
-  }
-
-  public LocalDate getDateMailOuRdvSignatureConvAvn() {
-    return dateMailOuRdvSignatureConvAvn;
-  }
-
-  public void setDateMailOuRdvSignatureConvAvn(LocalDate dateMailOuRdvSignatureConvAvn1) {
-    this.dateMailOuRdvSignatureConvAvn = dateMailOuRdvSignatureConvAvn1;
-  }
-
-  public LocalDate getDateDepotAlfrescoConvAvn() {
-    return dateDepotAlfrescoConvAvn;
-  }
-
-  public void setDateDepotAlfrescoConvAvn(LocalDate dateDepotAlfrescoConvAvn1) {
-    this.dateDepotAlfrescoConvAvn = dateDepotAlfrescoConvAvn1;
-  }
-
-  public Boolean getConvAvenantRemisEtudiant() {
-    return convAvenantRemisEtudiant;
-  }
-
-  public void setConvAvenantRemisEtudiant(Boolean convAvenantRemisEtudiant) {
-    this.convAvenantRemisEtudiant = convAvenantRemisEtudiant;
-  }
-
-  public Boolean getConvAvenantRemisEmployeur() {
-    return convAvenantRemisEmployeur;
-  }
-
-  public void setConvAvenantRemisEmployeur(Boolean convAvenantRemisEmployeur) {
-    this.convAvenantRemisEmployeur = convAvenantRemisEmployeur;
-  }
-
-  public Boolean getConvAvenantRemisTuteur() {
-    return convAvenantRemisTuteur;
-  }
-
-  public void setConvAvenantRemisTuteur(Boolean convAvenantRemisTuteur) {
-    this.convAvenantRemisTuteur = convAvenantRemisTuteur;
-  }
-
-  public LocalDate getFormationLea() {
-    return formationLea;
-  }
-
-  public void setFormationLea(LocalDate formationLea) {
-    this.formationLea = formationLea;
-  }
-
-  public String getObservations() {
-    return observations;
-  }
-
-  public void setObservations(String observations) {
-    this.observations = observations;
-  }
-
-  public Entreprise getEntreprise() {
-    return entreprise;
-  }
-
-  public void setEntreprise(Entreprise entreprise) {
-    this.entreprise = entreprise;
-  }
-
-  public Etudiant getEtudiant() {
-    return etudiant;
-  }
-
-  public void setEtudiant(Etudiant etudiant) {
-    this.etudiant = etudiant;
-  }
-
-  public Formation getFormation() {
-    return formation;
-  }
-
-  public void setFormation(Formation formation) {
-    this.formation = formation;
-  }
-
-  public Tuteur getTuteur() {
-    return tuteur;
-  }
-
-  public void setTuteur(Tuteur tuteur) {
-    this.tuteur = tuteur;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public LocalDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(LocalDateTime updatedAt) {
-    this.updatedAt = updatedAt;
-  }
 
   // autres fonctions
   public Object clone() throws CloneNotSupportedException {
@@ -626,6 +248,9 @@ public class Contrat implements Cloneable {
             "\n convAvenantRemisTuteur=" + convAvenantRemisTuteur +
             "\n convAvenantRemisEmployeur=" + convAvenantRemisEmployeur +
             "\n formationLea=" + formationLea +
+            "\n statutActif='" + statutActif + '\'' +
+            "\n salaireNegocie=" + salaireNegocie +
+            "\n missionsAlternant='" + missionsAlternant + '\'' +
             "\n observations='" + observations + '\'' +
             "\n entreprise=" + (entreprise != null ? entreprise.getEnseigne() : "") +
             "\n etudiant=" + (etudiant != null ? etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() : "") +

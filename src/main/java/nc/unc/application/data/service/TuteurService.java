@@ -2,6 +2,7 @@ package nc.unc.application.data.service;
 
 import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.entity.TuteurHabilitation;
+import nc.unc.application.data.enums.StatutActifAutres;
 import nc.unc.application.data.repository.TuteurHabilitationRepository;
 import nc.unc.application.data.repository.TuteurRepository;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,9 @@ public class TuteurService {
         if (tuteur == null) {
             System.err.println("Le tuteur est nul, le formulaire est-il bien connecté à l'application ?");
             return;
+        }
+        if (tuteur.getStatutActif() == null) {
+            tuteur.setStatutActif(StatutActifAutres.ACTIF.getEnumStringify());
         }
         tuteurRepository.save(tuteur);
     }

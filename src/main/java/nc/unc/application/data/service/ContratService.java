@@ -2,6 +2,7 @@ package nc.unc.application.data.service;
 
 import nc.unc.application.data.entity.Contrat;
 import nc.unc.application.data.enums.CodeContrat;
+import nc.unc.application.data.enums.StatutActifAutres;
 import nc.unc.application.data.repository.ContratRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,9 @@ public class ContratService {
   }
 
   public void saveContrat(Contrat contrat){
+    if (contrat.getStatutActif() == null) {
+      contrat.setStatutActif(StatutActifAutres.ACTIF.getEnumStringify());
+    }
     contratRepository.save(contrat);
 
     // si après la mise à jour d'un contrat initial, ses informations de rupture de contrat ne sont pas nulles,

@@ -1,6 +1,5 @@
 package nc.unc.application.data.repository;
 
-import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Etudiant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -9,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -37,6 +37,6 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
 
   @Transactional
   @Modifying(clearAutomatically = true)
-  @Query("update Etudiant e set e.statutActif = :actif where e.id = :id")
-  void updateStatusOfEtudiant(Long id, String actif);
+  @Query("update Etudiant e set e.statutActif = :actif, e.updatedAt = :now where e.id = :id")
+  void updateStatusOfEtudiant(Long id, String actif, LocalDateTime now);
 }

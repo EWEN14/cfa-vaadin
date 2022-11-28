@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -40,6 +41,8 @@ public interface ContratRepository extends JpaRepository<Contrat, Long> {
 
 
   @Modifying(clearAutomatically = true)
-  @Query("update Contrat c set c.statutActif = :choix where c.id = :id")
-  void updateActiveContract(Long id, String choix);
+  @Query("update Contrat c set c.statutActif = :choix, c.updatedAt = :currentDate where c.id = :id")
+  void updateActiveContract(Long id, String choix, LocalDateTime currentDate);
+
+   List<Contrat> findAllByStatutActif(String actif);
 }

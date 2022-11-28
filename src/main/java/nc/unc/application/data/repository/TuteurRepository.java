@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,8 +30,8 @@ public interface TuteurRepository extends JpaRepository<Tuteur, UUID> {
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query("update Tuteur t set t.statutActif = :actif where t.id = :id")
-    void updateStatusOfTuteur(Long id, String actif);
+    @Query("update Tuteur t set t.statutActif = :actif, t.updatedAt = :now where t.id = :id")
+    void updateStatusOfTuteur(Long id, String actif, LocalDateTime now);
 
     @Query("select t from Tuteur t ,Contrat c, Etudiant e where t.id = :id")
     List<Tuteur> findAllTuteursByEtudiantId(Long id);

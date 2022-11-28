@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -33,13 +34,15 @@ public class InactiveContractCronTask {
     public void reportCurrentTime() {
 
         String choix = SituationContrat.INACTIF;
-        List<Contrat> contrats = contratRepository.findAll();
+        List<Contrat> contrats = contratRepository.findAllByStatutActif(SituationContrat.ACTIF);
 
-        contrats.stream().filter(contrat -> contrat.getFinContrat().getDayOfMonth() <= LocalDate.now().getDayOfMonth())
+        contrats.stream().filter(contrat -> contrat.getFinContrat().getDayOfMonth() <= LocalDate.now().getDayOfMonth() &&
+                                            contrat.getFinContrat().getMonthValue() <= LocalDate.now().getMonthValue() &&
+                                    contrat.getFinContrat().getYear() <= LocalDate.now().getYear())
                 .forEach(contrat -> {
-                    contratRepository.updateActiveContract(contrat.getId(), choix);
-                    etudiantRepository.updateStatusOfEtudiant(contrat.getEtudiant().getId(),choix);
-                    tuteurRepository.updateStatusOfTuteur(contrat.getTuteur().getId(),choix);
+                    contratRepository.updateActiveContract(contrat.getId(), choix, LocalDateTime.now());
+                    etudiantRepository.updateStatusOfEtudiant(contrat.getEtudiant().getId(),choix, LocalDateTime.now());
+                    tuteurRepository.updateStatusOfTuteur(contrat.getTuteur().getId(),choix, LocalDateTime.now());
                 });
     }
 }

@@ -1,8 +1,6 @@
 package nc.unc.application.data.service.cron;
 
 import nc.unc.application.data.entity.Contrat;
-import nc.unc.application.data.entity.Etudiant;
-import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.enums.SituationContrat;
 import nc.unc.application.data.repository.ContratRepository;
 import nc.unc.application.data.repository.EtudiantRepository;
@@ -12,14 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DateFormat;
 import java.time.LocalDate;
-import java.util.Formatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
+@Transactional
 public class InactiveContractCronTask {
     private static final Logger log = LoggerFactory.getLogger(InactiveContractCronTask.class);
 
@@ -35,7 +32,7 @@ public class InactiveContractCronTask {
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
 
-        String choix = SituationContrat.NON_ACTIF;
+        String choix = SituationContrat.INACTIF;
         List<Contrat> contrats = contratRepository.findAll();
 
         contrats.stream().filter(contrat -> contrat.getFinContrat().getDayOfMonth() <= LocalDate.now().getDayOfMonth())

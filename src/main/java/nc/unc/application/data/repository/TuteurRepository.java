@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +27,7 @@ public interface TuteurRepository extends JpaRepository<Tuteur, UUID> {
 
     List<Tuteur> findAllByTuteurHabilitationsIsNullOrderByNomTuteur();
 
-    @Transactional
+
     @Modifying(clearAutomatically = true)
     @Query("update Tuteur t set t.statutActif = :actif, t.updatedAt = :now where t.id = :id")
     void updateStatusOfTuteur(Long id, String actif, LocalDateTime now);

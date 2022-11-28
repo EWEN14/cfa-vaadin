@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,7 +38,8 @@ public interface ContratRepository extends JpaRepository<Contrat, Long> {
 
   List<Contrat> findAllByContratParentOrderByNumeroAvenantAsc(Contrat contrat);
 
+  @Transactional
   @Modifying(clearAutomatically = true)
-  @Query("UPDATE Contrat c set c.actif = :actif where c.id_contrat = :id")
+  @Query("update Contrat c set c.statutActif = :actif where c.id = :id")
   void updateActiveContract(Long id,String actif);
 }

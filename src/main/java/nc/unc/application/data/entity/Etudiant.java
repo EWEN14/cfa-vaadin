@@ -143,7 +143,7 @@ public class Etudiant implements Cloneable {
   @Column(name = "annee_promotion")
   private Integer anneePromotion;
 
-  @Column(name = "statut_actif", length = 40)
+  @Column(name = "", length = 40)
   private String statutActif;
 
   @Column(name = "suivre_etudiant", nullable = false)

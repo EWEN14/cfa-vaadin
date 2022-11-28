@@ -13,8 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
 import java.time.LocalDate;
+import java.util.Formatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class InactiveContractCronTask {
@@ -35,19 +38,11 @@ public class InactiveContractCronTask {
         String choix = SituationContrat.NON_ACTIF;
         List<Contrat> contrats = contratRepository.findAll();
 
-        contrats.stream().filter(contrat -> contrat.getFinContrat() == LocalDate.now())
-                .forEach(contrat -> contratRepository.updateActiveContract(contrat.getId(),choix));
-
-        List<Etudiant> etudiants = (List<Etudiant>) contrats.stream()
-                                        .filter(contrat -> contrat.getFinContrat() == LocalDate.now())
-                                        .map(contrat-> etudiantRepository.findAllEtudiantByContract(contrat.getId()));
-        etudiants.forEach(etudiant -> etudiantRepository.updateStatusOfEtudiant(etudiant.getId(), choix));
-
-        List<Tuteur> tuteurs = (List<Tuteur>) etudiants.stream().map(etudiant -> {
-           return tuteurRepository.findAllByEtudiantId(etudiant.getId());
-        });
-
-        tuteurs.forEach(tuteur -> tuteurRepository.updateStatusOfTuteur(tuteur.getId(), choix));
-        //log.info("The time is now {}", LocalDate.now());
+        contrats.stream().filter(contrat -> contrat.getFinContrat().getDayOfMonth() <= LocalDate.now().getDayOfMonth())
+                .forEach(contrat -> {
+                    contratRepository.updateActiveContract(contrat.getId(), choix);
+                    etudiantRepository.updateStatusOfEtudiant(contrat.getEtudiant().getId(),choix);
+                    tuteurRepository.updateStatusOfTuteur(contrat.getTuteur().getId(),choix);
+                });
     }
 }

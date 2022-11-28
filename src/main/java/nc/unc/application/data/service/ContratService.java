@@ -1,9 +1,11 @@
 package nc.unc.application.data.service;
 
 import nc.unc.application.data.entity.Contrat;
+import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.enums.CodeContrat;
 import nc.unc.application.data.enums.StatutActifAutres;
 import nc.unc.application.data.repository.ContratRepository;
+import nc.unc.application.data.repository.EtudiantRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +15,11 @@ public class ContratService {
 
   private final ContratRepository contratRepository;
 
-  public ContratService(ContratRepository contratRepository){
+  private final EtudiantRepository etudiantRepository;
+
+  public ContratService(ContratRepository contratRepository, EtudiantRepository etudiantRepository){
     this.contratRepository = contratRepository;
+    this.etudiantRepository = etudiantRepository;
   }
 
   public void saveContrat(Contrat contrat){
@@ -37,6 +42,16 @@ public class ContratService {
         contratRepository.saveAll(avenants);
       }
     }
+  }
+
+  public void saveAvenant(Contrat avenant) {
+    // la plupart du temps, un avenant est créé du fait que le tuteur change,
+    // alors on en profite pour répercuter ce changement dans étudiant
+    Etudiant etudiantInAvenant = avenant.getEtudiant();
+    etudiantInAvenant.setTuteur(avenant.getTuteur());
+
+    etudiantRepository.save(etudiantInAvenant);
+    contratRepository.save(avenant);
   }
 
   /**

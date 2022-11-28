@@ -292,13 +292,15 @@ public class ContratNewOrEdit extends Dialog {
   /**
    * Création d'un avenant qui va reprendre les informations d'un contrat ou avenant existant que l'utilisateur pourra
    * modifier avant de sauvegarder ce nouvel avenant.
-   * @param contratOrAvenant le contrat parent ou l'avenant depuis lequel on créé un nouvel avenant
+   * @param contratOrAvenant le contrat parent ou l'avenant depuis lequel on crée un nouvel avenant
    */
   public void setNewAvenant(Contrat contratOrAvenant) {
     titre.removeAll();
     try {
       // on clone le contrat ou l'avenant en paramètre
       this.contrat = (Contrat) contratOrAvenant.clone();
+      // on passe clone contrat à null car on est à présent dans la création d'un nouvel avenant
+      this.cloneContrat = null;
       // si le contrat en paramètre est bien un contrat, on le définit en tant que parent
       if (contratOrAvenant.getCodeContrat() == CodeContrat.CONTRAT) {
         this.contrat.setContratParent(contratOrAvenant);

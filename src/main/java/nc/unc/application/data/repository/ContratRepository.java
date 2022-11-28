@@ -3,11 +3,9 @@ package nc.unc.application.data.repository;
 import nc.unc.application.data.entity.Contrat;
 import nc.unc.application.data.entity.Etudiant;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,9 +35,4 @@ public interface ContratRepository extends JpaRepository<Contrat, Long> {
   Integer getCountOfAvenants(@Param("contrat_parent") Contrat contratParent);
 
   List<Contrat> findAllByContratParentOrderByNumeroAvenantAsc(Contrat contrat);
-
-  @Transactional
-  @Modifying(clearAutomatically = true)
-  @Query("update Contrat c set c.statutActif = :actif where c.id = :id")
-  void updateActiveContract(Long id,String actif);
 }

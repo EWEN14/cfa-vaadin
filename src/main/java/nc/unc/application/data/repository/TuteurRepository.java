@@ -27,11 +27,11 @@ public interface TuteurRepository extends JpaRepository<Tuteur, UUID> {
 
     List<Tuteur> findAllByTuteurHabilitationsIsNullOrderByNomTuteur();
 
+    List<Tuteur> findAllByStatutActif(String statutActif);
 
     @Modifying(clearAutomatically = true)
     @Query("update Tuteur t set t.statutActif = :actif, t.updatedAt = :now where t.id = :id")
     void updateStatusOfTuteur(Long id, String actif, LocalDateTime now);
 
-    @Query("select t from Tuteur t ,Contrat c, Etudiant e where t.id = :id")
-    List<Tuteur> findAllTuteursByEtudiantId(Long id);
+
 }

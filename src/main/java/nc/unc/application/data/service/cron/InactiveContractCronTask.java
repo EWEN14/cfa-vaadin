@@ -1,6 +1,7 @@
 package nc.unc.application.data.service.cron;
 
 import nc.unc.application.data.entity.Contrat;
+import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.enums.SituationContrat;
 import nc.unc.application.data.repository.ContratRepository;
 import nc.unc.application.data.repository.EtudiantRepository;
@@ -31,18 +32,27 @@ public class InactiveContractCronTask {
     private TuteurRepository tuteurRepository;
 
     @Scheduled(fixedRate = 5000)
-    public void reportCurrentTime() {
+    public void miseAjourStatutActif() {
 
-        String choix = SituationContrat.INACTIF;
         List<Contrat> contrats = contratRepository.findAllByStatutActif(SituationContrat.ACTIF);
 
         contrats.stream().filter(contrat -> contrat.getFinContrat().getDayOfMonth() <= LocalDate.now().getDayOfMonth() &&
                                             contrat.getFinContrat().getMonthValue() <= LocalDate.now().getMonthValue() &&
                                     contrat.getFinContrat().getYear() <= LocalDate.now().getYear())
                 .forEach(contrat -> {
-                    contratRepository.updateActiveContract(contrat.getId(), choix, LocalDateTime.now());
-                    etudiantRepository.updateStatusOfEtudiant(contrat.getEtudiant().getId(),choix, LocalDateTime.now());
-                    tuteurRepository.updateStatusOfTuteur(contrat.getTuteur().getId(),choix, LocalDateTime.now());
+                    contratRepository.updateActiveContract(contrat.getId(), SituationContrat.INACTIF, LocalDateTime.now());
+                    etudiantRepository.updateStatusOfEtudiant(contrat.getEtudiant().getId(),SituationContrat.INACTIF, LocalDateTime.now());
+                    tuteurRepository.updateStatusOfTuteur(contrat.getTuteur().getId(),SituationContrat.INACTIF, LocalDateTime.now());
                 });
+
+        List<Tuteur> tuteurList = tuteurRepository.findAllByStatutActif(SituationContrat.ACTIF);
+
+        for (Tuteur tuteur:tuteurList
+             ) {
+            List<Contrat> contratList = contratRepository.findAllByTuteurIdAndStatutActif(tuteur.getId(),SituationContrat.ACTIF);
+            if (contratList == null){
+                tuteurRepository.updateStatusOfTuteur(tuteur.getId(),SituationContrat.INACTIF, LocalDateTime.now());
+            }
+        }
     }
 }

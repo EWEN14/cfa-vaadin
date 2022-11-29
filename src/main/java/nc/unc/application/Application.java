@@ -5,6 +5,7 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import nc.unc.application.data.service.cron.InactiveContractCronTask;
+import nc.unc.application.data.service.cron.SuppressLogCronTask;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -27,6 +28,7 @@ public class Application extends SpringBootServletInitializer implements AppShel
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
         SpringApplication.run(InactiveContractCronTask.class);
+        SpringApplication.run(SuppressLogCronTask.class);
     }
 
 }

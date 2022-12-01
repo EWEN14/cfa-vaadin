@@ -4,6 +4,7 @@ import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
+import lombok.extern.slf4j.Slf4j;
 import nc.unc.application.data.service.cron.InactiveContractCronTask;
 import nc.unc.application.data.service.cron.SuppressLogCronTask;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +20,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  *
  */
 @EnableScheduling
+@Slf4j
 @SpringBootApplication
 @Theme(value = "cfavaadin-custom")
 @PWA(name = "cfa_vaadin", shortName = "cfa_vaadin", offlineResources = {"images/logo.png"})

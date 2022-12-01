@@ -1,9 +1,12 @@
 package nc.unc.application.data.service.cron;
 
+import lombok.extern.slf4j.Slf4j;
 import nc.unc.application.data.entity.Contrat;
+import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.enums.SituationContrat;
 import nc.unc.application.data.repository.ContratRepository;
+import nc.unc.application.data.repository.EntrepriseRepository;
 import nc.unc.application.data.repository.EtudiantRepository;
 import nc.unc.application.data.repository.TuteurRepository;
 import org.slf4j.Logger;
@@ -19,8 +22,8 @@ import java.util.List;
 
 @Component
 @Transactional
+@Slf4j
 public class InactiveContractCronTask {
-    private static final Logger log = LoggerFactory.getLogger(InactiveContractCronTask.class);
 
     @Autowired
     private EtudiantRepository etudiantRepository;
@@ -30,6 +33,7 @@ public class InactiveContractCronTask {
 
     @Autowired
     private TuteurRepository tuteurRepository;
+
 
     @Scheduled(fixedRate = 5000)
     public void miseAjourStatutActif() {
@@ -41,8 +45,9 @@ public class InactiveContractCronTask {
                                     contrat.getFinContrat().getYear() <= LocalDate.now().getYear())
                 .forEach(contrat -> {
                     contratRepository.updateActiveContract(contrat.getId(), SituationContrat.INACTIF, LocalDateTime.now());
+                    log.info("Mise a jour du statut du contrat {}",contrat.getCodeContrat());
                     etudiantRepository.updateStatusOfEtudiant(contrat.getEtudiant().getId(),SituationContrat.INACTIF, LocalDateTime.now());
-                    tuteurRepository.updateStatusOfTuteur(contrat.getTuteur().getId(),SituationContrat.INACTIF, LocalDateTime.now());
+                    log.info("Mise a jour du statut de l'étudiant lié au contrat {}, ayant l'identifiant : {}",contrat.getCodeContrat(), contrat.getEtudiant().getId());
                 });
 
         List<Tuteur> tuteurList = tuteurRepository.findAllByStatutActif(SituationContrat.ACTIF);
@@ -51,8 +56,11 @@ public class InactiveContractCronTask {
              ) {
             List<Contrat> contratList = contratRepository.findAllByTuteurIdAndStatutActif(tuteur.getId(),SituationContrat.ACTIF);
             if (contratList == null){
+                log.info("Mise a jour du statut du tuteur {}",tuteur.getId());
                 tuteurRepository.updateStatusOfTuteur(tuteur.getId(),SituationContrat.INACTIF, LocalDateTime.now());
             }
         }
+
+        //TODO : Ajouter la mise a jours du status des entreprises.
     }
 }

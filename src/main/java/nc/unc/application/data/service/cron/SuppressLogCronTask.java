@@ -1,5 +1,6 @@
 package nc.unc.application.data.service.cron;
 
+import lombok.extern.slf4j.Slf4j;
 import nc.unc.application.data.entity.LogEnregistrement;
 import nc.unc.application.data.repository.LogEnregistrementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Component
+@Slf4j
 @Transactional
 public class SuppressLogCronTask {
 

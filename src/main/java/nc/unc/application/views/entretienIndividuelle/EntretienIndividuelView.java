@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
 
+import static nc.unc.application.utils.Utils.frenchDateFormater;
+
 @Component // utilisé pour les tests
 @Scope("prototype") // utilisé pour les tests
 @Route(value = "entretiensIndividuels", layout = MainLayout.class) // inclusion du MainLayout (header + nav)
@@ -94,7 +96,7 @@ public class EntretienIndividuelView extends VerticalLayout {
     private void configureGrid() {
         grid.addClassNames("entretien-grid");
         grid.setSizeFull();
-        grid.addColumn(entretienIndividuel -> entretienIndividuel.getDate()).setHeader("Date de l'entretien").setSortable(true);
+        grid.addColumn(entretienIndividuel -> entretienIndividuel.getDate() != null ? frenchDateFormater(entretienIndividuel.getDate()) : "").setHeader("Date de l'Entretien").setSortable(true);
         grid.addColumn(entretienIndividuel -> entretienIndividuel.getEtudiant().getNomEtudiant() + ' ' + entretienIndividuel.getEtudiant().getPrenomEtudiant()).setHeader("Etudiant");
         grid.addColumn(entretienIndividuel -> entretienIndividuel.getReferentCfa().getNomReferentCfa() + ' ' + entretienIndividuel.getReferentCfa().getPrenomReferentCfa()).setHeader("Référent CFA");
         // bouton consultation entretien

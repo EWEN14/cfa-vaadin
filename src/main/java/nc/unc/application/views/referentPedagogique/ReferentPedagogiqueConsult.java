@@ -24,7 +24,7 @@ import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.ReferentPedagogique;
 import nc.unc.application.data.enums.Civilite;
 
-public class ReferentPedagogiqueConsult extends Dialog{
+public class ReferentPedagogiqueConsult extends Dialog {
   private ReferentPedagogique referentPedagogique;
 
   private final VerticalLayout content = new VerticalLayout();
@@ -38,14 +38,14 @@ public class ReferentPedagogiqueConsult extends Dialog{
   private final EmailField emailReferentPedago = new EmailField("Email");
   private final Select<Civilite> civiliteReferentPedago = new Select<>(Civilite.values());
   Binder<ReferentPedagogique> referentPedagogiqueBinder = new BeanValidationBinder<>(ReferentPedagogique.class);
-  private final DatePicker dateCreation = new DatePicker();
-  private final DatePicker dateMiseAJour = new DatePicker();
-  private final Tab referentPedagogiqueInfosTab = new Tab(VaadinIcon.MALE.create(),new Span("Référent Pédagogique"));
+  private final DatePicker dateCreation = new DatePicker("Date de création");
+  private final DatePicker dateMiseAJour = new DatePicker("Date de mise à jour");
+  private final Tab referentPedagogiqueInfosTab = new Tab(VaadinIcon.MALE.create(), new Span("Référent Pédagogique"));
 
   private final Button close = new Button("Fermer");
   private final Button delete = new Button("Supprimer le référent pédagogique");
 
-  public ReferentPedagogiqueConsult(){
+  public ReferentPedagogiqueConsult() {
     this.setModal(true);
     this.setWidth("85vw");
     this.setHeight("90vh");
@@ -56,34 +56,32 @@ public class ReferentPedagogiqueConsult extends Dialog{
 
     civiliteReferentPedago.setLabel("Civilité");
 
-    //Labels des dates de création et mise à jour du referrent
-    dateCreation.setLabel("Date de création");
-    dateMiseAJour.setLabel("Date de mise à jour");
-
     Tabs tabsReferentPedagogique = new Tabs(referentPedagogiqueInfosTab);
     // Au clic sur une des tab, on appelle notre méthode setContent pour pouvoir changer le contenu
     tabsReferentPedagogique.addSelectedChangeListener(selectedChangeEvent ->
             setContent(selectedChangeEvent.getSelectedTab())
     );
 
-    formReferentPedagogiqueInfos.add(nomReferentPedago, prenomReferentPedago, telephoneReferentPedago, emailReferentPedago, civiliteReferentPedago);
+    formReferentPedagogiqueInfos.add(nomReferentPedago, prenomReferentPedago, telephoneReferentPedago, emailReferentPedago,
+            civiliteReferentPedago, dateCreation, dateMiseAJour);
     content.setSpacing(false);
     setContent(referentPedagogiqueInfosTab);
 
     add(tabsReferentPedagogique, titre, content, createButtonsLayout());
   }
 
-  public void setReferentPedagogique(ReferentPedagogique referentPedagogique){
+  public void setReferentPedagogique(ReferentPedagogique referentPedagogique) {
     this.referentPedagogique = referentPedagogique;
-    if(referentPedagogique != null){
-      //Transforme les dates en LocalDate et remplies les champs de dates
+    if (referentPedagogique != null) {
+      // Transforme les dates en LocalDate et remplies les champs de dates
       dateCreation.setValue(referentPedagogique.getCreatedAt().toLocalDate());
       dateMiseAJour.setValue(referentPedagogique.getUpdatedAt().toLocalDate());
+
       referentPedagogiqueBinder.readBean(referentPedagogique);
     }
   }
 
-  private HorizontalLayout createButtonsLayout(){
+  private HorizontalLayout createButtonsLayout() {
     delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
     delete.addClickListener(event -> fireEvent(new DeleteEvent(this, referentPedagogique)));
@@ -93,7 +91,7 @@ public class ReferentPedagogiqueConsult extends Dialog{
   }
 
 
-  private void setContent(Tab tab){
+  private void setContent(Tab tab) {
     content.removeAll();
 
     if (tab.equals(referentPedagogiqueInfosTab)) {
@@ -113,29 +111,33 @@ public class ReferentPedagogiqueConsult extends Dialog{
     delete.setVisible(false);
   }
 
-  public static abstract class ReferentPedagogiqueConsultFormEvent extends ComponentEvent<ReferentPedagogiqueConsult>{
+  public static abstract class ReferentPedagogiqueConsultFormEvent extends ComponentEvent<ReferentPedagogiqueConsult> {
     private final ReferentPedagogique referentPedagogique;
 
-    protected ReferentPedagogiqueConsultFormEvent(ReferentPedagogiqueConsult source, ReferentPedagogique referentPedagogique){
+    protected ReferentPedagogiqueConsultFormEvent(ReferentPedagogiqueConsult source, ReferentPedagogique referentPedagogique) {
       super(source, false);
       this.referentPedagogique = referentPedagogique;
     }
 
-    public ReferentPedagogique getReferentPedagogique(){
+    public ReferentPedagogique getReferentPedagogique() {
       return referentPedagogique;
     }
 
   }
 
-  public static class DeleteEvent extends ReferentPedagogiqueConsultFormEvent{
-    DeleteEvent(ReferentPedagogiqueConsult source, ReferentPedagogique referentPedagogique) { super(source, referentPedagogique); }
+  public static class DeleteEvent extends ReferentPedagogiqueConsultFormEvent {
+    DeleteEvent(ReferentPedagogiqueConsult source, ReferentPedagogique referentPedagogique) {
+      super(source, referentPedagogique);
+    }
   }
 
-  public static class CloseEvent extends ReferentPedagogiqueConsultFormEvent{
-    CloseEvent(ReferentPedagogiqueConsult source) { super(source, null); }
+  public static class CloseEvent extends ReferentPedagogiqueConsultFormEvent {
+    CloseEvent(ReferentPedagogiqueConsult source) {
+      super(source, null);
+    }
   }
 
-  public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener){
+  public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {
     return getEventBus().addListener(eventType, listener);
   }
 

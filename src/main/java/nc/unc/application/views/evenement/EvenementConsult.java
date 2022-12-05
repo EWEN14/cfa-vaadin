@@ -73,9 +73,6 @@ public class EvenementConsult extends Dialog {
   public void setEvenement(Evenement evenement) {
     this.evenement = evenement;
     if (evenement != null) {
-      //Transforme les dates en LocalDate et remplies les champs de dates
-      //dateCreation.setValue(evenement.getCreatedAt().toLocalDate());
-      //dateMiseAJour.setValue(evenement.getUpdatedAt().toLocalDate());
       // lecture du binder pour compléter les champs dans le formulaire
       binder.readBean(evenement);
       // formations.select(evenement.getFormations());

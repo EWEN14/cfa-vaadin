@@ -24,6 +24,7 @@ import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.Formation;
 import nc.unc.application.data.entity.ReferentPedagogique;
 import nc.unc.application.data.enums.Commune;
+import nc.unc.application.data.enums.StatutActifAutres;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class FormationNewOrEdit extends Dialog {
   IntegerField semainesFormation = new IntegerField("Nombre de semaines en formation");
   ComboBox<String> lieuFormation = new ComboBox<>("Lieu de la formation");
   IntegerField dureeHebdomadaireTravail = new IntegerField("Durée hebdomadaire de travail");
+  Select<String> statutActif = new Select<>();
   TextArea observations = new TextArea("Observations");
   ComboBox<ReferentPedagogique> referentPedagogique = new ComboBox<>("Responsable de la formation");
   Icon addReferentButton = new Icon(VaadinIcon.PLUS);
@@ -70,6 +72,9 @@ public class FormationNewOrEdit extends Dialog {
 
     lieuFormation.setItems(Commune.getCommunesStr());
 
+    statutActif.setLabel("Statut Actif de la Formation");
+    statutActif.setItems(StatutActifAutres.getStatutActifAutresStr());
+
     FlexLayout content = new FlexLayout(referentPedagogique);
     content.setFlexGrow(2, referentPedagogique);
     content.setSizeFull();
@@ -87,7 +92,7 @@ public class FormationNewOrEdit extends Dialog {
 
     form.add(libelleFormation, codeFormation, layoutReferent, codeRome, niveauCertificationProfessionnelle,
             typeEmploiExerce, semainesEntreprise, heuresFormation, heuresProjetUniversitaire, semainesFormation, lieuFormation, dureeHebdomadaireTravail,
-            observations, createButtonsLayout());
+            statutActif, observations, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(titre, form);

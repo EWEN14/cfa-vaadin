@@ -137,7 +137,7 @@ public class EntretienCollectifConsult extends Dialog {
 
 
     //Le formulaire concernant l'entretien
-    formEntretien.add(date, formation, referentCfa, observations_entretien_collectif);
+    formEntretien.add(date, formation, referentCfa, observations_entretien_collectif, dateCreation, dateModification);
 
     //Le formulaire du référent CFA
     formReferentCFAInfos.add(nomReferentCfa, prenomReferentCfa, emailReferentCfa, civiliteReferentCfa, telephoneReferentCfa);

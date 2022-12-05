@@ -53,8 +53,8 @@ public class EntretienIndividuelConsult extends Dialog {
   private final DatePicker date = new DatePicker();
   ComboBox<Etudiant> etudiant = new ComboBox<>("Etudiant concerné par l'entretien");
   ComboBox<ReferentCfa> referentCfa = new ComboBox<>("Référent CFA concerné par l'entretien");
-  private final DatePicker dateCreation = new DatePicker();
-  private final DatePicker dateModification = new DatePicker();
+  private final DatePicker dateCreation = new DatePicker("Date de création");
+  private final DatePicker dateModification = new DatePicker("Date de mise à jour");
   // binder qui sera utilisé pour remplir automatiquement les champs d'infos générales de l'entretien individuel
   Binder<EntretienIndividuel> entretienIndividuelBinder = new BeanValidationBinder<>(EntretienIndividuel.class);
 
@@ -137,8 +137,6 @@ public class EntretienIndividuelConsult extends Dialog {
     referentCfa.setItems(referentCfaService.findAllReferentCfa(null));
     referentCfa.setItemLabelGenerator(referentCfa -> referentCfa.getNomReferentCfa()+ " " + referentCfa.getPrenomReferentCfa());
     referentCfa.setClearButtonVisible(true);
-    dateCreation.setLabel("Date de création");
-    dateModification.setLabel("Date de mise à jour");
 
     // nécessité de set les items de civilité (étant donné que ce n'est pas une des enums qui retourne des String)
     civiliteEtudiant.setLabel("Civilité");
@@ -160,7 +158,7 @@ public class EntretienIndividuelConsult extends Dialog {
 
 
     //Le formulaire concernant l'entretien
-    formEntretien.add(date, etudiant, referentCfa, observations_entretien_individuel);
+    formEntretien.add(date, etudiant, referentCfa, observations_entretien_individuel, dateCreation, dateModification);
 
     //Le formulaire du référent CFA
     formReferentCFAInfos.add(nomReferentCfa, prenomReferentCfa, emailReferentCfa, civiliteReferentCfa, telephoneReferentCfa);

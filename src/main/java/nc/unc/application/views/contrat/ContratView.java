@@ -13,6 +13,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import nc.unc.application.data.entity.Contrat;
 import nc.unc.application.data.entity.Tuteur;
+import nc.unc.application.data.enums.CodeContrat;
 import nc.unc.application.data.enums.Sexe;
 import nc.unc.application.data.service.*;
 import nc.unc.application.views.ConfirmDelete;
@@ -148,8 +149,13 @@ public class ContratView extends VerticalLayout {
   private void saveContrat(ContratNewOrEdit.SaveEvent event) {
     // utilisation du getContrat de la classe mère ContratFormEvent pour récupérer le contrat
     Contrat contrat = event.getContrat();
-    // sauvegarde du contrat
-    contratService.saveContrat(contrat);
+
+    if (contrat.getCodeContrat() == CodeContrat.AVENANT) {
+      contratService.saveAvenant(contrat);
+    } else {
+      // sauvegarde du contrat
+      contratService.saveContrat(contrat);
+    }
 
     // ajout du log d'ajout
     logEnregistrmentService.saveLogAjoutString(contrat.toString());
@@ -157,7 +163,12 @@ public class ContratView extends VerticalLayout {
     // mise à jour de la grid, fermeture du formulaire et notification
     updateList();
     closeNewOrEditModal();
-    Notification.show("Contrat créé.");
+
+    if (contrat.getCodeContrat() == CodeContrat.CONTRAT) {
+      Notification.show("Contrat créé.");
+    } else {
+      Notification.show("Avenant créé.");
+    }
   }
 
   // sauvegarde du contrat à modifier en utilisant ContratService
@@ -175,7 +186,12 @@ public class ContratView extends VerticalLayout {
     // mise à jour de la grid, fermeture du formulaire et notification
     updateList();
     closeNewOrEditModal();
-    Notification.show("Contrat modifié.");
+
+    if (contrat.getCodeContrat() == CodeContrat.CONTRAT) {
+      Notification.show("Contrat modifié.");
+    } else {
+      Notification.show("Avenant modifié.");
+    }
   }
 
   private void transfertContractFromEventToDelete(ContratConsult.DeleteEventConsult event) {

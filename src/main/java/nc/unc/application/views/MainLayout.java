@@ -164,15 +164,15 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Formations", "las la-award menu-icon", FormationListView.class),
 
-                new MenuItemInfo("Evénements", "las la-history menu-icon", EvenementView.class),
+                new MenuItemInfo("Evénements", "las la-calendar menu-icon", EvenementView.class),
 
-                new MenuItemInfo("Référents CFA", "las la-user menu-icon", ReferentCfaView.class),
+                new MenuItemInfo("Référents CFA", "las la-user-shield menu-icon", ReferentCfaView.class),
 
-                new MenuItemInfo("Entretiens individuels", "las la-user menu-icon", EntretienIndividuelView.class),
+                new MenuItemInfo("Entretiens Individuels", "las la-user-friends menu-icon", EntretienIndividuelView.class),
 
-                new MenuItemInfo("Entretiens Collectifs", "las la-user menu-icon", EntretienCollectifView.class),
+                new MenuItemInfo("Entretiens Collectifs", "las la-users menu-icon", EntretienCollectifView.class),
 
-                new MenuItemInfo("Utilisateurs", "las la-user menu-icon", UserView.class),
+                new MenuItemInfo("Utilisateurs", "las la-user-cog menu-icon", UserView.class),
 
                 new MenuItemInfo("Logs", "las la-history menu-icon", LogsView.class)
         };

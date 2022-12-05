@@ -24,12 +24,12 @@ public class Formation implements Cloneable {
 
   @NotNull(message = "Le libellé de la formation ne peut pas être nul")
   @NotEmpty(message = "Le libellé de la formation doit être renseigné")
-  @Column(name = "libelle_formation")
+  @Column(name = "libelle_formation", nullable = false)
   private String libelleFormation;
 
   @NotNull(message = "Le code de la formation ne peut pas être nul")
   @NotEmpty(message = "Le code de la formation doit être renseigné")
-  @Column(name = "code_formation")
+  @Column(name = "code_formation", nullable = false)
   private String codeFormation;
 
   @Column(name = "code_rome", length = 15)
@@ -116,12 +116,12 @@ public class Formation implements Cloneable {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Formation formation = (Formation) o;
-    return id.equals(formation.id) && Objects.equals(libelleFormation, formation.libelleFormation) && Objects.equals(codeFormation, formation.codeFormation) && Objects.equals(codeRome, formation.codeRome) && Objects.equals(niveauCertificationProfessionnelle, formation.niveauCertificationProfessionnelle) && Objects.equals(typeEmploiExerce, formation.typeEmploiExerce) && Objects.equals(semainesEntreprise, formation.semainesEntreprise) && Objects.equals(dureeHebdomadaireTravail, formation.dureeHebdomadaireTravail) && Objects.equals(heuresFormation, formation.heuresFormation) && Objects.equals(semainesFormation, formation.semainesFormation) && Objects.equals(lieuFormation, formation.lieuFormation) && Objects.equals(observations, formation.observations) && createdAt.equals(formation.createdAt) && updatedAt.equals(formation.updatedAt);
+    return id.equals(formation.id) && libelleFormation.equals(formation.libelleFormation) && codeFormation.equals(formation.codeFormation) && Objects.equals(codeRome, formation.codeRome) && Objects.equals(niveauCertificationProfessionnelle, formation.niveauCertificationProfessionnelle) && Objects.equals(typeEmploiExerce, formation.typeEmploiExerce) && Objects.equals(semainesEntreprise, formation.semainesEntreprise) && Objects.equals(dureeHebdomadaireTravail, formation.dureeHebdomadaireTravail) && Objects.equals(heuresFormation, formation.heuresFormation) && Objects.equals(heuresProjetUniversitaire, formation.heuresProjetUniversitaire) && Objects.equals(semainesFormation, formation.semainesFormation) && Objects.equals(lieuFormation, formation.lieuFormation) && Objects.equals(statutActif, formation.statutActif) && Objects.equals(observations, formation.observations) && Objects.equals(createdAt, formation.createdAt) && Objects.equals(updatedAt, formation.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle, typeEmploiExerce, semainesEntreprise, dureeHebdomadaireTravail, heuresFormation, semainesFormation, lieuFormation, observations, createdAt, updatedAt);
+    return Objects.hash(id, libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle, typeEmploiExerce, semainesEntreprise, dureeHebdomadaireTravail, heuresFormation, heuresProjetUniversitaire, semainesFormation, lieuFormation, statutActif, observations, createdAt, updatedAt);
   }
 
   @Override

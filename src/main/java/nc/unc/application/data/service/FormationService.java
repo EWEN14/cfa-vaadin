@@ -22,7 +22,7 @@ public class FormationService {
   public List<Formation> findAllFormations(String filter){
 
     if(filter == null || filter.isEmpty()){
-      return formationRepository.findAll();
+      return formationRepository.findAllByOrderByLibelleFormationAsc();
     } else {
       return formationRepository.search(filter);
     }

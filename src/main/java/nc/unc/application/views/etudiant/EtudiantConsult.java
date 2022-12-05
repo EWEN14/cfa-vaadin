@@ -50,6 +50,7 @@ public class EtudiantConsult extends Dialog {
   // form qui contiendra les informations générales relatives à l'étudiants
   private final FormLayout formEtudiantInfos = new FormLayout();
   private final TextField nomEtudiant = new TextField("NOM");
+  private final TextField nomJeuneFille = new TextField("NOM de jeune fille");
   private final TextField prenomEtudiant = new TextField("Prénom");
   private final IntegerField numeroEtudiant = new IntegerField("N° Étudiant");
   // utilisation de select lorsque nombre de choix assez petis
@@ -81,6 +82,9 @@ public class EtudiantConsult extends Dialog {
   private final Checkbox veepap = new Checkbox("VEEPAP");
   private final TextField priseEnChargeFraisInscription = new TextField("Prise en charge des frais d'inscription");
   private final TextField obtentionDiplomeMention = new TextField("Obtention du diplôme et mention");
+  TextField statutActif = new TextField("Statut Actif de l'étudiant");
+  private final DatePicker dateCreation = new DatePicker("Date de création");
+  private final DatePicker DateUpdate = new DatePicker("Date de modification");
   private final TextArea observationsEtudiant = new TextArea("Observations");
   // binder qui sera utilisé pour remplir automatiquement les champs d'infos générales sur l'étudiant
   Binder<Etudiant> etudiantBinder = new BeanValidationBinder<>(Etudiant.class);
@@ -122,9 +126,6 @@ public class EtudiantConsult extends Dialog {
   // Binder qui sera utilisé pour remplir automatiquement les champs du référent pédagogique
   Binder<ReferentPedagogique> referentPedagogiqueBinder = new BeanValidationBinder<>(ReferentPedagogique.class);
 
-  private final DatePicker dateCreation = new DatePicker();
-  private final DatePicker dateMiseAJour = new DatePicker();
-
   // grid qui contiendra les contrats liés à l'étudiant
   private final Grid<Contrat> contratGrid = new Grid<>(Contrat.class, false);
 
@@ -158,10 +159,6 @@ public class EtudiantConsult extends Dialog {
     formationBinder.bindInstanceFields(this);
     referentPedagogiqueBinder.bindInstanceFields(this);
 
-    //Labels des dates de création et mise à jour de l'étudiant
-    dateCreation.setLabel("Date de création");
-    dateMiseAJour.setLabel("Date de mise à jour");
-
     civiliteEtudiant.setLabel("Civilité");
     civiliteEtudiant.setItems(Civilite.values());
 
@@ -188,7 +185,7 @@ public class EtudiantConsult extends Dialog {
             emailEtudiant, dernierDiplomeObtenuOuEnCours, niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, situationEntreprise,
             lieuNaissance, nationalite, numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente,
             etablissementDeProvenance, dernierEmploiOccupe, parcours, anneePromotion, travailleurHandicape, veepap, priseEnChargeFraisInscription,
-            obtentionDiplomeMention, observationsEtudiant);
+            obtentionDiplomeMention, nomJeuneFille, statutActif, observationsEtudiant, dateCreation, DateUpdate);
     // pareil, mais pour le formulaire relatif à son entreprise
     formEtudiantEntrepriseInfos.add(enseigne, raisonSociale, statutActifEntreprise, telephoneContactCfa);
 
@@ -214,15 +211,18 @@ public class EtudiantConsult extends Dialog {
   public void setEtudiant(Etudiant etudiant) {
     this.etudiant = etudiant;
     if (etudiant != null) {
-      //Transforme les dates en LocalDate et remplies les champs de dates
+      // Transforme les LocalDateTime en LocalDate et rempli les champs de dates
       dateCreation.setValue(etudiant.getCreatedAt().toLocalDate());
-      dateMiseAJour.setValue(etudiant.getUpdatedAt().toLocalDate());
+      DateUpdate.setValue(etudiant.getUpdatedAt().toLocalDate());
       // lecture des binder pour compléter les champs dans les différents formulaires
       etudiantBinder.readBean(etudiant);
       entrepriseBinder.readBean(etudiant.getEntreprise());
       tuteurBinder.readBean(etudiant.getTuteur());
       formationBinder.readBean(etudiant.getFormation());
       referentPedagogiqueBinder.readBean(etudiant.getReferentPedagogique());
+
+      // Pour une raison indéterminée, la lecture du bean semble omettre le statutActif, alors on doit le set manuellement
+      statutActif.setValue(etudiant.getStatutActif());
 
       // définition de l'âge de l'étudiant en front, en se basant sur la base de données
       ageEtudiant.setValue(ChronoUnit.YEARS.between(etudiant.getDateNaissanceEtudiant(), LocalDate.now()) + " ans");
@@ -267,6 +267,7 @@ public class EtudiantConsult extends Dialog {
   private void setAllFieldsToReadOnly() {
     // étudiant
     nomEtudiant.setReadOnly(true);
+    nomJeuneFille.setReadOnly(true);
     prenomEtudiant.setReadOnly(true);
     numeroEtudiant.setReadOnly(true);
     civiliteEtudiant.setReadOnly(true);
@@ -297,6 +298,7 @@ public class EtudiantConsult extends Dialog {
     priseEnChargeFraisInscription.setReadOnly(true);
     obtentionDiplomeMention.setReadOnly(true);
     anneePromotion.setReadOnly(true);
+    statutActif.setReadOnly(true);
     observationsEtudiant.setReadOnly(true);
     // entreprise
     enseigne.setReadOnly(true);
@@ -319,6 +321,9 @@ public class EtudiantConsult extends Dialog {
     prenomReferentPedago.setReadOnly(true);
     telephoneReferentPedago.setReadOnly(true);
     emailReferentPedago.setReadOnly(true);
+    // date de création et mise à jour
+    dateCreation.setReadOnly(true);
+    DateUpdate.setReadOnly(true);
   }
 
   public void hideDeleteButton() {

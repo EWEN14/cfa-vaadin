@@ -32,6 +32,7 @@ import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.*;
 import nc.unc.application.data.enums.CodeContrat;
 import nc.unc.application.data.enums.Commune;
+import nc.unc.application.data.enums.StatutActifAutres;
 import nc.unc.application.data.service.ContratService;
 
 import java.util.List;
@@ -80,6 +81,7 @@ public class ContratNewOrEdit extends Dialog {
   TextField numeroConventionFormation = new TextField("Numéro de la convention de Formation");
   DatePicker dateConventionFormation = new DatePicker("Date de la convention");
   TextField primeAvantageNature = new TextField("Prime ou Avantage(s) en nature");
+  Select<String> statutActif = new Select<>();
 
   Div decua = new Div(new H4("DECUA"));
   DatePicker dateReceptionDecua = new DatePicker("Date de réception du DECUA");
@@ -166,6 +168,10 @@ public class ContratNewOrEdit extends Dialog {
     // définition d'un picker customisé pour toutes les dates
     setCustomDatePicker();
 
+    // définition des différents statuts actif
+    statutActif.setLabel("Statut Actif du contrat");
+    statutActif.setItems(StatutActifAutres.getStatutActifAutresStr());
+
     // ajout de labels sur les select
     typeContrat.setLabel("Type du Contrat");
     relationAvecSalarie.setLabel("Relation du représentant avec le salarié");
@@ -195,7 +201,7 @@ public class ContratNewOrEdit extends Dialog {
 
     form.add(etudiant, formation, entreprise, layoutTuteur,
             infosContrat, new Div(), debutContrat, finContrat, typeContrat, dureePeriodeEssai, numeroConventionFormation, dateConventionFormation, primeAvantageNature,
-            new Div(), decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua, dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(),
+            statutActif, decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua, dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(),
             dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(), dateReceptionOriginauxConvention, new Div(),
             remiseExemplaireConv, new Div(), convOriginaleRemisEtudiant, convOriginaleRemisTuteur, convOriginaleRemisEmployeur,
             new Div(), lea, new Div(), formationLea);
@@ -292,13 +298,15 @@ public class ContratNewOrEdit extends Dialog {
   /**
    * Création d'un avenant qui va reprendre les informations d'un contrat ou avenant existant que l'utilisateur pourra
    * modifier avant de sauvegarder ce nouvel avenant.
-   * @param contratOrAvenant le contrat parent ou l'avenant depuis lequel on créé un nouvel avenant
+   * @param contratOrAvenant le contrat parent ou l'avenant depuis lequel on crée un nouvel avenant
    */
   public void setNewAvenant(Contrat contratOrAvenant) {
     titre.removeAll();
     try {
       // on clone le contrat ou l'avenant en paramètre
       this.contrat = (Contrat) contratOrAvenant.clone();
+      // on passe clone contrat à null car on est à présent dans la création d'un nouvel avenant
+      this.cloneContrat = null;
       // si le contrat en paramètre est bien un contrat, on le définit en tant que parent
       if (contratOrAvenant.getCodeContrat() == CodeContrat.CONTRAT) {
         this.contrat.setContratParent(contratOrAvenant);

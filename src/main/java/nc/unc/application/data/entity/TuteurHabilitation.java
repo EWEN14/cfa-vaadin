@@ -60,12 +60,12 @@ public class TuteurHabilitation implements Cloneable {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     TuteurHabilitation that = (TuteurHabilitation) o;
-    return id.equals(that.id) && statutFormation.equals(that.statutFormation) && Objects.equals(dateFormation, that.dateFormation) && Objects.equals(modaliteFormation, that.modaliteFormation) && Objects.equals(dateHabilitation, that.dateHabilitation) && tuteur.equals(that.tuteur) && formation.equals(that.formation) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+    return id.equals(that.id) && statutFormation.equals(that.statutFormation) && Objects.equals(dateFormation, that.dateFormation) && Objects.equals(modaliteFormation, that.modaliteFormation) && Objects.equals(dateHabilitation, that.dateHabilitation) && Objects.equals(observations, that.observations) && Objects.equals(tuteur, that.tuteur) && Objects.equals(formation, that.formation) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, statutFormation, dateFormation, modaliteFormation, dateHabilitation, tuteur, formation, createdAt, updatedAt);
+    return Objects.hash(id, statutFormation, dateFormation, modaliteFormation, dateHabilitation, observations, tuteur, formation, createdAt, updatedAt);
   }
 
   public Object clone() throws CloneNotSupportedException {

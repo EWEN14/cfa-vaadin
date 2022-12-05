@@ -58,7 +58,7 @@ public class EntretienCollectif implements Cloneable{
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     EntretienCollectif that = (EntretienCollectif) o;
-    return Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(observations_entretien_collectif, that.observations_entretien_collectif) && Objects.equals(created_at, that.created_at) && Objects.equals(updated_at, that.updated_at) && Objects.equals(formation, that.formation) && Objects.equals(referentCfa, that.referentCfa);
+    return id.equals(that.id) && Objects.equals(date, that.date) && Objects.equals(observations_entretien_collectif, that.observations_entretien_collectif) && Objects.equals(created_at, that.created_at) && Objects.equals(updated_at, that.updated_at) && Objects.equals(formation, that.formation) && Objects.equals(referentCfa, that.referentCfa);
   }
 
   @Override

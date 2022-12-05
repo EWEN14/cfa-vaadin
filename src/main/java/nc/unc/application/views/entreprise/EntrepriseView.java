@@ -125,6 +125,7 @@ public class EntrepriseView extends VerticalLayout {
     // on met les noms de famille en majuscule
     setNameToUppercase(entreprise);
 
+    // TODO : à modifier (check ridet quand unfocus sur le champ)
     // sauvegarde de l'entreprise
     boolean isSave = entrepriseService.saveEntreprise(entreprise);
     if(!isSave){
@@ -147,7 +148,7 @@ public class EntrepriseView extends VerticalLayout {
     // on met les noms de famille en majuscule
     setNameToUppercase(entreprise);
 
-    // sauvegarde du contrat
+    // sauvegarde de l'entreprise
     entrepriseService.saveEntreprise(entreprise);
 
     // ajout du log d'ajout

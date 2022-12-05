@@ -133,7 +133,6 @@ public class Tuteur implements Cloneable {
   private LocalDateTime updatedAt;
 
   /**
-   * TODO : supprimer les Habilitations plutôt que juste mettre tuteur à null
    * Retrait des références d'un tuteur dans les habilitations tuteur,
    * dans les étudiants et dans les contrats
    */

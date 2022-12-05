@@ -147,7 +147,7 @@ public class EntrepriseConsult extends Dialog {
             conventionCollective, prenomRepresentantEmployeur, nomRepresentantEmployeur, fonctionRepresentantEmployeur,
             telephoneEntreprise, emailEntreprise, prenomContactCfa, nomContactCfa, fonctionContactCfa, telephoneContactCfa,
             emailContactCfa, adressePhysiqueCommune, adressePhysiqueCodePostal, adressePhysiqueRue, adressePostaleCommune,
-            adressePostaleCodePostal, adressePostaleRueOuBp, observations);
+            adressePostaleCodePostal, adressePostaleRueOuBp, observations, dateCreation, dateMiseAJour);
 
     content.setSpacing(false);
     // à l'ouverture, on ouvre la tab d'infos générales sur l'entreprise
@@ -233,6 +233,8 @@ public class EntrepriseConsult extends Dialog {
     adressePostaleCodePostal.setReadOnly(true);
     adressePostaleRueOuBp.setReadOnly(true);
     observations.setReadOnly(true);
+    dateCreation.setReadOnly(true);
+    dateMiseAJour.setReadOnly(true);
   }
 
   public static abstract class EntrepriseConsultFormEvent extends ComponentEvent<EntrepriseConsult> {

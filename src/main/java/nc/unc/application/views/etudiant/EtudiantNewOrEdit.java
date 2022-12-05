@@ -34,6 +34,7 @@ public class EtudiantNewOrEdit extends Dialog {
 
   FormLayout form = new FormLayout();
   TextField nomEtudiant = new TextField("NOM");
+  TextField nomJeuneFille = new TextField("NOM de jeune fille");
   TextField prenomEtudiant = new TextField("Prénom");
   IntegerField numeroEtudiant = new IntegerField("N° Étudiant");
   // utilisation de select lorsque nombre de choix assez petits
@@ -70,6 +71,7 @@ public class EtudiantNewOrEdit extends Dialog {
   ComboBox<Formation> formation = new ComboBox<>("Formation suivie");
   IntegerField anneePromotion = new IntegerField("Année de début de la promotion");
   ComboBox<ReferentPedagogique> referentPedagogique = new ComboBox<>("Référent pédagogique");
+  Select<String> statutActif = new Select<>();
   TextArea observationsEtudiant = new TextArea("Observations");
 
   Binder<Etudiant> binder = new BeanValidationBinder<>(Etudiant.class);
@@ -152,12 +154,15 @@ public class EtudiantNewOrEdit extends Dialog {
     referentPedagogique.setItems(referentsPedagogiques);
     referentPedagogique.setItemLabelGenerator(rp -> rp.getPrenomReferentPedago()+ " " + rp.getNomReferentPedago());
 
+    statutActif.setLabel("Statut Actif de l'Étudiant");
+    statutActif.setItems(StatutActifAutres.getStatutActifAutresStr());
+
     // ajout des champs et des boutons d'action dans le formulaire
-    form.add(nomEtudiant, prenomEtudiant, numeroEtudiant, civiliteEtudiant, dateNaissanceEtudiant, telephoneEtudiant1, telephoneEtudiant2, emailEtudiant, dernierDiplomeObtenuOuEnCours,
-            niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, situationEntreprise, lieuNaissance, nationalite,
+    form.add(nomEtudiant, prenomEtudiant, civiliteEtudiant, dateNaissanceEtudiant, telephoneEtudiant1, emailEtudiant, dernierDiplomeObtenuOuEnCours, admis,
+            numeroEtudiant, telephoneEtudiant2, niveauDernierDiplome, anneeObtentionDernierDiplome, situationUnc, situationEntreprise, lieuNaissance, nationalite,
             numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente, etablissementDeProvenance,
             dernierEmploiOccupe, parcours, travailleurHandicape, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention, entreprise,
-            tuteur, formation, anneePromotion, referentPedagogique, observationsEtudiant, createButtonsLayout());
+            tuteur, formation, anneePromotion, referentPedagogique, nomJeuneFille, statutActif, observationsEtudiant, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(titre, form);

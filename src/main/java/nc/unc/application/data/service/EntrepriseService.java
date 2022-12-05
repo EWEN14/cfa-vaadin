@@ -5,6 +5,7 @@ import nc.unc.application.data.repository.EntrepriseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class EntrepriseService {
@@ -24,12 +25,16 @@ public class EntrepriseService {
   }
 
   public boolean saveEntreprise(Entreprise entreprise) {
-    Entreprise entreprise1 = entrepriseRepository.findByNumeroRidet(entreprise.getNumeroRidet());
-    if(entreprise1 == null){
+    Entreprise entrepriseExistante = entrepriseRepository.findByNumeroRidet(entreprise.getNumeroRidet());
+    if(entrepriseExistante == null){
       entrepriseRepository.save(entreprise);
       return true;
     }
     else{
+      if (Objects.equals(entrepriseExistante.getId(), entreprise.getId())) {
+        entrepriseRepository.save(entreprise);
+        return true;
+      }
       return false;
     }
   }

@@ -19,4 +19,6 @@ public interface FormationRepository extends JpaRepository<Formation, Long> {
 
   // récupère toutes les formations, sauf celles avec les id passés en paramètre.
   List<Formation> findAllByIdNotIn(List<Long> id);
+
+  List<Formation> findAllByOrderByLibelleFormationAsc();
 }

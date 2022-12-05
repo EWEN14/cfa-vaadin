@@ -95,10 +95,10 @@ header{
     color: #2A2A2A !important;
 }
 .contrat-link{
-    color: #2A2A2A;
+    color: #0d67dd;
 }
 .contrat-link:hover{
-    color: #1d1d2b;
+    color: #0d67dd;
     text-decoration: underline;
 }
 .tuteurcontrat-button{

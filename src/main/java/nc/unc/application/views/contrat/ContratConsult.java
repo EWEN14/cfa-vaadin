@@ -74,8 +74,7 @@ public class ContratConsult extends Dialog {
   private final Checkbox convOriginaleRemisEmployeur = new Checkbox("Remis à l'employeur");
   private final Div lea = new Div(new H4("Formation LEA"));
   private final DatePicker formationLea = new DatePicker("Date de formation au LEA");
-  private final DatePicker dateCreation = new DatePicker();
-  private final DatePicker dateMiseAJour = new DatePicker();
+  private final TextField statutActif = new TextField("Statut Actif de l'étudiant");
   // binder qui sera utilisé pour remlir automatiquement les champs d'infos propres au contrat
   Binder<Contrat> contratBinder = new BeanValidationBinder<>(Contrat.class);
 
@@ -98,6 +97,11 @@ public class ContratConsult extends Dialog {
   private final Div rupture = new Div(new H4("Rupture"));
   private final DatePicker dateRupture = new DatePicker("Date de rupture du contrat");
   private final TextArea motifRupture = new TextArea("Motif de la rupture");
+
+  // form qui contiendra les informations de création et de mise à jour du contrat
+  private final FormLayout createUpdateForm = new FormLayout();
+  private final DatePicker dateCreation = new DatePicker("Date de création");
+  private final DatePicker dateUpdate = new DatePicker("Date de modification");
 
   // form qui contiendra les informations de l'avenant
   private final FormLayout avenantContainer = new FormLayout();
@@ -178,10 +182,6 @@ public class ContratConsult extends Dialog {
     // fonction qui met tous les champs en ReadOnly, pour qu'ils ne soient pas modifiables
     setAllFieldsToReadOnly();
 
-    //Labels des dates de création et mise à jour du contrat
-    dateCreation.setLabel("Date de création");
-    dateMiseAJour.setLabel("Date de mise à jour");
-
     // instanciation des différents binder qui serviront au remplissage automatique des formulaires d'informations rattachés à l'étudiant
     contratBinder.bindInstanceFields(this);
     etudiantBinder.bindInstanceFields(this);
@@ -220,7 +220,7 @@ public class ContratConsult extends Dialog {
             dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(), dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(),
             dateReceptionOriginauxConvention, new Div(), remiseExemplaireConv, new Div(),
             convOriginaleRemisEtudiant, convOriginaleRemisTuteur, convOriginaleRemisEmployeur, new Div(),
-            lea, new Div(), formationLea);
+            lea, new Div(), formationLea, statutActif);
 
     // ajout des petits formulaires qui seront présents ou non dans la tab principale selon qu'ils sont renseignés ou non
     derogationAgeRepresentantLegalForm.add(representantLegal, new Div(), derogationAge, dateDelivranceDerogationAge, nomRepresentantLegal,
@@ -230,6 +230,9 @@ public class ContratConsult extends Dialog {
     avenantContainer.add(avenant, new Div(), numeroAvenant, motifAvn, suiviAvenantCua, new Div(), dateMailOuRdvSignatureCuaAvn, dateDepotAlfrescoCuaAvn,
             suiviAvenantConv, new Div(), dateMailOuRdvSignatureConvAvn, dateDepotAlfrescoConvAvn, remiseExemplaireConvAvn, new Div(),
             convAvenantRemisEtudiant, convAvenantRemisTuteur, convAvenantRemisEmployeur);
+
+    // ajout du formulaire contenant les deux champs concernant la date de création et de mise à jour du contrat
+    createUpdateForm.add(dateCreation, dateUpdate);
 
     // ajout des petits formulaires qui seront dans les autres tab
     formContratEtudiant.add(prenomEtudiant, nomEtudiant, numeroEtudiant, situationEntreprise, telephoneEtudiant1, emailEtudiant);
@@ -250,7 +253,7 @@ public class ContratConsult extends Dialog {
     if (contrat != null) {
       //Transforme les dates en LocalDate et remplies les champs de dates
       dateCreation.setValue(contrat.getCreatedAt().toLocalDate());
-      dateMiseAJour.setValue(contrat.getUpdatedAt().toLocalDate());
+      dateUpdate.setValue(contrat.getUpdatedAt().toLocalDate());
       // on passe l'id du contrat pour la page de generation pdf du contrat et de la convention
       lienPreview.setHref("/contrat-generation/"+contrat.getId());
       lienDownloadPdf.setHref("/contrat-generation/download/"+contrat.getId());
@@ -275,6 +278,8 @@ public class ContratConsult extends Dialog {
       entrepriseBinder.readBean(contrat.getEntreprise());
       tuteurBinder.readBean(contrat.getTuteur());
       formationBinder.readBean(contrat.getFormation());
+
+      statutActif.setValue(contrat.getStatutActif());
     }
   }
 
@@ -326,7 +331,7 @@ public class ContratConsult extends Dialog {
     content.removeAll();
     // on insère le contenu (formulaire) adéquat en fonction de la tab sélectionnée
     if (tab.equals(contratInfosTab)) {
-      content.add(form, ruptureContainer, avenantContainer, derogationAgeRepresentantLegalForm);
+      content.add(form, ruptureContainer, avenantContainer, derogationAgeRepresentantLegalForm, createUpdateForm);
     } else if (tab.equals(etudiantContratInfosTab)) {
       content.add(formContratEtudiant);
     } else if (tab.equals(formationContratInfosTab)) {
@@ -393,6 +398,7 @@ public class ContratConsult extends Dialog {
     convOriginaleRemisTuteur.setReadOnly(true);
     convOriginaleRemisEmployeur.setReadOnly(true);
     formationLea.setReadOnly(true);
+    statutActif.setReadOnly(true);
     dateRupture.setReadOnly(true);
     motifRupture.setReadOnly(true);
     numeroAvenant.setReadOnly(true);
@@ -404,6 +410,8 @@ public class ContratConsult extends Dialog {
     convAvenantRemisEtudiant.setReadOnly(true);
     convAvenantRemisTuteur.setReadOnly(true);
     convAvenantRemisEmployeur.setReadOnly(true);
+    dateCreation.setReadOnly(true);
+    dateUpdate.setReadOnly(true);
 
     // etudiant
     prenomEtudiant.setReadOnly(true);

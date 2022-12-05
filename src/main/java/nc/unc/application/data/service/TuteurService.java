@@ -38,6 +38,10 @@ public class TuteurService {
     // Supprimer un tuteur
     public void deleteTuteur(Tuteur tuteur) {
         tuteurRepository.delete(tuteur);
+        // suppression des habilitations du tuteur après sa suppression
+        for (TuteurHabilitation tuteurHabilitation: tuteur.getTuteurHabilitations()) {
+            deleteTuteurHabilitation(tuteurHabilitation);
+        }
     }
 
     // Sauvegarder un tuteur

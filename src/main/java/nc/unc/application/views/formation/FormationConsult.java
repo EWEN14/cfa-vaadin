@@ -35,9 +35,10 @@ public class FormationConsult extends Dialog {
   private final TextField lieuFormation = new TextField("Lieu de la formation");
   private final IntegerField dureeHebdomadaireTravail = new IntegerField("Durée hebdomadaire de travail");
   private final TextField responsableDeFormation = new TextField("Responsable de formation");
+  private final TextField statutActif = new TextField("Statut Actif de la formation");
   private final TextArea observations = new TextArea("Observations");
-  private final DatePicker dateCreation = new DatePicker();
-  private final DatePicker dateMiseAJour = new DatePicker();
+  private final DatePicker dateCreation = new DatePicker("Date de création");
+  private final DatePicker dateMiseAJour = new DatePicker("Date de mise à jour");
   // binder qui permettra le remplissage automatique des champs
   Binder<Formation> formationBinder = new BeanValidationBinder<>(Formation.class);
 
@@ -53,14 +54,10 @@ public class FormationConsult extends Dialog {
     // instanciation du binder
     formationBinder.bindInstanceFields(this);
 
-    //Labels des dates de création et mise à jour de la formation
-    dateCreation.setLabel("Date de création");
-    dateMiseAJour.setLabel("Date de mise à jour");
-
     // ajout des champs dans le formulaire
     form.add(libelleFormation, codeFormation, codeRome, niveauCertificationProfessionnelle, typeEmploiExerce,
             semainesEntreprise, heuresFormation, heuresProjetUniversitaire, semainesFormation, lieuFormation, dureeHebdomadaireTravail,
-            responsableDeFormation, observations);
+            responsableDeFormation, statutActif, observations, dateCreation, dateMiseAJour);
 
     // ajout du formulaire dans la modale
     add(titre, form, createButtonsLayout());
@@ -73,6 +70,7 @@ public class FormationConsult extends Dialog {
       dateMiseAJour.setValue(formation.getUpdatedAt().toLocalDate());
       // alimentation du binder
       formationBinder.readBean(formation);
+      statutActif.setValue(formation.getStatutActif());
       // normalement il y aura toujours un referent pédagogique, mais par précaution ajout d'un if/else
       if (formation.getReferentPedagogique() != null) {
         responsableDeFormation.setValue(formation.getReferentPedagogique().getPrenomReferentPedago() + " " + formation.getReferentPedagogique().getNomReferentPedago());
@@ -104,7 +102,10 @@ public class FormationConsult extends Dialog {
     lieuFormation.setReadOnly(true);
     dureeHebdomadaireTravail.setReadOnly(true);
     responsableDeFormation.setReadOnly(true);
+    statutActif.setReadOnly(true);
     observations.setReadOnly(true);
+    dateCreation.setReadOnly(true);
+    dateMiseAJour.setReadOnly(true);
   }
 
   public static abstract class FormationFormEvent extends ComponentEvent<FormationConsult> {

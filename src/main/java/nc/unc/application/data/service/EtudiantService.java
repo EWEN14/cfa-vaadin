@@ -1,13 +1,14 @@
 package nc.unc.application.data.service;
 
-import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.enums.StatutActifAutres;
 import nc.unc.application.data.repository.EtudiantRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional
 @Service
 public class EtudiantService {
 

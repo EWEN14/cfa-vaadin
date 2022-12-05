@@ -2,6 +2,7 @@ package nc.unc.application.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nc.unc.application.data.enums.CodeContrat;
 import org.hibernate.annotations.CreationTimestamp;
@@ -20,6 +21,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "contrat")
 public class Contrat implements Cloneable {
 

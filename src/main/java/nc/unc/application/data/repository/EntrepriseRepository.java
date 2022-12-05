@@ -23,4 +23,5 @@ public interface EntrepriseRepository extends JpaRepository<Entreprise, Long> {
   Integer CountBystatutActifEntreprise(@Param("statut") String statut);
 
   Entreprise findByNumeroRidet(String numeroRidet);
+
 }

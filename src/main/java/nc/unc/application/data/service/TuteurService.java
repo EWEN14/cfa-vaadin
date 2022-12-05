@@ -6,9 +6,11 @@ import nc.unc.application.data.enums.StatutActifAutres;
 import nc.unc.application.data.repository.TuteurHabilitationRepository;
 import nc.unc.application.data.repository.TuteurRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional
 @Service
 public class TuteurService {
 

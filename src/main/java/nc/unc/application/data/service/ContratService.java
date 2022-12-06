@@ -2,13 +2,17 @@ package nc.unc.application.data.service;
 
 import nc.unc.application.data.entity.Contrat;
 import nc.unc.application.data.entity.Etudiant;
+import nc.unc.application.data.entity.NumConventionFormation;
 import nc.unc.application.data.enums.CodeContrat;
 import nc.unc.application.data.enums.StatutActifAutres;
 import nc.unc.application.data.repository.ContratRepository;
 import nc.unc.application.data.repository.EtudiantRepository;
+import nc.unc.application.data.repository.NumConventionFormationRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ContratService {
@@ -17,15 +21,39 @@ public class ContratService {
 
   private final EtudiantRepository etudiantRepository;
 
-  public ContratService(ContratRepository contratRepository, EtudiantRepository etudiantRepository){
+  private final NumConventionFormationRepository numConvRepository;
+
+  public ContratService(ContratRepository contratRepository, EtudiantRepository etudiantRepository,
+                        NumConventionFormationRepository numConvRepository){
     this.contratRepository = contratRepository;
     this.etudiantRepository = etudiantRepository;
+    this.numConvRepository = numConvRepository;
   }
 
   public void saveContrat(Contrat contrat){
+    // Si le statut du contrat n'est pas défini, on le défini comme actif par défaut
     if (contrat.getStatutActif() == null) {
       contrat.setStatutActif(StatutActifAutres.ACTIF.getEnumStringify());
     }
+
+    // Si le numéro de convention du contrat est vide, on le génère en utilisant le dernier numéro de la table numero_convention_formation
+    if (contrat.getCodeContrat() == CodeContrat.CONTRAT &&
+            (contrat.getNumeroConventionFormation() == null || contrat.getNumeroConventionFormation().isEmpty())) {
+      Optional<NumConventionFormation> numConventionFormation = numConvRepository.findAllById(1L);
+      if (numConventionFormation.isPresent()) {
+        NumConventionFormation numberToAssign = numConventionFormation.get();
+        contrat.setNumeroConventionFormation(LocalDate.now().getYear() +"-"+numberToAssign.getNumeroConvention());
+
+        // on incrémente de 1 le numéro de convention pour la prochaine convention
+        numberToAssign.setNumeroConvention(numberToAssign.getNumeroConvention() + 1);
+        // mais s'il atteint 1001, on le remet à 1
+        if (numberToAssign.getNumeroConvention() == 1001) {
+          numberToAssign.setNumeroConvention(1);
+        }
+        numConvRepository.save(numberToAssign);
+      }
+    }
+
     contratRepository.save(contrat);
 
     // si après la mise à jour d'un contrat initial, ses informations de rupture de contrat ne sont pas nulles,

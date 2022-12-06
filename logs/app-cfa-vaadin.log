@@ -488,3 +488,101 @@ Caused by: org.springframework.context.ApplicationContextException: Unable to st
 2022-12-06 11:14:42,860 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: [build-status] 1 warning were reported.
 2022-12-06 11:14:42,860 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: [build-status] : Compiled.
 2022-12-06 11:14:42,870 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: No issues found.
+2022-12-06 12:06:19,596 INFO [SpringApplicationShutdownHook] org.springframework.orm.jpa.AbstractEntityManagerFactoryBean: Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-12-06 12:06:19,622 INFO [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource: HikariPool-1 - Shutdown initiated...
+2022-12-06 12:06:19,659 INFO [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource: HikariPool-1 - Shutdown completed.
+2022-12-06 12:06:46,953 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Starting Application using Java 11.0.11 on Ewen with PID 10764 (C:\Users\Ewen CLEMENT\Documents\MASTER MIAGE\Projet_tuteure_CFA\cfa-vaadin\target\classes started by Ewen CLEMENT in C:\Users\Ewen CLEMENT\Documents\MASTER MIAGE\Projet_tuteure_CFA\cfa-vaadin)
+2022-12-06 12:06:46,958 DEBUG [restartedMain] org.springframework.boot.StartupInfoLogger: Running with Spring Boot v2.6.4, Spring v5.3.16
+2022-12-06 12:06:46,963 INFO [restartedMain] org.springframework.boot.SpringApplication: No active profile set, falling back to 1 default profile: "default"
+2022-12-06 12:06:46,963 INFO [background-preinit] org.hibernate.validator.internal.util.Version: HV000001: Hibernate Validator 6.2.2.Final
+2022-12-06 12:06:47,118 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-12-06 12:06:47,118 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-12-06 12:06:49,461 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-12-06 12:06:49,682 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Finished Spring Data repository scanning in 209 ms. Found 14 JPA repository interfaces.
+2022-12-06 12:06:53,393 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat initialized with port(s): 8080 (http)
+2022-12-06 12:06:53,426 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing ProtocolHandler ["http-nio-8080"]
+2022-12-06 12:06:53,431 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting service [Tomcat]
+2022-12-06 12:06:53,432 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting Servlet engine: [Apache Tomcat/9.0.58]
+2022-12-06 12:06:54,184 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing Spring embedded WebApplicationContext
+2022-12-06 12:06:54,186 INFO [restartedMain] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext: Root WebApplicationContext: initialization completed in 7065 ms
+2022-12-06 12:06:55,102 INFO [restartedMain] com.vaadin.flow.spring.VaadinServletContextInitializer$VaadinAppShellContextListener: Search for VaadinAppShell took 149 ms
+2022-12-06 12:06:59,450 INFO [restartedMain] com.vaadin.flow.spring.VaadinServletContextInitializer$DevModeServletContextListener: Search for subclasses and classes with annotations took 3330 ms
+2022-12-06 12:06:59,704 INFO [restartedMain] com.vaadin.base.devserver.startup.DevModeInitializer: Starting dev-mode updaters in C:\Users\Ewen CLEMENT\Documents\MASTER MIAGE\Projet_tuteure_CFA\cfa-vaadin folder.
+2022-12-06 12:06:59,920 INFO [restartedMain] com.vaadin.flow.server.frontend.scanner.FullDependenciesScanner: Visited 159 classes. Took 168 ms.
+2022-12-06 12:07:00,357 INFO [ForkJoinPool.commonPool-worker-3] com.vaadin.flow.server.frontend.TaskRunNpmInstall: Skipping `npm install` because the frontend packages are already installed in the folder 'C:\Users\Ewen CLEMENT\Documents\MASTER MIAGE\Projet_tuteure_CFA\cfa-vaadin\node_modules' and the hash in the file 'C:\Users\Ewen CLEMENT\Documents\MASTER MIAGE\Projet_tuteure_CFA\cfa-vaadin\node_modules\.vaadin\vaadin.json' is the same as in 'package.json'
+2022-12-06 12:07:00,358 INFO [ForkJoinPool.commonPool-worker-3] com.vaadin.flow.server.frontend.TaskCopyFrontendFiles: Copying frontend resources from jar files ...
+2022-12-06 12:07:00,751 INFO [ForkJoinPool.commonPool-worker-3] com.vaadin.flow.server.frontend.TaskCopyFrontendFiles: Visited 19 resources. Took 392 ms.
+2022-12-06 12:07:00,896 INFO [restartedMain] com.zaxxer.hikari.HikariDataSource: HikariPool-1 - Starting...
+2022-12-06 12:07:01,993 INFO [ForkJoinPool.commonPool-worker-3] com.vaadin.base.devserver.AbstractDevServerRunner: Starting Webpack
+2022-12-06 12:07:02,277 INFO [restartedMain] com.zaxxer.hikari.HikariDataSource: HikariPool-1 - Start completed.
+2022-12-06 12:07:02,324 INFO [restartedMain] org.flywaydb.core.internal.logging.slf4j.Slf4jLog: Flyway Community Edition 8.0.5 by Redgate
+2022-12-06 12:07:02,325 INFO [restartedMain] org.flywaydb.core.internal.logging.slf4j.Slf4jLog: Database: jdbc:postgresql://localhost:5432/cfa_sb (PostgreSQL 14.1)
+2022-12-06 12:07:02,635 INFO [restartedMain] org.flywaydb.core.internal.logging.slf4j.Slf4jLog: Successfully validated 53 migrations (execution time 00:00.260s)
+2022-12-06 12:07:02,661 INFO [restartedMain] org.flywaydb.core.internal.logging.slf4j.Slf4jLog: Current version of schema "public": 53
+2022-12-06 12:07:02,674 INFO [restartedMain] org.flywaydb.core.internal.logging.slf4j.Slf4jLog: Schema "public" is up to date. No migration necessary.
+2022-12-06 12:07:03,185 INFO [restartedMain] org.hibernate.jpa.internal.util.LogHelper: HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-12-06 12:07:03,445 INFO [restartedMain] org.hibernate.Version: HHH000412: Hibernate ORM core version 5.6.5.Final
+2022-12-06 12:07:04,042 INFO [restartedMain] org.hibernate.annotations.common.reflection.java.JavaReflectionManager: HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-12-06 12:07:04,420 INFO [restartedMain] org.hibernate.dialect.Dialect: HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+2022-12-06 12:07:08,179 INFO [restartedMain] org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator: HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-12-06 12:07:08,211 INFO [restartedMain] org.springframework.orm.jpa.AbstractEntityManagerFactoryBean: Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-12-06 12:07:11,742 WARN [restartedMain] org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration: spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-12-06 12:07:12,380 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Or [Ant [pattern='/favicon.ico'], Ant [pattern='/manifest.webmanifest'], Ant [pattern='/sw.js'], Ant [pattern='/sw-runtime-resources-precache.js'], Ant [pattern='/offline.html'], Ant [pattern='/offline-stub.html'], Ant [pattern='/icons/icon.png'], Ant [pattern='/themes/**'], Ant [pattern='/icons/icon-144x144.png'], Ant [pattern='/icons/icon-192x192.png'], Ant [pattern='/icons/icon-512x512.png'], Ant [pattern='/icons/icon-16x16.png'], Ant [pattern='/icons/icon-32x32.png'], Ant [pattern='/icons/icon-96x96.png'], Ant [pattern='/icons/icon-180x180.png'], Ant [pattern='/icons/icon-2048x2732.png'], Ant [pattern='/icons/icon-2732x2048.png'], Ant [pattern='/icons/icon-1668x2388.png'], Ant [pattern='/icons/icon-2388x1668.png'], Ant [pattern='/icons/icon-1668x2224.png'], Ant [pattern='/icons/icon-2224x1668.png'], Ant [pattern='/icons/icon-1620x2160.png'], Ant [pattern='/icons/icon-2160x1620.png'], Ant [pattern='/icons/icon-1536x2048.png'], Ant [pattern='/icons/icon-2048x1536.png'], Ant [pattern='/icons/icon-1284x2778.png'], Ant [pattern='/icons/icon-2778x1284.png'], Ant [pattern='/icons/icon-1170x2532.png'], Ant [pattern='/icons/icon-2532x1170.png'], Ant [pattern='/icons/icon-1125x2436.png'], Ant [pattern='/icons/icon-2436x1125.png'], Ant [pattern='/icons/icon-1242x2688.png'], Ant [pattern='/icons/icon-2688x1242.png'], Ant [pattern='/icons/icon-828x1792.png'], Ant [pattern='/icons/icon-1792x828.png'], Ant [pattern='/icons/icon-1242x2208.png'], Ant [pattern='/icons/icon-2208x1242.png'], Ant [pattern='/icons/icon-750x1334.png'], Ant [pattern='/icons/icon-1334x750.png'], Ant [pattern='/icons/icon-640x1136.png'], Ant [pattern='/icons/icon-1136x640.png']]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-12-06 12:07:12,388 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Or [Ant [pattern='/favicon.ico'], Ant [pattern='/manifest.webmanifest'], Ant [pattern='/sw.js'], Ant [pattern='/sw-runtime-resources-precache.js'], Ant [pattern='/offline.html'], Ant [pattern='/offline-stub.html'], Ant [pattern='/icons/icon.png'], Ant [pattern='/themes/**'], Ant [pattern='/icons/icon-144x144.png'], Ant [pattern='/icons/icon-192x192.png'], Ant [pattern='/icons/icon-512x512.png'], Ant [pattern='/icons/icon-16x16.png'], Ant [pattern='/icons/icon-32x32.png'], Ant [pattern='/icons/icon-96x96.png'], Ant [pattern='/icons/icon-180x180.png'], Ant [pattern='/icons/icon-2048x2732.png'], Ant [pattern='/icons/icon-2732x2048.png'], Ant [pattern='/icons/icon-1668x2388.png'], Ant [pattern='/icons/icon-2388x1668.png'], Ant [pattern='/icons/icon-1668x2224.png'], Ant [pattern='/icons/icon-2224x1668.png'], Ant [pattern='/icons/icon-1620x2160.png'], Ant [pattern='/icons/icon-2160x1620.png'], Ant [pattern='/icons/icon-1536x2048.png'], Ant [pattern='/icons/icon-2048x1536.png'], Ant [pattern='/icons/icon-1284x2778.png'], Ant [pattern='/icons/icon-2778x1284.png'], Ant [pattern='/icons/icon-1170x2532.png'], Ant [pattern='/icons/icon-2532x1170.png'], Ant [pattern='/icons/icon-1125x2436.png'], Ant [pattern='/icons/icon-2436x1125.png'], Ant [pattern='/icons/icon-1242x2688.png'], Ant [pattern='/icons/icon-2688x1242.png'], Ant [pattern='/icons/icon-828x1792.png'], Ant [pattern='/icons/icon-1792x828.png'], Ant [pattern='/icons/icon-1242x2208.png'], Ant [pattern='/icons/icon-2208x1242.png'], Ant [pattern='/icons/icon-750x1334.png'], Ant [pattern='/icons/icon-1334x750.png'], Ant [pattern='/icons/icon-640x1136.png'], Ant [pattern='/icons/icon-1136x640.png']] with []
+2022-12-06 12:07:12,389 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/images/*.png']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-12-06 12:07:12,390 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Ant [pattern='/images/*.png'] with []
+2022-12-06 12:07:12,392 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/resources/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-12-06 12:07:12,393 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Ant [pattern='/resources/**'] with []
+2022-12-06 12:07:12,394 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='static/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-12-06 12:07:12,394 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Ant [pattern='static/**'] with []
+2022-12-06 12:07:12,513 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure any request
+2022-12-06 12:07:14,345 INFO [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer: LiveReload server is running on port 35729
+2022-12-06 12:07:15,178 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting ProtocolHandler ["http-nio-8080"]
+2022-12-06 12:07:15,330 INFO [restartedMain] com.vaadin.flow.server.DefaultDeploymentConfiguration: 
+Vaadin is running in DEBUG MODE.
+When deploying application for production, remember to disable debug features. See more from https://vaadin.com/docs/
+2022-12-06 12:07:15,468 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat started on port(s): 8080 (http) with context path ''
+2022-12-06 12:07:15,508 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Started Application in 29.592 seconds (JVM running for 34.317)
+2022-12-06 12:07:15,603 INFO [restartedMain] nc.unc.application.data.generator.DataGenerator: Using existing database
+2022-12-06 12:07:23,374 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-12-06 12:07:23,375 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-12-06 12:07:23,402 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Starting Application using Java 11.0.11 on Ewen with PID 10764 (C:\Users\Ewen CLEMENT\Documents\MASTER MIAGE\Projet_tuteure_CFA\cfa-vaadin\target\classes started by Ewen CLEMENT in C:\Users\Ewen CLEMENT\Documents\MASTER MIAGE\Projet_tuteure_CFA\cfa-vaadin)
+2022-12-06 12:07:23,403 DEBUG [restartedMain] org.springframework.boot.StartupInfoLogger: Running with Spring Boot v2.6.4, Spring v5.3.16
+2022-12-06 12:07:23,403 INFO [restartedMain] org.springframework.boot.SpringApplication: No active profile set, falling back to 1 default profile: "default"
+2022-12-06 12:07:23,428 WARN [restartedMain] org.springframework.context.support.AbstractApplicationContext: Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server; nested exception is org.springframework.context.ApplicationContextException: Unable to start ServletWebServerApplicationContext due to missing ServletWebServerFactory bean.
+2022-12-06 12:07:23,466 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Initializing Servlet 'dispatcherServlet'
+2022-12-06 12:07:23,472 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Completed initialization in 6 ms
+2022-12-06 12:07:23,506 ERROR [restartedMain] org.springframework.boot.SpringApplication: Application run failed
+org.springframework.context.ApplicationContextException: Unable to start web server; nested exception is org.springframework.context.ApplicationContextException: Unable to start ServletWebServerApplicationContext due to missing ServletWebServerFactory bean.
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:163)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:577)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:145)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:740)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:415)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1312)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1301)
+	at nc.unc.application.Application.main(Application.java:32)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49)
+Caused by: org.springframework.context.ApplicationContextException: Unable to start ServletWebServerApplicationContext due to missing ServletWebServerFactory bean.
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.getWebServerFactory(ServletWebServerApplicationContext.java:210)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:180)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:160)
+	... 13 common frames omitted
+2022-12-06 12:07:38,432 INFO [ForkJoinPool.commonPool-worker-3] com.vaadin.base.devserver.AbstractDevServerRunner: Running Webpack to compile frontend resources. This may take a moment, please stand by...
+2022-12-06 12:07:48,917 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: [webpack-dev-server] Project is running at:
+2022-12-06 12:07:48,917 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: [webpack-dev-server] Loopback: http://localhost:29791/
+2022-12-06 12:07:48,918 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: [webpack-dev-server] On Your Network (IPv4): http://192.168.178.27:29791/
+2022-12-06 12:07:48,927 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: [webpack-dev-server] Content not from webpack is served from 'C:\Users\Ewen CLEMENT\Documents\MASTER MIAGE\Projet_tuteure_CFA\cfa-vaadin\target\classes\META-INF\VAADIN\webapp, C:\Users\Ewen CLEMENT\Documents\MASTER MIAGE\Projet_tuteure_CFA\cfa-vaadin\src\main\webapp' directory
+2022-12-06 12:08:04,750 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: [build-status] : Compiled.
+2022-12-06 12:08:04,760 INFO [ForkJoinPool.commonPool-worker-3] com.vaadin.base.devserver.AbstractDevServerRunner: Started Webpack. Time: 62767ms
+2022-12-06 12:08:05,221 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: No issues found.
+2022-12-06 12:08:12,011 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: 
+2022-12-06 12:08:12,012 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: WARNING in InjectManifest has been called multiple times, perhaps due to running webpack in --watch mode. The precache manifest generated after the first call may be inaccurate! Please see https://github.com/GoogleChrome/workbox/issues/1790 for more information.
+2022-12-06 12:08:12,013 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: [build-status] 1 warning were reported.
+2022-12-06 12:08:12,014 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: [build-status] : Compiled.
+2022-12-06 12:08:12,030 INFO [dev-server-output] com.vaadin.base.devserver.DevServerOutputTracker$Finder: No issues found.

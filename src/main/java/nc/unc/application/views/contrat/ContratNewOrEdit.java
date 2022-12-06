@@ -176,6 +176,8 @@ public class ContratNewOrEdit extends Dialog {
     typeContrat.setLabel("Type du Contrat");
     relationAvecSalarie.setLabel("Relation du représentant avec le salarié");
 
+    numeroConventionFormation.setHelperText("Laisser vide pour une génération automatique");
+
     // on passe les communes de NC dans nos combo box en ayant besoin
     communeRepresentant.setItems(Commune.getCommunesStr());
     communeRepresentant.setClearButtonVisible(true);

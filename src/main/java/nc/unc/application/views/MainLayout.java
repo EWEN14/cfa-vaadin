@@ -5,14 +5,11 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
-import java.util.Optional;
 import nc.unc.application.data.entity.User;
 import nc.unc.application.security.AuthenticatedUser;
 import nc.unc.application.views.accueil.HomeView;
@@ -28,6 +25,8 @@ import nc.unc.application.views.referentCfa.ReferentCfaView;
 import nc.unc.application.views.referentPedagogique.ReferentPedagogiqueView;
 import nc.unc.application.views.tuteur.TuteurView;
 import nc.unc.application.views.user.UserView;
+
+import java.util.Optional;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -119,7 +118,6 @@ public class MainLayout extends AppLayout {
         Nav nav = new Nav();
         Div div = new Div();
 
-
         Image image = new Image("images/CFA.png","logo cfa");
         div.add(image);
         div.addClassNames("cfa-container-icon");
@@ -129,13 +127,10 @@ public class MainLayout extends AppLayout {
         nav.addClassNames("menu", "border-b", "border-contrast-10", "flex-grow", "overflow-auto");
         nav.getElement().setAttribute("aria-labelledby", "views");
 
-
-
         // Wrap the links in a list; improves accessibility
         UnorderedList list = new UnorderedList();
         list.addClassNames("list-none", "m-0", "p-0");
         nav.add(list);
-
 
         for (MenuItemInfo menuItem : createMenuItems()) {
             // on ajoute à la navbar les éléments auxquels l'utilisateur a le droit d'accéder
@@ -186,7 +181,7 @@ public class MainLayout extends AppLayout {
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
 
-            Span name = new Span(user.getPrenom()+" "+user.getNom());
+            Span name = new Span(user.getPrenom()+" "+user.getNom()+" \uD83D\uDEAA");
             name.addClassNames("font-medium", "text-s", "text-secondary","text-center");
 
             ContextMenu userMenu = new ContextMenu(name);

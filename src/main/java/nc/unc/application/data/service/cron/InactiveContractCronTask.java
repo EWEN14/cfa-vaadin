@@ -4,13 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import nc.unc.application.data.entity.Contrat;
 import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Tuteur;
-import nc.unc.application.data.enums.SituationContrat;
+import nc.unc.application.data.enums.StatutActifAutres;
 import nc.unc.application.data.repository.ContratRepository;
 import nc.unc.application.data.repository.EntrepriseRepository;
 import nc.unc.application.data.repository.EtudiantRepository;
 import nc.unc.application.data.repository.TuteurRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -25,42 +23,46 @@ import java.util.List;
 @Slf4j
 public class InactiveContractCronTask {
 
-    @Autowired
-    private EtudiantRepository etudiantRepository;
+  @Autowired
+  private EtudiantRepository etudiantRepository;
 
-    @Autowired
-    private ContratRepository contratRepository;
+  @Autowired
+  private ContratRepository contratRepository;
 
-    @Autowired
-    private TuteurRepository tuteurRepository;
+  @Autowired
+  private TuteurRepository tuteurRepository;
 
+  @Scheduled(fixedRate = 5000)
+  public void miseAjourStatutActif() {
 
-    @Scheduled(fixedRate = 5000)
-    public void miseAjourStatutActif() {
+    // Récupération de tous les contrats avec le statut ACTIF
+    List<Contrat> contrats = contratRepository.findAllByStatutActif(StatutActifAutres.ACTIF.getEnumStringify());
 
-        List<Contrat> contrats = contratRepository.findAllByStatutActif(SituationContrat.ACTIF);
+    // On fait un stream sur lequel on va filtrer pour ne garder que les contrats dont la date de fin est antérieure
+    // à la date du jour.
+    contrats.stream().filter(contrat -> contrat.getFinContrat().isBefore(LocalDate.now()))
+            .forEach(contrat -> {
+              // Pour chaque contrat restant, on passe le contrat et l'étudiant en statut INACTIF
+              contratRepository.updateActiveContract(contrat.getId(), StatutActifAutres.INACTIF.getEnumStringify(), LocalDateTime.now());
+              log.info("Mise a jour du statut (ACTIF -> INACTIF) du contrat {}", contrat.getCodeContrat());
+              etudiantRepository.updateStatusOfEtudiant(contrat.getEtudiant().getId(), StatutActifAutres.INACTIF.getEnumStringify(), LocalDateTime.now());
+              log.info("Mise a jour du statut (ACTIF -> INACTIF) de l'étudiant lié au contrat {}, ayant l'identifiant : {}", contrat.getCodeContrat(), contrat.getEtudiant().getId());
+            });
 
-        contrats.stream().filter(contrat -> contrat.getFinContrat().getDayOfMonth() <= LocalDate.now().getDayOfMonth() &&
-                                            contrat.getFinContrat().getMonthValue() <= LocalDate.now().getMonthValue() &&
-                                    contrat.getFinContrat().getYear() <= LocalDate.now().getYear())
-                .forEach(contrat -> {
-                    contratRepository.updateActiveContract(contrat.getId(), SituationContrat.INACTIF, LocalDateTime.now());
-                    log.info("Mise a jour du statut du contrat {}",contrat.getCodeContrat());
-                    etudiantRepository.updateStatusOfEtudiant(contrat.getEtudiant().getId(),SituationContrat.INACTIF, LocalDateTime.now());
-                    log.info("Mise a jour du statut de l'étudiant lié au contrat {}, ayant l'identifiant : {}",contrat.getCodeContrat(), contrat.getEtudiant().getId());
-                });
+    // On récupère la liste des tuteurs encore ACTIF
+    List<Tuteur> tuteurList = tuteurRepository.findAllByStatutActif(StatutActifAutres.ACTIF.getEnumStringify());
 
-        List<Tuteur> tuteurList = tuteurRepository.findAllByStatutActif(SituationContrat.ACTIF);
-
-        for (Tuteur tuteur:tuteurList
-             ) {
-            List<Contrat> contratList = contratRepository.findAllByTuteurIdAndStatutActif(tuteur.getId(),SituationContrat.ACTIF);
-            if (contratList == null){
-                log.info("Mise a jour du statut du tuteur {}",tuteur.getId());
-                tuteurRepository.updateStatusOfTuteur(tuteur.getId(),SituationContrat.INACTIF, LocalDateTime.now());
-            }
-        }
-
-        //TODO : Ajouter la mise a jours du status des entreprises.
+    for (Tuteur tuteur : tuteurList) {
+      // Pour chaque tuteur, on tente de récupérer la liste des contrats ACTIF ayant pour tuteur celui de l'itération en cours
+      List<Contrat> contratList = contratRepository.findAllByTuteurIdAndStatutActif(tuteur.getId(), StatutActifAutres.ACTIF.getEnumStringify());
+      // Si la liste est vide, cela veut dire que tous les contrats auxquels était lié le tuteur sont désormais INACTIF
+      if (contratList == null) {
+        // Par conséquent, on rend le tuteur INACTIF à son tour
+        tuteurRepository.updateStatusOfTuteur(tuteur.getId(), StatutActifAutres.INACTIF.getEnumStringify(), LocalDateTime.now());
+        log.info("Mise a jour du statut (ACTIF -> INACTIF) du tuteur {}", tuteur.getId());
+      }
     }
+
+    // TODO : Ajouter la mise a jours du status des entreprises.
+  }
 }

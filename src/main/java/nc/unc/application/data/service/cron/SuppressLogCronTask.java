@@ -12,22 +12,23 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Component
-@Slf4j
 @Transactional
+@Slf4j
 public class SuppressLogCronTask {
 
-    @Autowired
-    private LogEnregistrementRepository repository;
+  @Autowired
+  private LogEnregistrementRepository repository;
 
-    @Scheduled(fixedRate = 5000)
-    public void SuppressLogOfLastMonth(){
-        List<LogEnregistrement> logs = repository.findAllByOrderByCreatedAtDesc();
+  @Scheduled(fixedRate = 5000)
+  public void SuppressLogOfLastMonth() {
+    // On récupère tous les logs, du plus récent au plus ancien
+    List<LogEnregistrement> logs = repository.findAllByOrderByCreatedAtDesc();
 
-        logs.stream().filter(logEnregistrement -> logEnregistrement.getCreatedAt().getDayOfMonth() <= LocalDate.now().getDayOfMonth() &&
-                                                    logEnregistrement.getCreatedAt().getMonthValue() <= LocalDate.now().getMonthValue() &&
-                                                    logEnregistrement.getCreatedAt().getYear() <= LocalDate.now().getYear())
-                .forEach(logEnregistrement -> {
-                    repository.delete(logEnregistrement);
-                });
-    }
+    // On utilise un stream en filtrant ceux dont la date de création est inférieure à la date du jour moins un mois
+    logs.stream().filter(logEnregistrement -> logEnregistrement.getCreatedAt().toLocalDate().isBefore(LocalDate.now().minusMonths(1)))
+            .forEach(logEnregistrement -> {
+              // Chaque log restant sera supprimé. Ce qui fait qu'on ne garde que les logs datant de moins d'un mois.
+              repository.delete(logEnregistrement);
+            });
+  }
 }

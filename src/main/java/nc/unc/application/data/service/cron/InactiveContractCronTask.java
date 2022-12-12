@@ -67,11 +67,14 @@ public class InactiveContractCronTask {
       }
     }
 
+    //Recuperation de la liste des entreprises.
     List<Entreprise> entreprises = entrepriseRepository.findAll();
 
     entreprises.stream()
+            // Pour chaque entreprise on verifie que tout ses tuteurs soient inactifs.
             .filter(entreprise -> entreprise.getTuteurs().stream().filter(tuteur -> false).count() ==
                     entreprise.getTuteurs().size())
+            // Pour ces entreprises on mets leurs statut a jours en INACTIF.
             .forEach(entreprise ->
                     entrepriseRepository.updateStatusOfCompany(entreprise.getId(),StatutActifAutres.INACTIF.getEnumStringify(),LocalDateTime.now()));
 

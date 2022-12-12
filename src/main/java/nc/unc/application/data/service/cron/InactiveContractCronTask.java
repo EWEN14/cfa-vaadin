@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Transactional
@@ -31,6 +32,9 @@ public class InactiveContractCronTask {
 
   @Autowired
   private TuteurRepository tuteurRepository;
+
+  @Autowired
+  private EntrepriseRepository entrepriseRepository;
 
   @Scheduled(fixedRate = 5000)
   public void miseAjourStatutActif() {
@@ -63,6 +67,14 @@ public class InactiveContractCronTask {
       }
     }
 
-    // TODO : Ajouter la mise a jours du status des entreprises.
+    List<Entreprise> entreprises = entrepriseRepository.findAll();
+
+    entreprises.stream()
+            .filter(entreprise -> entreprise.getTuteurs().stream().filter(tuteur -> false).count() ==
+                    entreprise.getTuteurs().size())
+            .forEach(entreprise ->
+                    entrepriseRepository.updateStatusOfCompany(entreprise.getId(),StatutActifAutres.INACTIF.getEnumStringify(),LocalDateTime.now()));
+
   }
+
 }

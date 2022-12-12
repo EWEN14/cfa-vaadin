@@ -27,6 +27,6 @@ public interface EntrepriseRepository extends JpaRepository<Entreprise, Long> {
   Entreprise findByNumeroRidet(String numeroRidet);
 
   @Modifying(clearAutomatically = true)
-  @Query("update Entreprise e set e.statutActif = :enumStringiy, c.updatedAt = :now where c.id = :id")
-  void updateStatusOfCompany(Long id, String enumStringify, LocalDateTime now);
+  @Query("update Entreprise e set e.statutActifEntreprise = :choix, e.updatedAt = :now where e.id = :id")
+  void updateStatusOfCompany(Long id, String choix, LocalDateTime now);
 }

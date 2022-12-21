@@ -23,4 +23,4 @@ webpack.generated.js
 src/main/resources/application.properties
 
 # Logs
-/logs/
+logs/*

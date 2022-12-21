@@ -29,5 +29,5 @@ public class NumConventionFormation {
   // Numéro de la convention
   @Range(message = "Le numéro de la convention doit être entre 1 et 1000", min = 1, max = 1000)
   @Column(name = "numero_convention", nullable = false)
-  private int nomTuteur;
+  private int numeroConvention;
 }

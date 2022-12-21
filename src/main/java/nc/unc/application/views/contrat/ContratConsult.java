@@ -42,10 +42,10 @@ public class ContratConsult extends Dialog {
 
   // Layout qui contiendra les liens vers la prévisualisation et le téléchargement d'un contrat
   private HorizontalLayout lienContainer = new HorizontalLayout();
-  private Anchor lienPreview = new Anchor("unc.nc", "Consulter le contrat");
-  private Anchor lienDownloadPdf = new Anchor("unc.nc", "Télécharger le contrat");
-  private Anchor lienConsultConvention = new Anchor("unc.nc", "Consulter la convention");
-  private Anchor lienDownloadConvention = new Anchor("unc.nc", "Télécharger la convention");
+  private Anchor lienPreview = new Anchor("unc.nc", "Consulter le contrat \uD83D\uDD0E");
+  private Anchor lienDownloadPdf = new Anchor("unc.nc", "Télécharger le contrat \uD83D\uDCC4");
+  private Anchor lienConsultConvention = new Anchor("unc.nc", "Consulter la convention \uD83D\uDD0E");
+  private Anchor lienDownloadConvention = new Anchor("unc.nc", "Télécharger la convention \uD83D\uDCC4");
 
   // form qui contiendra les informations générales relatives au contrat
   private final FormLayout form = new FormLayout();
@@ -59,6 +59,8 @@ public class ContratConsult extends Dialog {
   private final IntegerField dureePeriodeEssai = new IntegerField("Durée de la période d'essai (nombre de semaines)");
   private final TextField numeroConventionFormation = new TextField("Numéro de la convention de Formation");
   private final TextField primeAvantageNature = new TextField("Prime ou Avantage(s) en nature");
+  private final IntegerField salaireNegocie = new IntegerField("Salaire Négocié (si négocié, vide sinon)");
+  private final TextArea missionsAlternant = new TextArea("Missions Confiées");
   private final Div decua = new Div(new H4("DECUA"));
   private final DatePicker dateReceptionDecua = new DatePicker("Date de réception du DECUA");
   private final DatePicker dateEnvoiRpDecua = new DatePicker("Date d'envoi au référent pédagogique du DECUA pour validation");
@@ -216,7 +218,7 @@ public class ContratConsult extends Dialog {
 
     // ajout des éléments au formulaire principal
     form.add(infosContrat, new Div(), debutContrat, finContrat, typeContrat, dureePeriodeEssai, numeroConventionFormation, primeAvantageNature,
-            decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua,
+            salaireNegocie, missionsAlternant, decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua,
             dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(), dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(),
             dateReceptionOriginauxConvention, new Div(), remiseExemplaireConv, new Div(),
             convOriginaleRemisEtudiant, convOriginaleRemisTuteur, convOriginaleRemisEmployeur, new Div(),
@@ -388,6 +390,8 @@ public class ContratConsult extends Dialog {
     dureePeriodeEssai.setReadOnly(true);
     numeroConventionFormation.setReadOnly(true);
     primeAvantageNature.setReadOnly(true);
+    salaireNegocie.setReadOnly(true);
+    missionsAlternant.setReadOnly(true);
     dateReceptionDecua.setReadOnly(true);
     dateEnvoiRpDecua.setReadOnly(true);
     dateRetourRpDecua.setReadOnly(true);

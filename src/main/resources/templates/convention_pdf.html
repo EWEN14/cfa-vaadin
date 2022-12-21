@@ -12,7 +12,7 @@
 <div class="page" data-th-object="${contrat}">
     <img class="unccfa" src="images/unc-cfa.png" alt="logo cfa"/>
 
-    <h1>CONVENTION N°CFA__-__<br/>RELATIVE<br/>A LA MISE EN ŒUVRE D'UN<br/>CONTRAT UNIQUE D'ALTERNANCE</h1>
+    <h1>CONVENTION N°CFA<span data-th-text="*{ numeroConventionFormation }"></span><br/>RELATIVE<br/>A LA MISE EN ŒUVRE D'UN<br/>CONTRAT UNIQUE D'ALTERNANCE</h1>
     <div class="objet">
         <h2><span class="puce">I.</span>OBJET DE LA CONVENTION</h2>
         <p>La présente convention conclue conformément aux dispositions de l'article LP.522-6 a pour objet de définir
@@ -152,7 +152,7 @@
 
     <b>Les missions confiées au salarié en entreprise consisteront notamment à : </b>
 
-    <div class="missions"></div>
+    <div class="missions" data-th-text="*{missionsAlternant}"></div>
 
     <h2><span class="puce">V.</span>REMUNERATION (Arrêté n°2018-3193/GNC du 26 décembre 2018)</h2>
 

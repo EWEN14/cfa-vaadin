@@ -81,6 +81,8 @@ public class ContratNewOrEdit extends Dialog {
   TextField numeroConventionFormation = new TextField("Numéro de la convention de Formation");
   DatePicker dateConventionFormation = new DatePicker("Date de la convention");
   TextField primeAvantageNature = new TextField("Prime ou Avantage(s) en nature");
+  IntegerField salaireNegocie = new IntegerField("Salaire Négocié (si négocié, vide sinon)");
+  TextArea missionsAlternant = new TextArea("Missions Confiées");
   Select<String> statutActif = new Select<>();
 
   Div decua = new Div(new H4("DECUA"));
@@ -203,7 +205,7 @@ public class ContratNewOrEdit extends Dialog {
 
     form.add(etudiant, formation, entreprise, layoutTuteur,
             infosContrat, new Div(), debutContrat, finContrat, typeContrat, dureePeriodeEssai, numeroConventionFormation, dateConventionFormation, primeAvantageNature,
-            statutActif, decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua, dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(),
+            salaireNegocie, statutActif, missionsAlternant, decua, new Div(), dateReceptionDecua, dateEnvoiRpDecua, dateRetourRpDecua, new Div(), retourCuaEtConvention, new Div(),
             dateEnvoiEmailCuaConvention, dateDepotAlfrescoCuaConvSigne, convention, new Div(), dateReceptionOriginauxConvention, new Div(),
             remiseExemplaireConv, new Div(), convOriginaleRemisEtudiant, convOriginaleRemisTuteur, convOriginaleRemisEmployeur,
             new Div(), lea, new Div(), formationLea);

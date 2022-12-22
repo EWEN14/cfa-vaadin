@@ -246,8 +246,14 @@ public class ContratNewOrEdit extends Dialog {
     save.addClickListener(event -> validateAndSave());
     close.addClickListener(event -> fireEvent(new ContratNewOrEdit.CloseEvent(this)));
 
-    //Evènement sur le click sur le bouton ajouter un tuteur
-    addTuteurButton.addClickListener(click -> contratView.addTuteur());
+    // Évènement sur le click sur le bouton ajouter un tuteur
+    addTuteurButton.addClickListener(click -> {
+      // on fait un draft (brouillon) qui nous permettra de pré-remplir les champs
+      // déjà remplis au retour sur la modale de création du contrat
+      binder.writeBeanAsDraft(contrat);
+      // On lance l'événement qui va ouvrir la modale de création d'un tuteur
+      fireEvent(new ContratNewOrEdit.GetContratInEditionEvent(this, contrat));
+    });
 
     // met le bouton de sauvegarde actif que si le binder est valide
     binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()
@@ -473,6 +479,12 @@ public class ContratNewOrEdit extends Dialog {
   public static class CloseEvent extends ContratNewOrEdit.ContratFormEvent {
     CloseEvent(ContratNewOrEdit source) {
       super(source, null, null);
+    }
+  }
+
+  public static class GetContratInEditionEvent extends ContratNewOrEdit.ContratFormEvent {
+    GetContratInEditionEvent(ContratNewOrEdit source, Contrat contrat) {
+      super(source, contrat, null);
     }
   }
 

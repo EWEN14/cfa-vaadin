@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
 
+import java.util.Objects;
+
 import static nc.unc.application.utils.Utils.frenchDateFormater;
 
 @Component // utilisé pour les tests
@@ -53,6 +55,9 @@ public class ContratView extends VerticalLayout {
   TuteurService tuteurService;
   LogEnregistrmentService logEnregistrmentService;
 
+  // Représente un éventuel contrat en cours d'édition (formation existante ou brouillon)
+  Contrat contratEnEdition = new Contrat();
+
   public ContratView(ContratService contratService, EtudiantService etudiantService, FormationService formationService,
                      EntrepriseService entrepriseService, TuteurService tuteurService, LogEnregistrmentService logEnregistrmentService) {
 
@@ -79,6 +84,7 @@ public class ContratView extends VerticalLayout {
             etudiantService.findAllEtudiants(""), tuteurService.findAllTuteurs(""), contratService);
     modalNewOrEdit.addListener(ContratNewOrEdit.SaveEvent.class, this::saveContrat);
     modalNewOrEdit.addListener(ContratNewOrEdit.SaveEditedEvent.class, this::saveEditedContrat);
+    modalNewOrEdit.addListener(ContratNewOrEdit.GetContratInEditionEvent.class, this::addTuteur);
     modalNewOrEdit.addListener(ContratNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
 
     confirmDelete = new ConfirmDelete("ce contrat");
@@ -278,24 +284,23 @@ public class ContratView extends VerticalLayout {
     grid.setItems(contratService.findAllContrats(filterText.getValue()));
   }
 
-  // sauvegarde du tuteur en utilisant TuteurService (nouveau)
+  // sauvegarde du tuteur ajouté "à la volée"
   private void saveTuteur(TuteurNewOrEdit.SaveEvent event) {
     // utilisation du getTuteur de la classe mère TuteurFormEvent pour récupérer le tuteur
     Tuteur tuteur = event.getTuteur();
     // mise en majuscule du nom et définition du sexe avant sauvegarde
     setSexeTuteur(tuteur);
-    // sauvegarde de l'étudiant
+    // sauvegarde du tuteur
     tuteurService.saveTuteur(tuteur);
 
     // ajout du log d'ajout
     logEnregistrmentService.saveLogAjoutString(tuteur.toString());
 
-    //fermeture du formulaire et notification
-    closeNewOrEditModalTuteur();
-
-    //Recharger la liste des tuteurs dans la modale d'edit d'un contrat pour récupérer le tuteur crée dans la vue contrat
+    // Rechargement de la liste des tuteurs dans la modale d'edit du contrat pour pouvoir voir le tuteur ajouté
     modalNewOrEdit.modifyTuteurs(tuteurService.findAllTuteurs(""));
 
+    // fermeture du formulaire et notification
+    closeNewOrEditModalTuteur();
     Notification.show(tuteur.getPrenomTuteur() + " " + tuteur.getNomTuteur() + " créé(e)");
   }
 
@@ -317,7 +322,7 @@ public class ContratView extends VerticalLayout {
     }
   }
 
-  // sauvegarde du tuteur modifié en utilisant TuteurService
+  // Sauvegarde du tuteur modifié en utilisant TuteurService
   private void saveEditedTuteur(TuteurNewOrEdit.SaveEditedEvent event) {
     // utilisation du getTuteur de la classe mère TuteurFormEvent pour récupérer le tuteur
     Tuteur tuteur = event.getTuteur();
@@ -341,10 +346,18 @@ public class ContratView extends VerticalLayout {
   private void closeNewOrEditModalTuteur() {
     tuteurModal.setTuteur(null);
     tuteurModal.close();
+
+    // Si le contrat à partir duquel on a créé le tuteur est déjà existant (édition ou brouillon),
+    // on le passe en paramètre, sinon on repart d'un nouveau contrat.
+    editContratModal(Objects.requireNonNullElseGet(this.contratEnEdition, Contrat::new));
   }
 
-  public void addTuteur() {
+  public void addTuteur(ContratNewOrEdit.GetContratInEditionEvent event) {
+    // on récupère les informations qui avaient été remplis dans le formulaire de contrat
+    this.contratEnEdition = event.getContrat();
+    // on ferme la modale de création/édition d'un contrat
     closeNewOrEditModal();
+    // on ouvre la modale de création d'un tuteur
     editTuteurModal(new Tuteur());
   }
 

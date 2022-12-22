@@ -5,6 +5,7 @@ import nc.unc.application.data.entity.Contrat;
 import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.entity.Tuteur;
 import nc.unc.application.data.enums.StatutActifAutres;
+import nc.unc.application.data.enums.StatutActifEntreprise;
 import nc.unc.application.data.repository.ContratRepository;
 import nc.unc.application.data.repository.EntrepriseRepository;
 import nc.unc.application.data.repository.EtudiantRepository;
@@ -67,16 +68,18 @@ public class InactiveContractCronTask {
       }
     }
 
-    //Recuperation de la liste des entreprises.
-    List<Entreprise> entreprises = entrepriseRepository.findAll();
+    // Récupération de la liste des entreprises.
+    List<Entreprise> entreprises = entrepriseRepository.findAllByStatutActifEntreprise(StatutActifEntreprise.ENTREPRISE_ACTIVE.getEnumStringify());
 
     entreprises.stream()
-            // Pour chaque entreprise on verifie que tout ses tuteurs soient inactifs.
+            // Pour chaque entreprise on vérifie que tous ses tuteurs soient inactifs.
             .filter(entreprise -> entreprise.getTuteurs().stream().filter(tuteur -> false).count() ==
                     entreprise.getTuteurs().size())
-            // Pour ces entreprises on mets leurs statut a jours en INACTIF.
-            .forEach(entreprise ->
-                    entrepriseRepository.updateStatusOfCompany(entreprise.getId(),StatutActifAutres.INACTIF.getEnumStringify(),LocalDateTime.now()));
+            // Pour ces entreprises on met leur statut à jour en INACTIF.
+            .forEach(entreprise -> {
+              entrepriseRepository.updateStatusOfCompany(entreprise.getId(), StatutActifEntreprise.ANCIENNE_ENTREPRISE.getEnumStringify(), LocalDateTime.now());
+              log.info("Mise a jour du statut (ENTREPRISE_ACTIVE -> ANCIENNE_ENTREPRISE) de l'entreprise {}", entreprise.getId());
+            });
 
   }
 

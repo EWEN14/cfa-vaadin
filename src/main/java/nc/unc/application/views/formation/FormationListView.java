@@ -47,6 +47,7 @@ public class FormationListView extends VerticalLayout {
   VirtualList<Formation> cardsFormations = new VirtualList<>();
   Button addFormationButton = new Button("Nouvelle Formation");
 
+  // Représente une éventuelle formation en cours d'édition (formation existante ou brouillon)
   Formation formationEnEdition = new Formation();
 
   // Composant qui définit l'aspect de chaque "carte" qui présente une formation

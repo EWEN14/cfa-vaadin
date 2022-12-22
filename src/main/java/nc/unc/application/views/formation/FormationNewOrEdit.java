@@ -199,6 +199,7 @@ public class FormationNewOrEdit extends Dialog {
     }
   }
 
+  // Event qui se déclenche au clic sur l'ajout d'un tuteur à la volée
   public static class GetFormationInEditionEvent extends FormationNewOrEdit.FormationFormEvent {
     GetFormationInEditionEvent(FormationNewOrEdit source, Formation formation) {
       super(source, formation, null);

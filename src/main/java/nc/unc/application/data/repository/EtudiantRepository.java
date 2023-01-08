@@ -25,7 +25,7 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
 
   List<Etudiant> findAllByEntrepriseIdOrderByNomEtudiantAscAnneePromotionDesc(Long id);
 
-  List<Etudiant> findAllByOrderByNomEtudiantAscAnneePromotionDesc();
+  List<Etudiant> findAllByOrderByAnneePromotionDescNomEtudiantAsc();
 
   List<Etudiant> findAllBySituationEntrepriseOrderByNomEtudiantAscAnneePromotionDesc(String situationEntreprise);
 

@@ -32,6 +32,7 @@ public class EtudiantNewOrEdit extends Dialog {
 
   H3 titre = new H3();
 
+  // TODO : ajouter statutEtudiant
   FormLayout form = new FormLayout();
   TextField nomEtudiant = new TextField("NOM");
   TextField nomJeuneFille = new TextField("NOM de jeune fille");

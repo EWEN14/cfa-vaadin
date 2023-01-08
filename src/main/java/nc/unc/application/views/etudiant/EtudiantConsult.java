@@ -47,6 +47,7 @@ public class EtudiantConsult extends Dialog {
 
   private final H3 titre = new H3("Consultation d'un étudiant");
 
+  // TODO : ajouter statutEtudiant
   // form qui contiendra les informations générales relatives à l'étudiants
   private final FormLayout formEtudiantInfos = new FormLayout();
   private final TextField nomEtudiant = new TextField("NOM");

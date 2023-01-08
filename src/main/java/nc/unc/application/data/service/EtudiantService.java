@@ -20,7 +20,7 @@ public class EtudiantService {
 
   public List<Etudiant> findAllEtudiants(String stringFilter) {
     if (stringFilter == null || stringFilter.isEmpty()) {
-      return etudiantRepository.findAllByOrderByNomEtudiantAscAnneePromotionDesc();
+      return etudiantRepository.findAllByOrderByAnneePromotionDescNomEtudiantAsc();
     } else {
       return etudiantRepository.search(stringFilter);
     }

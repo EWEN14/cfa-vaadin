@@ -109,6 +109,8 @@ public class EtudiantView extends VerticalLayout {
     grid.addColumn(Etudiant::getAnneePromotion).setHeader("Année de promotion").setSortable(true);
     grid.addColumn(Etudiant::getTelephoneEtudiant1).setHeader("Téléphone");
     grid.addColumn(Etudiant::getSituationUnc).setHeader("Situation à l'UNC").setSortable(true);
+    grid.addColumn(Etudiant::getSituationEntreprise).setHeader("Situation en entreprise").setSortable(true);
+    grid.addColumn(etudiant -> (etudiant.getSuivreEtudiant() != null && etudiant.getSuivreEtudiant()) ? "Oui" : "").setHeader("À suivre");
     // ajout du bouton de consultation d'un étudiant
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultEtudiant(etudiant);

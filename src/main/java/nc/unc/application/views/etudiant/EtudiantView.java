@@ -164,7 +164,7 @@ public class EtudiantView extends VerticalLayout {
     Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " créé(e).");
 
     //Rafraichir la page d'accueil
-    this.homeView.afficherChiffresFormation();
+    this.homeView.afficherChiffresFormation(2023);
   }
 
   // sauvegarde de l'étudiant modifié en utilisant EtudiantService
@@ -187,7 +187,7 @@ public class EtudiantView extends VerticalLayout {
     Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " modifié(e)");
 
     //Rafraichir la page d'accueil
-    this.homeView.afficherChiffresFormation();
+    this.homeView.afficherChiffresFormation(2023);
   }
 
   private void transfertEtudiantFromEventToDelete(EtudiantConsult.DeleteEvent event) {
@@ -201,7 +201,7 @@ public class EtudiantView extends VerticalLayout {
       etudiantService.deleteEtudiant(etudiantToDelete);
 
       //Rafraichir la page d'accueil
-      this.homeView.afficherChiffresFormation();
+      this.homeView.afficherChiffresFormation(2023);
 
       // ajout du log de suppression
       logEnregistrmentService.saveLogDeleteString(etudiantToDelete.toString());

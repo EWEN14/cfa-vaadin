@@ -27,6 +27,8 @@ public interface TuteurRepository extends JpaRepository<Tuteur, UUID> {
 
     List<Tuteur> findAllByTuteurHabilitationsIsNullOrderByNomTuteur();
 
+    List<Tuteur> findAllByStatutActifAndTuteurHabilitationsIsNullOrderByNomTuteur(String statut);
+
     List<Tuteur> findAllByStatutActif(String statutActif);
 
     @Modifying(clearAutomatically = true)

@@ -109,6 +109,8 @@ public class EtudiantView extends VerticalLayout {
     grid.addColumn(Etudiant::getAnneePromotion).setHeader("Année de promotion").setSortable(true);
     grid.addColumn(Etudiant::getTelephoneEtudiant1).setHeader("Téléphone");
     grid.addColumn(Etudiant::getSituationUnc).setHeader("Situation à l'UNC").setSortable(true);
+    grid.addColumn(Etudiant::getSituationEntreprise).setHeader("Situation en entreprise").setSortable(true);
+    grid.addColumn(etudiant -> (etudiant.getSuivreEtudiant() != null && etudiant.getSuivreEtudiant()) ? "Oui" : "").setHeader("À suivre");
     // ajout du bouton de consultation d'un étudiant
     grid.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
       consultEtudiant(etudiant);
@@ -162,7 +164,7 @@ public class EtudiantView extends VerticalLayout {
     Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " créé(e).");
 
     //Rafraichir la page d'accueil
-    this.homeView.afficherChiffresFormation();
+    this.homeView.afficherChiffresFormation(2023);
   }
 
   // sauvegarde de l'étudiant modifié en utilisant EtudiantService
@@ -185,7 +187,7 @@ public class EtudiantView extends VerticalLayout {
     Notification.show(etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() + " modifié(e)");
 
     //Rafraichir la page d'accueil
-    this.homeView.afficherChiffresFormation();
+    this.homeView.afficherChiffresFormation(2023);
   }
 
   private void transfertEtudiantFromEventToDelete(EtudiantConsult.DeleteEvent event) {
@@ -199,7 +201,7 @@ public class EtudiantView extends VerticalLayout {
       etudiantService.deleteEtudiant(etudiantToDelete);
 
       //Rafraichir la page d'accueil
-      this.homeView.afficherChiffresFormation();
+      this.homeView.afficherChiffresFormation(2023);
 
       // ajout du log de suppression
       logEnregistrmentService.saveLogDeleteString(etudiantToDelete.toString());

@@ -4,6 +4,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -32,6 +33,7 @@ public class EntretienIndividuelNewOrEdit extends Dialog {
   private final FormLayout formEntretien = new FormLayout();
   private final TextArea observations_entretien_individuel = new TextArea("Observations");
   private final DatePicker date = new DatePicker("Date");
+  private final Checkbox suivreEtudiant = new Checkbox("Suivre l'étudiant ?");
   ComboBox<Etudiant> etudiant = new ComboBox<>("Etudiant concerné par l'entretien");
   ComboBox<ReferentCfa> referentCfa = new ComboBox<>("Référent CFA concerné par l'entretien");
   // binder qui sera utilisé pour remplir automatiquement les champs d'infos générales de l'entretien individuel
@@ -64,7 +66,7 @@ public class EntretienIndividuelNewOrEdit extends Dialog {
     referentCfa.setClearButtonVisible(true);
 
     // ajout des champs et des boutons d'action dans le formulaire
-    formEntretien.add(date, etudiant, referentCfa, observations_entretien_individuel, createButtonsLayout());
+    formEntretien.add(date, etudiant, referentCfa, observations_entretien_individuel, suivreEtudiant, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(titre, formEntretien);

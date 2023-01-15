@@ -1,5 +1,6 @@
 package nc.unc.application.views.entreprise;
 
+import com.vaadin.flow.component.BlurNotifier;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
@@ -8,6 +9,8 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -17,10 +20,12 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.shared.Registration;
 import nc.unc.application.data.entity.Entreprise;
 import nc.unc.application.data.enums.Commune;
 import nc.unc.application.data.enums.StatutActifEntreprise;
+import nc.unc.application.data.service.EntrepriseService;
 
 public class EntrepriseNewOrEdit extends Dialog {
 
@@ -64,9 +69,13 @@ public class EntrepriseNewOrEdit extends Dialog {
   Button save = new com.vaadin.flow.component.button.Button("Sauvegarder");
   Button close = new Button("Fermer");
 
-  public EntrepriseNewOrEdit() {
+  EntrepriseService entrepriseService;
+
+  public EntrepriseNewOrEdit(EntrepriseService entrepriseService) {
     this.setWidth("85vw");
     this.setHeight("90vh");
+
+    this.entrepriseService = entrepriseService;
 
     // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)
@@ -83,10 +92,13 @@ public class EntrepriseNewOrEdit extends Dialog {
     // regex pour le ridet:
     numeroRidet.setHelperText("ex: 0 000 000.000");
     numeroRidet.setPattern("\\d\\s\\d{3}\\s\\d{3}\\.\\d{3}$");
+    numeroRidet.setValueChangeMode(ValueChangeMode.ON_BLUR);
+    numeroRidet.addBlurListener(change ->
+      checkExistingRidet());
 
     codeNaf.setHelperText("ex: 12.3 ou 12.34 ou 12.34Z");
 
-    form.add(statutActifEntreprise, enseigne, raisonSociale, numeroRidet, formeJuridique, numeroCafatEntreprise, nombreSalarie, codeNaf, activiteEntreprise,
+    form.add(numeroRidet, statutActifEntreprise, enseigne, raisonSociale, formeJuridique, numeroCafatEntreprise, nombreSalarie, codeNaf, activiteEntreprise,
             conventionCollective, prenomRepresentantEmployeur, nomRepresentantEmployeur, fonctionRepresentantEmployeur,
             telephoneEntreprise, emailEntreprise, prenomContactCfa, nomContactCfa, fonctionContactCfa, telephoneContactCfa,
             emailContactCfa, adressePhysiqueCommune, adressePhysiqueCodePostal, adressePhysiqueRue, adressePostaleCommune,
@@ -141,6 +153,17 @@ public class EntrepriseNewOrEdit extends Dialog {
       }
     } catch (ValidationException e) {
       e.printStackTrace();
+    }
+  }
+
+  // fonction qui vérifie que le ridet entrée n'est pas déjà existant dans le cas d'une création d'entreprise
+  private void checkExistingRidet() {
+    if (this.entreprise.getId() == null) {
+      if (this.entrepriseService.findEntrepriseWithRidet(numeroRidet.getValue())) {
+        Notification notification = Notification
+                .show("Une entreprise avec ce numéro de ridet existe déjà!", 10000, Notification.Position.TOP_END);
+        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+      };
     }
   }
 

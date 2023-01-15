@@ -1,6 +1,8 @@
 package nc.unc.application.data.repository;
 
 import nc.unc.application.data.entity.Etudiant;
+import nc.unc.application.data.enums.StatutActifAutres;
+import nc.unc.application.data.enums.StatutActifEntreprise;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,11 +27,15 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
 
   List<Etudiant> findAllByEntrepriseIdOrderByNomEtudiantAscAnneePromotionDesc(Long id);
 
-  List<Etudiant> findAllByOrderByNomEtudiantAscAnneePromotionDesc();
+  List<Etudiant> findAllByOrderByAnneePromotionDescNomEtudiantAsc();
 
   List<Etudiant> findAllBySituationEntrepriseOrderByNomEtudiantAscAnneePromotionDesc(String situationEntreprise);
 
   List<Etudiant> findAllByEntrepriseIsNullOrderByNomEtudiantAscAnneePromotionDesc();
+
+  List<Etudiant> findAllByStatutActifAndEntrepriseIsNullOrderByNomEtudiantAscAnneePromotionDesc(String statut);
+
+  List<Etudiant> findAllBySuivreEtudiantTrueAndStatutActif(String statut);
 
   @Query("select e from Etudiant e, Contrat c where c.id = :id")
   List<Etudiant> findAllEtudiantByContract(Long id);

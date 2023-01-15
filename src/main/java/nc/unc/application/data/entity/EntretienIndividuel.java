@@ -27,6 +27,9 @@ public class EntretienIndividuel implements Cloneable{
   @Column(name = "observations", length = 15000)
   private String observations_entretien_individuel;
 
+  @Column(name = "suivre_etudiant")
+  private Boolean suivreEtudiant;
+
   @CreationTimestamp
   @Column(name = "created_at")
   private LocalDateTime created_at;
@@ -49,5 +52,19 @@ public class EntretienIndividuel implements Cloneable{
 
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
+  }
+
+  @Override
+  public String toString() {
+    return "EntretienIndividuel{" +
+            "\n id=" + id +
+            ",\n date=" + date +
+            ",\n observations_entretien_individuel='" + observations_entretien_individuel + '\'' +
+            ",\n statutEtudiant=" + suivreEtudiant +
+            ",\n created_at=" + created_at +
+            ",\n updated_at=" + updated_at +
+            ",\n etudiant=" + etudiant.getPrenomEtudiant() + " " + etudiant.getNomEtudiant() +
+            ",\n referentCfa=" + referentCfa.getPrenomReferentCfa() + " " + referentCfa.getNomReferentCfa() +
+            '}';
   }
 }

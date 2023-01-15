@@ -53,6 +53,7 @@ public class EntretienIndividuelConsult extends Dialog {
   private final DatePicker date = new DatePicker();
   ComboBox<Etudiant> etudiant = new ComboBox<>("Etudiant concerné par l'entretien");
   ComboBox<ReferentCfa> referentCfa = new ComboBox<>("Référent CFA concerné par l'entretien");
+  private final Checkbox suivreEtudiant = new Checkbox("Suivre étudiant");
   private final DatePicker dateCreation = new DatePicker("Date de création");
   private final DatePicker dateModification = new DatePicker("Date de mise à jour");
   // binder qui sera utilisé pour remplir automatiquement les champs d'infos générales de l'entretien individuel
@@ -158,7 +159,7 @@ public class EntretienIndividuelConsult extends Dialog {
 
 
     //Le formulaire concernant l'entretien
-    formEntretien.add(date, etudiant, referentCfa, observations_entretien_individuel, dateCreation, dateModification);
+    formEntretien.add(date, etudiant, referentCfa, observations_entretien_individuel, suivreEtudiant, dateCreation, dateModification);
 
     //Le formulaire du référent CFA
     formReferentCFAInfos.add(nomReferentCfa, prenomReferentCfa, emailReferentCfa, civiliteReferentCfa, telephoneReferentCfa);
@@ -225,6 +226,7 @@ public class EntretienIndividuelConsult extends Dialog {
     observations_entretien_individuel.setReadOnly(true);
     etudiant.setReadOnly(true);
     referentCfa.setReadOnly(true);
+    suivreEtudiant.setReadOnly(true);
     dateCreation.setReadOnly(true);
     dateModification.setReadOnly(true);
 

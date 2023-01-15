@@ -65,4 +65,17 @@ public class EntretienCollectif implements Cloneable{
   public int hashCode() {
     return Objects.hash(id, date, observations_entretien_collectif, created_at, updated_at, formation, referentCfa);
   }
+
+  @Override
+  public String toString() {
+    return "EntretienCollectif{" +
+            "\n id=" + id +
+            "\n date=" + date +
+            "\n observations_entretien_collectif='" + observations_entretien_collectif + '\'' +
+            "\n created_at=" + created_at +
+            "\n updated_at=" + updated_at +
+            "\n formation=" + formation.getLibelleFormation() +
+            "\n referentCfa=" + referentCfa.getPrenomReferentCfa() + " " + referentCfa.getNomReferentCfa() +
+            '}';
+  }
 }

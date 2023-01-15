@@ -82,6 +82,6 @@ public class TuteurService {
     }
 
     public List<Tuteur> findAllTuteursSansHabilitations(){
-        return tuteurRepository.findAllByTuteurHabilitationsIsNullOrderByNomTuteur();
+        return tuteurRepository.findAllByStatutActifAndTuteurHabilitationsIsNullOrderByNomTuteur(StatutActifAutres.ACTIF.getEnumStringify());
     }
 }

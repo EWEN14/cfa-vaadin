@@ -99,6 +99,7 @@ public class EntretienIndividuelView extends VerticalLayout {
         grid.addColumn(entretienIndividuel -> entretienIndividuel.getDate() != null ? frenchDateFormater(entretienIndividuel.getDate()) : "").setHeader("Date de l'Entretien").setSortable(true);
         grid.addColumn(entretienIndividuel -> entretienIndividuel.getEtudiant().getNomEtudiant() + ' ' + entretienIndividuel.getEtudiant().getPrenomEtudiant()).setHeader("Etudiant");
         grid.addColumn(entretienIndividuel -> entretienIndividuel.getReferentCfa().getNomReferentCfa() + ' ' + entretienIndividuel.getReferentCfa().getPrenomReferentCfa()).setHeader("Référent CFA");
+        grid.addColumn(entretienIndividuel -> (entretienIndividuel.getSuivreEtudiant() != null && entretienIndividuel.getSuivreEtudiant()) ? "Oui" : "").setHeader("À suivre");
         // bouton consultation entretien
         grid.addComponentColumn(entretienIndividuel -> new Button(new Icon(VaadinIcon.EYE), click -> {
             consultEntretien(entretienIndividuel);

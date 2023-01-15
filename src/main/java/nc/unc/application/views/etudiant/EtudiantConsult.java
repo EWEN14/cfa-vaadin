@@ -47,6 +47,7 @@ public class EtudiantConsult extends Dialog {
 
   private final H3 titre = new H3("Consultation d'un étudiant");
 
+  // TODO : ajouter statutEtudiant
   // form qui contiendra les informations générales relatives à l'étudiants
   private final FormLayout formEtudiantInfos = new FormLayout();
   private final TextField nomEtudiant = new TextField("NOM");
@@ -86,6 +87,7 @@ public class EtudiantConsult extends Dialog {
   private final DatePicker dateCreation = new DatePicker("Date de création");
   private final DatePicker DateUpdate = new DatePicker("Date de modification");
   private final TextArea observationsEtudiant = new TextArea("Observations");
+  private final Checkbox suivreEtudiant = new Checkbox("Étudiant suivi");
   // binder qui sera utilisé pour remplir automatiquement les champs d'infos générales sur l'étudiant
   Binder<Etudiant> etudiantBinder = new BeanValidationBinder<>(Etudiant.class);
 
@@ -185,7 +187,7 @@ public class EtudiantConsult extends Dialog {
             emailEtudiant, dernierDiplomeObtenuOuEnCours, niveauDernierDiplome, anneeObtentionDernierDiplome, admis, situationUnc, situationEntreprise,
             lieuNaissance, nationalite, numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente,
             etablissementDeProvenance, dernierEmploiOccupe, parcours, anneePromotion, travailleurHandicape, veepap, priseEnChargeFraisInscription,
-            obtentionDiplomeMention, nomJeuneFille, statutActif, observationsEtudiant, dateCreation, DateUpdate);
+            obtentionDiplomeMention, nomJeuneFille, statutActif, observationsEtudiant, suivreEtudiant, dateCreation, DateUpdate);
     // pareil, mais pour le formulaire relatif à son entreprise
     formEtudiantEntrepriseInfos.add(enseigne, raisonSociale, statutActifEntreprise, telephoneContactCfa);
 
@@ -300,6 +302,7 @@ public class EtudiantConsult extends Dialog {
     anneePromotion.setReadOnly(true);
     statutActif.setReadOnly(true);
     observationsEtudiant.setReadOnly(true);
+    suivreEtudiant.setReadOnly(true);
     // entreprise
     enseigne.setReadOnly(true);
     raisonSociale.setReadOnly(true);

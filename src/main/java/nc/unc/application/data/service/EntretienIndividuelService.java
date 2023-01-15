@@ -1,7 +1,9 @@
 package nc.unc.application.data.service;
 
 import nc.unc.application.data.entity.EntretienIndividuel;
+import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.repository.EntretienIndividuelRepository;
+import nc.unc.application.data.repository.EtudiantRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,11 +13,20 @@ public class EntretienIndividuelService {
 
   private EntretienIndividuelRepository entretienIndividuelleRepository;
 
-  public EntretienIndividuelService(EntretienIndividuelRepository entretienIndividuelleRepository){
+  private EtudiantRepository etudiantRepository;
+
+  public EntretienIndividuelService(EntretienIndividuelRepository entretienIndividuelleRepository,
+                                    EtudiantRepository etudiantRepository){
     this.entretienIndividuelleRepository = entretienIndividuelleRepository;
+    this.etudiantRepository = etudiantRepository;
   }
 
   public void save(EntretienIndividuel entretienIndividuelle){
+    Etudiant etudiantSuivre = entretienIndividuelle.getEtudiant();
+    // si suivi étudiant coché dans l'entretien on met l'étudiant à suivre, sinon à false
+    etudiantSuivre.setSuivreEtudiant(entretienIndividuelle.getSuivreEtudiant());
+    etudiantRepository.save(etudiantSuivre);
+
     entretienIndividuelleRepository.save(entretienIndividuelle);
   }
 

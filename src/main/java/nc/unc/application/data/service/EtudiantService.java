@@ -2,6 +2,7 @@ package nc.unc.application.data.service;
 
 import nc.unc.application.data.entity.Etudiant;
 import nc.unc.application.data.enums.StatutActifAutres;
+import nc.unc.application.data.enums.StatutActifEntreprise;
 import nc.unc.application.data.repository.EtudiantRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ public class EtudiantService {
 
   public List<Etudiant> findAllEtudiants(String stringFilter) {
     if (stringFilter == null || stringFilter.isEmpty()) {
-      return etudiantRepository.findAllByOrderByNomEtudiantAscAnneePromotionDesc();
+      return etudiantRepository.findAllByOrderByAnneePromotionDescNomEtudiantAsc();
     } else {
       return etudiantRepository.search(stringFilter);
     }
@@ -77,6 +78,11 @@ public class EtudiantService {
    * @return liste d'étudiants, ordonné par leur nom de famille et leur année de promotion
    */
   public List<Etudiant> findAllEtudiantsSansEntreprise(){
-    return etudiantRepository.findAllByEntrepriseIsNullOrderByNomEtudiantAscAnneePromotionDesc();
+    return etudiantRepository.findAllByStatutActifAndEntrepriseIsNullOrderByNomEtudiantAscAnneePromotionDesc(StatutActifAutres.ACTIF.getEnumStringify());
+  }
+
+  public List<Etudiant> findAllEtudiantsEnSuivi() {
+    List<Etudiant> etudiantsSuivre = etudiantRepository.findAllBySuivreEtudiantTrueAndStatutActif(StatutActifAutres.ACTIF.getEnumStringify());
+    return etudiantRepository.findAllBySuivreEtudiantTrueAndStatutActif(StatutActifAutres.ACTIF.getEnumStringify());
   }
 }

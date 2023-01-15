@@ -11,6 +11,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -27,6 +28,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
+import java.time.LocalDate;
 import java.util.*;
 
 @Component // utilisé pour les tests
@@ -38,6 +40,7 @@ import java.util.*;
 public class HomeView extends VerticalLayout {
 
   Grid<Etudiant> gridEtudiantSansFormation = new Grid<>(Etudiant.class, false);
+  Grid<Etudiant> gridEtudiantEnSuivi = new Grid<>(Etudiant.class, false);
   Grid<Tuteur> gridTuteurSansHabilitation = new Grid<>(Tuteur.class, false);
 
   TuteurConsult tuteurConsult;
@@ -55,8 +58,12 @@ public class HomeView extends VerticalLayout {
   FormationService formationService;
   LogEnregistrmentService logEnregistrmentService;
   H3 titreChiffres = new H3("Chiffres importants");
-  H3 titreEtudiantSansEntreprise = new H3("Etudiants sans entreprise");
-  H3 titreTuteurSansHabilitation = new H3("Tuteurs sans habilitations");
+  H3 titreEtudiantSansEntreprise = new H3("Étudiants actifs sans entreprise");
+  H3 titreEtudiantSuivis = new H3("Étudiants actifs en suivi");
+  H3 titreTuteurSansHabilitation = new H3("Tuteurs actifs sans habilitations");
+
+  VerticalLayout formationsChiffres = new VerticalLayout();
+  Select<Integer> selectYear = new Select<>();
 
   public HomeView(FormationService formationService, EntrepriseService entrepriseService, EtudiantService etudiantService, TuteurService tuteurService, LogEnregistrmentService logEnregistrmentService, ContratService contratService) {
     this.formationService = formationService;
@@ -93,44 +100,57 @@ public class HomeView extends VerticalLayout {
     content.setFlexGrow(2, gridEtudiantSansFormation);
     content.addClassNames("content", "gap-m");
     content.setSizeFull();
+    content.setHeight("350px");
 
-    this.setHeight("150vh");
+    gridEtudiantEnSuivi.setHeight("350px");
+    // FlexLayout contentGridEtudiantsSuivi = new FlexLayout(gridEtudiantEnSuivi);
+    // content.setFlexGrow(2, gridEtudiantEnSuivi);
+    // content.addClassNames("content", "gap-m");
+    // content.setSizeFull();
+    // content.setHeight("350px");
+    // content.setWidth();
 
     FlexLayout content1 = new FlexLayout(gridTuteurSansHabilitation);
     content1.setFlexGrow(2, gridTuteurSansHabilitation);
     content1.addClassNames("content", "gap-m");
     content1.setSizeFull();
+    content1.setHeight("350px");
+
+    this.setMinHeight("500vh");
 
     Span entreprises_actives = new Span(createIcon(VaadinIcon.WORKPLACE), new Span("Entreprises actives : " + entrepriseService.CountBystatutActifEntreprise(StatutActifEntreprise.ENTREPRISE_ACTIVE.getEnumStringify())));
     entreprises_actives.getElement().getThemeList().add("badge");
 
-    // Et ne pas à récupérer les anciens étudiants par exemple
-    Calendar calendar = new GregorianCalendar();
-    calendar.setTime(new Date());
-    int annee = calendar.get(Calendar.YEAR);
-    H5 titreEtudiantsFormation = new H5("Etudiants inscrits par formation en " + annee + " :");
+    H5 titreEtudiantsFormation = new H5("Étudiants inscrits par formations :");
 
     HorizontalLayout layout = new HorizontalLayout(entreprises_actives);
 
-    add(titreChiffres, layout, titreEtudiantsFormation);
-    afficherChiffresFormation();
+    selectYear.addValueChangeListener(change -> afficherChiffresFormation(selectYear.getValue()));
 
-    add(titreEtudiantSansEntreprise, content, modalConsult, titreTuteurSansHabilitation, content1, tuteurConsult);
+    add(titreChiffres, layout, titreEtudiantsFormation, selectYear);
+    setItemsSelectAnnee();
+    afficherChiffresFormation(selectYear.getValue());
+    add(formationsChiffres);
+
+    add(titreEtudiantSansEntreprise, content,
+            modalConsult, titreTuteurSansHabilitation, content1, tuteurConsult,
+            titreEtudiantSuivis, gridEtudiantEnSuivi);
     // initialisation des données de la grille à l'ouverture de la vue
     updateList();
   }
 
-  public void afficherChiffresFormation(){
+  public void afficherChiffresFormation(Integer annee){
     Calendar calendar =new GregorianCalendar();
     calendar.setTime(new Date());
-    int annee =calendar.get(Calendar.YEAR);
     List<Formation> formations = formationService.findAllFormations(null);
+    formationsChiffres.removeAll();
+
     for(Formation f: formations){
       List<Etudiant> etudiantsAnneeActuel = new ArrayList<>();
       for(Etudiant e: f.getEtudiants()){
         // System.out.println(f.getEtudiants().size());
         if(e.getAnneePromotion() != null){
-          if(e.getAnneePromotion() == annee){
+          if(Objects.equals(e.getAnneePromotion(), annee)){
             etudiantsAnneeActuel.add(e);
           }
         }
@@ -139,7 +159,7 @@ public class HomeView extends VerticalLayout {
       formation.getElement().getThemeList().add("badge success");
       HorizontalLayout layout1 = new HorizontalLayout();
       layout1.add(formation);
-      add(layout1);
+      formationsChiffres.add(layout1);
     }
   }
   private Icon createIcon(VaadinIcon vaadinIcon) {
@@ -162,6 +182,20 @@ public class HomeView extends VerticalLayout {
     })).setHeader("Consulter");
     // on définit que chaque colonne à une largeur autodéterminée
     gridEtudiantSansFormation.getColumns().forEach(col -> col.setAutoWidth(true));
+
+    gridEtudiantEnSuivi.addClassNames("etudiant-grid-suivi");
+    // ajout des colonnes
+    gridEtudiantEnSuivi.addColumn(etudiant -> etudiant.getNomEtudiant() + " " + etudiant.getPrenomEtudiant()).setHeader("NOM Prénom").setSortable(true);
+    gridEtudiantEnSuivi.addColumn(Etudiant::getAnneePromotion).setHeader("Année de promotion").setSortable(true);
+    gridEtudiantEnSuivi.addColumn(Etudiant::getTelephoneEtudiant1).setHeader("Téléphone");
+    gridEtudiantEnSuivi.addColumn(Etudiant::getSituationUnc).setHeader("Situation à l'UNC").setSortable(true);
+    // ajout du bouton de consultation d'un étudiant
+    gridEtudiantEnSuivi.addComponentColumn(etudiant -> new Button(new Icon(VaadinIcon.EYE), click -> {
+      consultEtudiant(etudiant);
+    })).setHeader("Consulter");
+    // on définit que chaque colonne à une largeur autodéterminée
+    gridEtudiantEnSuivi.getColumns().forEach(col -> col.setAutoWidth(true));
+    gridEtudiantEnSuivi.setHeight("350px");
 
     gridTuteurSansHabilitation.addClassNames("tuteur-grid");
     gridTuteurSansHabilitation.setSizeFull();
@@ -240,6 +274,7 @@ public class HomeView extends VerticalLayout {
     tuteurConsult.setTuteur(null);
     tuteurConsult.close();
     gridEtudiantSansFormation.asSingleSelect().clear();
+    gridEtudiantEnSuivi.asSingleSelect().clear();
   }
 
   // ouverture de modale de consultation d'un étudiant
@@ -252,6 +287,7 @@ public class HomeView extends VerticalLayout {
     modalConsult.setEtudiant(null);
     modalConsult.close();
     gridEtudiantSansFormation.asSingleSelect().clear();
+    gridEtudiantEnSuivi.asSingleSelect().clear();
   }
 
   private void openConfirmDelete() {
@@ -261,16 +297,30 @@ public class HomeView extends VerticalLayout {
   private void closeConfirmDelete() {
     modalConfirmDelete.close();
     gridEtudiantSansFormation.asSingleSelect().clear();
+    gridEtudiantEnSuivi.asSingleSelect().clear();
   }
 
   private void closeConfirmDeleteTuteur() {
     tuteurConfirmDelete.close();
     gridEtudiantSansFormation.asSingleSelect().clear();
+    gridEtudiantEnSuivi.asSingleSelect().clear();
   }
 
-  // fonction qui récupère la liste des étudiants sans entrepise pour les afficher dans la grille (avec les valeurs de recherche)
+  // fonction qui récupère alimente les grilles
   private void updateList() {
     gridEtudiantSansFormation.setItems(etudiantService.findAllEtudiantsSansEntreprise());
+    gridEtudiantEnSuivi.setItems(etudiantService.findAllEtudiantsEnSuivi());
     gridTuteurSansHabilitation.setItems(tuteurService.findAllTuteursSansHabilitations());
+  }
+
+  // set des années dans la sélection des années sur le nombre d'étudiants par formation
+  private void setItemsSelectAnnee() {
+    int currentYear = LocalDate.now().getYear();
+    List<Integer> listeAnnee = new ArrayList<>();
+    for (int i = 0; i < 5; i++) {
+      listeAnnee.add(currentYear - i);
+    }
+    selectYear.setItems(listeAnnee);
+    selectYear.setValue(currentYear);
   }
 }

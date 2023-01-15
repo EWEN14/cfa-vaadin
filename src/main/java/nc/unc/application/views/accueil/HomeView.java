@@ -93,13 +93,15 @@ public class HomeView extends VerticalLayout {
     content.setFlexGrow(2, gridEtudiantSansFormation);
     content.addClassNames("content", "gap-m");
     content.setSizeFull();
+    content.setHeight("350px");
 
-    this.setHeight("150vh");
+    this.setMinHeight("150vh");
 
     FlexLayout content1 = new FlexLayout(gridTuteurSansHabilitation);
     content1.setFlexGrow(2, gridTuteurSansHabilitation);
     content1.addClassNames("content", "gap-m");
     content1.setSizeFull();
+    content1.setHeight("350px");
 
     Span entreprises_actives = new Span(createIcon(VaadinIcon.WORKPLACE), new Span("Entreprises actives : " + entrepriseService.CountBystatutActifEntreprise(StatutActifEntreprise.ENTREPRISE_ACTIVE.getEnumStringify())));
     entreprises_actives.getElement().getThemeList().add("badge");

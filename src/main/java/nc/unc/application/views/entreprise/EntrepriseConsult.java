@@ -143,7 +143,7 @@ public class EntrepriseConsult extends Dialog {
     tabsEntreprise.addSelectedChangeListener(selectedChangeEvent ->
             setContent(selectedChangeEvent.getSelectedTab()));
 
-    form.add(statutActifEntreprise, enseigne, raisonSociale, numeroRidet, formeJuridique, numeroCafatEntreprise, nombreSalarie, codeNaf, activiteEntreprise,
+    form.add(numeroRidet, statutActifEntreprise, enseigne, raisonSociale, formeJuridique, numeroCafatEntreprise, nombreSalarie, codeNaf, activiteEntreprise,
             conventionCollective, prenomRepresentantEmployeur, nomRepresentantEmployeur, fonctionRepresentantEmployeur,
             telephoneEntreprise, emailEntreprise, prenomContactCfa, nomContactCfa, fonctionContactCfa, telephoneContactCfa,
             emailContactCfa, adressePhysiqueCommune, adressePhysiqueCodePostal, adressePhysiqueRue, adressePostaleCommune,

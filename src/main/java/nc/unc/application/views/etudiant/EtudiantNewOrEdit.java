@@ -74,6 +74,7 @@ public class EtudiantNewOrEdit extends Dialog {
   ComboBox<ReferentPedagogique> referentPedagogique = new ComboBox<>("Référent pédagogique");
   Select<String> statutActif = new Select<>();
   TextArea observationsEtudiant = new TextArea("Observations");
+  Checkbox suivreEtudiant = new Checkbox("Suivre l'étudiant ?");
 
   Binder<Etudiant> binder = new BeanValidationBinder<>(Etudiant.class);
 
@@ -163,7 +164,7 @@ public class EtudiantNewOrEdit extends Dialog {
             numeroEtudiant, telephoneEtudiant2, niveauDernierDiplome, anneeObtentionDernierDiplome, situationUnc, situationEntreprise, lieuNaissance, nationalite,
             numeroCafatEtudiant, adresseEtudiant, boitePostaleEtudiant, codePostalEtudiant, communeEtudiant, situationAnneePrecedente, etablissementDeProvenance,
             dernierEmploiOccupe, parcours, travailleurHandicape, veepap, priseEnChargeFraisInscription, obtentionDiplomeMention, entreprise,
-            tuteur, formation, anneePromotion, referentPedagogique, nomJeuneFille, statutActif, observationsEtudiant, createButtonsLayout());
+            tuteur, formation, anneePromotion, referentPedagogique, nomJeuneFille, statutActif, observationsEtudiant, suivreEtudiant, createButtonsLayout());
 
     // ajout du formulaire dans la modale
     add(titre, form);

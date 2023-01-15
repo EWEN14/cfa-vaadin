@@ -63,7 +63,7 @@ public class EntrepriseView extends VerticalLayout {
     modalConsult.addListener(EntrepriseConsult.CloseEvent.class, e -> closeConsultModal());
 
     // ajout de la modale d'édition ou de création d'une entreprise dans la vue
-    modalNewOrEdit = new EntrepriseNewOrEdit();
+    modalNewOrEdit = new EntrepriseNewOrEdit(entrepriseService);
     modalNewOrEdit.addListener(EntrepriseNewOrEdit.SaveEvent.class, this::saveEntreprise);
     modalNewOrEdit.addListener(EntrepriseNewOrEdit.SaveEditedEvent.class, this::saveEditedEntreprise);
     modalNewOrEdit.addListener(EntrepriseNewOrEdit.CloseEvent.class, e -> closeNewOrEditModal());
@@ -83,7 +83,7 @@ public class EntrepriseView extends VerticalLayout {
     grid.setSizeFull();
 
     // ajout des colonnes
-    grid.setColumns("enseigne", "raisonSociale","telephoneEntreprise", "statutActifEntreprise");
+    grid.setColumns("enseigne", "numeroRidet", "raisonSociale","telephoneEntreprise", "statutActifEntreprise");
     // ajout du bouton de consultation d'une entreprise
     grid.addComponentColumn(entreprise -> new Button(new Icon(VaadinIcon.EYE), click ->
             consultEntreprise(entreprise))).setHeader("Consulter");

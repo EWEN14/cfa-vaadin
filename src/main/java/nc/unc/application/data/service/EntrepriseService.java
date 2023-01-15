@@ -48,8 +48,14 @@ public class EntrepriseService {
     }
   }
 
-  //Nombre d'entreprises actives
+  // Nombre d'entreprises actives
   public Integer CountBystatutActifEntreprise(String statut){
-    return  entrepriseRepository.CountBystatutActifEntreprise(statut);
+    return entrepriseRepository.CountBystatutActifEntreprise(statut);
+  }
+
+  // Vérifie l'existence d'une entreprise avec le ridet en paramètre
+  public boolean findEntrepriseWithRidet(String ridet) {
+    Entreprise entreprise = entrepriseRepository.findByNumeroRidet(ridet);
+    return entreprise != null;
   }
 }

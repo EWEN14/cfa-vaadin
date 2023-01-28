@@ -51,7 +51,7 @@ public class EvenementNewOrEdit extends Dialog {
     // tant que la modale n'est pas fermée
     this.setModal(true);
     this.setWidth("85vw");
-    this.setHeight("55vh");
+    this.setHeight("75vh");
 
     // on fait le bind avec le nom des champs du formulaire et des attributs de l'entité evenement,
     // (les noms sont les mêmes et permet de faire en sorte de binder automatiquement)

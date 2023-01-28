@@ -145,7 +145,7 @@ public class MainLayout extends AppLayout {
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ // navbar
 
-                new MenuItemInfo("Accueil", "la la-file menu-icon", HomeView.class),
+                new MenuItemInfo("Accueil", "las la-home menu-icon", HomeView.class),
 
                 new MenuItemInfo("Étudiants", "las la-user-graduate menu-icon", EtudiantView.class),
 

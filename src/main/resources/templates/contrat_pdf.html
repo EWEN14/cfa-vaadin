@@ -157,7 +157,7 @@
         <table>
             <tr>
                 <th>TEL</th>
-                <td><span data-th-text="*{ telephoneEtudiant1 }"></span> / <span
+                <td><span data-th-text="*{ telephoneEtudiant1 }"></span> <span th:if="*{telephoneEtudiant2}">/</span> <span
                         data-th-text="*{ telephoneEtudiant2 }"></span></td>
                 <th>COURRIEL</th>
                 <td data-th-text="*{ emailEtudiant }"></td>
@@ -284,8 +284,8 @@
 
     <p><strong>IL EST CONVENU CE QUI SUIT :</strong></p>
 
-    <p>L'employeur engage le(la) salarié(e) à compter du <span data-th-text="*{ debutContrat }"></span> jusqu'au<span
-            data-th-text="*{ finContrat }"></span>.</p>
+    <p>L'employeur engage le(la) salarié(e) à compter du <span data-th-text="*{#temporals.format(debutContrat, 'dd/MM/yyyy')}"></span> jusqu'au <span
+            data-th-text="*{#temporals.format(finContrat, 'dd/MM/yyyy')}"></span>.</p>
 
     <p>La période d'essai a une durée de <span data-th-text="*{ dureePeriodeEssai }"></span> semaines.</p>
 
@@ -367,7 +367,7 @@
 
     <p>Le salaire brut mensuel est fixé à<sup>1</sup> :</p>
 
-    <p>Montant mensuel brut <sup>2</sup>:</p>
+    <p>Montant mensuel brut <sup>2</sup>: <span th:if="${salaireNego != null}" th:text="${salaireNego}"></span></p>
 
     <p>Ou</p>
 
@@ -376,12 +376,18 @@
         <tr>
             <td>Pourcentage du SMG</td>
             <td>75%</td>
-            <td></td>
+            <td>
+                <input type="checkbox" checked="checked" th:if="${pourcent75 != null && contrat?.salaireNegocie == null}"/>
+                <span th:if="${periode75 != null && contrat?.salaireNegocie == null}" th:text="${periode75}"></span>
+            </td>
         </tr>
         <tr>
             <td>Pourcentage du SMG</td>
             <td>85%</td>
-            <td></td>
+            <td>
+                <input type="checkbox" checked="checked" th:if="${pourcent85 != null && contrat?.salaireNegocie == null}"/>
+                <span th:if="${periode85 != null && contrat?.salaireNegocie == null}" th:text="${periode85}"></span>
+            </td>
         </tr>
         </tbody>
     </table>
